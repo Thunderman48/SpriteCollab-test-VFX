@@ -4,7 +4,7 @@ A real-time Pokémon arena brawler for the browser, built on the [PMDCollab Spri
 sprites, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) sheets. The interface uses PMD: Origins'
 own window borders, portrait frames, cursor, fonts and type icons, so it looks like Mystery Dungeon.
 
-**Roster (20):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon. Each has 4 moves (53 different moves), and every move has its own VFX.
+**Roster (36):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon, Gyarados, Alakazam, Machamp, Lapras, Scizor, Typhlosion, Sceptile, Swampert, Infernape, Salamence, Absol, Togekiss, Mew, Jirachi, Darkrai, Greninja. Each has 4 moves (71 different moves), and every move has its own VFX.
 
 **Held items:** like in Mystery Dungeon, each Pokémon holds one item. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time; the in-game description says what each item does here.
 
@@ -15,7 +15,7 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
   Korean uses the official Korean Pokémon, move, type and item names, and the Galmuri pixel font for Hangul.
 - **Team setup:** a versus screen. Pick the battle mode from the **Mode** dropdown (top right). Each player panel shows the Pokémon on a stage,
   a **Player / CPU** switch, a **Random** button and (in Trio) the party of three. Click or tap a Pokémon to open the **editor**:
-  all 20 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** (held item grid with descriptions) and **Personality** (coming later).
+  all 36 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** (held item grid with descriptions) and **Personality** (coming later).
   Party members are stored as plain data (`species`, `item`, `moves`, `personality`, `statBoosts` in `js/modes.js`) so stat, skill and personality editing can be added later.
 - Everything works with the mouse, touch, the keyboard (arrows / WASD move the cursor, Enter / Space choose, Esc goes back, Tab changes editor tab) or any gamepad.
 

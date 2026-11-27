@@ -1316,6 +1316,416 @@
         "fps": 30,
         "scale": 1.3
       }
+    },
+    "waterfall": {
+      "behavior": "dash",
+      "anim": "Attack",
+      "range": 240,
+      "dashSpeed": 560,
+      "dashTime": 0.42,
+      "under": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 16,
+        "scale": 1.6,
+        "follow": true
+      },
+      "over": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 24,
+        "scale": 1.3,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Water_Column_Ranger.None",
+        "fps": 26,
+        "scale": 1.3,
+        "anchor": "bottom",
+        "anchorPad": 6
+      },
+      "shake": 4
+    },
+    "psybeam": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "range": 320,
+      "charge": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 50,
+        "scale": 1.1,
+        "time": 0.35,
+        "at": "front"
+      },
+      "beam": {
+        "set": "Beam/Beam_Pink",
+        "length": 320,
+        "width": 1.1,
+        "time": 0.5,
+        "fps": 20,
+        "growTime": 0.08
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 50,
+        "scale": 1.2
+      },
+      "shake": 2
+    },
+    "crosschop": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 46,
+      "hit": {
+        "fx": "Cross_Chop.None",
+        "fps": 14,
+        "scale": 1.5
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 5
+    },
+    "icebeam": {
+      "behavior": "beam",
+      "anim": "Shoot",
+      "range": 330,
+      "charge": {
+        "fx": "Ice_Shard_Hit_Sparkle.None",
+        "fps": 24,
+        "scale": 1.6,
+        "time": 0.35,
+        "at": "front",
+        "loop": true
+      },
+      "muzzle": {
+        "fx": "Ice_Shard_Hit.None",
+        "fps": 60,
+        "scale": 1
+      },
+      "beam": {
+        "set": "Beam/Column_Blue",
+        "length": 330,
+        "width": 1.1,
+        "time": 0.55,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Ice_Shard_Hit.None",
+        "fps": 50,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Ice_Pieces.None",
+        "fps": 10,
+        "scale": 2.2
+      },
+      "tint": "rgba(160,220,255,0.18)",
+      "shake": 3
+    },
+    "surf": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 150,
+      "radius": 150,
+      "delay": 0.5,
+      "under": {
+        "fx": "Aqua_Tail_Wave.None",
+        "fps": 14,
+        "scale": 4.4
+      },
+      "ring": {
+        "fx": "Water_Column_Ranger.None",
+        "fps": 26,
+        "scale": 1.3,
+        "n": 8,
+        "r": 110,
+        "anchor": "bottom",
+        "anchorPad": 6
+      },
+      "hit": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 22,
+        "scale": 1.6
+      },
+      "shake": 5
+    },
+    "xscissor": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "X_Scissor.None",
+        "fps": 40,
+        "scale": 1.4
+      }
+    },
+    "ironhead": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 52,
+      "hit": {
+        "fx": "Iron_Head.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1
+      },
+      "shake": 4
+    },
+    "nightslash": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Night_Slash.Dir1",
+        "fps": 60,
+        "scale": 1.2
+      },
+      "hit2": {
+        "fx": "Night_Slash_Hit.None",
+        "fps": 40,
+        "scale": 1.4
+      }
+    },
+    "eruption": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "chargeAnim": "Charge",
+      "range": 160,
+      "radius": 160,
+      "delay": 0.7,
+      "under": {
+        "fx": "Lava_Plume_Smoke.None",
+        "fps": 18,
+        "scale": 3.2
+      },
+      "ring": {
+        "fx": "Eruption.None",
+        "fps": 20,
+        "scale": 1.4,
+        "n": 8,
+        "r": 110,
+        "anchor": "bottom",
+        "anchorPad": 10
+      },
+      "hit": {
+        "fx": "Eruption_Rocks.None",
+        "fps": 16,
+        "scale": 2.2
+      },
+      "tint": "rgba(255,120,40,0.25)",
+      "shake": 9
+    },
+    "lavaplume": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 95,
+      "radius": 95,
+      "delay": 0.35,
+      "under": {
+        "fx": "Lava_Plume_Smoke.None",
+        "fps": 22,
+        "scale": 2.2
+      },
+      "ring": {
+        "fx": "Lava_Plume_Fire.None",
+        "fps": 20,
+        "scale": 2,
+        "n": 10,
+        "r": 62
+      },
+      "hit": {
+        "fx": "Lava_Plume_Fire.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "shake": 3
+    },
+    "leafblade": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 44,
+      "hit": {
+        "fx": "Leaf_Blade.None",
+        "fps": 60,
+        "scale": 1.2
+      },
+      "hit2": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1
+      }
+    },
+    "energyball": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "projectile": {
+        "fx": "Energy_Ball.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 240,
+        "radius": 14,
+        "life": 1.8,
+        "trail": {
+          "fx": "Leaf_Storm_Particle.None",
+          "fps": 12,
+          "scale": 1.2,
+          "every": 0.05,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Energy_Ball_Hit.None",
+        "fps": 16,
+        "scale": 2.4
+      }
+    },
+    "leafstorm": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "charge": {
+        "fx": "Leaf_Storm_Shoot.None",
+        "fps": 40,
+        "scale": 1.3,
+        "time": 0.45,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Leaf_Storm_Leaf.Dir2",
+        "fps": 12,
+        "scale": 1.8,
+        "loop": true,
+        "spin": 10,
+        "speed": 340,
+        "radius": 12,
+        "count": 5,
+        "spread": 0.16,
+        "life": 1.2,
+        "trail": {
+          "fx": "Leaf_Storm_Particle.None",
+          "fps": 12,
+          "scale": 1,
+          "every": 0.06
+        }
+      },
+      "hit": {
+        "fx": "Leaf_Storm_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 3
+    },
+    "mudbomb": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Mud_Bomb_Ball.None",
+        "fps": 16,
+        "scale": 1.5,
+        "loop": true,
+        "speed": 230,
+        "radius": 14,
+        "life": 1.8,
+        "splash": 32
+      },
+      "hit": {
+        "fx": "Mud_Bomb_Hit.None",
+        "fps": 36,
+        "scale": 1.2
+      },
+      "hit2": {
+        "fx": "Puff_Brown.None",
+        "fps": 20,
+        "scale": 2
+      }
+    },
+    "machpunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 46,
+      "hit": {
+        "fx": "Arm_Thrust.None",
+        "fps": 24,
+        "scale": 1.4
+      }
+    },
+    "suckerpunch": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 200,
+      "dashSpeed": 720,
+      "dashTime": 0.28,
+      "under": {
+        "fx": "Puff_Purple.None",
+        "fps": 30,
+        "scale": 1,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Sucker_Punch_Hit.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "shake": 3
+    },
+    "megahorn": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 78,
+      "lunge": 54,
+      "hit": {
+        "fx": "Megahorn_Front.None",
+        "fps": 12,
+        "scale": 1.5
+      },
+      "hit2": {
+        "fx": "Megahorn_Back.None",
+        "fps": 12,
+        "scale": 1.5
+      },
+      "shake": 6
+    },
+    "ancientpower": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "charge": {
+        "fx": "Ancient_Power_Front.None",
+        "fps": 20,
+        "scale": 2,
+        "time": 0.45,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Rock_Piece_Rotating.None",
+        "fps": 20,
+        "scale": 2.2,
+        "loop": true,
+        "speed": 260,
+        "radius": 12,
+        "count": 3,
+        "spread": 0.3,
+        "life": 1.5
+      },
+      "hit": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 2
+      }
     }
   }
 }

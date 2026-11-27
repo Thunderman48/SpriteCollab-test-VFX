@@ -18,5 +18,21 @@
   {"key": "eevee", "species": "Eevee", "dex": 133, "moves": ["quickattack", "swift", "bite", "shadowball"], "hurtRadius": 12},
   {"key": "snorlax", "species": "Snorlax", "dex": 143, "moves": ["bodyslam", "crunch", "earthquake", "gigaimpact"], "hurtRadius": 20},
   {"key": "dragonite", "species": "Dragonite", "dex": 149, "moves": ["wingattack", "dragonrush", "outrage", "hyperbeam"], "hurtRadius": 18},
-  {"key": "umbreon", "species": "Umbreon", "dex": 197, "moves": ["feintattack", "bite", "darkpulse", "payback"], "hurtRadius": 13}
+  {"key": "umbreon", "species": "Umbreon", "dex": 197, "moves": ["feintattack", "bite", "darkpulse", "payback"], "hurtRadius": 13},
+  {"key": "gyarados", "species": "Gyarados", "dex": 130, "moves": ["waterfall", "aquatail", "crunch", "hydropump"], "hurtRadius": 20},
+  {"key": "alakazam", "species": "Alakazam", "dex": 65, "moves": ["psybeam", "psychic", "shadowball", "focusblast"], "hurtRadius": 14},
+  {"key": "machamp", "species": "Machamp", "dex": 68, "moves": ["bulletpunch", "crosschop", "stoneedge", "closecombat"], "hurtRadius": 16},
+  {"key": "lapras", "species": "Lapras", "dex": 131, "moves": ["icebeam", "surf", "thunderbolt", "bodyslam"], "hurtRadius": 20},
+  {"key": "scizor", "species": "Scizor", "dex": 212, "moves": ["bulletpunch", "xscissor", "ironhead", "nightslash"], "hurtRadius": 15},
+  {"key": "typhlosion", "species": "Typhlosion", "dex": 157, "moves": ["flamethrower", "lavaplume", "eruption", "focusblast"], "hurtRadius": 16},
+  {"key": "sceptile", "species": "Sceptile", "dex": 254, "moves": ["leafblade", "energyball", "leafstorm", "dragonclaw"], "hurtRadius": 15},
+  {"key": "swampert", "species": "Swampert", "dex": 260, "moves": ["waterfall", "mudbomb", "earthquake", "hydropump"], "hurtRadius": 18},
+  {"key": "infernape", "species": "Infernape", "dex": 392, "moves": ["machpunch", "closecombat", "flareblitz", "flamethrower"], "hurtRadius": 14},
+  {"key": "salamence", "species": "Salamence", "dex": 373, "moves": ["dragonclaw", "airslash", "flamethrower", "dracometeor"], "hurtRadius": 20},
+  {"key": "absol", "species": "Absol", "dex": 359, "moves": ["nightslash", "suckerpunch", "psychocut", "megahorn"], "hurtRadius": 15},
+  {"key": "togekiss", "species": "Togekiss", "dex": 468, "moves": ["airslash", "moonblast", "aurasphere", "flamethrower"], "hurtRadius": 15, "flying": true},
+  {"key": "mew", "species": "Mew", "dex": 151, "moves": ["psychic", "aurasphere", "flamethrower", "ancientpower"], "hurtRadius": 12, "flying": true},
+  {"key": "jirachi", "species": "Jirachi", "dex": 385, "moves": ["ironhead", "zenheadbutt", "psychic", "flashcannon"], "hurtRadius": 12, "flying": true},
+  {"key": "darkrai", "species": "Darkrai", "dex": 491, "moves": ["darkpulse", "shadowball", "focusblast", "icebeam"], "hurtRadius": 16, "flying": true},
+  {"key": "greninja", "species": "Greninja", "dex": 658, "moves": ["nightslash", "hydropump", "darkpulse", "icebeam"], "hurtRadius": 14}
 ]

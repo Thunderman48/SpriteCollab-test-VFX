@@ -674,5 +674,546 @@
     "hurtRadius": 13,
     "flying": false,
     "legendary": false
+  },
+  "gyarados": {
+    "key": "gyarados",
+    "name": "Gyarados",
+    "dex": 130,
+    "spriteId": "0130",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 95,
+      "atk": 125,
+      "def": 79,
+      "spa": 60,
+      "spd": 100,
+      "spe": 81
+    },
+    "bst": 540,
+    "abilities": [
+      "Intimidate",
+      "Moxie"
+    ],
+    "weightkg": 235,
+    "gen": 1,
+    "moves": [
+      "waterfall",
+      "aquatail",
+      "crunch",
+      "hydropump"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": false
+  },
+  "alakazam": {
+    "key": "alakazam",
+    "name": "Alakazam",
+    "dex": 65,
+    "spriteId": "0065",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 55,
+      "atk": 50,
+      "def": 45,
+      "spa": 135,
+      "spd": 95,
+      "spe": 120
+    },
+    "bst": 500,
+    "abilities": [
+      "Synchronize",
+      "Inner Focus",
+      "Magic Guard"
+    ],
+    "weightkg": 48,
+    "gen": 1,
+    "moves": [
+      "psybeam",
+      "psychic",
+      "shadowball",
+      "focusblast"
+    ],
+    "hurtRadius": 14,
+    "flying": false,
+    "legendary": false
+  },
+  "machamp": {
+    "key": "machamp",
+    "name": "Machamp",
+    "dex": 68,
+    "spriteId": "0068",
+    "types": [
+      "Fighting"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 130,
+      "def": 80,
+      "spa": 65,
+      "spd": 85,
+      "spe": 55
+    },
+    "bst": 505,
+    "abilities": [
+      "Guts",
+      "No Guard",
+      "Steadfast"
+    ],
+    "weightkg": 130,
+    "gen": 1,
+    "moves": [
+      "bulletpunch",
+      "crosschop",
+      "stoneedge",
+      "closecombat"
+    ],
+    "hurtRadius": 16,
+    "flying": false,
+    "legendary": false
+  },
+  "lapras": {
+    "key": "lapras",
+    "name": "Lapras",
+    "dex": 131,
+    "spriteId": "0131",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "baseStats": {
+      "hp": 130,
+      "atk": 85,
+      "def": 80,
+      "spa": 85,
+      "spd": 95,
+      "spe": 60
+    },
+    "bst": 535,
+    "abilities": [
+      "Water Absorb",
+      "Shell Armor",
+      "Hydration"
+    ],
+    "weightkg": 220,
+    "gen": 1,
+    "moves": [
+      "icebeam",
+      "surf",
+      "thunderbolt",
+      "bodyslam"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": false
+  },
+  "scizor": {
+    "key": "scizor",
+    "name": "Scizor",
+    "dex": 212,
+    "spriteId": "0212",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 130,
+      "def": 100,
+      "spa": 55,
+      "spd": 80,
+      "spe": 65
+    },
+    "bst": 500,
+    "abilities": [
+      "Swarm",
+      "Technician",
+      "Light Metal"
+    ],
+    "weightkg": 118,
+    "gen": 2,
+    "moves": [
+      "bulletpunch",
+      "xscissor",
+      "ironhead",
+      "nightslash"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "typhlosion": {
+    "key": "typhlosion",
+    "name": "Typhlosion",
+    "dex": 157,
+    "spriteId": "0157",
+    "types": [
+      "Fire"
+    ],
+    "baseStats": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 109,
+      "spd": 85,
+      "spe": 100
+    },
+    "bst": 534,
+    "abilities": [
+      "Blaze",
+      "Flash Fire"
+    ],
+    "weightkg": 79.5,
+    "gen": 2,
+    "moves": [
+      "flamethrower",
+      "lavaplume",
+      "eruption",
+      "focusblast"
+    ],
+    "hurtRadius": 16,
+    "flying": false,
+    "legendary": false
+  },
+  "sceptile": {
+    "key": "sceptile",
+    "name": "Sceptile",
+    "dex": 254,
+    "spriteId": "0254",
+    "types": [
+      "Grass"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 85,
+      "def": 65,
+      "spa": 105,
+      "spd": 85,
+      "spe": 120
+    },
+    "bst": 530,
+    "abilities": [
+      "Overgrow",
+      "Unburden"
+    ],
+    "weightkg": 52.2,
+    "gen": 3,
+    "moves": [
+      "leafblade",
+      "energyball",
+      "leafstorm",
+      "dragonclaw"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "swampert": {
+    "key": "swampert",
+    "name": "Swampert",
+    "dex": 260,
+    "spriteId": "0260",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 110,
+      "def": 90,
+      "spa": 85,
+      "spd": 90,
+      "spe": 60
+    },
+    "bst": 535,
+    "abilities": [
+      "Torrent",
+      "Damp"
+    ],
+    "weightkg": 81.9,
+    "gen": 3,
+    "moves": [
+      "waterfall",
+      "mudbomb",
+      "earthquake",
+      "hydropump"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "infernape": {
+    "key": "infernape",
+    "name": "Infernape",
+    "dex": 392,
+    "spriteId": "0392",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "baseStats": {
+      "hp": 76,
+      "atk": 104,
+      "def": 71,
+      "spa": 104,
+      "spd": 71,
+      "spe": 108
+    },
+    "bst": 534,
+    "abilities": [
+      "Blaze",
+      "Iron Fist"
+    ],
+    "weightkg": 55,
+    "gen": 4,
+    "moves": [
+      "machpunch",
+      "closecombat",
+      "flareblitz",
+      "flamethrower"
+    ],
+    "hurtRadius": 14,
+    "flying": false,
+    "legendary": false
+  },
+  "salamence": {
+    "key": "salamence",
+    "name": "Salamence",
+    "dex": 373,
+    "spriteId": "0373",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 95,
+      "atk": 135,
+      "def": 80,
+      "spa": 110,
+      "spd": 80,
+      "spe": 100
+    },
+    "bst": 600,
+    "abilities": [
+      "Intimidate",
+      "Moxie"
+    ],
+    "weightkg": 102.6,
+    "gen": 3,
+    "moves": [
+      "dragonclaw",
+      "airslash",
+      "flamethrower",
+      "dracometeor"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": false
+  },
+  "absol": {
+    "key": "absol",
+    "name": "Absol",
+    "dex": 359,
+    "spriteId": "0359",
+    "types": [
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 65,
+      "atk": 130,
+      "def": 60,
+      "spa": 75,
+      "spd": 60,
+      "spe": 75
+    },
+    "bst": 465,
+    "abilities": [
+      "Pressure",
+      "Super Luck",
+      "Justified"
+    ],
+    "weightkg": 47,
+    "gen": 3,
+    "moves": [
+      "nightslash",
+      "suckerpunch",
+      "psychocut",
+      "megahorn"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "togekiss": {
+    "key": "togekiss",
+    "name": "Togekiss",
+    "dex": 468,
+    "spriteId": "0468",
+    "types": [
+      "Fairy",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 85,
+      "atk": 50,
+      "def": 95,
+      "spa": 120,
+      "spd": 115,
+      "spe": 80
+    },
+    "bst": 545,
+    "abilities": [
+      "Hustle",
+      "Serene Grace",
+      "Super Luck"
+    ],
+    "weightkg": 38,
+    "gen": 4,
+    "moves": [
+      "airslash",
+      "moonblast",
+      "aurasphere",
+      "flamethrower"
+    ],
+    "hurtRadius": 15,
+    "flying": true,
+    "legendary": false
+  },
+  "mew": {
+    "key": "mew",
+    "name": "Mew",
+    "dex": 151,
+    "spriteId": "0151",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 100,
+      "def": 100,
+      "spa": 100,
+      "spd": 100,
+      "spe": 100
+    },
+    "bst": 600,
+    "abilities": [
+      "Synchronize"
+    ],
+    "weightkg": 4,
+    "gen": 1,
+    "moves": [
+      "psychic",
+      "aurasphere",
+      "flamethrower",
+      "ancientpower"
+    ],
+    "hurtRadius": 12,
+    "flying": true,
+    "legendary": true
+  },
+  "jirachi": {
+    "key": "jirachi",
+    "name": "Jirachi",
+    "dex": 385,
+    "spriteId": "0385",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 100,
+      "def": 100,
+      "spa": 100,
+      "spd": 100,
+      "spe": 100
+    },
+    "bst": 600,
+    "abilities": [
+      "Serene Grace"
+    ],
+    "weightkg": 1.1,
+    "gen": 3,
+    "moves": [
+      "ironhead",
+      "zenheadbutt",
+      "psychic",
+      "flashcannon"
+    ],
+    "hurtRadius": 12,
+    "flying": true,
+    "legendary": true
+  },
+  "darkrai": {
+    "key": "darkrai",
+    "name": "Darkrai",
+    "dex": 491,
+    "spriteId": "0491",
+    "types": [
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 90,
+      "def": 90,
+      "spa": 135,
+      "spd": 90,
+      "spe": 125
+    },
+    "bst": 600,
+    "abilities": [
+      "Bad Dreams"
+    ],
+    "weightkg": 50.5,
+    "gen": 4,
+    "moves": [
+      "darkpulse",
+      "shadowball",
+      "focusblast",
+      "icebeam"
+    ],
+    "hurtRadius": 16,
+    "flying": true,
+    "legendary": true
+  },
+  "greninja": {
+    "key": "greninja",
+    "name": "Greninja",
+    "dex": 658,
+    "spriteId": "0658",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 72,
+      "atk": 95,
+      "def": 67,
+      "spa": 103,
+      "spd": 71,
+      "spe": 122
+    },
+    "bst": 530,
+    "abilities": [
+      "Torrent",
+      "Protean",
+      "Battle Bond"
+    ],
+    "weightkg": 40,
+    "gen": 6,
+    "moves": [
+      "nightslash",
+      "hydropump",
+      "darkpulse",
+      "icebeam"
+    ],
+    "hurtRadius": 14,
+    "flying": false,
+    "legendary": false
   }
 }

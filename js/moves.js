@@ -256,10 +256,13 @@ const BEHAVIORS = {
     const d = cast.def;
     const anim = c.sprite.art.animData.anims[c.sprite.resolve(d.anim)];
     const hitFrame = anim.hit ?? anim.durations.length - 1;
-    const hitTime = Math.max(0.06, anim.durations.slice(0, hitFrame).reduce((s, x) => s + x, 0) / 60);
+    // Some sprites mark the hit on frame 0; give the lunge a moment to close in first.
+    const hitTime = Math.max(d.lunge ? 0.12 : 0.06, anim.durations.slice(0, hitFrame).reduce((s, x) => s + x, 0) / 60);
     let travelled = 0;
+    let elapsed = 0;
     const lungeSpeed = (d.lunge || 0) / hitTime;
     cast.drive = (dt) => {
+      elapsed += dt;
       if (travelled >= (d.lunge || 0) || !t.alive) return;
       if (c.distTo(t) <= c.radius + t.radius + 4) return;
       const a = c.angleTo(t);
@@ -269,7 +272,15 @@ const BEHAVIORS = {
       travelled += step;
       c.clamp();
     };
+    let struck = false;
+    let deferred = false;
     const strike = () => {
+      if (struck) return;
+      if (!deferred && elapsed < hitTime - 1e-3) {
+        deferred = true;
+        return void game.after(hitTime - elapsed, strike, null);
+      }
+      struck = true;
       cast.release();
       cast.drive = null;
       cast.track = false;

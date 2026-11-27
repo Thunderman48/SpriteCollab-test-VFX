@@ -89,6 +89,9 @@ const MON_KO = {
   charizard: '리자몽', blastoise: '거북왕', venusaur: '이상해꽃', pikachu: '피카츄', dialga: '디아루가',
   palkia: '펄기아', giratina: '기라티나', blaziken: '번치코', gardevoir: '가디안', metagross: '메타그로스',
   tyranitar: '마기라스', eevee: '이브이', snorlax: '잠만보', dragonite: '망나뇽', umbreon: '블래키',
+  gyarados: '갸라도스', alakazam: '후딘', machamp: '괴력몬', lapras: '라프라스', scizor: '핫삼',
+  typhlosion: '블레이범', sceptile: '나무킹', swampert: '대짱이', infernape: '초염몽', salamence: '보만다',
+  absol: '앱솔', togekiss: '토게키스', mew: '뮤', jirachi: '지라치', darkrai: '다크라이', greninja: '개굴닌자',
 };
 
 const MOVE_KO = {
@@ -104,6 +107,10 @@ const MOVE_KO = {
   meteormash: '코멧펀치', earthquake: '지진', rockslide: '스톤샤워', swift: '스피드스타', bite: '물기',
   bodyslam: '누르기', gigaimpact: '기가임팩트', wingattack: '날개치기', outrage: '역린', feintattack: '속여때리기',
   payback: '보복',
+  waterfall: '폭포오르기', psybeam: '환상빔', crosschop: '크로스촙', icebeam: '냉동빔', surf: '파도타기',
+  xscissor: '시저크로스', ironhead: '아이언헤드', nightslash: '깜짝베기', eruption: '분화', lavaplume: '분연',
+  leafblade: '리프블레이드', energyball: '에너지볼', leafstorm: '리프스톰', mudbomb: '진흙폭탄', machpunch: '마하펀치',
+  suckerpunch: '기습', megahorn: '메가혼', ancientpower: '원시의힘',
 };
 
 const TYPE_KO = {
