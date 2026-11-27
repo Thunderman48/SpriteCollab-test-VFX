@@ -2,13 +2,16 @@
 // dropdown), Pokémon editor, fight HUD (2-4 players), message log, pause/result menus, credits.
 // Everything works with mouse/touch, keyboard (arrows/WASD + Enter, Esc = back) or a gamepad.
 import { DB, statsFor, HP_SCALE, effectiveness } from './combat.js';
+import { moveEffectText } from './movetext.js';
 import { SpriteAnimator } from './sprite.js';
 import { MOVEFX } from './moves.js';
 import { DODGE_COOLDOWN } from './fighter.js';
 import { ITEMS, itemSprite } from './items.js';
 import { MODES, MODE_ORDER, RULES, RULE_ORDER, makeMember, partyFor, teamOf, canPick, enforceRules, effectiveBase, randomParty, isMirrorCopy, isLegendary } from './modes.js';
 import { KEYMAP } from './input.js';
-import { t, LANGS, monName, moveName, typeName, itemName, itemDesc, I18N } from './i18n.js';
+import { t, LANGS, monName, moveName, typeName, itemName, itemDesc, I18N, natureName, abilityName, abilityDesc } from './i18n.js';
+import { STATS, SP_TOTAL, SP_MAX, spUsed, zeroSp, saveBuild, forgetBuild, defaultBuild, sanitize } from './builds.js';
+import { weatherNow, wantsMove } from './effects.js';
 import { SETTINGS, saveSettings } from './settings.js';
 import { Sfx } from './sfx.js';
 
@@ -17,7 +20,7 @@ const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const TYPE_ORDER = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
 const TABS = ['Stats', 'Skills', 'Equipment', 'Personality'];
 const OVERLAYS = ['settings', 'credits', 'info', 'editor', 'pause', 'result'];
-export const VERSION = 'v0.9';
+export const VERSION = 'v1.0';
 
 const KEYS = {
   up: ['ArrowUp', 'KeyW'],
@@ -197,8 +200,7 @@ export class UI {
           : '';
       const plate = mystery
         ? `<div class="yellow">${t('mystery')}</div><div class="plate-item dim">${t('rule_random')}</div>`
-        : `<div><span class="yellow">${mon(m.species)}</span> ${d.types.map(orb).join('')}</div>
-           <div class="plate-item">${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('noItem')}</span>`}</div>`;
+        : this.plateHTML(m);
       return `<div class="win p${team + 1} ppanel ${mystery ? 'mystery' : ''} ${mirror ? 'mirror' : ''}" data-slot="${slot}">
         <div class="pp-head">
           <span class="p-tag c-p${slot + 1}">P${slot + 1}</span>
@@ -277,6 +279,15 @@ export class UI {
     });
   }
 
+  /** Name, types, item and build (nature · ability) under a setup panel's stage. */
+  plateHTML(m) {
+    const d = DB.pokedex[m.species];
+    const item = m.item ? ITEMS.byId[m.item] : null;
+    return `<div><span class="yellow">${mon(m.species)}</span> ${d.types.map(orb).join('')}</div>
+      <div class="plate-item">${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('noItem')}</span>`}</div>
+      <div class="plate-build dim">${natureName(DB.natures[m.nature])} · ${abilityName(m.ability, d.abilityNames[m.ability])}</div>`;
+  }
+
   toggleDropdown(open) {
     this.ddOpen = open;
     $('#setup .mode-dd')?.classList.toggle('open', open);
@@ -293,7 +304,7 @@ export class UI {
 
   // ---------- Pokémon editor (Stats / Skills / Equipment / Personality) ----------
   openEditor(slot, idx, tab = this.edit?.tab || 'Stats') {
-    this.edit = { slot, idx, tab };
+    this.edit = { slot, idx, tab, pick: null };
     this.shown[slot] = idx;
     const root = $('#editor');
     root.innerHTML = `<div class="win solid editor">
@@ -308,35 +319,53 @@ export class UI {
         <div class="tabs">${TABS.map((tb) => `<button class="nav tab" type="button" data-tab="${tb}"></button>`).join('')}</div>
         <div class="tab-panel"></div>
       </div>
-      <div class="ed-foot"><span class="kb-only">${key('Tab')} ${t('changeTab')} ${key('Esc')} ${t('back')}</span><button class="win nav done-btn" type="button"></button></div>
+      <div class="ed-foot"><span class="kb-only">${key('Tab')} ${t('changeTab')} ${key('Esc')} ${t('back')}</span><span class="foot-btns"><button class="win nav reset-btn" type="button"></button><button class="win nav done-btn" type="button"></button></span></div>
     </div>`;
     $$('.mon-cell', root).forEach((b) =>
       b.addEventListener('click', () => {
         const m = this.member();
         if (!canPick(this.setup, slot, idx, b.dataset.species)) return this.game.sfx('tick');
         this.setup.players[slot].party[idx] = makeMember(b.dataset.species, m.item);
+        this.edit.pick = null;
         this.game.sfx('tick');
+        this.game.saveTeam?.();
         this.renderEditor();
       }),
     );
     $$('.tab', root).forEach((b) =>
       b.addEventListener('click', () => {
         this.edit.tab = b.dataset.tab;
+        this.edit.pick = null;
         this.renderEditor();
       }),
     );
     $('.done-btn', root).addEventListener('click', () => this.closeEditor());
+    $('.reset-btn', root).addEventListener('click', () => {
+      // Back to the default build (moves, neutral nature, first ability, no Stat Points); the item stays.
+      const m = this.member();
+      forgetBuild(m.species);
+      this.setup.players[slot].party[idx] = defaultBuild(m.species, m.item);
+      this.edit.pick = null;
+      this.changed();
+      this.renderEditor();
+      this.setFocus($('#editor .reset-btn'), false);
+    });
     root.classList.add('show');
     this.renderEditor();
     this.setFocus($(`#editor .mon-cell[data-species="${this.member().species}"]`), false);
   }
 
   member() {
-    return this.setup.players[this.edit.slot].party[this.edit.idx];
+    const party = this.setup.players[this.edit.slot].party;
+    const m = party[this.edit.idx];
+    // Older / hand-made members without a full build get one (default nature, ability, no SP).
+    if (!m.sp || !m.nature || !m.ability) party[this.edit.idx] = sanitize(m);
+    return party[this.edit.idx];
   }
 
   closeEditor() {
     $('#editor').classList.remove('show');
+    this.game.saveTeam?.();
     const { slot, idx } = this.edit;
     this.preview = null;
     this.renderSetup();
@@ -351,6 +380,7 @@ export class UI {
     const partySize = MODES[this.setup.mode].party;
     $('.ed-label', root).textContent = t('pokemon');
     $('.done-btn', root).textContent = t('done');
+    $('.reset-btn', root).textContent = t('resetBuild');
     const onlyLegend = RULES[this.setup.rule].onlyLegend;
     $$('.mon-cell', root).forEach((b) => {
       const sp = b.dataset.species;
@@ -365,12 +395,13 @@ export class UI {
       b.classList.toggle('sel', b.dataset.tab === this.edit.tab);
       b.textContent = t('t_' + b.dataset.tab);
     });
+    const nat = DB.natures[m.nature];
     $('.ed-head', root).innerHTML = `
       <canvas class="preview" width="80" height="60"></canvas>
       <div>
         <div><span class="c-p${this.edit.slot + 1}">P${this.edit.slot + 1}</span>${partySize > 1 ? ` <span class="dim">${t('partyPos', { n: this.edit.idx + 1, m: partySize })}</span>` : ''}</div>
-        <div><span class="yellow">${mon(m.species)}</span> <span class="dim">No.${String(d.dex).padStart(3, '0')}</span></div>
-        <div>${d.types.map(typeText).join(' ')}</div>
+        <div><span class="yellow">${mon(m.species)}</span> <span class="dim">No.${String(d.dex).padStart(3, '0')}</span> ${d.types.map(orb).join('')}</div>
+        <div><span class="cyan">${t('nature')}</span> ${natureName(nat)} <span class="cyan">${t('ability')}</span> ${abilityName(m.ability, d.abilityNames[m.ability])}</div>
         <div><span class="cyan">${t('item')}</span> ${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('none')}</span>`}</div>
       </div>`;
     if (!this.preview || this.preview.key !== m.species) {
@@ -379,24 +410,9 @@ export class UI {
     this.preview.cv = $('.preview', root);
     const panel = $('.tab-panel', root);
     const tab = this.edit.tab;
-    if (tab === 'Stats') {
-      const base = effectiveBase(this.setup.rule, m.species); // Balanced scales non-legendaries to 600
-      const st = statsFor(base);
-      const total = Object.values(base).reduce((a, b) => a + b, 0);
-      panel.innerHTML = `<div class="stat-list">${Object.entries(base)
-        .map(([k, v]) => `<div class="stat-row"><span class="cyan">${t('s_' + k)}</span><b>${v}</b><i style="--w:${Math.min(100, (v / 160) * 100)}%"></i></div>`)
-        .join('')}</div>
-        <div class="row"><span><span class="cyan">${t('total')}</span> ${total}${total !== d.bst ? ` <span class="dim">(${d.bst})</span>` : ''}</span><span><span class="cyan">${t('arenaHp')}</span> ${st.hp * HP_SCALE}</span></div>`;
-    } else if (tab === 'Skills') {
-      panel.innerHTML = `<ul class="skill-list">${m.moves
-        .map((id) => {
-          const mv = DB.moves[id];
-          const fx = MOVEFX.moves[id];
-          return `<li><div class="row"><span>${orb(mv.type)}<span class="green">${moveName(id, mv.name)}</span></span><span>${mv.category === 'Physical' ? t('phys') : t('spec')} ${mv.power} · <span class="cyan">PP</span> ${mv.pp} · ${mv.cooldown}s</span></div>
-            <div class="dim">${typeName(mv.type)} · ${t(mv.category)} · ${t('b_' + fx.behavior)}</div></li>`;
-        })
-        .join('')}</ul>`;
-    } else if (tab === 'Equipment') {
+    if (tab === 'Stats') this.renderStatsTab(panel, m);
+    else if (tab === 'Skills') this.renderSkillsTab(panel, m);
+    else if (tab === 'Equipment') {
       const opts = [null, ...ITEMS.list];
       panel.innerHTML = `<div class="item-grid">${opts
         .map((it) => `<button class="nav item-cell ${(it?.id ?? null) === m.item ? 'sel' : ''}" type="button" data-id="${it?.id ?? ''}" title="${it ? esc(itemName(it)) : t('noItem')}">${it ? itemIcon(it) : '<span class="dim">–</span>'}</button>`)
@@ -404,16 +420,230 @@ export class UI {
       $$('.item-cell', panel).forEach((b) =>
         b.addEventListener('click', () => {
           m.item = b.dataset.id || null;
-          this.game.sfx('tick');
+          this.changed();
           const id = b.dataset.id;
           this.renderEditor();
           this.setFocus($(`#editor .item-cell[data-id="${id}"]`), false);
         }),
       );
       this.renderItemInfo(m.item);
-    } else {
-      panel.innerHTML = `<div class="dim">${t('comingSoon')}</div>`;
+    } else this.renderPersonalityTab(panel, m);
+  }
+
+  /** A build was edited: remember it (per species) and the team. */
+  changed(sound = true) {
+    const m = this.member();
+    saveBuild(m);
+    this.game.saveTeam?.();
+    if (sound) this.game.sfx('tick');
+  }
+
+  // Stats: nature colours + Stat Points (66 total, 32 max per stat; 1 SP = +1 at Lv50).
+  renderStatsTab(panel, m) {
+    const base = effectiveBase(this.setup.rule, m.species); // Balanced scales non-legendaries to 600
+    const d = DB.pokedex[m.species];
+    const st = statsFor(base, m);
+    const nat = DB.natures[m.nature];
+    const total = Object.values(base).reduce((a, b) => a + b, 0);
+    const used = spUsed(m.sp);
+    panel.innerHTML = `<div class="stat-list">${STATS.map((k) => {
+      const cls = nat?.plus === k && nat.minus !== k ? 'nat-up' : nat?.minus === k && nat.plus !== k ? 'nat-down' : 'cyan';
+      return `<button class="nav sp-row" type="button" data-stat="${k}">
+        <span class="${cls}">${t('s_' + k)}</span><span class="dim sp-base">${base[k]}</span>
+        <span class="sp-ctl"><span class="sp-btn" data-d="-1">−</span><b>${m.sp[k]}</b><span class="sp-btn" data-d="1">+</span></span>
+        <span class="sp-val">${st[k]}</span><i style="--w:${Math.min(100, (st[k] / (k === 'hp' ? 300 : 260)) * 100)}%"></i></button>`;
+    }).join('')}</div>
+      <div class="row stat-foot"><span><span class="cyan">${t('statPoints')}</span> <span class="${used === SP_TOTAL ? 'yellow' : ''}">${used}/${SP_TOTAL}</span> <span class="dim">${t('base')} ${total}${total !== d.bst ? ` (${d.bst})` : ''}</span></span>
+      <span><span class="cyan">${t('arenaHp')}</span> ${st.hp * HP_SCALE}</span><button class="nav sp-reset" type="button">${t('reset')}</button></div>`;
+    $$('.sp-row', panel).forEach((row) => {
+      const k = row.dataset.stat;
+      // Enter / tap on the row fills the stat (or empties it if already filled).
+      row.addEventListener('click', (e) => {
+        const btn = e.target.closest('.sp-btn');
+        if (btn) return;
+        this.setSp(k, m.sp[k] > 0 ? -m.sp[k] : SP_MAX);
+      });
+      $$('.sp-btn', row).forEach((b) => {
+        b.addEventListener('pointerdown', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const dd = Number(b.dataset.d);
+          this.setSp(k, dd);
+          // Hold to repeat. The row is re-rendered under the finger, so listen for the release on window.
+          let n = 0;
+          clearInterval(this.spRepeat);
+          this.spRepeat = setInterval(() => {
+            if (n++ > 4 && !this.setSp(k, dd)) clearInterval(this.spRepeat);
+          }, 70);
+          const stop = () => clearInterval(this.spRepeat);
+          addEventListener('pointerup', stop, { once: true });
+          addEventListener('pointercancel', stop, { once: true });
+        });
+        b.addEventListener('click', (e) => e.stopPropagation());
+      });
+    });
+    $('.sp-reset', panel).addEventListener('click', () => {
+      m.sp = zeroSp();
+      this.changed();
+      this.renderEditor();
+      this.setFocus($('#editor .sp-reset'), false);
+    });
+  }
+
+  /** Change one stat's Stat Points by `delta`, within the caps. Keeps focus on that row. */
+  setSp(k, delta) {
+    if (this.edit?.tab !== 'Stats' || !$('#editor').classList.contains('show')) return false;
+    const m = this.member();
+    const left = SP_TOTAL - spUsed(m.sp);
+    const v = Math.max(0, Math.min(SP_MAX, m.sp[k] + Math.min(delta, left)));
+    if (v === m.sp[k]) return false;
+    m.sp[k] = v;
+    this.changed();
+    const panel = $('#editor .tab-panel');
+    this.renderStatsTab(panel, m);
+    this.setFocus($(`#editor .sp-row[data-stat="${k}"]`), false);
+    return true;
+  }
+
+  // Skills: 4 slots in priority order (1 fires first), each replaceable by a learnable skill.
+  renderSkillsTab(panel, m) {
+    const d = DB.pokedex[m.species];
+    const pick = this.edit.pick;
+    const moveLabel = (id) => {
+      const mv = DB.moves[id];
+      return `${orb(mv.type)}<span class="${mv.category === 'Status' ? 'cyan' : 'green'}">${moveName(id, mv.name)}</span>`;
+    };
+    const meta = (id) => {
+      const mv = DB.moves[id];
+      return `${mv.category === 'Physical' ? t('phys') : mv.category === 'Special' ? t('spec') : t('stat')}${mv.power ? ' ' + mv.power : ''} · ${mv.cooldown}s`;
+    };
+    if (pick == null) {
+      panel.innerHTML = `<div class="dim skill-hint">${t('skillOrder')}</div>
+        <ul class="slot-list">${m.moves.map((id, i) => `<li>
+          <span class="slot-n yellow">${i + 1}</span>
+          <button class="nav skill-slot" type="button" data-i="${i}" data-move="${id}"><span>${moveLabel(id)}</span><span class="dim">${meta(id)}</span></button>
+          <button class="nav ord-btn" type="button" data-i="${i}" data-d="-1" ${i === 0 ? 'disabled' : ''}>▲</button><button class="nav ord-btn" type="button" data-i="${i}" data-d="1" ${i === 3 ? 'disabled' : ''}>▼</button>
+        </li>`).join('')}</ul>
+        <div class="move-info"></div>`;
+      $$('.skill-slot', panel).forEach((b) =>
+        b.addEventListener('click', () => {
+          this.edit.pick = Number(b.dataset.i);
+          this.game.sfx('tick');
+          this.renderSkillsTab(panel, m);
+          this.setFocus($(`#editor .move-opt[data-move="${m.moves[this.edit.pick]}"]`) || $('#editor .move-opt'), false);
+        }),
+      );
+      $$('.ord-btn', panel).forEach((b) =>
+        b.addEventListener('click', () => {
+          const i = Number(b.dataset.i);
+          const j = i + Number(b.dataset.d);
+          if (j < 0 || j > 3) return;
+          [m.moves[i], m.moves[j]] = [m.moves[j], m.moves[i]];
+          this.changed();
+          this.renderSkillsTab(panel, m);
+          const again = $(`#editor .ord-btn[data-i="${j}"][data-d="${b.dataset.d}"]`);
+          this.setFocus(again && !again.disabled ? again : $(`#editor .skill-slot[data-i="${j}"]`), false);
+        }),
+      );
+      this.renderMoveInfo(m.moves[0]);
+      return;
     }
+    const types = d.types;
+    const list = [...d.learnable].sort((a, b) => {
+      const A = DB.moves[a];
+      const B = DB.moves[b];
+      const rank = (x) => (x.category === 'Status' ? 2 : types.includes(x.type) ? 0 : 1);
+      return rank(A) - rank(B) || A.type.localeCompare(B.type) || B.power - A.power;
+    });
+    panel.innerHTML = `<div class="row pick-head"><span><span class="yellow">${t('slotN', { n: pick + 1 })}</span> <span class="dim">·</span> <span class="cyan">${t('learnable', { n: list.length })}</span></span><button class="nav pick-back" type="button">← ${t('back')}</button></div>
+      <div class="move-grid">${list.map((id) => {
+        const j = m.moves.indexOf(id);
+        return `<button class="nav move-opt ${j === pick ? 'sel' : ''}" type="button" data-move="${id}">${moveLabel(id)}${j >= 0 ? `<span class="slot-tag">${j + 1}</span>` : ''}</button>`;
+      }).join('')}</div>
+      <div class="move-info"></div>`;
+    $('.pick-back', panel).addEventListener('click', () => this.closePicker());
+    $$('.move-opt', panel).forEach((b) =>
+      b.addEventListener('click', () => {
+        const id = b.dataset.move;
+        const j = m.moves.indexOf(id);
+        if (j >= 0) [m.moves[j], m.moves[pick]] = [m.moves[pick], m.moves[j]]; // already known: swap slots
+        else m.moves[pick] = id;
+        this.changed();
+        this.closePicker();
+      }),
+    );
+    this.renderMoveInfo(m.moves[pick]);
+  }
+
+  closePicker() {
+    const i = this.edit.pick;
+    this.edit.pick = null;
+    this.renderSkillsTab($('#editor .tab-panel'), this.member());
+    this.setFocus($(`#editor .skill-slot[data-i="${i}"]`), false);
+  }
+
+  renderMoveInfo(id) {
+    const box = $('#editor .move-info');
+    if (!box || !id) return;
+    const mv = DB.moves[id];
+    const fx = MOVEFX.moves[id];
+    const extra = fx.extra ? (I18N.lang === 'ko' ? fx.extra.descKo : fx.extra.desc) : '';
+    const effect = moveEffectText(mv);
+    box.innerHTML = `<div>${orb(mv.type)}<span class="yellow">${moveName(id, mv.name)}</span> <span class="dim">${typeName(mv.type)} · ${t(mv.category)}${mv.power ? ` · ${t('power')} ${mv.power}` : ''} · ${t('cooldown')} ${mv.cooldown}s · ${t('b_' + fx.behavior)}</span></div>
+      <div>${effect || (extra ? '' : `<span class="dim">${t('e_none')}</span>`)}</div>${extra ? `<div class="extra">★ ${esc(extra)}</div>` : ''}`;
+  }
+
+  // Personality: nature chart (rows = raised stat, columns = lowered stat) + ability.
+  renderPersonalityTab(panel, m) {
+    const d = DB.pokedex[m.species];
+    const order = ['atk', 'def', 'spa', 'spd', 'spe'];
+    const byPair = {};
+    for (const n of Object.values(DB.natures)) byPair[n.plus ? `${n.plus}-${n.minus}` : n.id] = n;
+    const NEUTRAL = { atk: 'hardy', def: 'docile', spa: 'bashful', spd: 'quirky', spe: 'serious' };
+    const cell = (up, down) => {
+      const n = up === down ? DB.natures[NEUTRAL[up]] : byPair[`${up}-${down}`];
+      return `<button class="nav nat-cell ${n.id === m.nature ? 'sel' : ''} ${up === down ? 'neutral' : ''}" type="button" data-nature="${n.id}">${natureName(n)}</button>`;
+    };
+    panel.innerHTML = `<div class="nat-info"></div>
+      <div class="nat-chart"><span></span>${order.map((k) => `<span class="nat-down">−${t('sh_' + k)}</span>`).join('')}
+        ${order.map((up) => `<span class="nat-up">+${t('sh_' + up)}</span>${order.map((down) => cell(up, down)).join('')}`).join('')}</div>
+      <div class="ab-row"><span class="cyan">${t('ability')}</span>${d.abilities.map((a) => `<button class="nav ab-btn ${a === m.ability ? 'sel' : ''}" type="button" data-ability="${a}">${abilityName(a, d.abilityNames[a])}</button>`).join('')}</div>
+      <div class="ab-info"></div>`;
+    $$('.nat-cell', panel).forEach((b) =>
+      b.addEventListener('click', () => {
+        m.nature = b.dataset.nature;
+        this.changed();
+        this.renderEditor();
+        this.setFocus($(`#editor .nat-cell[data-nature="${m.nature}"]`), false);
+      }),
+    );
+    $$('.ab-btn', panel).forEach((b) =>
+      b.addEventListener('click', () => {
+        m.ability = b.dataset.ability;
+        this.changed();
+        this.renderEditor();
+        this.setFocus($(`#editor .ab-btn[data-ability="${m.ability}"]`), false);
+      }),
+    );
+    this.renderNatureInfo(m.nature);
+    this.renderAbilityInfo(m.ability);
+  }
+
+  renderNatureInfo(id) {
+    const box = $('#editor .nat-info');
+    const n = DB.natures[id];
+    if (!box || !n) return;
+    const neutral = !n.plus || n.plus === n.minus;
+    box.innerHTML = `<span class="cyan">${t('nature')}</span> <span class="yellow">${natureName(n)}</span> ${
+      neutral ? `<span class="dim">${t('neutral')}</span>` : `<span class="nat-up">${t('natureUp', { stat: t('s_' + n.plus) })}</span> <span class="nat-down">${t('natureDown', { stat: t('s_' + n.minus) })}</span>`
+    }`;
+  }
+
+  renderAbilityInfo(id) {
+    const box = $('#editor .ab-info');
+    if (!box) return;
+    const d = DB.pokedex[this.member().species];
+    box.innerHTML = `<span class="yellow">${abilityName(id, d.abilityNames[id])}</span> ${esc(abilityDesc(id))}`;
   }
 
   renderItemInfo(id) {
@@ -425,6 +655,15 @@ export class UI {
 
   /** Per-frame animation of the preview sprites (setup panels + editor). */
   tick(dt) {
+    // Holding ←/→ on a Stat Point row keeps changing it.
+    const h = this.spHold;
+    if (h) {
+      if (!this.game.input?.down.has(h.code) || !this.focus?.classList.contains('sp-row')) this.spHold = null;
+      else if ((h.t += dt) >= 0.06) {
+        h.t = 0;
+        this.setSp(this.focus.dataset.stat, h.dd);
+      }
+    }
     const draw = (cv, anim, dir, big) => {
       anim.update(dt);
       const ctx = cv.getContext('2d');
@@ -490,6 +729,9 @@ export class UI {
     el.classList.add('focus');
     el.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
     if (el.classList.contains('item-cell')) this.renderItemInfo(el.dataset.id || null);
+    if (el.dataset.move) this.renderMoveInfo(el.dataset.move);
+    if (el.dataset.nature) this.renderNatureInfo(el.dataset.nature);
+    if (el.dataset.ability) this.renderAbilityInfo(el.dataset.ability);
     // Setup: hovering / moving onto a party member shows it on the panel's stage.
     if (el.classList.contains('member') && this.game.state === 'setup' && !$('#editor').classList.contains('show')) {
       const slot = Number(el.dataset.slot);
@@ -501,10 +743,7 @@ export class UI {
         if (st) st.anim = new SpriteAnimator(this.arts[m.species]);
         const panel = $(`#setup .ppanel[data-slot="${slot}"]`);
         $$('.member', panel).forEach((b) => b.classList.toggle('on', Number(b.dataset.idx) === idx));
-        const d = DB.pokedex[m.species];
-        const item = m.item ? ITEMS.byId[m.item] : null;
-        $('.plate', panel).innerHTML = `<div><span class="yellow">${mon(m.species)}</span> ${d.types.map(orb).join('')}</div>
-          <div class="plate-item">${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('noItem')}</span>`}</div>`;
+        $('.plate', panel).innerHTML = this.plateHTML(m);
         $('.stage', panel).dataset.idx = idx;
       }
     }
@@ -539,6 +778,13 @@ export class UI {
 
   /** Title / setup / any open window. Returns true when the key was used. */
   navKey(code) {
+    // Stat Point rows: ←/→ change the value (hold to repeat).
+    if (this.focus?.classList.contains('sp-row') && (KEYS.left.includes(code) || KEYS.right.includes(code))) {
+      const dd = KEYS.left.includes(code) ? -1 : 1;
+      this.setSp(this.focus.dataset.stat, dd);
+      this.spHold = { code, dd, t: -0.3 };
+      return true;
+    }
     if (KEYS.up.includes(code)) this.move(0, -1);
     else if (KEYS.down.includes(code)) this.move(0, 1);
     else if (KEYS.left.includes(code)) this.move(-1, 0);
@@ -550,6 +796,7 @@ export class UI {
     else if (code === 'Tab' && this.edit && $('#editor').classList.contains('show')) {
       const i = TABS.indexOf(this.edit.tab);
       this.edit.tab = TABS[(i + 1) % TABS.length];
+      this.edit.pick = null;
       this.renderEditor();
       this.setFocus($(`#editor .tab[data-tab="${this.edit.tab}"]`));
     } else return false;
@@ -566,7 +813,7 @@ export class UI {
       $('#info').classList.remove('show');
       return this.refocus();
     }
-    if ($('#editor').classList.contains('show')) return this.closeEditor();
+    if ($('#editor').classList.contains('show')) return this.edit?.pick != null ? this.closePicker() : this.closeEditor();
     if (this.ddOpen) return this.toggleDropdown(false);
     if (this.game.state === 'paused') return this.game.togglePause();
     if (this.game.state === 'result') return this.game.toSetup();
@@ -635,6 +882,7 @@ export class UI {
         <div class="hud-main">
           <div class="hud-name"><span class="c-p${p.slot + 1}">${compact ? `P${p.slot + 1} ` : ''}${mon(f.data.key)}</span>${compact ? '' : ' <span class="dim">Lv.50</span>'}${f.item ? ` <span class="hud-item" title="${esc(itemName(f.item))}">${itemIcon(f.item)}</span>` : ''}${minis}</div>
           <div class="hp-line"><span class="cyan">HP</span><span class="hp-text"></span><span class="hp-bar"><i></i></span></div>
+          <div class="hud-fx"></div>
           <div class="cds">
             ${f.moves.map((id) => `<div class="cd" title="${moveName(id, DB.moves[id].name)}">${orb(DB.moves[id].type)}<b><i></i></b></div>`).join('')}
             <div class="cd dodge" title="${t('dodge')}"><img class="dodge-ico" src="assets/ui/icon-dash.png" alt=""><b><i></i></b></div>
@@ -646,13 +894,15 @@ export class UI {
     const right = g.parties.filter((p) => p.team === 1).reverse();
     hud.className = compact ? 'compact' : '';
     hud.innerHTML = `<div class="hud-side">${left.map(panel).join('')}</div>
-      <button class="win menu-btn" type="button">${t('menu')}</button>
+      <div class="hud-mid"><button class="win menu-btn" type="button">${t('menu')}</button><div class="weather-chip"></div></div>
       <div class="hud-side right">${right.map(panel).join('')}</div>`;
     $('.menu-btn', hud).addEventListener('click', () => this.game.togglePause());
     this.hudEls = g.parties.map((p) => {
       const el = $(`.hud-p[data-slot="${p.slot}"]`, hud);
-      return { slot: p.slot, f: p.members[p.active], portrait: $('.hud-portrait', el), hp: $('.hp-bar i', el), hpText: $('.hp-text', el), cds: $$('.cd', el), item: $('.hud-item', el), minis: $$('.mini', el), emotion: 'Normal', lastHp: -1 };
+      return { slot: p.slot, f: p.members[p.active], portrait: $('.hud-portrait', el), hp: $('.hp-bar i', el), hpText: $('.hp-text', el), cds: $$('.cd', el), item: $('.hud-item', el), minis: $$('.mini', el), fx: $('.hud-fx', el), fxSig: '', emotion: 'Normal', lastHp: -1 };
     });
+    this.weatherEl = $('.weather-chip', hud);
+    this.weatherSig = '';
     if (g.state === 'countdown' || g.state === 'loading') this.clearLog();
   }
 
@@ -665,6 +915,13 @@ export class UI {
   updateHUD() {
     if (!this.hudEls) return;
     const g = this.game;
+    const w = weatherNow(g);
+    const wsig = w ? `${w}${Math.ceil(g.weather.t)}` : '';
+    if (wsig !== this.weatherSig && this.weatherEl) {
+      this.weatherSig = wsig;
+      this.weatherEl.innerHTML = w ? `${t('wn_' + w)} <span class="dim">${Math.ceil(g.weather.t)}</span>` : '';
+      this.weatherEl.classList.toggle('on', !!w);
+    }
     for (const h of this.hudEls) {
       const f = h.f;
       const party = g.parties[h.slot];
@@ -684,11 +941,22 @@ export class UI {
       }
       if (h.item) h.item.classList.toggle('spent', f.itemSpent);
       h.minis.forEach((img, i) => img.classList.toggle('ko', party.members[i].ko));
+      // Status condition + timed stat changes.
+      const parts = [];
+      if (f.status) parts.push(`<span class="st st-${f.status.id}">${t('stn_' + f.status.id)}</span>`);
+      if (f.confusedT > 0) parts.push(`<span class="st st-confusion">${t('stn_confusion')}</span>`);
+      for (const [k, b] of Object.entries(f.boosts)) parts.push(`<span class="bst ${b.n > 0 ? 'up' : 'down'}">${t('sh_' + k)}${b.n > 0 ? '+' : ''}${b.n}</span>`);
+      const sig = parts.join('');
+      if (sig !== h.fxSig) {
+        h.fxSig = sig;
+        h.fx.innerHTML = sig;
+      }
       const foe = g.nearestEnemy(f);
       f.moves.forEach((id, j) => {
         const cd = DB.moves[id].cooldown;
         const c = h.cds[j];
-        c.classList.toggle('immune', foe ? effectiveness(DB.moves[id].type, foe.data.types) === 0 : false);
+        const mv = DB.moves[id];
+        c.classList.toggle('immune', foe && mv.category !== 'Status' ? effectiveness(mv.type, foe.types) === 0 : false);
         c.classList.toggle('ready', f.cd[id] <= 0);
         c.classList.toggle('casting', f.cast?.id === id);
         c.lastChild.firstChild.style.width = `${(1 - f.cd[id] / cd) * 100}%`;

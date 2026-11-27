@@ -123,7 +123,7 @@ export class SpriteAnimator {
     }
   }
 
-  draw(ctx, x, y, dir, { flash = 0, alpha = 1, scale = 1 } = {}) {
+  draw(ctx, x, y, dir, { flash = 0, alpha = 1, scale = 1, tint = null, tintAmt = 0 } = {}) {
     const a = this.anim;
     const img = this.art.sheets[a.file];
     if (!img) return;
@@ -138,17 +138,20 @@ export class SpriteAnimator {
     ctx.save();
     ctx.globalAlpha *= alpha;
     ctx.drawImage(img, sx, sy, a.fw, a.fh, dx, dy, w, h);
-    if (flash > 0) {
+    // White hit flash, or a colour tint (status conditions: frozen, burned...).
+    const color = flash > 0 ? '#fff' : tint;
+    const amount = flash > 0 ? flash : tintAmt;
+    if (color && amount > 0) {
       const c = scratchCanvas(a.fw, a.fh);
       const sctx = c.getContext('2d');
       sctx.clearRect(0, 0, a.fw, a.fh);
       sctx.globalCompositeOperation = 'source-over';
       sctx.drawImage(img, sx, sy, a.fw, a.fh, 0, 0, a.fw, a.fh);
       sctx.globalCompositeOperation = 'source-atop';
-      sctx.fillStyle = '#fff';
+      sctx.fillStyle = color;
       sctx.fillRect(0, 0, a.fw, a.fh);
       sctx.globalCompositeOperation = 'source-over';
-      ctx.globalAlpha *= Math.min(1, flash);
+      ctx.globalAlpha *= Math.min(1, amount);
       ctx.drawImage(c, 0, 0, a.fw, a.fh, dx, dy, w, h);
     }
     ctx.restore();

@@ -114,7 +114,11 @@
         "fps": 30,
         "scale": 1.2
       },
-      "shake": 6
+      "shake": 6,
+      "extra": {
+        "desc": "Huge beam; the user must rest afterwards.",
+        "descKo": "거대한 광선. 사용 후 쉬어야 한다."
+      }
     },
     "dracometeor": {
       "behavior": "targetArea",
@@ -156,7 +160,11 @@
         "fps": 12,
         "scale": 1.6
       },
-      "shake": 4
+      "shake": 4,
+      "extra": {
+        "desc": "Meteors rain over a wide area.",
+        "descKo": "넓은 범위에 유성이 쏟아진다."
+      }
     },
     "bulletpunch": {
       "behavior": "melee",
@@ -167,6 +175,11 @@
         "fx": "Bullet_Punch.None",
         "fps": 30,
         "scale": 1.1
+      },
+      "extra": {
+        "cdMul": 0.85,
+        "desc": "Recharges 15% faster.",
+        "descKo": "쿨타임이 15% 짧다."
       }
     },
     "aurasphere": {
@@ -211,6 +224,10 @@
       "hit2": {
         "fx": "Hit_Super_Effective.None",
         "fps": 20
+      },
+      "extra": {
+        "desc": "Homes in on the target.",
+        "descKo": "상대를 따라간다."
       }
     },
     "flashcannon": {
@@ -271,28 +288,28 @@
     },
     "dragonrush": {
       "behavior": "dash",
-      "anim": "Attack",
-      "range": 260,
-      "dashSpeed": 560,
-      "dashTime": 0.45,
+      "anim": "Walk",
+      "range": 240,
+      "dashSpeed": 620,
+      "dashTime": 0.4,
       "under": {
         "fx": "Dragon_Rush_Back.Flip",
-        "fps": 30,
-        "scale": 1.2,
+        "fps": 20,
+        "scale": 1.4,
         "follow": true
       },
       "over": {
         "fx": "Dragon_Rush_Front.Flip",
-        "fps": 30,
-        "scale": 1.2,
+        "fps": 20,
+        "scale": 1.4,
         "follow": true
       },
       "hit": {
         "fx": "Hit_Super_Effective.None",
         "fps": 20,
-        "scale": 1.3
+        "scale": 1.6
       },
-      "shake": 5
+      "shake": 6
     },
     "earthpower": {
       "behavior": "targetArea",
@@ -439,30 +456,31 @@
       "range": 300,
       "projectile": {
         "fx": "Gunk_Shot.Dir8",
-        "fps": 20,
+        "fps": 16,
+        "scale": 1.4,
         "loop": true,
-        "scale": 1.3,
         "dirRows": true,
-        "speed": 220,
-        "radius": 16,
+        "speed": 230,
+        "radius": 14,
         "life": 1.8,
-        "splash": 36,
+        "splash": 30,
         "trail": {
           "fx": "Gunk_Shot_Particle.None",
           "fps": 20,
-          "every": 0.04,
+          "scale": 1,
+          "every": 0.06,
           "jitter": 6
         }
       },
       "hit": {
         "fx": "Gunk_Shot_Hit.None",
-        "fps": 40,
-        "scale": 2
+        "fps": 24,
+        "scale": 1.6
       },
       "hit2": {
         "fx": "Smoke_Purple.None",
-        "fps": 18,
-        "scale": 2.2
+        "fps": 20,
+        "scale": 1.4
       }
     },
     "psychocut": {
@@ -490,6 +508,11 @@
         "fx": "Psycho_Cut_Hole.None",
         "fps": 36,
         "scale": 1.4
+      },
+      "extra": {
+        "pierce": true,
+        "desc": "The blade pierces through every foe in line.",
+        "descKo": "칼날이 직선상의 모든 상대를 관통한다."
       }
     },
     "psychic": {
@@ -566,6 +589,11 @@
         "fx": "Flamethrower.None",
         "fps": 30,
         "scale": 1.2
+      },
+      "extra": {
+        "pierce": true,
+        "desc": "Flames pierce: hits every foe in the line.",
+        "descKo": "불꽃이 관통해 직선상의 모든 상대에게 맞는다."
       }
     },
     "dragonclaw": {
@@ -583,6 +611,11 @@
         "fx": "Dragon_Pulse_Particle_Purple.Dir2",
         "fps": 16,
         "scale": 1.5
+      },
+      "extra": {
+        "cdMul": 0.8,
+        "desc": "Recharges 20% faster.",
+        "descKo": "쿨타임이 20% 짧다."
       }
     },
     "fireblast": {
@@ -609,7 +642,12 @@
         "fps": 30,
         "scale": 1.3
       },
-      "shake": 6
+      "shake": 6,
+      "extra": {
+        "burnGround": 3,
+        "desc": "Leaves burning ground for 3 s.",
+        "descKo": "3초 동안 땅이 불탄다."
+      }
     },
     "waterpulse": {
       "behavior": "projectile",
@@ -685,7 +723,12 @@
         "anchor": "bottom",
         "anchorPad": 6
       },
-      "shake": 4
+      "shake": 4,
+      "extra": {
+        "kbMul": 2.2,
+        "desc": "Huge knockback.",
+        "descKo": "상대를 크게 밀어낸다."
+      }
     },
     "razorleaf": {
       "behavior": "projectile",
@@ -770,7 +813,12 @@
         "scale": 1.2
       },
       "tint": "rgba(255,250,180,0.2)",
-      "shake": 5
+      "shake": 5,
+      "extra": {
+        "noChargeSun": true,
+        "desc": "In sun it fires without charging.",
+        "descKo": "쾌청이면 모으지 않고 바로 발사한다."
+      }
     },
     "quickattack": {
       "behavior": "dash",
@@ -855,7 +903,12 @@
         "scale": 1.6
       },
       "tint": "rgba(255,255,160,0.25)",
-      "shake": 6
+      "shake": 6,
+      "extra": {
+        "instantRain": true,
+        "desc": "In rain it strikes with no warning.",
+        "descKo": "비가 오면 예고 없이 떨어진다."
+      }
     },
     "metalclaw": {
       "behavior": "melee",
@@ -984,7 +1037,6 @@
       "range": 260,
       "dashSpeed": 600,
       "dashTime": 0.42,
-      "recoil": 0.33,
       "under": {
         "fx": "Flare_Blitz_Charge_Back.None",
         "fps": 30,
@@ -1074,7 +1126,11 @@
         "fps": 34,
         "scale": 1
       },
-      "shake": 5
+      "shake": 5,
+      "extra": {
+        "desc": "Big, slow orb that hits hard.",
+        "descKo": "크고 느리지만 강력한 구슬."
+      }
     },
     "zenheadbutt": {
       "behavior": "dash",
@@ -1129,7 +1185,11 @@
         "fps": 20,
         "scale": 2
       },
-      "shake": 10
+      "shake": 10,
+      "extra": {
+        "desc": "Shakes the whole area around the user.",
+        "descKo": "사용자 주위 전체를 흔든다."
+      }
     },
     "rockslide": {
       "behavior": "targetArea",
@@ -1250,7 +1310,12 @@
         "fps": 30,
         "scale": 1.4
       },
-      "shake": 9
+      "shake": 9,
+      "extra": {
+        "kbMul": 2,
+        "desc": "Sends the target flying.",
+        "descKo": "상대를 멀리 날려 보낸다."
+      }
     },
     "wingattack": {
       "behavior": "melee",
@@ -1422,7 +1487,12 @@
         "scale": 2.2
       },
       "tint": "rgba(160,220,255,0.18)",
-      "shake": 3
+      "shake": 3,
+      "extra": {
+        "chill": 2,
+        "desc": "Chills the target: 40% slower for 2 s.",
+        "descKo": "상대를 얼려 2초 동안 40% 느리게 한다."
+      }
     },
     "surf": {
       "behavior": "burst",
@@ -1449,7 +1519,12 @@
         "fps": 22,
         "scale": 1.6
       },
-      "shake": 5
+      "shake": 5,
+      "extra": {
+        "kbMul": 1.6,
+        "desc": "The wave pushes foes back.",
+        "descKo": "파도가 상대를 밀어낸다."
+      }
     },
     "xscissor": {
       "behavior": "melee",
@@ -1522,7 +1597,12 @@
         "scale": 2.2
       },
       "tint": "rgba(255,120,40,0.25)",
-      "shake": 9
+      "shake": 9,
+      "extra": {
+        "hpPower": true,
+        "desc": "Stronger the more HP the user has.",
+        "descKo": "HP가 많을수록 위력이 오른다."
+      }
     },
     "lavaplume": {
       "behavior": "burst",
@@ -1547,7 +1627,11 @@
         "fps": 20,
         "scale": 2.4
       },
-      "shake": 3
+      "shake": 3,
+      "extra": {
+        "desc": "Hits everyone around; 30% burn each.",
+        "descKo": "주위 모두를 공격, 각각 30% 화상."
+      }
     },
     "leafblade": {
       "behavior": "melee",
@@ -1625,7 +1709,11 @@
         "fps": 24,
         "scale": 1.6
       },
-      "shake": 3
+      "shake": 3,
+      "extra": {
+        "desc": "Five leaves in a wide spread.",
+        "descKo": "잎 다섯 장이 넓게 퍼진다."
+      }
     },
     "mudbomb": {
       "behavior": "projectile",
@@ -1655,12 +1743,17 @@
     "machpunch": {
       "behavior": "melee",
       "anim": "Attack",
-      "range": 76,
-      "lunge": 46,
+      "range": 110,
+      "lunge": 84,
       "hit": {
         "fx": "Arm_Thrust.None",
         "fps": 24,
         "scale": 1.4
+      },
+      "extra": {
+        "longLunge": true,
+        "desc": "Lunges in from farther away.",
+        "descKo": "더 먼 곳에서 돌진해 때린다."
       }
     },
     "suckerpunch": {
@@ -1680,7 +1773,12 @@
         "fps": 20,
         "scale": 1.6
       },
-      "shake": 3
+      "shake": 3,
+      "extra": {
+        "punish": 1.5,
+        "desc": "×1.5 if the target is in the middle of an attack.",
+        "descKo": "상대가 공격하는 중이면 위력 1.5배."
+      }
     },
     "megahorn": {
       "behavior": "melee",
@@ -1726,6 +1824,719 @@
         "fps": 20,
         "scale": 2
       }
+    },
+    "swordsdance": {
+      "behavior": "self",
+      "anim": "Rotate",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Swords_Dance.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "dragondance": {
+      "behavior": "self",
+      "anim": "Rotate",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Dragon_Dance.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "under": {
+        "fx": "Dragon_Dance_Circle.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "nastyplot": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Nasty_Plot_Think.None",
+        "fps": 12,
+        "scale": 1.3,
+        "oy": -30
+      },
+      "under": {
+        "fx": "Nasty_Plot.None",
+        "fps": 16,
+        "scale": 1.4
+      }
+    },
+    "calmmind": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 40,
+        "scale": 1.2
+      }
+    },
+    "bulkup": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Charge_Up.None",
+        "fps": 24,
+        "scale": 1.4
+      }
+    },
+    "irondefense": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Harden_RSE.None",
+        "fps": 16,
+        "scale": 1.6
+      }
+    },
+    "agility": {
+      "behavior": "self",
+      "anim": "Hop",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Puff_White.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "under": {
+        "fx": "Tailwind.Dir1",
+        "fps": 20,
+        "scale": 1.2
+      }
+    },
+    "shellsmash": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Harden_RSE.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "under": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 1.8
+      }
+    },
+    "focusenergy": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Focus_Energy.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "willowisp": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Will_O_Wisp.None",
+        "fps": 16,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 200,
+        "radius": 12,
+        "count": 3,
+        "spread": 0.35,
+        "homing": 2.5,
+        "life": 2
+      },
+      "hit": {
+        "fx": "Burned.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "thunderwave": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Shock_Wave.None",
+        "fps": 24,
+        "scale": 1.2,
+        "loop": true,
+        "speed": 320,
+        "radius": 14,
+        "life": 1.2
+      },
+      "hit": {
+        "fx": "Spark.None",
+        "fps": 14,
+        "scale": 1.6
+      }
+    },
+    "toxic": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Poison_Ball_Ranger.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 240,
+        "radius": 13,
+        "life": 1.6,
+        "trail": {
+          "fx": "Bubbles_Purple.None",
+          "fps": 20,
+          "scale": 0.8,
+          "every": 0.07,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Smoke_Purple.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "confuseray": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Confuse_Ray.None",
+        "fps": 16,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 200,
+        "radius": 12,
+        "homing": 3,
+        "life": 2
+      },
+      "hit": {
+        "fx": "Light_Ball_Pink.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "darkvoid": {
+      "behavior": "burst",
+      "anim": "Charge",
+      "range": 120,
+      "radius": 120,
+      "delay": 0.6,
+      "under": {
+        "fx": "Dark_Void_Back.None",
+        "fps": 20,
+        "scale": 2.6
+      },
+      "over": {
+        "fx": "Dark_Void_Front.None",
+        "fps": 20,
+        "scale": 2.6
+      },
+      "ring": {
+        "fx": "Dark_Void_Sparkle.None",
+        "fps": 20,
+        "scale": 1.2,
+        "n": 8,
+        "r": 90
+      },
+      "hit": {
+        "fx": "Dark_Void_Sparkle.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "tint": "rgba(20,0,40,0.3)",
+      "shake": 2,
+      "extra": {
+        "desc": "Puts every foe nearby to sleep.",
+        "descKo": "주위의 상대를 모두 잠재운다."
+      }
+    },
+    "recover": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 40,
+        "scale": 1.2
+      },
+      "under": {
+        "fx": "Moonlight_Sparkles.None",
+        "fps": 20,
+        "scale": 1.2
+      }
+    },
+    "roost": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Roost_Front.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Roost_Back.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Heals 50%; loses the Flying type for 3 s.",
+        "descKo": "HP 50% 회복. 3초 동안 비행 타입이 사라진다."
+      }
+    },
+    "moonlight": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Moonlight_Moon.None",
+        "fps": 16,
+        "scale": 1.4,
+        "oy": -34
+      },
+      "under": {
+        "fx": "Moonlight_Sparkles.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Heals 50% (66% in sun, 25% in rain or sand).",
+        "descKo": "HP 50% 회복 (쾌청 66%, 비·모래바람 25%)."
+      }
+    },
+    "synthesis": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Synthesis_Sparkle.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Heals 50% (66% in sun, 25% in rain or sand).",
+        "descKo": "HP 50% 회복 (쾌청 66%, 비·모래바람 25%)."
+      }
+    },
+    "rest": {
+      "behavior": "self",
+      "anim": "Sleep",
+      "range": 9999,
+      "time": 0.6,
+      "over": {
+        "fx": "Sleep_Z.None",
+        "fps": 8,
+        "scale": 1.4,
+        "oy": -26
+      },
+      "extra": {
+        "desc": "Restores all HP and cures status, then sleeps.",
+        "descKo": "HP와 상태이상을 모두 회복하고 잠든다."
+      }
+    },
+    "protect": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.25,
+      "over": {
+        "fx": "Protect.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Blocks every attack for 0.8 s. Used automatically when an attack is coming.",
+        "descKo": "0.8초 동안 모든 공격을 막는다. 공격이 올 때 자동으로 사용."
+      }
+    },
+    "raindance": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Rain.None",
+        "fps": 20,
+        "scale": 1.2,
+        "oy": -20
+      }
+    },
+    "sunnyday": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Sun.None",
+        "fps": 16,
+        "scale": 1.4,
+        "oy": -30
+      }
+    },
+    "sandstorm": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Sand_Tomb_Sand.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "firefang": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Fire_Fang_Fang.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      }
+    },
+    "icefang": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Ice_Fang_Fang.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Ice_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      }
+    },
+    "thunderfang": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Thunder_Fang_Fang.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Spark.None",
+        "fps": 14,
+        "scale": 1.4
+      }
+    },
+    "shadowsneak": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 220,
+      "dashSpeed": 680,
+      "dashTime": 0.32,
+      "under": {
+        "fx": "Shadow_Sneak_Shadow.None",
+        "fps": 20,
+        "scale": 1.2,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Shadow_Sneak_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 2,
+      "extra": {
+        "desc": "Slips through the shadows at high speed.",
+        "descKo": "그림자를 타고 빠르게 다가간다."
+      }
+    },
+    "extremespeed": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 260,
+      "dashSpeed": 900,
+      "dashTime": 0.3,
+      "under": {
+        "fx": "Puff_White.None",
+        "fps": 30,
+        "scale": 1.2,
+        "follow": true
+      },
+      "over": {
+        "fx": "Giga_Impact_Front.None",
+        "fps": 30,
+        "scale": 0.8,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 4,
+      "extra": {
+        "desc": "The fastest dash in the game.",
+        "descKo": "게임에서 가장 빠른 돌진."
+      }
+    },
+    "uturn": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 220,
+      "dashSpeed": 620,
+      "dashTime": 0.35,
+      "under": {
+        "fx": "U_Turn_Travel.None",
+        "fps": 20,
+        "scale": 1.2,
+        "follow": true
+      },
+      "hit": {
+        "fx": "U_Turn_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "In Trio, the user switches out after hitting.",
+        "descKo": "트리오에서는 공격 후 교체된다."
+      }
+    },
+    "knockoff": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Knock_Off.Flip",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Knocks the target's held item away for the rest of the battle.",
+        "descKo": "상대의 도구를 배틀이 끝날 때까지 떨어뜨린다."
+      }
+    },
+    "gigadrain": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Bubble_Clump_Green.None",
+        "fps": 16,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 230,
+        "radius": 13,
+        "life": 1.8,
+        "trail": {
+          "fx": "Bubbles_Green.None",
+          "fps": 20,
+          "scale": 0.8,
+          "every": 0.06,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Absorb.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "drainpunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 46,
+      "hit": {
+        "fx": "Bullet_Punch.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Absorb.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "superpower": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 78,
+      "lunge": 54,
+      "hit": {
+        "fx": "Superpower.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 7
+    },
+    "scald": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Bubbles_Blue.None",
+        "fps": 20,
+        "scale": 1.2,
+        "loop": true,
+        "speed": 300,
+        "radius": 12,
+        "life": 1,
+        "stream": 5,
+        "streamGap": 0.07,
+        "spread": 0.1,
+        "trail": {
+          "fx": "Smoke_White.None",
+          "fps": 20,
+          "scale": 0.7,
+          "every": 0.06,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "A rapid stream of hot water.",
+        "descKo": "뜨거운 물줄기를 연속으로 쏜다."
+      }
+    }
+  },
+  "status": {
+    "statUp": {
+      "fx": "Stat_Red_Line.Dir1",
+      "fps": 16,
+      "scale": 1.4
+    },
+    "statDown": {
+      "fx": "Stat_Blue_Line.Dir1",
+      "fps": 16,
+      "scale": 1.4
+    },
+    "statUpRing": {
+      "fx": "Stat_Red_Ring.None",
+      "fps": 14,
+      "scale": 1.6
+    },
+    "statDownRing": {
+      "fx": "Stat_Blue_Ring.None",
+      "fps": 14,
+      "scale": 1.6
+    },
+    "brn": {
+      "fx": "Burned.None",
+      "fps": 16,
+      "scale": 1.2
+    },
+    "psn": {
+      "fx": "Bubbles_Purple.None",
+      "fps": 14,
+      "scale": 1
+    },
+    "tox": {
+      "fx": "Bubbles_Purple.None",
+      "fps": 18,
+      "scale": 1.2
+    },
+    "par": {
+      "fx": "Spark.None",
+      "fps": 14,
+      "scale": 1.2
+    },
+    "slp": {
+      "fx": "Sleep_Z.None",
+      "fps": 8,
+      "scale": 1.2
+    },
+    "frz": {
+      "fx": "Ice_Pieces.None",
+      "fps": 10,
+      "scale": 1.6
+    },
+    "confusion": {
+      "fx": "Emote_Question.None",
+      "fps": 8,
+      "scale": 1.2
+    },
+    "flinch": {
+      "fx": "Emote_Shock.Flip",
+      "fps": 12,
+      "scale": 1.2
+    },
+    "heal": {
+      "fx": "Moonlight_Sparkles.None",
+      "fps": 20,
+      "scale": 1.3
+    },
+    "protect": {
+      "fx": "Protect.None",
+      "fps": 24,
+      "scale": 1.6
+    },
+    "chill": {
+      "fx": "Ice_Shard_Hit_Sparkle.None",
+      "fps": 24,
+      "scale": 1
+    },
+    "rain": {
+      "fx": "Rain.None",
+      "fps": 20,
+      "scale": 1
+    },
+    "sun": {
+      "fx": "Sun.None",
+      "fps": 12,
+      "scale": 1.6
+    },
+    "sand": {
+      "fx": "Sand_Tomb_Sand.None",
+      "fps": 16,
+      "scale": 1.4
+    },
+    "burnGround": {
+      "fx": "Lava_Plume_Fire.None",
+      "fps": 20,
+      "scale": 1.4
     }
   }
 }

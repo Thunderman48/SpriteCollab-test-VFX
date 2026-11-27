@@ -4,8 +4,9 @@ import { statsFor, HP_SCALE, DB, effectiveness } from './combat.js';
 import { effectiveBase } from './modes.js';
 import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
-import { equip } from './items.js';
-import { t, itemName } from './i18n.js';
+import { equip, unequip } from './items.js';
+import { t, itemName, abilityName } from './i18n.js';
+import { ab, stageOf, stageMul, tickFighter, beforeCast, wantsMove, weatherNow } from './effects.js';
 
 export const PLAYER_COLORS = ['#88c8f8', '#f8a0c8', '#88f888', '#f8e860'];
 const DODGE_TIME = 0.2;
@@ -28,7 +29,10 @@ export class Fighter {
     this.moves = member.moves;
     this.art = art;
     this.sprite = new SpriteAnimator(art);
-    this.stats = statsFor(effectiveBase(game.rule || 'standard', member.species)); // rule-adjusted (Balanced)
+    // Nature + Stat Points on top of the rule-adjusted base stats (Balanced).
+    this.rawStats = statsFor(effectiveBase(game.rule || 'standard', member.species), member);
+    this.stats = { ...this.rawStats };
+    this.ability = data.abilities.includes(member.ability) ? member.ability : data.abilities[0];
     this.maxHp = this.stats.hp * HP_SCALE;
     this.hp = this.maxHp;
     this.radius = data.hurtRadius;
@@ -37,10 +41,22 @@ export class Fighter {
     this.dir = team === 0 ? 2 : 6;
     this.facing = team === 0 ? 0 : Math.PI; // last movement direction (default dodge direction)
     this.moveSpeed = 64 + this.stats.spe * 0.22;
-    // Faster Pokémon recharge a little quicker (±~10%).
-    this.recharge = 1 + (this.stats.spe - 115) / 350;
+    this.recharge = 1;
+    // Battle effects (js/effects.js): timed stat stages, status, short-lived states.
+    this.boosts = {};
+    this.status = null;
+    this.statusImmune = 0;
+    this.confusedT = 0;
+    this.chillT = 0;
+    this.roostT = 0;
+    this.protectT = 0;
+    this.rechargeT = 0;
+    this.pendingRecharge = 0;
+    this.lock = null; // Outrage
+    this.flashFire = false;
+    // Skill order: skill 1 is ready first, then 2, 3, 4; afterwards the top ready skill wins.
     this.cd = {};
-    for (const id of this.moves) this.cd[id] = DB.moves[id].cooldown * (0.35 + Math.random() * 0.3);
+    this.moves.forEach((id, i) => (this.cd[id] = 0.3 + 0.8 * i));
     this.cast = null;
     this.castGap = 0.6;
     this.dodgeT = 0;
@@ -58,12 +74,74 @@ export class Fighter {
     this.emotion = 'Normal';
     this.emotionT = 0;
     equip(this, member.item);
-    for (const id in this.cd) this.cd[id] *= this.mods.cooldownMul;
+    this.refreshSpeed();
+  }
+
+  /** Types right now (Roost removes Flying for a moment). */
+  get types() {
+    if (this.roostT > 0) {
+      const t2 = this.data.types.filter((x) => x !== 'Flying');
+      return t2.length ? t2 : ['Normal'];
+    }
+    return this.data.types;
+  }
+
+  abilityName() {
+    return abilityName(this.ability, this.data.abilityNames?.[this.ability]);
+  }
+
+  itemLabel() {
+    return this.item ? `<span class="yellow">${itemName(this.item)}</span>` : '';
+  }
+
+  /** Knock Off: the held item is gone for the rest of the battle. */
+  loseItem() {
+    unequip(this);
+    this.refreshSpeed();
+  }
+
+  get stunned() {
+    return this.status?.id === 'slp' || this.status?.id === 'frz' || this.rechargeT > 0;
+  }
+
+  /**
+   * A stat with its timed stage and ability/weather modifiers.
+   * critSide 'atk' ignores the attacker's drops, 'def' ignores the defender's raises.
+   */
+  statVal(k, critSide = null) {
+    let n = stageOf(this, k);
+    if ((critSide === 'atk' && n < 0) || (critSide === 'def' && n > 0)) n = 0;
+    let v = this.stats[k] * stageMul(n);
+    const w = weatherNow(this.game);
+    if (k === 'atk' && ab(this, 'guts') && this.status) v *= 1.5;
+    if (k === 'atk' && ab(this, 'hustle')) v *= 1.5;
+    if (k === 'spa' && ab(this, 'solarpower') && w === 'sunnyday') v *= 1.5;
+    if (k === 'spd' && w === 'sandstorm' && this.types.includes('Rock')) v *= 1.5;
+    if (k === 'spe' && ab(this, 'chlorophyll') && w === 'sunnyday') v *= 1.5;
+    if (k === 'spe' && ab(this, 'unburden') && this.itemGone) v *= 1.5;
+    return v;
+  }
+
+  /** Movement speed + cooldown recharge from Speed (stages, paralysis, chill, Pressure...). */
+  refreshSpeed() {
+    const spe = this.statVal('spe');
+    const ratio = Math.sqrt(spe / this.stats.spe); // stages help, but walking speed can't explode
+    let move = (64 + this.stats.spe * 0.22 * ratio) * (this.mods?.speedMul ?? 1);
+    if (ab(this, 'lightmetal')) move *= 1.1;
+    if (this.status?.id === 'par') move *= 0.5;
+    if (this.chillT > 0) move *= 0.6;
+    this.moveSpeed = move;
+    // Faster Pokémon recharge a little quicker (±~10% at +0).
+    let r = Math.max(0.75, Math.min(1.6, 1 + (spe - 115) / 350));
+    if (this.status?.id === 'par') r *= 0.75;
+    if (this.game.enemiesOf?.(this).some((e) => ab(e, 'pressure'))) r *= 0.85;
+    this.recharge = r;
   }
 
   /** Mark a one-shot held item (berry / seed) as used, with log + sparkle. */
   useItem(message) {
     this.itemSpent = true;
+    this.itemGone = true; // Unburden
     this.game.ui.log(message);
     this.game.addEffect(new Effect(MOVEFX.common.spawn, this.x, this.y, { layer: 'over' }));
     this.game.sfx?.('go');
@@ -94,16 +172,18 @@ export class Fighter {
     }
   }
 
-  takeHit(dmg, angle) {
+  takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
     this.flash = 0.75;
     this.metroStacks = 0; // Metronome streak breaks when you're hit
-    const kb = this.mods.noKnockback ? 0 : dmg > 0 ? 160 : 40;
+    const kb = this.mods.noKnockback ? 0 : (dmg > 0 ? 160 : 40) * kbMul;
     this.kbx = Math.cos(angle) * kb;
     this.kby = Math.sin(angle) * kb;
     this.setEmotion('Pain');
     if (this.hp <= 0) return this.faint();
-    if (this.mods.sitrus && !this.itemSpent && this.hp < this.maxHp / 2) {
+    const berryAt = ab(this, 'gluttony') ? 0.75 : 0.5;
+    const unnerved = this.game.enemiesOf?.(this).some((e) => ab(e, 'unnerve'));
+    if (this.mods.sitrus && !this.itemSpent && !unnerved && this.hp < this.maxHp * berryAt) {
       const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus));
       this.useItem(t('sitrus', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>`, n: healed }));
     }
@@ -134,7 +214,7 @@ export class Fighter {
   }
 
   startDodge(input) {
-    if (this.dodgeCd > 0 || this.ko) return;
+    if (this.dodgeCd > 0 || this.ko || this.stunned) return;
     // Dodging interrupts your own cast: an unreleased move stays ready, a released
     // one keeps whatever it already fired (projectiles, beams, pending hits).
     if (this.cast) cancelCast(this.game, this);
@@ -155,7 +235,7 @@ export class Fighter {
     }
     this.dodgeT = DODGE_TIME;
     this.invuln = DODGE_INVULN;
-    this.dodgeCd = DODGE_COOLDOWN;
+    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1);
     this.dir = angleToDir(this.dodgeAngle);
     this.sprite.play('Hop', { loop: false, restart: true, speed: 1.6 });
     this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y + 6, { layer: 'under' }));
@@ -163,12 +243,27 @@ export class Fighter {
   }
 
   update(dt, input, opp) {
-    this.sprite.update(dt);
+    if (this.status?.id !== 'frz') this.sprite.update(dt); // frozen solid: the sprite stops
     this.flash = Math.max(0, this.flash - dt * 7);
     if (this.emotionT > 0 && (this.emotionT -= dt) <= 0) this.emotion = 'Normal';
     if (this.ko) {
       this.koT += dt;
       return;
+    }
+    if (this.game.state === 'fight') tickFighter(this.game, this, dt);
+    if (this.ko) return;
+    if (!this.cast && this.pendingRecharge) {
+      this.rechargeT = this.pendingRecharge; // Hyper Beam / Giga Impact: must recharge
+      this.pendingRecharge = 0;
+      this.game.ui.log(t('mustRecharge', { who: this.game.who(this) }));
+    }
+    this.refreshSpeed();
+    if (this.stunned) input = { x: 0, y: 0, dodgePressed: false };
+    else if (this.confusedT > 0 && (input.x || input.y)) {
+      // Confused: steering wobbles.
+      const a = Math.atan2(input.y, input.x) + Math.sin(this.game.time * 2.3 + this.slot) * 1.1;
+      const l = Math.hypot(input.x, input.y);
+      input = { ...input, x: Math.cos(a) * l, y: Math.sin(a) * l };
     }
     this.invuln = Math.max(0, this.invuln - dt);
     this.dodgeCd = Math.max(0, this.dodgeCd - dt);
@@ -216,7 +311,8 @@ export class Fighter {
       this.dir = angleToDir(this.cast.faceAngle);
     }
 
-    if (!this.cast && this.dodgeT <= 0 && this.hurtT <= 0) {
+    if (this.status?.id === 'slp' && !this.cast) this.sprite.play('Sleep');
+    else if (!this.cast && this.dodgeT <= 0 && this.hurtT <= 0) {
       this.sprite.play(this.moving ? 'Walk' : 'Idle');
     }
 
@@ -229,24 +325,24 @@ export class Fighter {
     this.y = Math.max(b.y0 + 4, Math.min(b.y1 - 4, this.y));
   }
 
-  /** Fire the strongest ready move whose range reaches the opponent. */
+  /**
+   * Skill order: fire the top skill (1 → 4) that is ready and useful right now
+   * (in range, not immune, not a wasted buff/heal...). Outrage keeps raging.
+   */
   tryAutoCast(opp) {
-    if (this.cast || this.castGap > 0 || !this.still) return;
-    const d = this.distTo(opp);
-    let best = null;
-    for (const id of this.moves) {
+    if (this.cast || this.castGap > 0 || !this.still || this.stunned) return;
+    const list = this.lock ? [this.lock.id] : this.moves;
+    for (const id of list) {
       if (this.cd[id] > 0) continue;
-      // Auto-attacks are smart enough not to waste a move the target is immune to.
-      if (effectiveness(DB.moves[id].type, opp.data.types) === 0) continue;
-      const fx = MOVEFX.moves[id];
-      if (d > fx.range + opp.radius) continue;
-      if (!best || DB.moves[id].cooldown > DB.moves[best].cooldown) best = id;
+      if (!wantsMove(this.game, this, id, opp)) continue;
+      if (beforeCast(this.game, this, opp, id)) startCast(this.game, this, opp, id);
+      return;
     }
-    if (best) startCast(this.game, this, opp, best);
   }
 
   draw(ctx) {
     if (this.hidden) return; // vanished (Shadow Force)
+    const frozen = this.status?.id === 'frz';
     let alpha = 1;
     if (this.ko) alpha = Math.max(0, 1 - Math.max(0, this.koT - 0.6) / 0.8);
     else if (this.invuln > 0) alpha = 0.55;
@@ -261,7 +357,11 @@ export class Fighter {
     ctx.fill();
     ctx.restore();
     const sy = this.y + bob - (this.data.flying ? 6 : 0);
-    this.sprite.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha });
+    const st = this.status?.id;
+    const pulse = 0.5 + 0.5 * Math.sin(this.game.time * 6);
+    const tint = frozen ? '#a8e0ff' : this.protectT > 0 ? '#88f8f8' : st === 'brn' ? '#f86030' : st === 'par' ? '#f8e048' : st === 'psn' || st === 'tox' ? '#b048f8' : null;
+    const tintAmt = frozen ? 0.6 : this.protectT > 0 ? 0.35 : tint ? 0.15 + 0.15 * pulse : 0;
+    this.sprite.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
     if (!this.ko) this.drawTag(ctx, sy);
   }
 

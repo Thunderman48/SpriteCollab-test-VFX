@@ -9,8 +9,18 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "any",
     "cooldown": 3,
-    "shortDesc": "30% chance to make the target flinch."
+    "shortDesc": "30% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "slicing"
+    ]
   },
   "dragonpulse": {
     "id": "dragonpulse",
@@ -22,6 +32,7 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "any",
     "cooldown": 4.5,
     "shortDesc": "No additional effect."
   },
@@ -35,8 +46,10 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "User cannot move next turn."
+    "shortDesc": "User cannot move next turn.",
+    "recharge": true
   },
   "dracometeor": {
     "id": "dracometeor",
@@ -48,8 +61,12 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Lowers the user's Sp. Atk by 2."
+    "shortDesc": "Lowers the user's Sp. Atk by 2.",
+    "selfBoosts": {
+      "spa": -2
+    }
   },
   "bulletpunch": {
     "id": "bulletpunch",
@@ -61,8 +78,13 @@
     "alwaysHits": false,
     "pp": 30,
     "priority": 1,
+    "target": "normal",
     "cooldown": 1.5,
-    "shortDesc": "Usually goes first."
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
   },
   "aurasphere": {
     "id": "aurasphere",
@@ -74,8 +96,12 @@
     "alwaysHits": true,
     "pp": 20,
     "priority": 0,
+    "target": "any",
     "cooldown": 2.25,
-    "shortDesc": "This move does not check accuracy."
+    "shortDesc": "This move does not check accuracy.",
+    "flags": [
+      "bullet"
+    ]
   },
   "flashcannon": {
     "id": "flashcannon",
@@ -87,8 +113,17 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "10% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ]
   },
   "closecombat": {
     "id": "closecombat",
@@ -100,8 +135,16 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Lowers the user's Defense and Sp. Def by 1."
+    "shortDesc": "Lowers the user's Defense and Sp. Def by 1.",
+    "selfBoosts": {
+      "def": -1,
+      "spd": -1
+    },
+    "flags": [
+      "contact"
+    ]
   },
   "crunch": {
     "id": "crunch",
@@ -113,8 +156,21 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "20% chance to lower the target's Defense by 1."
+    "shortDesc": "20% chance to lower the target's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 20,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
   },
   "dragonrush": {
     "id": "dragonrush",
@@ -126,8 +182,18 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "20% chance to make the target flinch."
+    "shortDesc": "20% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 20,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "earthpower": {
     "id": "earthpower",
@@ -139,8 +205,17 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "10% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ]
   },
   "stoneedge": {
     "id": "stoneedge",
@@ -152,8 +227,10 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "High critical hit ratio."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2
   },
   "lick": {
     "id": "lick",
@@ -165,8 +242,18 @@
     "alwaysHits": false,
     "pp": 30,
     "priority": 0,
+    "target": "normal",
     "cooldown": 1.5,
-    "shortDesc": "30% chance to paralyze the target."
+    "shortDesc": "30% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "shadowball": {
     "id": "shadowball",
@@ -178,8 +265,20 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "20% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "20% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 20,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
   },
   "darkpulse": {
     "id": "darkpulse",
@@ -191,8 +290,15 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "any",
     "cooldown": 3,
-    "shortDesc": "20% chance to make the target flinch."
+    "shortDesc": "20% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 20,
+        "volatile": "flinch"
+      }
+    ]
   },
   "sludgebomb": {
     "id": "sludgebomb",
@@ -204,8 +310,18 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "30% chance to poison the target."
+    "shortDesc": "30% chance to poison the target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
   },
   "psychocut": {
     "id": "psychocut",
@@ -217,8 +333,13 @@
     "alwaysHits": false,
     "pp": 20,
     "priority": 0,
+    "target": "normal",
     "cooldown": 2.25,
-    "shortDesc": "High critical hit ratio."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "slicing"
+    ]
   },
   "psychic": {
     "id": "psychic",
@@ -230,8 +351,17 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "10% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ]
   },
   "psychoboost": {
     "id": "psychoboost",
@@ -243,8 +373,12 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Lowers the user's Sp. Atk by 2."
+    "shortDesc": "Lowers the user's Sp. Atk by 2.",
+    "selfBoosts": {
+      "spa": -2
+    }
   },
   "flamethrower": {
     "id": "flamethrower",
@@ -256,8 +390,15 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "10% chance to burn the target."
+    "shortDesc": "10% chance to burn the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ]
   },
   "dragonclaw": {
     "id": "dragonclaw",
@@ -269,8 +410,12 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
   },
   "fireblast": {
     "id": "fireblast",
@@ -282,8 +427,15 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "10% chance to burn the target."
+    "shortDesc": "10% chance to burn the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ]
   },
   "waterpulse": {
     "id": "waterpulse",
@@ -295,8 +447,15 @@
     "alwaysHits": false,
     "pp": 20,
     "priority": 0,
+    "target": "any",
     "cooldown": 2.25,
-    "shortDesc": "20% chance to confuse the target."
+    "shortDesc": "20% chance to confuse the target.",
+    "secondary": [
+      {
+        "chance": 20,
+        "volatile": "confusion"
+      }
+    ]
   },
   "aquatail": {
     "id": "aquatail",
@@ -308,8 +467,12 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
   },
   "hydropump": {
     "id": "hydropump",
@@ -321,6 +484,7 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
     "shortDesc": "No additional effect."
   },
@@ -334,8 +498,13 @@
     "alwaysHits": false,
     "pp": 25,
     "priority": 0,
+    "target": "allAdjacentFoes",
     "cooldown": 1.8,
-    "shortDesc": "High critical hit ratio. Hits adjacent foes."
+    "shortDesc": "High critical hit ratio. Hits adjacent foes.",
+    "critRatio": 2,
+    "flags": [
+      "slicing"
+    ]
   },
   "petaldance": {
     "id": "petaldance",
@@ -347,8 +516,13 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "randomNormal",
     "cooldown": 4.5,
-    "shortDesc": "Lasts 2-3 turns. Confuses the user afterwards."
+    "shortDesc": "Lasts 2-3 turns. Confuses the user afterwards.",
+    "locked": true,
+    "flags": [
+      "contact"
+    ]
   },
   "solarbeam": {
     "id": "solarbeam",
@@ -360,6 +534,7 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
     "shortDesc": "Charges turn 1. Hits turn 2. No charge in sunlight."
   },
@@ -373,8 +548,12 @@
     "alwaysHits": false,
     "pp": 30,
     "priority": 1,
+    "target": "normal",
     "cooldown": 1.5,
-    "shortDesc": "Usually goes first."
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact"
+    ]
   },
   "thunderbolt": {
     "id": "thunderbolt",
@@ -386,8 +565,15 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "10% chance to paralyze the target."
+    "shortDesc": "10% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ]
   },
   "irontail": {
     "id": "irontail",
@@ -399,8 +585,20 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "30% chance to lower the target's Defense by 1."
+    "shortDesc": "30% chance to lower the target's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 30,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "thunder": {
     "id": "thunder",
@@ -412,8 +610,15 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "30% chance to paralyze. Can't miss in rain."
+    "shortDesc": "30% chance to paralyze. Can't miss in rain.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ]
   },
   "metalclaw": {
     "id": "metalclaw",
@@ -425,8 +630,20 @@
     "alwaysHits": false,
     "pp": 35,
     "priority": 0,
+    "target": "normal",
     "cooldown": 1.29,
-    "shortDesc": "10% chance to raise the user's Attack by 1."
+    "shortDesc": "10% chance to raise the user's Attack by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "selfBoosts": {
+          "atk": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "roaroftime": {
     "id": "roaroftime",
@@ -438,8 +655,10 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "User cannot move next turn."
+    "shortDesc": "User cannot move next turn.",
+    "recharge": true
   },
   "spacialrend": {
     "id": "spacialrend",
@@ -451,8 +670,10 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "High critical hit ratio."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2
   },
   "shadowforce": {
     "id": "shadowforce",
@@ -464,8 +685,12 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Disappears turn 1. Hits turn 2. Breaks protection."
+    "shortDesc": "Disappears turn 1. Hits turn 2. Breaks protection.",
+    "flags": [
+      "contact"
+    ]
   },
   "skyuppercut": {
     "id": "skyuppercut",
@@ -477,8 +702,13 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "Can hit Pokemon using Bounce, Fly, or Sky Drop."
+    "shortDesc": "Can hit Pokemon using Bounce, Fly, or Sky Drop.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
   },
   "blazekick": {
     "id": "blazekick",
@@ -490,8 +720,19 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "High critical hit ratio. 10% chance to burn."
+    "shortDesc": "High critical hit ratio. 10% chance to burn.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
+    "critRatio": 2,
+    "flags": [
+      "contact"
+    ]
   },
   "flareblitz": {
     "id": "flareblitz",
@@ -503,8 +744,19 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "Has 33% recoil. 10% chance to burn. Thaws user."
+    "shortDesc": "Has 33% recoil. 10% chance to burn. Thaws user.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
+    "recoil": 0.33,
+    "flags": [
+      "contact"
+    ]
   },
   "moonblast": {
     "id": "moonblast",
@@ -516,8 +768,17 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "30% chance to lower the target's Sp. Atk by 1."
+    "shortDesc": "30% chance to lower the target's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 30,
+        "boosts": {
+          "spa": -1
+        }
+      }
+    ]
   },
   "focusblast": {
     "id": "focusblast",
@@ -529,8 +790,20 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "10% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
   },
   "zenheadbutt": {
     "id": "zenheadbutt",
@@ -542,8 +815,18 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "20% chance to make the target flinch."
+    "shortDesc": "20% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 20,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "meteormash": {
     "id": "meteormash",
@@ -555,8 +838,21 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "20% chance to raise the user's Attack by 1."
+    "shortDesc": "20% chance to raise the user's Attack by 1.",
+    "secondary": [
+      {
+        "chance": 20,
+        "selfBoosts": {
+          "atk": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
   },
   "earthquake": {
     "id": "earthquake",
@@ -568,6 +864,7 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "allAdjacent",
     "cooldown": 4.5,
     "shortDesc": "Hits adjacent Pokemon. Double damage on Dig."
   },
@@ -581,8 +878,15 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "allAdjacentFoes",
     "cooldown": 4.5,
-    "shortDesc": "30% chance to make the foe(s) flinch."
+    "shortDesc": "30% chance to make the foe(s) flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ]
   },
   "swift": {
     "id": "swift",
@@ -594,6 +898,7 @@
     "alwaysHits": true,
     "pp": 20,
     "priority": 0,
+    "target": "allAdjacentFoes",
     "cooldown": 2.25,
     "shortDesc": "This move does not check accuracy. Hits foes."
   },
@@ -607,8 +912,19 @@
     "alwaysHits": false,
     "pp": 25,
     "priority": 0,
+    "target": "normal",
     "cooldown": 1.8,
-    "shortDesc": "30% chance to make the target flinch."
+    "shortDesc": "30% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
   },
   "bodyslam": {
     "id": "bodyslam",
@@ -620,8 +936,18 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "30% chance to paralyze the target."
+    "shortDesc": "30% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "gigaimpact": {
     "id": "gigaimpact",
@@ -633,8 +959,13 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "User cannot move next turn."
+    "shortDesc": "User cannot move next turn.",
+    "recharge": true,
+    "flags": [
+      "contact"
+    ]
   },
   "wingattack": {
     "id": "wingattack",
@@ -646,8 +977,12 @@
     "alwaysHits": false,
     "pp": 35,
     "priority": 0,
+    "target": "any",
     "cooldown": 1.29,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
   },
   "outrage": {
     "id": "outrage",
@@ -659,8 +994,13 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "randomNormal",
     "cooldown": 4.5,
-    "shortDesc": "Lasts 2-3 turns. Confuses the user afterwards."
+    "shortDesc": "Lasts 2-3 turns. Confuses the user afterwards.",
+    "locked": true,
+    "flags": [
+      "contact"
+    ]
   },
   "feintattack": {
     "id": "feintattack",
@@ -672,8 +1012,12 @@
     "alwaysHits": true,
     "pp": 20,
     "priority": 0,
+    "target": "normal",
     "cooldown": 2.25,
-    "shortDesc": "This move does not check accuracy."
+    "shortDesc": "This move does not check accuracy.",
+    "flags": [
+      "contact"
+    ]
   },
   "payback": {
     "id": "payback",
@@ -685,8 +1029,12 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "Power doubles if the user moves after the target."
+    "shortDesc": "Power doubles if the user moves after the target.",
+    "flags": [
+      "contact"
+    ]
   },
   "waterfall": {
     "id": "waterfall",
@@ -698,8 +1046,18 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "20% chance to make the target flinch."
+    "shortDesc": "20% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 20,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "psybeam": {
     "id": "psybeam",
@@ -711,8 +1069,15 @@
     "alwaysHits": false,
     "pp": 20,
     "priority": 0,
+    "target": "normal",
     "cooldown": 2.25,
-    "shortDesc": "10% chance to confuse the target."
+    "shortDesc": "10% chance to confuse the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "volatile": "confusion"
+      }
+    ]
   },
   "crosschop": {
     "id": "crosschop",
@@ -724,8 +1089,13 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "High critical hit ratio."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact"
+    ]
   },
   "icebeam": {
     "id": "icebeam",
@@ -737,8 +1107,15 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "10% chance to freeze the target."
+    "shortDesc": "10% chance to freeze the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ]
   },
   "surf": {
     "id": "surf",
@@ -750,6 +1127,7 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "allAdjacent",
     "cooldown": 3,
     "shortDesc": "Hits adjacent Pokemon. Double damage on Dive."
   },
@@ -763,8 +1141,13 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact",
+      "slicing"
+    ]
   },
   "ironhead": {
     "id": "ironhead",
@@ -776,8 +1159,18 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "30% chance to make the target flinch."
+    "shortDesc": "30% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
   },
   "nightslash": {
     "id": "nightslash",
@@ -789,21 +1182,14 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "High critical hit ratio."
-  },
-  "lavaplume": {
-    "id": "lavaplume",
-    "name": "Lava Plume",
-    "type": "Fire",
-    "category": "Special",
-    "power": 80,
-    "accuracy": 100,
-    "alwaysHits": false,
-    "pp": 15,
-    "priority": 0,
-    "cooldown": 3,
-    "shortDesc": "30% chance to burn adjacent Pokemon."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact",
+      "slicing"
+    ]
   },
   "eruption": {
     "id": "eruption",
@@ -815,8 +1201,29 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "allAdjacentFoes",
     "cooldown": 9,
     "shortDesc": "Less power as user's HP decreases. Hits foe(s)."
+  },
+  "lavaplume": {
+    "id": "lavaplume",
+    "name": "Lava Plume",
+    "type": "Fire",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 3,
+    "shortDesc": "30% chance to burn adjacent Pokemon.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ]
   },
   "leafblade": {
     "id": "leafblade",
@@ -828,8 +1235,14 @@
     "alwaysHits": false,
     "pp": 15,
     "priority": 0,
+    "target": "normal",
     "cooldown": 3,
-    "shortDesc": "High critical hit ratio."
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact",
+      "slicing"
+    ]
   },
   "energyball": {
     "id": "energyball",
@@ -841,8 +1254,20 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "10% chance to lower the target's Sp. Def by 1."
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
   },
   "leafstorm": {
     "id": "leafstorm",
@@ -854,8 +1279,12 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Lowers the user's Sp. Atk by 2."
+    "shortDesc": "Lowers the user's Sp. Atk by 2.",
+    "selfBoosts": {
+      "spa": -2
+    }
   },
   "mudbomb": {
     "id": "mudbomb",
@@ -867,8 +1296,20 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "30% chance to lower the target's accuracy by 1."
+    "shortDesc": "30% chance to lower the target's accuracy by 1.",
+    "secondary": [
+      {
+        "chance": 30,
+        "boosts": {
+          "accuracy": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
   },
   "machpunch": {
     "id": "machpunch",
@@ -880,8 +1321,13 @@
     "alwaysHits": false,
     "pp": 30,
     "priority": 1,
+    "target": "normal",
     "cooldown": 1.5,
-    "shortDesc": "Usually goes first."
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
   },
   "suckerpunch": {
     "id": "suckerpunch",
@@ -893,8 +1339,12 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 1,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "Usually goes first. Fails if target is not attacking."
+    "shortDesc": "Usually goes first. Fails if target is not attacking.",
+    "flags": [
+      "contact"
+    ]
   },
   "megahorn": {
     "id": "megahorn",
@@ -906,8 +1356,12 @@
     "alwaysHits": false,
     "pp": 10,
     "priority": 0,
+    "target": "normal",
     "cooldown": 4.5,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
   },
   "ancientpower": {
     "id": "ancientpower",
@@ -919,7 +1373,613 @@
     "alwaysHits": false,
     "pp": 5,
     "priority": 0,
+    "target": "normal",
     "cooldown": 9,
-    "shortDesc": "10% chance to raise all stats by 1 (not acc/eva)."
+    "shortDesc": "10% chance to raise all stats by 1 (not acc/eva).",
+    "secondary": [
+      {
+        "chance": 10,
+        "selfBoosts": {
+          "atk": 1,
+          "def": 1,
+          "spa": 1,
+          "spd": 1,
+          "spe": 1
+        }
+      }
+    ]
+  },
+  "swordsdance": {
+    "id": "swordsdance",
+    "name": "Swords Dance",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Attack by 2.",
+    "boosts": {
+      "atk": 2
+    }
+  },
+  "dragondance": {
+    "id": "dragondance",
+    "name": "Dragon Dance",
+    "type": "Dragon",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Attack and Speed by 1.",
+    "boosts": {
+      "atk": 1,
+      "spe": 1
+    }
+  },
+  "nastyplot": {
+    "id": "nastyplot",
+    "name": "Nasty Plot",
+    "type": "Dark",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Sp. Atk by 2.",
+    "boosts": {
+      "spa": 2
+    }
+  },
+  "calmmind": {
+    "id": "calmmind",
+    "name": "Calm Mind",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Sp. Atk and Sp. Def by 1.",
+    "boosts": {
+      "spa": 1,
+      "spd": 1
+    }
+  },
+  "bulkup": {
+    "id": "bulkup",
+    "name": "Bulk Up",
+    "type": "Fighting",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Attack and Defense by 1.",
+    "boosts": {
+      "atk": 1,
+      "def": 1
+    }
+  },
+  "irondefense": {
+    "id": "irondefense",
+    "name": "Iron Defense",
+    "type": "Steel",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 15,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 10,
+    "shortDesc": "Raises the user's Defense by 2.",
+    "boosts": {
+      "def": 2
+    }
+  },
+  "agility": {
+    "id": "agility",
+    "name": "Agility",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 30,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 5,
+    "shortDesc": "Raises the user's Speed by 2.",
+    "boosts": {
+      "spe": 2
+    }
+  },
+  "shellsmash": {
+    "id": "shellsmash",
+    "name": "Shell Smash",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 15,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 10,
+    "shortDesc": "Lowers Def, SpD by 1; raises Atk, SpA, Spe by 2.",
+    "boosts": {
+      "def": -1,
+      "spd": -1,
+      "atk": 2,
+      "spa": 2,
+      "spe": 2
+    }
+  },
+  "focusenergy": {
+    "id": "focusenergy",
+    "name": "Focus Energy",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 30,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 5,
+    "shortDesc": "Raises the user's critical hit ratio by 2.",
+    "volatile": "focusenergy"
+  },
+  "willowisp": {
+    "id": "willowisp",
+    "name": "Will-O-Wisp",
+    "type": "Fire",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Burns the target.",
+    "status": "brn"
+  },
+  "thunderwave": {
+    "id": "thunderwave",
+    "name": "Thunder Wave",
+    "type": "Electric",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 7.5,
+    "shortDesc": "Paralyzes the target.",
+    "status": "par"
+  },
+  "toxic": {
+    "id": "toxic",
+    "name": "Toxic",
+    "type": "Poison",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "Badly poisons the target. Poison types can't miss.",
+    "status": "tox"
+  },
+  "confuseray": {
+    "id": "confuseray",
+    "name": "Confuse Ray",
+    "type": "Ghost",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "Confuses the target.",
+    "volatile": "confusion"
+  },
+  "darkvoid": {
+    "id": "darkvoid",
+    "name": "Dark Void",
+    "type": "Dark",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 50,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 15,
+    "shortDesc": "Darkrai: Causes the foe(s) to fall asleep.",
+    "status": "slp"
+  },
+  "recover": {
+    "id": "recover",
+    "name": "Recover",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by 50% of its max HP.",
+    "heal": 0.5
+  },
+  "roost": {
+    "id": "roost",
+    "name": "Roost",
+    "type": "Flying",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals 50% HP. Flying-type removed 'til turn ends.",
+    "heal": 0.5
+  },
+  "moonlight": {
+    "id": "moonlight",
+    "name": "Moonlight",
+    "type": "Fairy",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by a weather-dependent amount."
+  },
+  "synthesis": {
+    "id": "synthesis",
+    "name": "Synthesis",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by a weather-dependent amount."
+  },
+  "rest": {
+    "id": "rest",
+    "name": "Rest",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "User sleeps 2 turns and restores HP and status."
+  },
+  "protect": {
+    "id": "protect",
+    "name": "Protect",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 4,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Prevents moves from affecting the user this turn.",
+    "volatile": "protect"
+  },
+  "raindance": {
+    "id": "raindance",
+    "name": "Rain Dance",
+    "type": "Water",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "all",
+    "cooldown": 30,
+    "shortDesc": "For 5 turns, heavy rain powers Water moves.",
+    "weather": "raindance"
+  },
+  "sunnyday": {
+    "id": "sunnyday",
+    "name": "Sunny Day",
+    "type": "Fire",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "all",
+    "cooldown": 30,
+    "shortDesc": "For 5 turns, intense sunlight powers Fire moves.",
+    "weather": "sunnyday"
+  },
+  "sandstorm": {
+    "id": "sandstorm",
+    "name": "Sandstorm",
+    "type": "Rock",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "all",
+    "cooldown": 15,
+    "shortDesc": "For 5 turns, a sandstorm rages. Rock: 1.5× SpD.",
+    "weather": "sandstorm"
+  },
+  "firefang": {
+    "id": "firefang",
+    "name": "Fire Fang",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to burn. 10% chance to flinch.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      },
+      {
+        "chance": 10,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
+  },
+  "icefang": {
+    "id": "icefang",
+    "name": "Ice Fang",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to freeze. 10% chance to flinch.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "frz"
+      },
+      {
+        "chance": 10,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
+  },
+  "thunderfang": {
+    "id": "thunderfang",
+    "name": "Thunder Fang",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to paralyze. 10% chance to flinch.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "par"
+      },
+      {
+        "chance": 10,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
+  },
+  "shadowsneak": {
+    "id": "shadowsneak",
+    "name": "Shadow Sneak",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 30,
+    "priority": 1,
+    "target": "normal",
+    "cooldown": 1.5,
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "extremespeed": {
+    "id": "extremespeed",
+    "name": "Extreme Speed",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 2,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Nearly always goes first.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "uturn": {
+    "id": "uturn",
+    "name": "U-turn",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "User switches out after damaging the target.",
+    "selfSwitch": true,
+    "flags": [
+      "contact"
+    ]
+  },
+  "knockoff": {
+    "id": "knockoff",
+    "name": "Knock Off",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "1.5× damage if foe holds an item. Removes item.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "gigadrain": {
+    "id": "gigadrain",
+    "name": "Giga Drain",
+    "type": "Grass",
+    "category": "Special",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 50% of the damage dealt.",
+    "drain": 0.5
+  },
+  "drainpunch": {
+    "id": "drainpunch",
+    "name": "Drain Punch",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 50% of the damage dealt.",
+    "drain": 0.5,
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "superpower": {
+    "id": "superpower",
+    "name": "Superpower",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Attack and Defense by 1.",
+    "selfBoosts": {
+      "atk": -1,
+      "def": -1
+    },
+    "flags": [
+      "contact"
+    ]
+  },
+  "scald": {
+    "id": "scald",
+    "name": "Scald",
+    "type": "Water",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "30% chance to burn the target. Thaws target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ]
   }
 }

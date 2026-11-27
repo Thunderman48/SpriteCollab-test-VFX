@@ -1,0 +1,258 @@
+{
+  "_comment": "Abilities (traits), adapted to real time. Code: js/effects.js. ko = official Korean name.",
+  "adaptability": {
+    "ko": "적응력",
+    "desc": "Same-type (STAB) moves deal ×2 instead of ×1.5.",
+    "descKo": "자신의 타입 기술(자속)의 위력이 1.5배 대신 2배가 된다."
+  },
+  "airlock": {
+    "ko": "에어록",
+    "desc": "While it's on the field, weather has no effect.",
+    "descKo": "필드에 있는 동안 날씨의 영향이 사라진다."
+  },
+  "anticipation": {
+    "ko": "위험예지",
+    "desc": "When a foe winds up a super-effective move at it, its dodge recharges instantly (once per 8 s).",
+    "descKo": "상대가 효과가 굉장한 기술을 준비하면 회피가 즉시 충전된다 (8초에 한 번)."
+  },
+  "baddreams": {
+    "ko": "나이트메어",
+    "desc": "Sleeping foes lose 4% HP per second.",
+    "descKo": "잠든 상대의 HP가 1초마다 4%씩 줄어든다."
+  },
+  "battlebond": {
+    "ko": "유대변화",
+    "desc": "After knocking out a foe: Attack, Sp. Atk and Speed +1.",
+    "descKo": "상대를 쓰러뜨리면 공격·특수공격·스피드가 1랭크 오른다."
+  },
+  "blaze": {
+    "ko": "맹화",
+    "desc": "Below 1/3 HP, Fire moves ×1.5.",
+    "descKo": "HP가 1/3 이하일 때 불꽃 기술의 위력이 1.5배."
+  },
+  "chlorophyll": {
+    "ko": "엽록소",
+    "desc": "In sun, Speed ×1.5.",
+    "descKo": "쾌청일 때 스피드가 1.5배."
+  },
+  "clearbody": {
+    "ko": "클리어바디",
+    "desc": "Foes can't lower its stats.",
+    "descKo": "상대가 능력을 떨어뜨릴 수 없다."
+  },
+  "cursedbody": {
+    "ko": "저주받은바디",
+    "desc": "30% chance the move that hit it goes back on full cooldown.",
+    "descKo": "맞은 기술이 30% 확률로 쿨타임 처음부터 다시 충전된다."
+  },
+  "damp": {
+    "ko": "습기",
+    "desc": "Foes' area (burst) moves deal 25% less to it.",
+    "descKo": "상대의 범위(폭발형) 기술 피해를 25% 줄인다."
+  },
+  "flashfire": {
+    "ko": "타오르는불꽃",
+    "desc": "Immune to Fire moves; once hit by one, its own Fire moves ×1.5.",
+    "descKo": "불꽃 기술을 받지 않고, 받으면 자신의 불꽃 기술이 1.5배가 된다."
+  },
+  "gluttony": {
+    "ko": "먹보",
+    "desc": "Its berry is eaten earlier (Sitrus at 75% HP).",
+    "descKo": "나무열매를 더 일찍 먹는다 (자뭉열매 HP 75%)."
+  },
+  "guts": {
+    "ko": "근성",
+    "desc": "While it has a status condition, Attack ×1.5 (burn doesn't weaken it).",
+    "descKo": "상태이상일 때 공격이 1.5배 (화상으로 약해지지 않는다)."
+  },
+  "hustle": {
+    "ko": "의욕",
+    "desc": "Physical moves ×1.5, but 20% of its physical hits miss.",
+    "descKo": "물리 기술 위력 1.5배, 하지만 물리 공격의 20%가 빗나간다."
+  },
+  "hydration": {
+    "ko": "촉촉바디",
+    "desc": "In rain, its status conditions are cured.",
+    "descKo": "비가 오면 상태이상이 낫는다."
+  },
+  "immunity": {
+    "ko": "면역",
+    "desc": "Can't be poisoned.",
+    "descKo": "독 상태가 되지 않는다."
+  },
+  "innerfocus": {
+    "ko": "정신력",
+    "desc": "Can't flinch. Immune to Intimidate.",
+    "descKo": "풀죽지 않는다. 위협이 통하지 않는다."
+  },
+  "intimidate": {
+    "ko": "위협",
+    "desc": "When it enters, foes' Attack −1.",
+    "descKo": "등장하면 상대의 공격이 1랭크 내려간다."
+  },
+  "ironfist": {
+    "ko": "철주먹",
+    "desc": "Punching moves ×1.2.",
+    "descKo": "펀치 기술의 위력이 1.2배."
+  },
+  "justified": {
+    "ko": "정의의마음",
+    "desc": "Hit by a Dark move: Attack +1.",
+    "descKo": "악 타입 기술에 맞으면 공격이 1랭크 오른다."
+  },
+  "lightmetal": {
+    "ko": "라이트메탈",
+    "desc": "Lighter: moves 10% faster.",
+    "descKo": "가벼워서 이동 속도가 10% 빨라진다."
+  },
+  "lightningrod": {
+    "ko": "피뢰침",
+    "desc": "Immune to Electric moves; being hit by one raises Sp. Atk +1.",
+    "descKo": "전기 기술을 받지 않고 특수공격이 1랭크 오른다."
+  },
+  "magicguard": {
+    "ko": "매직가드",
+    "desc": "Only attacks hurt it: no recoil, Life Orb, burn, poison or sandstorm damage.",
+    "descKo": "공격 외의 데미지(반동·생명의구슬·화상·독·모래바람)를 받지 않는다."
+  },
+  "moxie": {
+    "ko": "자기과신",
+    "desc": "After knocking out a foe: Attack +1.",
+    "descKo": "상대를 쓰러뜨리면 공격이 1랭크 오른다."
+  },
+  "multiscale": {
+    "ko": "멀티스케일",
+    "desc": "At full HP, damage taken is halved.",
+    "descKo": "HP가 꽉 찼을 때 받는 데미지가 절반."
+  },
+  "noguard": {
+    "ko": "노가드",
+    "desc": "Its attacks can't be dodged, and attacks against it can't be dodged either.",
+    "descKo": "자신의 공격을 회피할 수 없고, 자신도 공격을 회피할 수 없다."
+  },
+  "overgrow": {
+    "ko": "심록",
+    "desc": "Below 1/3 HP, Grass moves ×1.5.",
+    "descKo": "HP가 1/3 이하일 때 풀 기술의 위력이 1.5배."
+  },
+  "pressure": {
+    "ko": "프레셔",
+    "desc": "Foes' cooldowns recharge 15% slower.",
+    "descKo": "상대 기술의 쿨타임이 15% 느리게 충전된다."
+  },
+  "protean": {
+    "ko": "변환자재",
+    "desc": "Becomes the type of the move it uses: every move gets STAB.",
+    "descKo": "사용하는 기술의 타입이 되어 모든 기술이 자속 보정을 받는다."
+  },
+  "raindish": {
+    "ko": "젖은접시",
+    "desc": "In rain, heals 1% HP per second.",
+    "descKo": "비가 오면 1초마다 HP를 1% 회복."
+  },
+  "roughskin": {
+    "ko": "까칠한피부",
+    "desc": "Foes that hit it with contact moves lose 6% of their HP.",
+    "descKo": "접촉 기술로 공격한 상대가 HP를 6% 잃는다."
+  },
+  "runaway": {
+    "ko": "도주",
+    "desc": "Dodge recharges 30% faster.",
+    "descKo": "회피 쿨타임이 30% 짧아진다."
+  },
+  "sandstream": {
+    "ko": "모래날림",
+    "desc": "When it enters, a sandstorm blows for 20 s.",
+    "descKo": "등장하면 20초 동안 모래바람이 분다."
+  },
+  "sandveil": {
+    "ko": "모래숨기",
+    "desc": "Unhurt by sandstorm; in sand, 20% of hits against it miss.",
+    "descKo": "모래바람 데미지를 받지 않고, 모래바람 중 20%의 공격을 피한다."
+  },
+  "serenegrace": {
+    "ko": "하늘의은총",
+    "desc": "Its moves' extra effect chances are doubled.",
+    "descKo": "기술의 추가 효과 확률이 2배."
+  },
+  "shellarmor": {
+    "ko": "조가비갑옷",
+    "desc": "Can't be hit by critical hits.",
+    "descKo": "급소에 맞지 않는다."
+  },
+  "solarpower": {
+    "ko": "선파워",
+    "desc": "In sun, Sp. Atk ×1.5 but loses 1% HP per second.",
+    "descKo": "쾌청일 때 특수공격 1.5배, 대신 1초마다 HP 1%를 잃는다."
+  },
+  "speedboost": {
+    "ko": "가속",
+    "desc": "Speed +1 every 8 s.",
+    "descKo": "8초마다 스피드가 1랭크 오른다."
+  },
+  "static": {
+    "ko": "정전기",
+    "desc": "Foes that hit it with contact moves: 30% paralysis.",
+    "descKo": "접촉 기술로 공격한 상대를 30% 확률로 마비시킨다."
+  },
+  "steadfast": {
+    "ko": "불굴의마음",
+    "desc": "When it flinches, Speed +1.",
+    "descKo": "풀죽으면 스피드가 1랭크 오른다."
+  },
+  "superluck": {
+    "ko": "대운",
+    "desc": "Critical-hit chance +1 stage.",
+    "descKo": "급소에 맞을 확률이 1랭크 오른다."
+  },
+  "swarm": {
+    "ko": "벌레의알림",
+    "desc": "Below 1/3 HP, Bug moves ×1.5.",
+    "descKo": "HP가 1/3 이하일 때 벌레 기술의 위력이 1.5배."
+  },
+  "synchronize": {
+    "ko": "싱크로",
+    "desc": "A foe that burns, poisons or paralyzes it gets the same status.",
+    "descKo": "자신을 화상·독·마비로 만든 상대도 같은 상태가 된다."
+  },
+  "technician": {
+    "ko": "테크니션",
+    "desc": "Moves with 60 power or less ×1.5.",
+    "descKo": "위력 60 이하인 기술의 위력이 1.5배."
+  },
+  "telepathy": {
+    "ko": "텔레파시",
+    "desc": "Reads attacks: 10% of hits against it miss.",
+    "descKo": "공격을 읽어서 10% 확률로 피한다."
+  },
+  "thickfat": {
+    "ko": "두꺼운지방",
+    "desc": "Fire and Ice damage taken halved.",
+    "descKo": "불꽃·얼음 기술의 데미지가 절반."
+  },
+  "torrent": {
+    "ko": "급류",
+    "desc": "Below 1/3 HP, Water moves ×1.5.",
+    "descKo": "HP가 1/3 이하일 때 물 기술의 위력이 1.5배."
+  },
+  "trace": {
+    "ko": "트레이스",
+    "desc": "When it enters, copies the nearest foe's ability.",
+    "descKo": "등장하면 가장 가까운 상대의 특성을 복사한다."
+  },
+  "unburden": {
+    "ko": "곡예",
+    "desc": "Once its held item is used up or lost, Speed ×1.5.",
+    "descKo": "지닌 도구가 없어지면 스피드가 1.5배."
+  },
+  "unnerve": {
+    "ko": "긴장감",
+    "desc": "Foes can't eat their berries.",
+    "descKo": "상대가 나무열매를 먹을 수 없다."
+  },
+  "waterabsorb": {
+    "ko": "저수",
+    "desc": "Immune to Water moves; being hit by one heals 25% HP.",
+    "descKo": "물 기술을 받지 않고 HP를 25% 회복한다."
+  }
+}

@@ -1,6 +1,7 @@
-// Battle modes and the editable team setup (party members are plain data so stats,
-// skills, equipment and personality can be customised later).
+// Battle modes and the editable team setup. Party members are plain data:
+// { species, item, moves[4], nature, ability, sp{hp,atk,def,spa,spd,spe} } (see builds.js).
 import { DB } from './combat.js';
+import { defaultBuild, savedBuild, randomBuild, sanitize } from './builds.js';
 
 export const MODES = {
   showdown: { id: 'showdown', name: 'Showdown', short: '1 vs 1', slots: 2, party: 1, teams: [[0], [1]], suddenDeath: 90,
@@ -17,9 +18,9 @@ export const TEAM_NAMES = ['Blue team', 'Pink team'];
 
 export const teamOf = (mode, slot) => (MODES[mode].teams[0].includes(slot) ? 0 : 1);
 
-/** A party member: what the future editor tabs (stats/skills/equipment/personality) change. */
+/** A party member: the last build saved for this species, or the default build. */
 export function makeMember(species, item = null) {
-  return { species, item, moves: [...DB.pokedex[species].moves], personality: null, statBoosts: null };
+  return savedBuild(species) || defaultBuild(species, item);
 }
 
 const DEFAULT_PARTIES = [
@@ -100,7 +101,8 @@ export function randomParty(setup, slot, items = []) {
     if (fresh.length) pool = fresh;
     const species = pick(pool);
     if (isLegendary(species)) legendLeft--;
-    party.push(makeMember(species, items.length && Math.random() < 0.85 ? pick(items).id : null));
+    const item = items.length && Math.random() < 0.85 ? pick(items).id : null;
+    party.push(rule.randomTeams ? randomBuild(species, item) : makeMember(species, item));
   }
   setup.players[slot].party = party;
 }
@@ -108,6 +110,8 @@ export function randomParty(setup, slot, items = []) {
 /** Make a setup legal for its rule: fix extra legendaries, fill All Legendary, copy Mirror teams. */
 export function enforceRules(setup) {
   const rule = RULES[setup.rule];
+  // Members without a full build (older data) get one.
+  for (const p of setup.players) p.party = p.party.map((m) => (m.sp && m.nature && m.ability ? m : sanitize(m)));
   for (const team of [0, 1]) {
     let seen = 0;
     for (const { slot, idx, m } of teamMembers(setup, team)) {

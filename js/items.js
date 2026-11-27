@@ -48,6 +48,14 @@ export function equip(fighter, itemId) {
     for (const [stat, mul] of Object.entries(e.stats || {})) fighter.stats[stat] = Math.floor(fighter.stats[stat] * mul);
   }
   fighter.mods = m;
-  fighter.moveSpeed *= m.speedMul;
   fighter.metroStacks = 0;
+}
+
+/** Lose the held item for the rest of the battle (Knock Off). */
+export function unequip(fighter) {
+  fighter.item = null;
+  fighter.itemSpent = true;
+  fighter.itemGone = true; // Unburden
+  fighter.stats = { ...fighter.rawStats };
+  fighter.mods = baseMods();
 }

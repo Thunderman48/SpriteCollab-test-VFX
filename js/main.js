@@ -1,6 +1,8 @@
 // Pokémon Clash — boot, game loop, arena rendering, battles (Showdown / Trio / 2vs2), hits.
 import { loadJSON, loadImage, loadFighterArt, loadParticle, loadBeam } from './assets.js';
 import { DB, computeDamage } from './combat.js';
+import * as FXE from './effects.js';
+import { defaultBuild, loadTeam, saveTeam } from './builds.js';
 import { Fighter } from './fighter.js';
 import { SpriteAnimator } from './sprite.js';
 import { MODES, defaultSetup, makeMember, partyFor, teamOf, battleSetup } from './modes.js';
@@ -12,7 +14,7 @@ import { UI } from './ui.js';
 import { setItems } from './items.js';
 import { Bot } from './bot.js';
 import { Sfx } from './sfx.js';
-import { t, monName, moveName } from './i18n.js';
+import { t, monName, moveName, setAbilityData } from './i18n.js';
 import { loadSettings, SETTINGS } from './settings.js';
 
 const W = 640; // arena size in game pixels
@@ -62,6 +64,14 @@ class Game {
   }
   addUpdater(fn, owner = null) {
     this.updaters.push({ fn, owner });
+  }
+  cancelCast(f) {
+    cancelCast(this, f);
+  }
+  /** Does `def` avoid this hit by dodging? (No Guard lands it anyway; a vanished Pokémon can't be hit.) */
+  dodges(att, def) {
+    if (def.hidden) return true;
+    return def.invuln > 0 && !FXE.noGuard(att, def);
   }
   cancelOwner(owner) {
     this.timers = this.timers.filter((t) => t.owner !== owner);
@@ -122,6 +132,7 @@ class Game {
     else this.fighters.push(next);
     this.addEffect(new Effect(MOVEFX.common.spawn, next.x, next.y, { layer: 'under' }));
     this.ui.buildHUD();
+    FXE.onEntry(this, next);
   }
 
   trySwitch(slot) {
@@ -154,14 +165,22 @@ class Game {
   applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false } = {}) {
     if (!def.alive || this.state === 'result') return;
     const move = cast.move;
-    const { dmg, eff, crit } = computeDamage(att, def, move, factor * this.damageMul);
     const fxd = cast.def;
     const hx = at ? (at.x + def.x) / 2 : def.x;
     const hy = at ? (at.y + def.y) / 2 : def.y - 4;
+    // Protect, absorbing abilities, evasion.
+    if (FXE.preHit(this, att, def, cast)) return 0;
     if (!noFx) {
       if (fxd.hit) this.addEffect(new Effect(fxd.hit, hx, hy, { angle }));
       if (fxd.hit2) this.addEffect(new Effect(fxd.hit2, hx, hy, { angle, layer: 'under' }));
     }
+    // Status skills aimed at a foe (Will-O-Wisp, Thunder Wave...) only apply their effect.
+    if (move.category === 'Status') {
+      FXE.afterHit(this, att, def, cast, 0, { angle });
+      return 0;
+    }
+    const x = FXE.damageMods(this, att, def, cast);
+    const { dmg, eff, crit } = computeDamage(att, def, move, factor * this.damageMul, x);
     if (eff > 1) this.addEffect(new Effect(MOVEFX.common.hitSuper, def.x, def.y - 6, { scale: 1.2 }));
     else if (noFx && eff > 0) this.addEffect(new Effect(MOVEFX.common.hitNeutral, def.x, def.y - 6));
     const s = this.stats[att.slot];
@@ -169,7 +188,7 @@ class Game {
     s.hits++;
     if (eff > 1) s.supers++;
     this.moveLog[move.id] = (this.moveLog[move.id] || 0) + 1;
-    def.takeHit(dmg, angle);
+    def.takeHit(dmg, angle, fxd.extra?.kbMul ?? 1);
     if (att.mods.drain && dmg > 0 && att.alive) att.heal(Math.max(1, Math.round(dmg * att.mods.drain))); // Shell Bell
     const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
     this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
@@ -179,19 +198,31 @@ class Game {
     if (crit) this.ui.log(t('crit'));
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
+    if (eff > 0) FXE.afterHit(this, att, def, cast, dmg, { angle });
+    if (def.ko) FXE.onKnockOut(this, att);
     return dmg;
   }
 
   /** Called when a move actually fires (after any wind-up). */
-  onMoveUsed(c) {
+  onMoveUsed(c, id) {
     const m = c.mods;
     if (m.metronome) c.metroStacks = Math.min(5, (c.metroStacks || 0) + 1);
-    if (m.lifeOrb) this.recoil(c, Math.round(c.maxHp * m.lifeOrb), `its ${c.item.name}`, false);
+    if (m.lifeOrb && DB.moves[id]?.category !== 'Status') this.recoil(c, Math.round(c.maxHp * m.lifeOrb), `its ${c.item.name}`, false);
+    if (id) FXE.onMoveUsed(this, c, id);
   }
 
-  /** Self-damage from moves like Flare Blitz (and Life Orb). */
+  /** U-turn: in Trio the user switches out after hitting (if someone can come in). */
+  uturn(c) {
+    const p = this.parties[c.slot];
+    if (!c.alive || this.mode.party < 2 || this.activeOf(c.slot) !== c || !this.benchOf(c.slot).length || this.state !== 'fight') return;
+    p.switchCd = 0;
+    if (c.cast) cancelCast(this, c);
+    this.trySwitch(c.slot);
+  }
+
+  /** Self-damage from moves like Flare Blitz (and Life Orb). Magic Guard is immune. */
   recoil(f, amount, what = 'recoil', log = true) {
-    if (!f.alive || amount <= 0) return;
+    if (!f.alive || amount <= 0 || FXE.ab(f, 'magicguard')) return;
     f.hp = Math.max(0, f.hp - amount);
     if (log) this.ui.log(t('recoil', { who: this.who(f) }));
     this.addEffect(new FloatText(String(amount), f.x, f.y - 20, '#f85840'));
@@ -290,15 +321,17 @@ class Game {
     this.after(steps.length * 0.6 - 0.6, () => {
       this.state = 'fight';
       this.fightTime = 0;
+      for (const f of this.fighters) FXE.onEntry(this, f); // Intimidate, Sand Stream, Trace
     });
     this.damageMul = 1;
+    this.weather = null;
   }
 
   /** Quick 1v1 helper (used by tests and URL shortcuts). */
   startFight(keys, cpu = [false, false], items = [null, null]) {
     const s = defaultSetup();
     keys.forEach((k, i) => {
-      s.players[i].party = [makeMember(k, items[i] || null)];
+      s.players[i].party = [defaultBuild(k, items[i] || null)];
       s.players[i].human = !cpu[i];
     });
     this.setup = s;
@@ -310,6 +343,7 @@ class Game {
   }
 
   leaveBattle() {
+    this.weather = null;
     this.fighters = [];
     this.parties = [];
     this.objects = [];
@@ -396,6 +430,7 @@ class Game {
     }
     this.dodgeTextT = this.dodgeTextT.map((t) => Math.max(0, t - dt));
 
+    if (this.state === 'fight') FXE.tickGame(this, dt);
     for (const t of this.timers) t.t -= dt;
     const due = this.timers.filter((t) => t.t <= 0);
     this.timers = this.timers.filter((t) => t.t > 0);
@@ -455,6 +490,11 @@ class Game {
       for (const o of this.objects) if ((o.layer || 'over') === name) o.draw(ctx);
     };
     layer('ground');
+    const wt = this.fighters.length ? FXE.weatherTint(this) : null;
+    if (wt) {
+      ctx.fillStyle = wt;
+      ctx.fillRect(-10, -10, W + 20, H + 20);
+    }
     layer('under');
     if (this.state === 'lobby') {
       for (const d of [...this.decor].sort((p, q) => p.y - q.y)) {
@@ -579,7 +619,7 @@ async function boot() {
   window.__arena = game; // handy for debugging / automated tests
 
   try {
-    const [pokedex, moves, typechart, movefx, roster, manifest, items] = await Promise.all([
+    const [pokedex, moves, typechart, movefx, roster, manifest, items, natures, abilities] = await Promise.all([
       loadJSON('data/pokedex.json'),
       loadJSON('data/moves.json'),
       loadJSON('data/typechart.json'),
@@ -587,9 +627,12 @@ async function boot() {
       loadJSON('data/roster.json'),
       loadJSON('assets/manifest.json'),
       loadJSON('data/items.json'),
+      loadJSON('data/natures.json'),
+      loadJSON('data/abilityfx.json'),
     ]);
     setItems(items);
-    Object.assign(DB, { pokedex, moves, typechart });
+    setAbilityData(abilities);
+    Object.assign(DB, { pokedex, moves, typechart, natures: Object.fromEntries(natures.map((n) => [n.id, n])), abilities });
     Object.assign(MOVEFX, movefx);
 
     const particles = new Set();
@@ -637,7 +680,8 @@ async function boot() {
     game.input.setLabels(t('dodge'), t('switch'));
     if (game.input.touchMode) document.body.classList.add('touch');
     game.input.onKey((code) => game.onKey(code));
-    game.setup = defaultSetup();
+    game.setup = loadTeam() || defaultSetup(); // the last team is remembered
+    game.saveTeam = () => saveTeam(game.setup);
     game.makeDecor();
     game.ui = new UI(game, keys, game.arts);
     document.getElementById('loading').classList.add('done');

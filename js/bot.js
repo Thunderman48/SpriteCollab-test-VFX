@@ -1,7 +1,7 @@
 // CPU player for any slot. It only produces the inputs a human has:
 // a movement vector, dodge presses and (in Trio) switch presses.
 import { MOVEFX } from './moves.js';
-import { DB, effectiveness } from './combat.js';
+import { wantsMove } from './effects.js';
 
 export class Bot {
   constructor(game, slot) {
@@ -20,8 +20,8 @@ export class Bot {
 
     // Preferred distance: reach of the move that's coming off cooldown soonest.
     let soon = null;
-    for (const id of me.moves) if (!soon || me.cd[id] < me.cd[soon]) soon = id;
-    const want = Math.max(50, Math.min(220, MOVEFX.moves[soon].range * 0.7));
+    for (const id of me.moves) if (MOVEFX.moves[id].behavior !== 'self' && (!soon || me.cd[id] < me.cd[soon])) soon = id;
+    const want = Math.max(50, Math.min(220, (soon ? MOVEFX.moves[soon].range : 150) * 0.7));
     const d = me.distTo(foe);
     const a = me.angleTo(foe);
     this.strafeT -= dt;
@@ -40,10 +40,8 @@ export class Bot {
     if (me.y > b.y1 - 20) y -= 1;
 
     // Moves only fire while standing still: stop when one is ready (or while attacking).
-    const ready = me.moves.find(
-      (id) => me.cd[id] <= 0 && d <= MOVEFX.moves[id].range + foe.radius && effectiveness(DB.moves[id].type, foe.data.types) > 0,
-    );
-    if (me.cast || ready) {
+    const ready = (me.lock ? [me.lock.id] : me.moves).find((id) => me.cd[id] <= 0 && wantsMove(g, me, id, foe));
+    if (me.cast || ready || me.stunned) {
       x = 0;
       y = 0;
     }

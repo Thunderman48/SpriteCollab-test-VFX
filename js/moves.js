@@ -2,6 +2,7 @@
 // sprite anim / RawAsset VFX it uses. Damage numbers come from data/moves.json.
 import { DB } from './combat.js';
 import { Effect, Beam, Telegraph } from './vfx.js';
+import { selfMove, burnGround, weatherNow } from './effects.js';
 
 export const MOVEFX = { common: {}, moves: {} };
 /** Pause after every attack before the next one can start. */
@@ -33,11 +34,13 @@ export function startCast(game, c, t, id) {
     track: true,
     drive: null,
     faceAngle: c.angleTo(t),
+    // Priority moves (Quick Attack, Bullet Punch...) wind up faster and skip most of the gap.
+    speed: move.priority > 0 ? 1.6 : 1,
   };
   cast.release = () => {
     if (cast.released) return;
     cast.released = true;
-    c.cd[id] = move.cooldown * (c.mods?.cooldownMul ?? 1);
+    c.cd[id] = move.cooldown * (c.mods?.cooldownMul ?? 1) * (def.extra?.cdMul ?? 1);
     game.onMoveUsed?.(c, id);
   };
   cast.finish = () => {
@@ -45,7 +48,7 @@ export function startCast(game, c, t, id) {
     cast.done = true;
     if (c.cast === cast) {
       c.cast = null;
-      c.castGap = CAST_GAP;
+      c.castGap = move.priority > 0 ? 0.15 : CAST_GAP;
     }
   };
   c.cast = cast;
@@ -73,7 +76,8 @@ export function cancelCast(game, c) {
 /** Optional charge phase (charge anim + charge VFX at the caster's front), then `then()`. */
 function withCharge(game, c, t, cast, then) {
   const d = cast.def;
-  const time = d.charge?.time || 0;
+  let time = (d.charge?.time || 0) / cast.speed;
+  if (d.extra?.noChargeSun && weatherNow(game) === 'sunnyday') time = 0.12;
   if (!time) return then();
   c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
   const a = cast.faceAngle;
@@ -128,13 +132,19 @@ class Projectile {
     }
 
     // Hits the first enemy it touches (not only the one it was aimed at).
+    // Piercing shots (Flamethrower, Psycho Cut) keep going and hit each enemy once.
+    const pierce = this.def.extra?.pierce;
     for (const tg of this.game.enemiesOf(this.owner)) {
+      if (pierce && this.pierced?.has(tg)) continue;
       if (Math.hypot(tg.x - this.x, tg.y - this.y) >= pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) continue;
-      if (tg.invuln > 0) {
+      if (this.game.dodges(this.owner, tg)) {
         if (!this.dodged) {
           this.dodged = true;
           this.game.dodgedText(tg);
         }
+      } else if (pierce) {
+        (this.pierced ||= new Set()).add(tg);
+        this.game.applyHit(this.owner, tg, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
       } else {
         this.explode(tg);
         return;
@@ -142,7 +152,10 @@ class Projectile {
     }
     const b = this.game.bounds;
     const out = this.x < b.x0 - 20 || this.x > b.x1 + 20 || this.y < b.y0 - 40 || this.y > b.y1 + 20;
-    if (out || this.t > (pd.life || 2)) this.explode(false);
+    if (out || this.t > (pd.life || 2)) {
+      if (this.pierced?.size) this.dead = true;
+      else this.explode(false);
+    }
   }
 
   /** victim = the enemy hit directly, or false when it ran out / hit a wall. */
@@ -155,7 +168,7 @@ class Projectile {
       spawnFx(g, this.def.hit, this.x, this.y);
       spawnFx(g, this.def.hit2, this.x, this.y, { layer: 'under' });
       for (const tg of g.enemiesOf(this.owner)) {
-        if (tg.invuln <= 0 && Math.hypot(tg.x - this.x, tg.y - this.y) < this.pd.splash + tg.radius) {
+        if (!g.dodges(this.owner, tg) && Math.hypot(tg.x - this.x, tg.y - this.y) < this.pd.splash + tg.radius) {
           g.applyHit(this.owner, tg, this.cast, { angle: this.angle, factor: 0.6, noFx: true });
         }
       }
@@ -208,7 +221,7 @@ const BEHAVIORS = {
         }
         game.sfx?.('shoot');
       };
-      c.sprite.play(d.anim, { loop: false, restart: true, onHit: fire, onEnd: cast.finish });
+      c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: fire, onEnd: cast.finish });
     });
   },
 
@@ -236,7 +249,7 @@ const BEHAVIORS = {
             const w = Math.max(6, beam.halfWidth);
             for (const e of game.enemiesOf(c)) {
               if (hit.has(e) || distToSegment(e.x, e.y, beam.x, beam.y, a, beam.length) >= w + e.radius) continue;
-              if (e.invuln > 0) game.dodgedText(e);
+              if (game.dodges(c, e)) game.dodgedText(e);
               else {
                 hit.add(e);
                 game.applyHit(c, e, cast, { angle: a });
@@ -247,7 +260,7 @@ const BEHAVIORS = {
         });
         game.after(d.beam.time, cast.finish, null);
       };
-      c.sprite.play(d.anim, { loop: false, restart: true, onHit: fire, onEnd: () => {} });
+      c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: fire, onEnd: () => {} });
       // Hold the last frame while the beam is out.
     });
   },
@@ -257,7 +270,7 @@ const BEHAVIORS = {
     const anim = c.sprite.art.animData.anims[c.sprite.resolve(d.anim)];
     const hitFrame = anim.hit ?? anim.durations.length - 1;
     // Some sprites mark the hit on frame 0; give the lunge a moment to close in first.
-    const hitTime = Math.max(d.lunge ? 0.12 : 0.06, anim.durations.slice(0, hitFrame).reduce((s, x) => s + x, 0) / 60);
+    const hitTime = Math.max(d.lunge ? 0.12 : 0.06, anim.durations.slice(0, hitFrame).reduce((s, x) => s + x, 0) / 60 / cast.speed);
     let travelled = 0;
     let elapsed = 0;
     const lungeSpeed = (d.lunge || 0) / hitTime;
@@ -290,7 +303,7 @@ const BEHAVIORS = {
           if (!t.alive || c.ko) return;
           const a = c.angleTo(t);
           if (c.distTo(t) <= c.radius + t.radius + 34) {
-            if (t.invuln > 0) return game.dodgedText(t);
+            if (game.dodges(c, t)) return game.dodgedText(t);
             game.applyHit(c, t, cast, { angle: a, factor: 1 / hits });
           } else {
             spawnFx(game, MOVEFX.common.dodge, c.x + Math.cos(a) * 26, c.y + Math.sin(a) * 26, { scale: 0.7 });
@@ -299,7 +312,7 @@ const BEHAVIORS = {
       }
       game.sfx?.('melee');
     };
-    c.sprite.play(d.anim, { loop: false, restart: true, onHit: strike, onEnd: () => game.after((d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
+    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after((d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
   },
 
   dash(game, c, t, cast) {
@@ -326,14 +339,13 @@ const BEHAVIORS = {
       c.clamp();
       const e = game.enemiesOf(c).find((o) => c.distTo(o) <= c.radius + o.radius + 6);
       if (e) {
-        if (e.invuln > 0) {
+        if (game.dodges(c, e)) {
           if (!cast.dodgeShown) game.dodgedText(e);
           cast.dodgeShown = true;
         } else {
           hit = true;
-          const dmg = game.applyHit(c, e, cast, { angle: a });
+          game.applyHit(c, e, cast, { angle: a });
           game.shake(d.shake || 0, 0.25);
-          if (d.recoil && dmg) game.recoil(c, Math.floor(dmg * d.recoil));
         }
       }
     };
@@ -343,6 +355,8 @@ const BEHAVIORS = {
   targetArea(game, c, t, cast) {
     const d = cast.def;
     const radius = d.radius * (c.mods?.hitbox ?? 1); // Wide Lens
+    // Thunder in rain: no warning time.
+    const warnTime = d.extra?.instantRain && weatherNow(game) === 'raindance' ? 0.12 : d.warn;
     const go = () => {
       if (cast.released) return;
       cast.release();
@@ -358,13 +372,13 @@ const BEHAVIORS = {
         });
       }
       if (d.sky) spawnFx(game, d.sky, t.x, t.y - 40, { layer: 'over', alpha: d.sky.alpha });
-      if (d.tint) game.tint(d.tint, d.warn + 0.4);
+      if (d.tint) game.tint(d.tint, warnTime + 0.4);
       game.sfx?.('charge');
       pts.forEach((p, i) => {
         const delay = i * 0.12;
-        const warn = d.warn + delay;
+        const warn = warnTime + delay;
         game.after(delay, () => {
-          game.addEffect(new Telegraph(p.x, p.y + 4, radius, d.warn));
+          game.addEffect(new Telegraph(p.x, p.y + 4, radius, warnTime));
           spawnFx(game, d.under, p.x, p.y, { layer: 'under' });
         }, null);
         if (d.ring) {
@@ -406,9 +420,10 @@ const BEHAVIORS = {
           game.sfx?.('boom');
           for (const e of game.enemiesOf(c)) {
             if (Math.hypot(e.x - p.x, (e.y - p.y) / 0.7) > radius + e.radius) continue;
-            if (e.invuln > 0) game.dodgedText(e);
+            if (game.dodges(c, e)) game.dodgedText(e);
             else game.applyHit(c, e, cast, { angle: Math.atan2(e.y - p.y, e.x - p.x), factor: d.damageFactor ?? 1, noFx: true });
           }
+          if (d.extra?.burnGround) burnGround(game, c, p.x, p.y, radius, d.extra.burnGround);
         }, null);
       });
     };
@@ -442,11 +457,29 @@ const BEHAVIORS = {
       game.sfx?.('boom');
       for (const e of game.enemiesOf(c)) {
         if (c.distTo(e) > d.radius + e.radius) continue;
-        if (e.invuln > 0) game.dodgedText(e);
+        if (game.dodges(c, e)) game.dodgedText(e);
         else game.applyHit(c, e, cast, { angle: c.angleTo(e) });
       }
     }, null);
     game.after(Math.max(d.delay + 0.25, c.sprite.duration(d.anim)), cast.finish, null);
+  },
+
+  /** Buffs, heals, Protect, weather, Rest: an animation + effect on the user. Dodging cancels it. */
+  self(game, c, t, cast) {
+    const d = cast.def;
+    cast.track = false;
+    c.sprite.play(d.anim, { loop: true, restart: true });
+    const time = d.time / cast.speed;
+    const opts = (fx) => ({ follow: c, ox: 0, oy: fx?.oy ?? 0, loop: true, life: Math.max(time, 0.5) + 0.2 });
+    if (d.under) spawnFx(game, d.under, c.x, c.y + (d.under.oy ?? 0), { ...opts(d.under), layer: 'under' });
+    if (d.over) spawnFx(game, d.over, c.x, c.y - 4 + (d.over.oy ?? 0), { ...opts(d.over), oy: -4 + (d.over.oy ?? 0), layer: 'over' });
+    game.sfx?.('charge');
+    game.after(time, () => {
+      if (c.ko) return;
+      cast.release();
+      selfMove(game, c, cast);
+      game.after(0.15, cast.finish, null);
+    }, cast);
   },
 
   /** Shadow Force: vanish (invulnerable), then strike from behind the target. Dodge the warning! */
@@ -477,7 +510,7 @@ const BEHAVIORS = {
         restart: true,
         onHit: () => {
           if (!t.alive || c.ko) return;
-          if (t.invuln > 0) game.dodgedText(t);
+          if (game.dodges(c, t)) game.dodgedText(t);
           else if (c.distTo(t) <= c.radius + t.radius + 40) game.applyHit(c, t, cast, { angle: c.angleTo(t) });
           game.shake(d.shake || 0, 0.3);
         },

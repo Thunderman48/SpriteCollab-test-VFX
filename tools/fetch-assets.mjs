@@ -14,9 +14,10 @@ const FORCE = process.argv.includes('--force');
 
 const roster = JSON.parse(readFileSync(join(root, 'data/roster.json'), 'utf8'));
 const movefx = JSON.parse(readFileSync(join(root, 'data/movefx.json'), 'utf8'));
+const pokedex = JSON.parse(readFileSync(join(root, 'data/pokedex.json'), 'utf8')); // run build-db.mjs first
 
 // Sprite anims every fighter needs, on top of the per-move anims from movefx.json.
-const BASE_ANIMS = ['Idle', 'Walk', 'Hurt', 'Hop', 'Faint', 'Charge', 'Pose'];
+const BASE_ANIMS = ['Idle', 'Walk', 'Hurt', 'Hop', 'Faint', 'Charge', 'Pose', 'Sleep'];
 const PORTRAITS = ['Normal', 'Determined', 'Pain', 'Happy', 'Joyous'];
 
 let failures = 0;
@@ -75,14 +76,15 @@ for (const r of roster) {
     const copy = block.match(/<CopyOf>(.*?)<\/CopyOf>/);
     anims[name] = copy ? copy[1] : name;
   }
+  // Skills are customizable, so fetch the anims of every skill this Pokémon can learn.
   const wanted = new Set(BASE_ANIMS);
-  for (const m of r.moves) {
+  for (const m of pokedex[r.key]?.learnable || r.moves) {
     const fx = movefx.moves[m];
     if (fx.anim) wanted.add(fx.anim);
     if (fx.chargeAnim) wanted.add(fx.chargeAnim);
   }
   for (const a of wanted) {
-    if (!anims[a]) { console.warn(`  ${r.species}: no ${a} anim (game will fall back)`); continue; }
+    if (!anims[a]) continue; // the game falls back to a similar anim
     const file = anims[a];
     tasks.push(save(`${SC}/sprite/${id}/${file}-Anim.png`, `assets/sprites/${id}/${file}-Anim.png`));
   }
