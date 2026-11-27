@@ -9,8 +9,9 @@ import { UI } from './ui.js';
 import { Bot } from './bot.js';
 import { Sfx } from './sfx.js';
 
-const W = 512;
-const H = 288;
+const W = 640; // arena size in game pixels
+const H = 360;
+const START_X = 150; // spawn distance from the side walls
 const RES = 2; // backing-store pixels per arena pixel
 const STEP = 1 / 60;
 
@@ -146,7 +147,7 @@ class Game {
     this.stats = [0, 1].map(() => ({ damage: 0, casts: 0, hits: 0, dodges: 0, supers: 0 }));
     this.moveLog = {};
     const midY = (this.bounds.y0 + this.bounds.y1) / 2 + 6;
-    this.fighters = keys.map((k, i) => new Fighter(this, i, DB.pokedex[k], this.arts[k], i === 0 ? 120 : W - 120, midY));
+    this.fighters = keys.map((k, i) => new Fighter(this, i, DB.pokedex[k], this.arts[k], i === 0 ? START_X : W - START_X, midY));
     this.bots = cpu.map((on, i) => (on ? new Bot(this, i) : null));
     this.fighters.forEach((f) => this.addEffect(new Effect(MOVEFX.common.spawn, f.x, f.y, { layer: 'under' })));
     this.ui.buildHUD(this.fighters);
@@ -353,7 +354,7 @@ class Game {
     g.stroke();
     g.strokeRect(10, fy + 4, W - 20, H - fy - 10);
     // Start marks
-    for (const x of [120, W - 120]) {
+    for (const x of [START_X, W - START_X]) {
       g.fillStyle = 'rgba(235,230,210,0.3)';
       g.fillRect(x - 10, cy + 10, 20, 2);
     }

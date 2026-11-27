@@ -10,8 +10,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const roster = JSON.parse(readFileSync(join(root, 'data/roster.json'), 'utf8'));
 const movefx = JSON.parse(readFileSync(join(root, 'data/movefx.json'), 'utf8'));
 
-// Cooldown rule: low PP = slow & rare, high PP = fast. 30 PP -> 1s, 5 PP -> 6s.
-const cooldownFor = (pp) => Math.round((30 / pp) * 100) / 100;
+// Cooldown rule: low PP = slow & rare, high PP = fast. 30 PP -> 1.5s, 5 PP -> 9s.
+const cooldownFor = (pp) => Math.round((45 / pp) * 100) / 100;
 
 const pokedex = {};
 const moves = {};

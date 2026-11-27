@@ -38,6 +38,17 @@ export class Bot {
     if (me.y < b.y0 + 30) y += 1;
     if (me.y > b.y1 - 20) y -= 1;
 
+    // Turn toward the opponent when an aimed (facing) move is ready, with a little aim error.
+    const aimReady = me.data.moves.some((id) => me.cd[id] <= 0 && MOVEFX.moves[id].aim === 'facing' && d <= MOVEFX.moves[id].range + foe.radius);
+    if (aimReady && !me.cast) {
+      const err = (Math.random() - 0.5) * 0.3;
+      x = Math.cos(a + err);
+      y = Math.sin(a + err);
+    } else if (me.cast?.aimFacing && !me.cast.released) {
+      x = Math.cos(a) * 0.3;
+      y = Math.sin(a) * 0.3;
+    }
+
     // Dodge incoming projectiles / standing in a warning circle / point-blank dashes.
     let danger = null;
     for (const o of g.objects) {

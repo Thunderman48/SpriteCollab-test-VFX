@@ -4,6 +4,10 @@ import { DB } from './combat.js';
 import { Effect, Beam, Telegraph } from './vfx.js';
 
 export const MOVEFX = { common: {}, moves: {} };
+/** Pause after every attack before the next one can start. */
+export const CAST_GAP = 0.5;
+/** Facing moves only fire when the opponent is within this angle of where you're aiming. */
+export const FACING_CONE = (70 * Math.PI) / 180;
 
 const MOUTH_Y = -4;
 
@@ -28,10 +32,11 @@ export function startCast(game, c, t, id) {
     released: false,
     cancelable: false,
     done: false,
-    track: true,
+    track: def.aim !== 'facing',
+    aimFacing: def.aim === 'facing',
     moveMul: 0.35,
     drive: null,
-    faceAngle: c.angleTo(t),
+    faceAngle: def.aim === 'facing' ? c.aimAngle : c.angleTo(t),
   };
   cast.release = () => {
     if (cast.released) return;
@@ -44,7 +49,7 @@ export function startCast(game, c, t, id) {
     cast.done = true;
     if (c.cast === cast) {
       c.cast = null;
-      c.castGap = 0.15;
+      c.castGap = CAST_GAP;
     }
   };
   c.cast = cast;
@@ -52,6 +57,12 @@ export function startCast(game, c, t, id) {
   BEHAVIORS[def.behavior](game, c, t, cast);
   game.after(5, cast.finish, cast); // safety net
   return cast;
+}
+
+/** Facing moves go where the caster is aiming; the rest at the opponent. */
+function aimOf(c, t, cast) {
+  if (cast.aimFacing) return c.aimAngle;
+  return t.alive ? c.angleTo(t) : cast.faceAngle;
 }
 
 export function cancelCast(game, c) {
@@ -69,7 +80,7 @@ function withCharge(game, c, t, cast, then) {
   const time = d.charge?.time || 0;
   if (!time) return then();
   c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
-  const a = c.angleTo(t);
+  const a = cast.faceAngle;
   const p = frontOf(c, a, 8);
   spawnFx(game, d.charge, p.x, p.y, {
     follow: c,
@@ -174,7 +185,7 @@ const BEHAVIORS = {
       cast.moveMul = 0.35;
       const fire = () => {
         cast.release();
-        const a = t.alive ? c.angleTo(t) : cast.faceAngle;
+        const a = aimOf(c, t, cast);
         cast.faceAngle = a;
         cast.track = false;
         const p = frontOf(c, a);
@@ -200,7 +211,7 @@ const BEHAVIORS = {
         fired = true;
         cast.release();
         cast.track = false;
-        const a = t.alive ? c.angleTo(t) : cast.faceAngle;
+        const a = aimOf(c, t, cast);
         cast.faceAngle = a;
         const p = frontOf(c, a, 6);
         spawnFx(game, d.muzzle, p.x, p.y, { angle: a });
@@ -276,7 +287,7 @@ const BEHAVIORS = {
     const d = cast.def;
     cast.release();
     cast.track = false;
-    const a = c.angleTo(t);
+    const a = aimOf(c, t, cast);
     cast.faceAngle = a;
     c.sprite.play(d.anim, { loop: true, restart: true, speed: 1.5 });
     const flip = Math.cos(a) < 0;
