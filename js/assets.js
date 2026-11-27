@@ -115,11 +115,10 @@ export async function loadFighterArt(entry, manifest) {
   const sheets = {};
   // Only keep anims whose sheet was downloaded (the rest fall back, see sprite.js).
   for (const [k, a] of Object.entries(animData.anims)) if (!have.has(a.file)) delete animData.anims[k];
-  await Promise.all(
-    [...new Set(Object.values(animData.anims).map((a) => a.file))].map(async (file) => {
-      sheets[file] = await loadImage(`assets/sprites/${id}/${file}-Anim.png`);
-    }),
-  );
+  const files = [...new Set(Object.values(animData.anims).map((a) => a.file))];
+  const load = (list) => Promise.all(list.map(async (file) => (sheets[file] = await loadImage(`assets/sprites/${id}/${file}-Anim.png`))));
+  // Only Idle at start (for the select screen); the rest when the Pokémon is picked.
+  await load(files.filter((f) => f === 'Idle'));
   const portraits = {};
   await Promise.all(
     (manifest.portraits[id] || []).map(async (p) => {
@@ -127,5 +126,10 @@ export async function loadFighterArt(entry, manifest) {
       await loadImage(portraits[p]);
     }),
   );
-  return { animData, sheets, portraits };
+  const art = { animData, sheets, portraits, full: false };
+  art.loadRest = () => {
+    art.pending ||= load(files.filter((f) => !sheets[f])).then(() => (art.full = true));
+    return art.pending;
+  };
+  return art;
 }

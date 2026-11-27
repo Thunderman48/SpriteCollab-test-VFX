@@ -1,0 +1,326 @@
+{
+  "_comment": "Held items (one per Pokémon, chosen on the select screen). id = PMD: Origins item id; names and sprites come from DumpAsset Data/Item via tools/fetch-assets.mjs. desc = what the item does in this real-time arena.",
+  "items": [
+    {
+      "id": "held_power_band",
+      "effect": {
+        "stats": {
+          "atk": 1.25
+        }
+      },
+      "desc": "Raises Attack by 25%."
+    },
+    {
+      "id": "held_special_band",
+      "effect": {
+        "stats": {
+          "spa": 1.25
+        }
+      },
+      "desc": "Raises Sp. Atk by 25%."
+    },
+    {
+      "id": "held_defense_scarf",
+      "effect": {
+        "stats": {
+          "def": 1.25
+        }
+      },
+      "desc": "Raises Defense by 25%."
+    },
+    {
+      "id": "held_zinc_band",
+      "effect": {
+        "stats": {
+          "spd": 1.25
+        }
+      },
+      "desc": "Raises Sp. Def by 25%."
+    },
+    {
+      "id": "held_choice_band",
+      "effect": {
+        "stats": {
+          "atk": 1.5
+        },
+        "cooldownMul": 1.25
+      },
+      "desc": "Attack ×1.5, but every move recharges 25% slower."
+    },
+    {
+      "id": "held_choice_specs",
+      "effect": {
+        "stats": {
+          "spa": 1.5
+        },
+        "cooldownMul": 1.25
+      },
+      "desc": "Sp. Atk ×1.5, but every move recharges 25% slower."
+    },
+    {
+      "id": "held_choice_scarf",
+      "effect": {
+        "speedMul": 1.3,
+        "cooldownMul": 1.25
+      },
+      "desc": "Move 30% faster, but every move recharges 25% slower."
+    },
+    {
+      "id": "held_assault_vest",
+      "effect": {
+        "stats": {
+          "spd": 1.5
+        }
+      },
+      "desc": "Raises Sp. Def by 50%."
+    },
+    {
+      "id": "held_scope_lens",
+      "effect": {
+        "crit": 0.125
+      },
+      "desc": "Critical hits happen far more often (1 in 8)."
+    },
+    {
+      "id": "held_life_orb",
+      "effect": {
+        "dmgMul": 1.3,
+        "lifeOrb": 0.03
+      },
+      "desc": "Moves deal 30% more damage, but each attack costs 3% of max HP."
+    },
+    {
+      "id": "held_expert_belt",
+      "effect": {
+        "superMul": 1.2
+      },
+      "desc": "Super-effective hits deal 20% more damage."
+    },
+    {
+      "id": "held_shell_bell",
+      "effect": {
+        "drain": 0.125
+      },
+      "desc": "Restores HP equal to 1/8 of the damage you deal."
+    },
+    {
+      "id": "held_big_root",
+      "effect": {
+        "regen": 0.006
+      },
+      "desc": "Slowly restores HP while standing still."
+    },
+    {
+      "id": "held_metronome",
+      "effect": {
+        "metronome": 0.1
+      },
+      "desc": "Each attack in a row without getting hit deals 10% more damage (up to +50%)."
+    },
+    {
+      "id": "held_wide_lens",
+      "effect": {
+        "hitbox": 1.4
+      },
+      "desc": "Your projectiles and area attacks have 40% bigger hitboxes."
+    },
+    {
+      "id": "held_iron_ball",
+      "effect": {
+        "speedMul": 0.75,
+        "takenMul": 0.85
+      },
+      "desc": "Move 25% slower, but take 15% less damage."
+    },
+    {
+      "id": "held_twist_band",
+      "effect": {
+        "noKnockback": true
+      },
+      "desc": "You are never knocked back or flinched by hits."
+    },
+    {
+      "id": "held_warp_scarf",
+      "effect": {
+        "warpDodge": true
+      },
+      "desc": "Your dodge becomes a long-range teleport."
+    },
+    {
+      "id": "berry_sitrus",
+      "effect": {
+        "sitrus": 0.25
+      },
+      "desc": "Once per fight, restores 25% HP when you drop below half."
+    },
+    {
+      "id": "seed_reviver",
+      "effect": {
+        "revive": 0.3
+      },
+      "desc": "Once per fight, revives you with 30% HP instead of fainting."
+    },
+    {
+      "id": "held_charcoal",
+      "effect": {
+        "typeBoost": {
+          "Fire": 1.2
+        }
+      },
+      "desc": "Fire-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_mystic_water",
+      "effect": {
+        "typeBoost": {
+          "Water": 1.2
+        }
+      },
+      "desc": "Water-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_miracle_seed",
+      "effect": {
+        "typeBoost": {
+          "Grass": 1.2
+        }
+      },
+      "desc": "Grass-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_magnet",
+      "effect": {
+        "typeBoost": {
+          "Electric": 1.2
+        }
+      },
+      "desc": "Electric-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_never_melt_ice",
+      "effect": {
+        "typeBoost": {
+          "Ice": 1.2
+        }
+      },
+      "desc": "Ice-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_black_belt",
+      "effect": {
+        "typeBoost": {
+          "Fighting": 1.2
+        }
+      },
+      "desc": "Fighting-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_poison_barb",
+      "effect": {
+        "typeBoost": {
+          "Poison": 1.2
+        }
+      },
+      "desc": "Poison-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_soft_sand",
+      "effect": {
+        "typeBoost": {
+          "Ground": 1.2
+        }
+      },
+      "desc": "Ground-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_sharp_beak",
+      "effect": {
+        "typeBoost": {
+          "Flying": 1.2
+        }
+      },
+      "desc": "Flying-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_twisted_spoon",
+      "effect": {
+        "typeBoost": {
+          "Psychic": 1.2
+        }
+      },
+      "desc": "Psychic-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_silver_powder",
+      "effect": {
+        "typeBoost": {
+          "Bug": 1.2
+        }
+      },
+      "desc": "Bug-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_hard_stone",
+      "effect": {
+        "typeBoost": {
+          "Rock": 1.2
+        }
+      },
+      "desc": "Rock-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_spell_tag",
+      "effect": {
+        "typeBoost": {
+          "Ghost": 1.2
+        }
+      },
+      "desc": "Ghost-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_dragon_scale",
+      "effect": {
+        "typeBoost": {
+          "Dragon": 1.2
+        }
+      },
+      "desc": "Dragon-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_black_glasses",
+      "effect": {
+        "typeBoost": {
+          "Dark": 1.2
+        }
+      },
+      "desc": "Dark-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_metal_coat",
+      "effect": {
+        "typeBoost": {
+          "Steel": 1.2
+        }
+      },
+      "desc": "Steel-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_silk_scarf",
+      "effect": {
+        "typeBoost": {
+          "Normal": 1.2
+        }
+      },
+      "desc": "Normal-type moves deal 20% more damage."
+    },
+    {
+      "id": "held_pink_bow",
+      "effect": {
+        "typeBoost": {
+          "Fairy": 1.2
+        }
+      },
+      "desc": "Fairy-type moves deal 20% more damage."
+    }
+  ]
+}

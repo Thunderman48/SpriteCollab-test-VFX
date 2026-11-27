@@ -148,7 +148,15 @@ export class Beam {
     const { head, body, tail } = b;
     const L = this.length;
     const bw = body.fw * ws;
-    ctx.drawImage(body.img, frame * body.fw, 0, body.fw, body.fh, -bw / 2, 0, bw, L);
+    if (d.tile) {
+      // Repeat the body strip along the beam (e.g. Lightning's 128px segments).
+      for (let y = 0; y < L; y += body.fh) {
+        const h = Math.min(body.fh, L - y);
+        ctx.drawImage(body.img, frame * body.fw, 0, body.fw, h, -bw / 2, y, bw, h);
+      }
+    } else {
+      ctx.drawImage(body.img, frame * body.fw, 0, body.fw, body.fh, -bw / 2, 0, bw, L);
+    }
     if (tail.fw > 2) {
       const tw = tail.fw * ws;
       const th = tail.fh * ws;

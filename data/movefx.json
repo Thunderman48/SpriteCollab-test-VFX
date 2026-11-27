@@ -1,14 +1,29 @@
 {
   "_comment": "aim: facing = fired in the direction the player faces (otherwise auto-aimed at the opponent). Hand-authored move behaviour + VFX mapping. Particle names are files from PMDCollab/RawAsset/Particle (Name.Tag), beams are folders from RawAsset/Beam. Distances are arena pixels, times are seconds. Damage numbers come from data/moves.json (generated from @pkmn/dex).",
-
   "common": {
-    "hitNeutral": { "fx": "Hit_Neutral.None", "fps": 20 },
-    "hitSuper": { "fx": "Hit_Super_Effective.None", "fps": 20 },
-    "dodge": { "fx": "Puff_White.None", "fps": 24 },
-    "ko": { "fx": "Circle_White_Out.None", "fps": 16, "scale": 2 },
-    "spawn": { "fx": "Circle_Small_White_Out.None", "fps": 20, "scale": 2 }
+    "hitNeutral": {
+      "fx": "Hit_Neutral.None",
+      "fps": 20
+    },
+    "hitSuper": {
+      "fx": "Hit_Super_Effective.None",
+      "fps": 20
+    },
+    "dodge": {
+      "fx": "Puff_White.None",
+      "fps": 24
+    },
+    "ko": {
+      "fx": "Circle_White_Out.None",
+      "fps": 16,
+      "scale": 2
+    },
+    "spawn": {
+      "fx": "Circle_Small_White_Out.None",
+      "fps": 20,
+      "scale": 2
+    }
   },
-
   "moves": {
     "airslash": {
       "aim": "facing",
@@ -16,94 +31,222 @@
       "anim": "Shoot",
       "range": 320,
       "projectile": {
-        "fx": "Air_Slash_Slash.None", "fps": 24, "loop": true, "scale": 1.4, "rotate": true, "rotOffset": -45,
-        "speed": 340, "radius": 12, "count": 3, "spread": 0.22, "life": 1.3,
-        "trail": { "fx": "Air_Slash_Particle.Flip", "fps": 30, "every": 0.05 }
+        "fx": "Air_Slash_Slash.None",
+        "fps": 24,
+        "loop": true,
+        "scale": 1.4,
+        "rotate": true,
+        "rotOffset": -45,
+        "speed": 340,
+        "radius": 12,
+        "count": 3,
+        "spread": 0.22,
+        "life": 1.3,
+        "trail": {
+          "fx": "Air_Slash_Particle.Flip",
+          "fps": 30,
+          "every": 0.05
+        }
       },
-      "hit": { "fx": "Hit_Neutral.None", "fps": 20 }
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20
+      }
     },
-
     "dragonpulse": {
       "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
-      "charge": { "fx": "Dragon_Pulse_Charge.None", "fps": 40, "time": 0.4, "scale": 1.3, "at": "front" },
-      "projectile": {
-        "fx": "Dragon_Pulse_Ball.None", "fps": 20, "loop": true, "scale": 2,
-        "speed": 260, "radius": 16, "life": 1.6,
-        "trail": { "fx": "Dragon_Pulse_Particle_Purple.Dir2", "fps": 16, "every": 0.03, "jitter": 8 }
+      "charge": {
+        "fx": "Dragon_Pulse_Charge.None",
+        "fps": 40,
+        "time": 0.4,
+        "scale": 1.3,
+        "at": "front"
       },
-      "hit": { "fx": "Dragon_Pulse_Charge.None", "fps": 60, "scale": 2.4 },
-      "hit2": { "fx": "Puff_Purple.None", "fps": 20, "scale": 2 }
+      "projectile": {
+        "fx": "Dragon_Pulse_Ball.None",
+        "fps": 20,
+        "loop": true,
+        "scale": 2,
+        "speed": 260,
+        "radius": 16,
+        "life": 1.6,
+        "trail": {
+          "fx": "Dragon_Pulse_Particle_Purple.Dir2",
+          "fps": 16,
+          "every": 0.03,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Dragon_Pulse_Charge.None",
+        "fps": 60,
+        "scale": 2.4
+      },
+      "hit2": {
+        "fx": "Puff_Purple.None",
+        "fps": 20,
+        "scale": 2
+      }
     },
-
     "hyperbeam": {
       "aim": "facing",
       "behavior": "beam",
       "anim": "SpAttack",
       "chargeAnim": "Charge",
       "range": 360,
-      "charge": { "fx": "Charge_Up.None", "fps": 16, "time": 0.7, "scale": 1.6, "at": "front" },
-      "beam": { "set": "Beam/Beam", "length": 380, "width": 1.6, "time": 0.7, "fps": 20, "growTime": 0.12 },
-      "hit": { "fx": "Explosion.None", "fps": 30, "scale": 1.2 },
+      "charge": {
+        "fx": "Charge_Up.None",
+        "fps": 16,
+        "time": 0.7,
+        "scale": 1.6,
+        "at": "front"
+      },
+      "beam": {
+        "set": "Beam/Beam",
+        "length": 380,
+        "width": 1.6,
+        "time": 0.7,
+        "fps": 20,
+        "growTime": 0.12
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.2
+      },
       "shake": 6
     },
-
     "dracometeor": {
       "behavior": "targetArea",
       "anim": "SpAttack",
       "range": 330,
-      "sky": { "fx": "Draco_Meteor_Streaks.None", "fps": 14, "alpha": 0.55, "scale": 1.2 },
+      "sky": {
+        "fx": "Draco_Meteor_Streaks.None",
+        "fps": 14,
+        "alpha": 0.55,
+        "scale": 1.2
+      },
       "warn": 0.9,
       "count": 5,
       "scatter": 70,
       "radius": 34,
       "damageFactor": 0.45,
       "meteor": {
-        "fx": "Dragon_Pulse_Charge.None", "fps": 40, "loop": true, "scale": 1.5, "fall": 0.45, "fromX": -120, "fromY": -260,
-        "trail": { "fx": "Dragon_Pulse_Particle_Red.Dir2", "fps": 16, "every": 0.025, "jitter": 6 }
+        "fx": "Dragon_Pulse_Charge.None",
+        "fps": 40,
+        "loop": true,
+        "scale": 1.5,
+        "fall": 0.45,
+        "fromX": -120,
+        "fromY": -260,
+        "trail": {
+          "fx": "Dragon_Pulse_Particle_Red.Dir2",
+          "fps": 16,
+          "every": 0.025,
+          "jitter": 6
+        }
       },
-      "hit": { "fx": "Draco_Meteor_Explosion.None", "fps": 20, "scale": 0.9 },
-      "hit2": { "fx": "Draco_Meteor_Dust.None", "fps": 12, "scale": 1.6 },
+      "hit": {
+        "fx": "Draco_Meteor_Explosion.None",
+        "fps": 20,
+        "scale": 0.9
+      },
+      "hit2": {
+        "fx": "Draco_Meteor_Dust.None",
+        "fps": 12,
+        "scale": 1.6
+      },
       "shake": 4
     },
-
     "bulletpunch": {
       "behavior": "melee",
       "anim": "QuickStrike",
       "range": 70,
       "lunge": 36,
-      "hit": { "fx": "Bullet_Punch.None", "fps": 30, "scale": 1.1 }
+      "hit": {
+        "fx": "Bullet_Punch.None",
+        "fps": 30,
+        "scale": 1.1
+      }
     },
-
     "aurasphere": {
       "behavior": "projectile",
       "anim": "SpAttack",
       "range": 340,
-      "charge": { "fx": "Aura_Sphere.None", "fps": 24, "time": 0.35, "scale": 1.3, "at": "front", "loop": true },
-      "muzzle": { "fx": "Aura_Sphere_Shoot.Dir8", "fps": 20, "scale": 1.6 },
-      "projectile": {
-        "fx": "Aura_Sphere_Shot.Dir8", "fps": 16, "loop": true, "scale": 1.6, "dirRows": true,
-        "speed": 250, "radius": 14, "homing": 3.2, "life": 2.2,
-        "trail": { "fx": "Aura_Sphere_Shoot.Dir8", "fps": 24, "every": 0.08, "scale": 0.8 }
+      "charge": {
+        "fx": "Aura_Sphere.None",
+        "fps": 24,
+        "time": 0.35,
+        "scale": 1.3,
+        "at": "front",
+        "loop": true
       },
-      "hit": { "fx": "Aura_Sphere.None", "fps": 24, "scale": 2.2 },
-      "hit2": { "fx": "Hit_Super_Effective.None", "fps": 20 }
+      "muzzle": {
+        "fx": "Aura_Sphere_Shoot.Dir8",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "projectile": {
+        "fx": "Aura_Sphere_Shot.Dir8",
+        "fps": 16,
+        "loop": true,
+        "scale": 1.6,
+        "dirRows": true,
+        "speed": 250,
+        "radius": 14,
+        "homing": 3.2,
+        "life": 2.2,
+        "trail": {
+          "fx": "Aura_Sphere_Shoot.Dir8",
+          "fps": 24,
+          "every": 0.08,
+          "scale": 0.8
+        }
+      },
+      "hit": {
+        "fx": "Aura_Sphere.None",
+        "fps": 24,
+        "scale": 2.2
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20
+      }
     },
-
     "flashcannon": {
       "aim": "facing",
       "behavior": "beam",
       "anim": "SpAttack",
       "range": 320,
-      "charge": { "fx": "Flash_Cannon_Sparkle_Gather.None", "fps": 22, "time": 0.5, "scale": 1.1, "at": "front" },
-      "muzzle": { "fx": "Flash_Cannon.None", "fps": 24, "scale": 1.5 },
-      "beam": { "set": "Beam/Column_White", "length": 340, "width": 1.2, "time": 0.6, "frameDriven": true },
-      "hit": { "fx": "Flash_Cannon_Release.None", "fps": 20, "scale": 1.3 },
+      "charge": {
+        "fx": "Flash_Cannon_Sparkle_Gather.None",
+        "fps": 22,
+        "time": 0.5,
+        "scale": 1.1,
+        "at": "front"
+      },
+      "muzzle": {
+        "fx": "Flash_Cannon.None",
+        "fps": 24,
+        "scale": 1.5
+      },
+      "beam": {
+        "set": "Beam/Column_White",
+        "length": 340,
+        "width": 1.2,
+        "time": 0.6,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Flash_Cannon_Release.None",
+        "fps": 20,
+        "scale": 1.3
+      },
       "shake": 3
     },
-
     "closecombat": {
       "behavior": "melee",
       "anim": "Strike",
@@ -111,18 +254,25 @@
       "lunge": 44,
       "hits": 3,
       "hitGap": 0.14,
-      "hit": { "fx": "Close_Combat.None", "fps": 26, "scale": 1.4 },
+      "hit": {
+        "fx": "Close_Combat.None",
+        "fps": 26,
+        "scale": 1.4
+      },
       "shake": 4
     },
-
     "crunch": {
       "behavior": "melee",
       "anim": "Attack",
       "range": 74,
       "lunge": 40,
-      "hit": { "fx": "Crunch.Dir8", "fps": 22, "scale": 1.3, "dirRows": true }
+      "hit": {
+        "fx": "Crunch.Dir8",
+        "fps": 22,
+        "scale": 1.3,
+        "dirRows": true
+      }
     },
-
     "dragonrush": {
       "aim": "facing",
       "behavior": "dash",
@@ -130,12 +280,25 @@
       "range": 260,
       "dashSpeed": 560,
       "dashTime": 0.45,
-      "under": { "fx": "Dragon_Rush_Back.Flip", "fps": 30, "scale": 1.2, "follow": true },
-      "over": { "fx": "Dragon_Rush_Front.Flip", "fps": 30, "scale": 1.2, "follow": true },
-      "hit": { "fx": "Hit_Super_Effective.None", "fps": 20, "scale": 1.3 },
+      "under": {
+        "fx": "Dragon_Rush_Back.Flip",
+        "fps": 30,
+        "scale": 1.2,
+        "follow": true
+      },
+      "over": {
+        "fx": "Dragon_Rush_Front.Flip",
+        "fps": 30,
+        "scale": 1.2,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.3
+      },
       "shake": 5
     },
-
     "earthpower": {
       "behavior": "targetArea",
       "anim": "RearUp",
@@ -143,12 +306,23 @@
       "warn": 0.75,
       "count": 1,
       "radius": 38,
-      "under": { "fx": "Earth_Power_Back.None", "fps": 24, "scale": 1.5 },
-      "hit": { "fx": "Earth_Power_Front.None", "fps": 24, "scale": 1.5 },
-      "hit2": { "fx": "Earth_Power_Eruption.None", "fps": 14, "scale": 1.6 },
+      "under": {
+        "fx": "Earth_Power_Back.None",
+        "fps": 24,
+        "scale": 1.5
+      },
+      "hit": {
+        "fx": "Earth_Power_Front.None",
+        "fps": 24,
+        "scale": 1.5
+      },
+      "hit2": {
+        "fx": "Earth_Power_Eruption.None",
+        "fps": 14,
+        "scale": 1.6
+      },
       "shake": 5
     },
-
     "stoneedge": {
       "behavior": "targetArea",
       "anim": "Strike",
@@ -156,76 +330,176 @@
       "warn": 0.7,
       "count": 1,
       "radius": 44,
-      "under": { "fx": "Stone_Edge_Rock.None", "fps": 26, "scale": 1.2 },
-      "ring": { "fx": "Stone_Edge.38", "fps": 44, "scale": 1, "anchor": "bottom", "anchorPad": 4, "n": 5, "r": 30 },
-      "hit": { "fx": "Stone_Edge.38", "fps": 44, "scale": 1.3, "anchor": "bottom", "anchorPad": 4 },
-      "hit2": { "fx": "Rock_Pieces.None", "fps": 20, "scale": 1.6 },
+      "under": {
+        "fx": "Stone_Edge_Rock.None",
+        "fps": 26,
+        "scale": 1.2
+      },
+      "ring": {
+        "fx": "Stone_Edge.38",
+        "fps": 44,
+        "scale": 1,
+        "anchor": "bottom",
+        "anchorPad": 4,
+        "n": 5,
+        "r": 30
+      },
+      "hit": {
+        "fx": "Stone_Edge.38",
+        "fps": 44,
+        "scale": 1.3,
+        "anchor": "bottom",
+        "anchorPad": 4
+      },
+      "hit2": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 1.6
+      },
       "shake": 5
     },
-
     "lick": {
       "behavior": "melee",
       "anim": "Lick",
       "range": 62,
       "lunge": 24,
-      "hit": { "fx": "Lick.None", "fps": 14, "scale": 1.4 },
-      "hit2": { "fx": "Hit_Neutral.None", "fps": 20 }
+      "hit": {
+        "fx": "Lick.None",
+        "fps": 14,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20
+      }
     },
-
     "shadowball": {
       "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
-      "charge": { "fx": "Puff_Purple.None", "fps": 20, "time": 0.25, "scale": 1.4, "at": "front" },
-      "projectile": {
-        "fx": "Shadow_Ball.None", "fps": 12, "loop": true, "scale": 2.2, "spin": 6,
-        "speed": 230, "radius": 16, "life": 1.8,
-        "trail": { "fx": "Puff_Purple.None", "fps": 24, "every": 0.05, "scale": 0.8 }
+      "charge": {
+        "fx": "Puff_Purple.None",
+        "fps": 20,
+        "time": 0.25,
+        "scale": 1.4,
+        "at": "front"
       },
-      "hit": { "fx": "Shadow_Force_Hit.None", "fps": 24, "scale": 1.8 },
-      "hit2": { "fx": "Puff_Purple.None", "fps": 18, "scale": 2.2 }
+      "projectile": {
+        "fx": "Shadow_Ball.None",
+        "fps": 12,
+        "loop": true,
+        "scale": 2.2,
+        "spin": 6,
+        "speed": 230,
+        "radius": 16,
+        "life": 1.8,
+        "trail": {
+          "fx": "Puff_Purple.None",
+          "fps": 24,
+          "every": 0.05,
+          "scale": 0.8
+        }
+      },
+      "hit": {
+        "fx": "Shadow_Force_Hit.None",
+        "fps": 24,
+        "scale": 1.8
+      },
+      "hit2": {
+        "fx": "Puff_Purple.None",
+        "fps": 18,
+        "scale": 2.2
+      }
     },
-
     "darkpulse": {
       "behavior": "burst",
       "anim": "Twirl",
       "range": 110,
       "radius": 110,
       "delay": 0.3,
-      "under": { "fx": "Dark_Pulse_Back.None", "fps": 22, "scale": 3, "alpha": 0.7 },
-      "over": { "fx": "Dark_Pulse_Front.None", "fps": 22, "scale": 3 },
-      "hit": { "fx": "Dark_Pulse_Particle.None", "fps": 12, "scale": 2 },
-      "hit2": { "fx": "Hit_Neutral.None", "fps": 20 }
+      "under": {
+        "fx": "Dark_Pulse_Back.None",
+        "fps": 22,
+        "scale": 3,
+        "alpha": 0.7
+      },
+      "over": {
+        "fx": "Dark_Pulse_Front.None",
+        "fps": 22,
+        "scale": 3
+      },
+      "hit": {
+        "fx": "Dark_Pulse_Particle.None",
+        "fps": 12,
+        "scale": 2
+      },
+      "hit2": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20
+      }
     },
-
     "sludgebomb": {
       "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 300,
       "projectile": {
-        "fx": "Gunk_Shot.Dir8", "fps": 20, "loop": true, "scale": 1.3, "dirRows": true,
-        "speed": 220, "radius": 16, "life": 1.8, "splash": 36,
-        "trail": { "fx": "Gunk_Shot_Particle.None", "fps": 20, "every": 0.04, "jitter": 6 }
+        "fx": "Gunk_Shot.Dir8",
+        "fps": 20,
+        "loop": true,
+        "scale": 1.3,
+        "dirRows": true,
+        "speed": 220,
+        "radius": 16,
+        "life": 1.8,
+        "splash": 36,
+        "trail": {
+          "fx": "Gunk_Shot_Particle.None",
+          "fps": 20,
+          "every": 0.04,
+          "jitter": 6
+        }
       },
-      "hit": { "fx": "Gunk_Shot_Hit.None", "fps": 40, "scale": 2 },
-      "hit2": { "fx": "Smoke_Purple.None", "fps": 18, "scale": 2.2 }
+      "hit": {
+        "fx": "Gunk_Shot_Hit.None",
+        "fps": 40,
+        "scale": 2
+      },
+      "hit2": {
+        "fx": "Smoke_Purple.None",
+        "fps": 18,
+        "scale": 2.2
+      }
     },
-
     "psychocut": {
       "aim": "facing",
       "behavior": "projectile",
       "anim": "Attack",
       "range": 320,
-      "muzzle": { "fx": "Psycho_Cut.None", "fps": 40, "scale": 1.4 },
-      "projectile": {
-        "fx": "Psycho_Cut_Shot.Dir8", "fps": 20, "loop": true, "scale": 2, "dirRows": true,
-        "speed": 360, "radius": 12, "count": 3, "spread": 0.28, "life": 1.2
+      "muzzle": {
+        "fx": "Psycho_Cut.None",
+        "fps": 40,
+        "scale": 1.4
       },
-      "hit": { "fx": "Psycho_Cut_Hole.None", "fps": 36, "scale": 1.4 }
+      "projectile": {
+        "fx": "Psycho_Cut_Shot.Dir8",
+        "fps": 20,
+        "loop": true,
+        "scale": 2,
+        "dirRows": true,
+        "speed": 360,
+        "radius": 12,
+        "count": 3,
+        "spread": 0.28,
+        "life": 1.2
+      },
+      "hit": {
+        "fx": "Psycho_Cut_Hole.None",
+        "fps": 36,
+        "scale": 1.4
+      }
     },
-
     "psychic": {
       "behavior": "targetArea",
       "anim": "SpAttack",
@@ -234,11 +508,18 @@
       "count": 1,
       "radius": 40,
       "tint": "rgba(255,80,200,0.18)",
-      "under": { "fx": "Psycho_Shift_Charge.None", "fps": 50, "scale": 1.6 },
-      "hit": { "fx": "Psycho_Shift_Hit.None", "fps": 40, "scale": 1.8 },
+      "under": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 50,
+        "scale": 1.6
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 40,
+        "scale": 1.8
+      },
       "shake": 3
     },
-
     "psychoboost": {
       "behavior": "burst",
       "anim": "SpAttack",
@@ -247,10 +528,810 @@
       "radius": 130,
       "delay": 0.75,
       "tint": "rgba(255,60,140,0.22)",
-      "under": { "fx": "Psycho_Boost_Back.None", "fps": 26, "scale": 3.4, "alpha": 0.8 },
-      "over": { "fx": "Psycho_Boost_Front.None", "fps": 26, "scale": 3.4 },
-      "hit": { "fx": "Psycho_Shift_Hit.None", "fps": 50, "scale": 1.2 },
+      "under": {
+        "fx": "Psycho_Boost_Back.None",
+        "fps": 26,
+        "scale": 3.4,
+        "alpha": 0.8
+      },
+      "over": {
+        "fx": "Psycho_Boost_Front.None",
+        "fps": 26,
+        "scale": 3.4
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 50,
+        "scale": 1.2
+      },
       "shake": 7
+    },
+    "flamethrower": {
+      "aim": "facing",
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 220,
+      "projectile": {
+        "fx": "Flamethrower_2.None",
+        "fps": 24,
+        "scale": 1.2,
+        "loop": true,
+        "spin": 8,
+        "speed": 300,
+        "radius": 12,
+        "life": 0.75,
+        "stream": 6,
+        "streamGap": 0.07,
+        "spread": 0.12,
+        "trail": {
+          "fx": "Ember.None",
+          "fps": 24,
+          "scale": 1,
+          "every": 0.05,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Flamethrower.None",
+        "fps": 30,
+        "scale": 1.2
+      }
+    },
+    "dragonclaw": {
+      "behavior": "melee",
+      "anim": "Strike",
+      "range": 72,
+      "lunge": 40,
+      "hit": {
+        "fx": "Cut.Dir8",
+        "fps": 30,
+        "scale": 1.2,
+        "dirRows": true
+      },
+      "hit2": {
+        "fx": "Dragon_Pulse_Particle_Purple.Dir2",
+        "fps": 16,
+        "scale": 1.5
+      }
+    },
+    "fireblast": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 320,
+      "warn": 0.85,
+      "count": 1,
+      "radius": 46,
+      "under": {
+        "fx": "Weather_Ball_Fire.None",
+        "fps": 16,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Fire_Column_Ranger.None",
+        "fps": 14,
+        "scale": 1.6,
+        "anchor": "bottom",
+        "anchorPad": 20
+      },
+      "hit2": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.3
+      },
+      "shake": 6
+    },
+    "waterpulse": {
+      "aim": "facing",
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "projectile": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 30,
+        "scale": 2,
+        "loop": true,
+        "speed": 250,
+        "radius": 14,
+        "life": 1.6,
+        "trail": {
+          "fx": "Bubbles_Blue.None",
+          "fps": 20,
+          "scale": 1,
+          "every": 0.05,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Aqua_Tail_Wave.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 40,
+        "scale": 2.4
+      }
+    },
+    "aquatail": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 42,
+      "hit": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 22,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Aqua_Tail_Wave.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "shake": 3
+    },
+    "hydropump": {
+      "aim": "facing",
+      "behavior": "beam",
+      "anim": "Shoot",
+      "chargeAnim": "Charge",
+      "range": 340,
+      "charge": {
+        "fx": "Hydro_Cannon.None",
+        "fps": 8,
+        "scale": 1.4,
+        "time": 0.5,
+        "at": "front"
+      },
+      "beam": {
+        "set": "Beam/Column_Blue",
+        "length": 340,
+        "width": 1.3,
+        "time": 0.65,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Water_Column_Ranger.None",
+        "fps": 26,
+        "scale": 1.4,
+        "anchor": "bottom",
+        "anchorPad": 6
+      },
+      "shake": 4
+    },
+    "razorleaf": {
+      "aim": "facing",
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "charge": {
+        "fx": "Razor_Leaf_Charge.None",
+        "fps": 60,
+        "scale": 0.9,
+        "time": 0.3,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Razor_Leaf.None",
+        "fps": 24,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 330,
+        "radius": 11,
+        "count": 3,
+        "spread": 0.2,
+        "life": 1.2
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1
+      }
+    },
+    "petaldance": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 100,
+      "radius": 100,
+      "delay": 0.45,
+      "under": {
+        "fx": "Petal_Dance_Back.None",
+        "fps": 50,
+        "scale": 2.6
+      },
+      "over": {
+        "fx": "Petal_Dance_Front.None",
+        "fps": 50,
+        "scale": 2.6
+      },
+      "ring": {
+        "fx": "Petal_Dance_Flower_Pink.None",
+        "fps": 16,
+        "scale": 1.6,
+        "n": 10,
+        "r": 60,
+        "spin": 4
+      },
+      "hit": {
+        "fx": "Petal_Dance_Flower_Pink.None",
+        "fps": 20,
+        "scale": 2
+      }
+    },
+    "solarbeam": {
+      "aim": "facing",
+      "behavior": "beam",
+      "anim": "Shoot",
+      "chargeAnim": "Charge",
+      "range": 360,
+      "charge": {
+        "fx": "Solar_Beam_Charge.None",
+        "fps": 50,
+        "scale": 1.6,
+        "time": 1.0,
+        "at": "front"
+      },
+      "beam": {
+        "set": "Beam/Column_Green",
+        "length": 380,
+        "width": 1.5,
+        "time": 0.7,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.2
+      },
+      "tint": "rgba(255,250,180,0.2)",
+      "shake": 5
+    },
+    "quickattack": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 200,
+      "dashSpeed": 700,
+      "dashTime": 0.3,
+      "under": {
+        "fx": "Puff_White.None",
+        "fps": 30,
+        "scale": 1,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.2
+      }
+    },
+    "thunderbolt": {
+      "aim": "facing",
+      "behavior": "beam",
+      "anim": "Shock",
+      "range": 300,
+      "charge": {
+        "fx": "Spark.None",
+        "fps": 14,
+        "scale": 1,
+        "time": 0.3,
+        "at": "front"
+      },
+      "beam": {
+        "set": "Beam/Lightning",
+        "length": 300,
+        "width": 1,
+        "time": 0.5,
+        "fps": 24,
+        "tile": true,
+        "growTime": 0.05
+      },
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1
+      },
+      "shake": 3
+    },
+    "irontail": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 70,
+      "lunge": 40,
+      "hit": {
+        "fx": "Iron_Head.None",
+        "fps": 30,
+        "scale": 1.2
+      },
+      "shake": 3
+    },
+    "thunder": {
+      "behavior": "targetArea",
+      "anim": "Shock",
+      "range": 330,
+      "warn": 0.7,
+      "count": 1,
+      "radius": 38,
+      "bolt": {
+        "set": "Beam/Lightning",
+        "width": 1.4,
+        "time": 0.35,
+        "fps": 24,
+        "tile": true,
+        "growTime": 0.04
+      },
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Spark.None",
+        "fps": 14,
+        "scale": 1.6
+      },
+      "tint": "rgba(255,255,160,0.25)",
+      "shake": 6
+    },
+    "metalclaw": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 70,
+      "lunge": 40,
+      "hit": {
+        "fx": "Metal_Claw.None",
+        "fps": 30,
+        "scale": 1.3
+      }
+    },
+    "roaroftime": {
+      "behavior": "burst",
+      "anim": "Shoot",
+      "chargeAnim": "Charge",
+      "range": 170,
+      "radius": 170,
+      "delay": 1.0,
+      "under": {
+        "fx": "Roar_Of_Time.None",
+        "fps": 18,
+        "scale": 3.4
+      },
+      "ring": {
+        "fx": "Roar_Of_Time_Cloud.None",
+        "fps": 12,
+        "scale": 2,
+        "n": 8,
+        "r": 120
+      },
+      "hit": {
+        "fx": "Roar_Of_Time_Cloud.None",
+        "fps": 14,
+        "scale": 2
+      },
+      "tint": "rgba(80,160,255,0.28)",
+      "shake": 9
+    },
+    "spacialrend": {
+      "behavior": "targetArea",
+      "anim": "Attack",
+      "range": 330,
+      "warn": 0.7,
+      "count": 1,
+      "radius": 46,
+      "under": {
+        "fx": "Spacial_Rend.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "hit": {
+        "fx": "Spacial_Rend_Hit.None",
+        "fps": 24,
+        "scale": 2.6
+      },
+      "tint": "rgba(220,120,255,0.25)",
+      "shake": 7
+    },
+    "shadowforce": {
+      "behavior": "vanish",
+      "anim": "Attack",
+      "range": 300,
+      "vanishTime": 0.7,
+      "under": {
+        "fx": "Shadow_Force_Back.None",
+        "fps": 40,
+        "scale": 1.6
+      },
+      "over": {
+        "fx": "Shadow_Force_Front.None",
+        "fps": 40,
+        "scale": 1.6
+      },
+      "hit": {
+        "fx": "Shadow_Force_Hit_Dark.None",
+        "fps": 24,
+        "scale": 2
+      },
+      "hit2": {
+        "fx": "Shadow_Force_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "tint": "rgba(40,0,60,0.3)",
+      "shake": 6
+    },
+    "skyuppercut": {
+      "behavior": "melee",
+      "anim": "Strike",
+      "range": 70,
+      "lunge": 36,
+      "hit": {
+        "fx": "Sky_Uppercut.None",
+        "fps": 24,
+        "scale": 1,
+        "anchor": "bottom",
+        "anchorPad": 10
+      },
+      "hit2": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 3
+    },
+    "blazekick": {
+      "behavior": "melee",
+      "anim": "Kick",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Ember.None",
+        "fps": 20,
+        "scale": 2
+      }
+    },
+    "flareblitz": {
+      "behavior": "dash",
+      "anim": "Attack",
+      "range": 260,
+      "dashSpeed": 600,
+      "dashTime": 0.42,
+      "recoil": 0.33,
+      "under": {
+        "fx": "Flare_Blitz_Charge_Back.None",
+        "fps": 30,
+        "scale": 1.6,
+        "follow": true
+      },
+      "over": {
+        "fx": "Rage.None",
+        "fps": 30,
+        "scale": 0.8,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Flare_Blitz_Hit_Front.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "shake": 6
+    },
+    "moonblast": {
+      "aim": "facing",
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 320,
+      "charge": {
+        "fx": "Moonlight_Sparkles.None",
+        "fps": 20,
+        "scale": 1.4,
+        "time": 0.35,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Moonlight_Moon.None",
+        "fps": 10,
+        "scale": 1.1,
+        "loop": true,
+        "spin": 3,
+        "speed": 240,
+        "radius": 15,
+        "life": 1.8,
+        "trail": {
+          "fx": "Moonlight_Sparkles.None",
+          "fps": 24,
+          "scale": 0.8,
+          "every": 0.07,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Light_Ball_Pink.None",
+        "fps": 40,
+        "scale": 0.8
+      },
+      "hit2": {
+        "fx": "Moonlight_Sparkles.None",
+        "fps": 20,
+        "scale": 1.6
+      }
+    },
+    "focusblast": {
+      "aim": "facing",
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 320,
+      "charge": {
+        "fx": "Focus_Blast.None",
+        "fps": 50,
+        "scale": 1.4,
+        "time": 0.6,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Focus_Blast_Ball.Dir8",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "dirRows": true,
+        "speed": 270,
+        "radius": 15,
+        "life": 1.7
+      },
+      "hit": {
+        "fx": "Focus_Blast_Hit.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Explosion.None",
+        "fps": 34,
+        "scale": 1
+      },
+      "shake": 5
+    },
+    "zenheadbutt": {
+      "behavior": "dash",
+      "anim": "Attack",
+      "range": 240,
+      "dashSpeed": 520,
+      "dashTime": 0.42,
+      "over": {
+        "fx": "Zen_Headbutt.None",
+        "fps": 40,
+        "scale": 1.3,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Zen_Headbutt_Hit.None",
+        "fps": 30,
+        "scale": 1.5
+      },
+      "shake": 4
+    },
+    "meteormash": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "hit": {
+        "fx": "Meteor_Mash_Star.Dir8",
+        "fps": 10,
+        "scale": 1.6,
+        "dirRows": true
+      },
+      "hit2": {
+        "fx": "Draco_Meteor_Dust.None",
+        "fps": 14,
+        "scale": 1.6
+      },
+      "shake": 5
+    },
+    "earthquake": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 140,
+      "radius": 140,
+      "delay": 0.35,
+      "under": {
+        "fx": "Earthquake_Ranger.None",
+        "fps": 22,
+        "scale": 2.6
+      },
+      "hit": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 2
+      },
+      "shake": 10
+    },
+    "rockslide": {
+      "behavior": "targetArea",
+      "anim": "Attack",
+      "range": 300,
+      "warn": 0.9,
+      "count": 4,
+      "scatter": 55,
+      "radius": 28,
+      "damageFactor": 0.4,
+      "meteor": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 2.2,
+        "loop": true,
+        "fall": 0.4,
+        "fromX": -30,
+        "fromY": -200,
+        "trail": {
+          "fx": "Puff_Brown.None",
+          "fps": 30,
+          "scale": 0.6,
+          "every": 0.04,
+          "jitter": 4
+        }
+      },
+      "hit": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "hit2": {
+        "fx": "Puff_Brown.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "shake": 4
+    },
+    "swift": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "projectile": {
+        "fx": "Swift_Star.None",
+        "fps": 12,
+        "scale": 1.6,
+        "loop": true,
+        "spin": 10,
+        "speed": 260,
+        "radius": 12,
+        "count": 3,
+        "spread": 0.5,
+        "homing": 4,
+        "life": 1.8,
+        "trail": {
+          "fx": "Moonlight_Sparkles.None",
+          "fps": 30,
+          "scale": 0.5,
+          "every": 0.06
+        }
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1
+      }
+    },
+    "bite": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 66,
+      "lunge": 36,
+      "hit": {
+        "fx": "Bite.Dir8",
+        "fps": 14,
+        "scale": 1.3,
+        "dirRows": true
+      }
+    },
+    "bodyslam": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 84,
+      "lunge": 60,
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "hit2": {
+        "fx": "Puff_White.None",
+        "fps": 20,
+        "scale": 2.2
+      },
+      "shake": 6
+    },
+    "gigaimpact": {
+      "behavior": "dash",
+      "anim": "Attack",
+      "range": 260,
+      "dashSpeed": 560,
+      "dashTime": 0.5,
+      "under": {
+        "fx": "Giga_Impact_Back.None",
+        "fps": 40,
+        "scale": 1.6,
+        "follow": true,
+        "alpha": 0.8
+      },
+      "over": {
+        "fx": "Giga_Impact_Front.None",
+        "fps": 40,
+        "scale": 1.6,
+        "follow": true
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "shake": 9
+    },
+    "wingattack": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 42,
+      "hit": {
+        "fx": "Wing_Attack.None",
+        "fps": 50,
+        "scale": 1.2
+      }
+    },
+    "outrage": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 46,
+      "hits": 3,
+      "hitGap": 0.16,
+      "hit": {
+        "fx": "Rage.None",
+        "fps": 30,
+        "scale": 0.9
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1
+      },
+      "shake": 4
+    },
+    "feintattack": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 200,
+      "dashSpeed": 650,
+      "dashTime": 0.3,
+      "under": {
+        "fx": "Feint_Attack.None",
+        "fps": 8,
+        "scale": 0.8,
+        "follow": true,
+        "alpha": 0.7
+      },
+      "hit": {
+        "fx": "Feint_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "payback": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 40,
+      "hit": {
+        "fx": "Payback.None",
+        "fps": 40,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Payback_Hit.None",
+        "fps": 30,
+        "scale": 1.3
+      }
     }
   }
 }

@@ -40,7 +40,7 @@ export function startCast(game, c, t, id) {
   cast.release = () => {
     if (cast.released) return;
     cast.released = true;
-    c.cd[id] = move.cooldown;
+    c.cd[id] = move.cooldown * (c.mods?.cooldownMul ?? 1);
     game.onMoveUsed?.(c, id);
   };
   cast.finish = () => {
@@ -68,6 +68,7 @@ export function cancelCast(game, c) {
   const cast = c.cast;
   if (!cast) return;
   game.cancelOwner(cast);
+  c.hidden = false;
   cast.done = true;
   c.cast = null;
   c.castGap = 0.1;
@@ -131,7 +132,7 @@ class Projectile {
     }
 
     const tg = this.target;
-    if (tg.alive && Math.hypot(tg.x - this.x, tg.y - this.y) < pd.radius + tg.radius) {
+    if (tg.alive && Math.hypot(tg.x - this.x, tg.y - this.y) < pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) {
       if (tg.invuln > 0) {
         if (!this.dodged) {
           this.dodged = true;
@@ -152,7 +153,7 @@ class Projectile {
     const g = this.game;
     const tg = this.target;
     if (direct) {
-      g.applyHit(this.owner, tg, this.cast, { angle: this.angle, at: { x: this.x, y: this.y } });
+      g.applyHit(this.owner, tg, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
     } else if (this.pd.splash) {
       spawnFx(g, this.def.hit, this.x, this.y);
       spawnFx(g, this.def.hit2, this.x, this.y, { layer: 'under' });
@@ -187,10 +188,24 @@ const BEHAVIORS = {
         cast.track = false;
         const p = frontOf(c, a);
         spawnFx(game, d.muzzle, p.x, p.y, { angle: a });
-        const n = d.projectile.count || 1;
-        for (let i = 0; i < n; i++) {
-          const ang = a + (i - (n - 1) / 2) * (d.projectile.spread || 0);
-          game.addObject(new Projectile(game, c, t, cast, ang, p.x, p.y));
+        const pd = d.projectile;
+        if (pd.stream) {
+          // A rapid stream of small shots (Flamethrower); each carries a share of the damage.
+          for (let k = 0; k < pd.stream; k++) {
+            game.after(k * (pd.streamGap || 0.07), () => {
+              if (c.ko) return;
+              const q = frontOf(c, a);
+              const proj = new Projectile(game, c, t, cast, a + (Math.random() - 0.5) * (pd.spread || 0), q.x, q.y);
+              proj.factor = 1.6 / pd.stream;
+              game.addObject(proj);
+            }, null);
+          }
+        } else {
+          const n = pd.count || 1;
+          for (let i = 0; i < n; i++) {
+            const ang = a + (i - (n - 1) / 2) * (pd.spread || 0);
+            game.addObject(new Projectile(game, c, t, cast, ang, p.x, p.y));
+          }
         }
         game.sfx?.('shoot');
       };
@@ -306,8 +321,9 @@ const BEHAVIORS = {
           cast.dodgeShown = true;
         } else {
           hit = true;
-          game.applyHit(c, t, cast, { angle: a });
+          const dmg = game.applyHit(c, t, cast, { angle: a });
           game.shake(d.shake || 0, 0.25);
+          if (d.recoil && dmg) game.recoil(c, Math.floor(dmg * d.recoil));
         }
       }
     };
@@ -316,6 +332,7 @@ const BEHAVIORS = {
 
   targetArea(game, c, t, cast) {
     const d = cast.def;
+    const radius = d.radius * (c.mods?.hitbox ?? 1); // Wide Lens
     const go = () => {
       if (cast.released) return;
       cast.release();
@@ -337,7 +354,7 @@ const BEHAVIORS = {
         const delay = i * 0.12;
         const warn = d.warn + delay;
         game.after(delay, () => {
-          game.addEffect(new Telegraph(p.x, p.y + 4, d.radius, d.warn));
+          game.addEffect(new Telegraph(p.x, p.y + 4, radius, d.warn));
           spawnFx(game, d.under, p.x, p.y, { layer: 'under' });
         }, null);
         if (d.ring) {
@@ -366,12 +383,18 @@ const BEHAVIORS = {
             });
           }, null);
         }
+        if (d.bolt) {
+          // A bolt from the top of the screen down onto the point.
+          game.after(Math.max(0, warn - 0.05), () => {
+            game.addEffect(new Beam({ ...d.bolt, length: p.y + 10 }, p.x, -10, Math.PI / 2));
+          }, null);
+        }
         game.after(warn, () => {
           spawnFx(game, d.hit, p.x, d.hit?.anchor === 'bottom' ? p.y + 4 : p.y - 6);
           spawnFx(game, d.hit2, p.x, p.y - 4, { layer: 'under' });
           game.shake(d.shake || 0, 0.25);
           game.sfx?.('boom');
-          if (t.alive && Math.hypot(t.x - p.x, (t.y - p.y) / 0.7) <= d.radius + t.radius) {
+          if (t.alive && Math.hypot(t.x - p.x, (t.y - p.y) / 0.7) <= radius + t.radius) {
             if (t.invuln > 0) game.dodgedText(t);
             else game.applyHit(c, t, cast, { angle: Math.atan2(t.y - p.y, t.x - p.x), factor: d.damageFactor ?? 1, noFx: true });
           }
@@ -393,6 +416,14 @@ const BEHAVIORS = {
       c.sprite.play(d.anim, { loop: false, restart: true });
     }
     game.sfx?.('charge');
+    if (d.ring) {
+      for (let k = 0; k < d.ring.n; k++) {
+        const ang = (k / d.ring.n) * Math.PI * 2;
+        game.after(d.delay * 0.4 + k * 0.03, () => {
+          spawnFx(game, d.ring, c.x + Math.cos(ang) * d.ring.r, c.y + Math.sin(ang) * d.ring.r * 0.6);
+        }, null);
+      }
+    }
     game.after(d.delay, () => {
       if (c.ko) return;
       if (d.tint) game.tint(d.tint, 0.5);
@@ -404,5 +435,42 @@ const BEHAVIORS = {
       }
     }, null);
     game.after(Math.max(d.delay + 0.25, c.sprite.duration(d.anim)), cast.finish, null);
+  },
+
+  /** Shadow Force: vanish (invulnerable), then strike from behind the target. Dodge the warning! */
+  vanish(game, c, t, cast) {
+    const d = cast.def;
+    cast.release();
+    cast.track = false;
+    spawnFx(game, d.under, c.x, c.y, { layer: 'under' });
+    if (d.tint) game.tint(d.tint, d.vanishTime + 0.5);
+    c.hidden = true;
+    c.invuln = Math.max(c.invuln, d.vanishTime + 0.05);
+    game.sfx?.('charge');
+    game.after(Math.max(0, d.vanishTime - 0.4), () => {
+      if (t.alive && c.hidden) game.addEffect(new Telegraph(t.x, t.y + 4, t.radius + 16, 0.4, '150,60,220'));
+    }, cast);
+    game.after(d.vanishTime, () => {
+      c.hidden = false;
+      if (!t.alive) return cast.finish();
+      // Reappear behind the target (opposite the way it's aiming).
+      const back = t.aimAngle + Math.PI;
+      c.x = t.x + Math.cos(back) * (t.radius + c.radius + 4);
+      c.y = t.y + Math.sin(back) * (t.radius + c.radius + 4) * 0.7;
+      c.clamp();
+      cast.faceAngle = c.angleTo(t);
+      spawnFx(game, d.over, c.x, c.y, { layer: 'over' });
+      c.sprite.play(d.anim, {
+        loop: false,
+        restart: true,
+        onHit: () => {
+          if (!t.alive || c.ko) return;
+          if (t.invuln > 0) game.dodgedText(t);
+          else if (c.distTo(t) <= c.radius + t.radius + 40) game.applyHit(c, t, cast, { angle: c.angleTo(t) });
+          game.shake(d.shake || 0, 0.3);
+        },
+        onEnd: cast.finish,
+      });
+    }, cast);
   },
 };

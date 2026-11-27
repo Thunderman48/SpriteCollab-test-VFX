@@ -3,6 +3,7 @@ import { DB, statsFor, HP_SCALE, effectiveness } from './combat.js';
 import { SpriteAnimator } from './sprite.js';
 import { MOVEFX } from './moves.js';
 import { DODGE_COOLDOWN } from './fighter.js';
+import { ITEMS, itemSprite } from './items.js';
 
 const $ = (sel, el = document) => el.querySelector(sel);
 const TYPE_ORDER = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
@@ -13,10 +14,11 @@ const BEHAVIOR_LABEL = {
   dash: 'Dash',
   targetArea: 'Aimed area',
   burst: 'Burst around self',
+  vanish: 'Vanish, then strike',
 };
 const CONTROLS = [
-  { keys: 'WASD', dodge: 'Space', ready: 'Space' },
-  { keys: '←↑→↓', dodge: 'Enter', ready: 'Enter' },
+  { keys: 'WASD', dodge: 'Space', ready: 'Space', back: 'Q' },
+  { keys: '←↑→↓', dodge: 'Enter', ready: 'Enter', back: 'Backspace' },
 ];
 const KEYS = {
   up: ['ArrowUp', 'KeyW'],
@@ -26,6 +28,7 @@ const KEYS = {
 };
 
 export const orb = (type) => `<i class="orb" style="--i:${Math.max(0, TYPE_ORDER.indexOf(type))}"></i>`;
+const itemIcon = (it) => `<img class="item-ico" src="${itemSprite(it)}" alt="">`;
 const typeText = (t) => `${orb(t)}${t}`;
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
 
@@ -67,7 +70,8 @@ export class UI {
     this.roster = roster; // array of keys
     this.arts = arts;
     this.pick = [0, 4];
-    this.ready = [false, false];
+    this.itemPick = [0, 0]; // index into itemOptions (0 = no item)
+    this.stage = ['mon', 'mon'];
     this.cpu = [false, false];
     this.previews = [];
     this.logLines = [];
@@ -78,13 +82,13 @@ export class UI {
     $('#credits-close').addEventListener('click', () => this.hideCredits());
   }
 
-  // ---------- Character select ----------
+  // ---------- Character select: Pokémon → held item → ready (per player) ----------
   buildSelect() {
     const root = $('#select');
     root.innerHTML = `
       <header class="select-title">
         <canvas class="banner-img" aria-label="SpriteCollab VFX Arena"></canvas>
-        <span class="dim">Stand still to attack: moves fire on their own (high PP = fast, low PP = strong). <span class="cyan">→</span> moves fire where you face.</span>
+        <span class="dim">Stand still to attack: moves fire on their own (high PP = fast, low PP = strong). <span class="cyan">→</span> moves fire where you face. <button class="credits-btn cyan" type="button">Credits</button></span>
       </header>
       <div class="select-cols">
         ${[0, 1].map((i) => `
@@ -94,35 +98,35 @@ export class UI {
               ${i === 1 ? '<button class="cpu-toggle" type="button">P2: Human</button>' : ''}
             </div>
             <div class="pick-row">
-              <div class="win p${i + 1} roster"><ul class="menu" aria-label="Player ${i + 1} Pokémon">
-                ${this.roster.map((k, j) => `<li data-j="${j}">${DB.pokedex[k].name}</li>`).join('')}
-              </ul></div>
+              <div class="win p${i + 1} roster"><div class="list-head"><span class="list-title"></span><span class="list-page dim"></span></div><ul class="menu"></ul></div>
               <div class="win who"><canvas class="preview" width="80" height="60"></canvas></div>
             </div>
             <div class="win info"></div>
-            <div class="win moves-win"><ul class="moves"></ul></div>
+            <div class="win moves-win"></div>
             <div class="win p${i + 1} ready-win" role="button" tabindex="0"></div>
           </section>`).join('')}
       </div>
-      <footer class="select-foot">
-        <button class="credits-btn" type="button">Credits</button>
-      </footer>`;
+`;
     root.querySelectorAll('.pcol').forEach((col) => {
       const i = Number(col.dataset.p);
-      col.querySelectorAll('.roster li').forEach((li) =>
-        li.addEventListener('click', () => {
-          if (i === 1 && this.cpu[1]) this.ready[1] = true;
-          else this.ready[i] = false;
-          this.pick[i] = Number(li.dataset.j);
-          this.renderSelect();
-        }),
-      );
-      $('.ready-win', col).addEventListener('click', () => this.toggleReady(i));
+      $('.roster .menu', col).addEventListener('click', (e) => {
+        const li = e.target.closest('li');
+        if (!li || (i === 1 && this.cpu[1])) return;
+        const j = Number(li.dataset.j);
+        if (this.cursor(i) === j) this.confirm(i); // second tap confirms
+        else this.setCursor(i, j);
+      });
+      $('.ready-win', col).addEventListener('click', () => {
+        if (i === 1 && this.cpu[1]) return;
+        if (this.stage[i] === 'ready') this.back(i);
+        else this.confirm(i);
+      });
     });
     $('.cpu-toggle', root).addEventListener('click', (e) => {
       this.cpu[1] = !this.cpu[1];
       e.currentTarget.textContent = `P2: ${this.cpu[1] ? 'CPU' : 'Human'}`;
-      this.ready[1] = this.cpu[1];
+      if (this.cpu[1]) this.cpuPick();
+      else this.stage[1] = 'mon';
       this.renderSelect();
       this.checkStart();
     });
@@ -132,19 +136,63 @@ export class UI {
     this.renderSelect();
   }
 
-  toggleReady(i) {
-    if (i === 1 && this.cpu[1]) return;
-    this.ready[i] = !this.ready[i];
-    this.game.sfx(this.ready[i] ? 'go' : 'tick');
+  get itemOptions() {
+    return [null, ...ITEMS.list];
+  }
+
+  cursor(i) {
+    return this.stage[i] === 'item' ? this.itemPick[i] : this.pick[i];
+  }
+
+  setCursor(i, j) {
+    if (this.stage[i] === 'item') this.itemPick[i] = j;
+    else if (this.stage[i] === 'mon') this.pick[i] = j;
+    this.game.sfx('tick');
+    this.renderSelect();
+  }
+
+  move(i, d) {
+    if (this.stage[i] === 'ready') return;
+    const n = this.stage[i] === 'item' ? this.itemOptions.length : this.roster.length;
+    this.setCursor(i, (this.cursor(i) + d + n) % n);
+  }
+
+  confirm(i) {
+    if (this.stage[i] === 'mon') this.stage[i] = 'item';
+    else if (this.stage[i] === 'item') this.stage[i] = 'ready';
+    else return;
+    this.game.sfx(this.stage[i] === 'ready' ? 'go' : 'tick');
     this.renderSelect();
     this.checkStart();
+  }
+
+  back(i) {
+    if (this.stage[i] === 'ready') this.stage[i] = 'item';
+    else if (this.stage[i] === 'item') this.stage[i] = 'mon';
+    else return;
+    this.game.sfx('tick');
+    this.renderSelect();
+  }
+
+  /** CPU: keep the highlighted Pokémon, hold a random item. */
+  cpuPick() {
+    this.itemPick[1] = 1 + Math.floor(Math.random() * ITEMS.list.length);
+    this.stage[1] = 'ready';
+  }
+
+  get ready() {
+    return this.stage.map((s) => s === 'ready');
+  }
+
+  chosenItems() {
+    return this.itemPick.map((j) => this.itemOptions[j]?.id ?? null);
   }
 
   checkStart() {
     if (this.ready[0] && this.ready[1]) {
       setTimeout(() => {
         if (this.ready[0] && this.ready[1] && this.game.state === 'select') {
-          this.game.startFight(this.pick.map((j) => this.roster[j]), this.cpu.slice());
+          this.game.startFight(this.pick.map((j) => this.roster[j]), this.cpu.slice(), this.chosenItems());
         }
       }, 350);
     }
@@ -153,39 +201,56 @@ export class UI {
   selectKey(code) {
     if (this.game.state !== 'select') return false;
     const nav = [
-      { prev: ['KeyW', 'KeyA'], next: ['KeyS', 'KeyD'], ready: ['Space', 'KeyF', 'ShiftLeft'] },
-      { prev: ['ArrowUp', 'ArrowLeft'], next: ['ArrowDown', 'ArrowRight'], ready: ['Enter', 'NumpadEnter', 'ShiftRight'] },
+      { prev: ['KeyW', 'KeyA'], next: ['KeyS', 'KeyD'], ok: ['Space', 'KeyF', 'ShiftLeft'], back: ['KeyQ'] },
+      { prev: ['ArrowUp', 'ArrowLeft'], next: ['ArrowDown', 'ArrowRight'], ok: ['Enter', 'NumpadEnter'], back: ['Backspace', 'ShiftRight', 'Delete'] },
     ];
     nav.forEach((n, i) => {
       if (i === 1 && this.cpu[1]) return;
-      const n5 = this.roster.length;
-      if (n.prev.includes(code) && !this.ready[i]) this.pick[i] = (this.pick[i] + n5 - 1) % n5;
-      else if (n.next.includes(code) && !this.ready[i]) this.pick[i] = (this.pick[i] + 1) % n5;
-      else if (n.ready.includes(code)) return this.toggleReady(i);
-      else return;
-      this.game.sfx('tick');
-      this.renderSelect();
+      if (n.prev.includes(code)) this.move(i, -1);
+      else if (n.next.includes(code)) this.move(i, 1);
+      else if (n.ok.includes(code)) this.confirm(i);
+      else if (n.back.includes(code)) this.back(i);
     });
     return true;
   }
 
   renderSelect() {
     const root = $('#select');
+    const PAGE = 5;
     root.querySelectorAll('.pcol').forEach((col) => {
       const i = Number(col.dataset.p);
-      col.classList.toggle('is-ready', this.ready[i]);
-      col.querySelectorAll('.roster li').forEach((li) => li.classList.toggle('sel', Number(li.dataset.j) === this.pick[i]));
+      const stage = this.stage[i];
+      col.classList.toggle('is-ready', stage === 'ready');
+      col.dataset.stage = stage;
+      // Paged list (PMD menus show a page at a time with a "page/total" counter).
+      const items = stage === 'mon' ? this.roster : this.itemOptions;
+      const cur = stage === 'mon' ? this.pick[i] : this.itemPick[i];
+      const pages = Math.ceil(items.length / PAGE);
+      const page = Math.floor(cur / PAGE);
+      $('.list-title', col).textContent = stage === 'mon' ? 'Pokémon' : 'Held item';
+      $('.list-page', col).textContent = `${page + 1}/${pages}`;
+      const rows = [];
+      for (let j = page * PAGE; j < Math.min(items.length, (page + 1) * PAGE); j++) {
+        const label = stage === 'mon' ? DB.pokedex[items[j]].name : items[j] ? `${itemIcon(items[j])}${items[j].name}` : '<span class="dim">No item</span>';
+        rows.push(`<li data-j="${j}" class="${j === cur ? 'sel' : ''}">${label}</li>`);
+      }
+      $('.roster .menu', col).innerHTML = rows.join('');
       const key = this.roster[this.pick[i]];
       if (col.dataset.key !== key) {
         col.dataset.key = key;
-        this.renderCard(col, key, i);
         this.previews[i] = { cv: $('.preview', col), anim: new SpriteAnimator(this.arts[key]), dir: i === 0 ? 1 : 7 };
       }
+      this.renderCard(col, key, i);
       const cpu = i === 1 && this.cpu[1];
-      $('.ready-win', col).innerHTML = this.ready[i]
-        ? `${cpu ? 'CPU is ready!' : 'Ready!'} <span class="more-arrow"></span>`
-        : `Press ${CONTROLS[i].ready} when ready`;
-      if (!this.ready[i] && this.game.input?.touchMode) $('.ready-win', col).textContent = 'Tap here when ready';
+      const touch = this.game.input?.touchMode;
+      const k = CONTROLS[i];
+      $('.ready-win', col).innerHTML = cpu
+        ? 'CPU is ready! <span class="more-arrow"></span>'
+        : stage === 'ready'
+          ? `Ready! <span class="more-arrow"></span> <span class="dim">${touch ? '(tap to change)' : `(${k.back}: back)`}</span>`
+          : stage === 'item'
+            ? touch ? 'Tap here to hold this item' : `${k.ready}: hold item · ${k.back}: back`
+            : touch ? 'Tap here to choose' : `${k.ready}: choose Pokémon`;
     });
   }
 
@@ -193,30 +258,41 @@ export class UI {
     const d = DB.pokedex[key];
     const st = statsFor(d.baseStats);
     const s = d.baseStats;
+    const item = this.itemOptions[this.itemPick[i]];
+    const itemLine = this.stage[i] === 'mon' ? '' : `<div><span class="cyan">Item</span> ${item ? `${itemIcon(item)}${item.name}` : '<span class="dim">None</span>'}</div>`;
     $('.info', col).innerHTML = `
       <div class="row" style="justify-content:flex-start;gap:calc(5*var(--u))">
         <span class="frame p${i + 1}"><img src="${this.arts[key].portraits.Normal}" alt=""></span>
         <div>
           <div><span class="yellow">${d.name}</span> <span class="dim">No.${String(d.dex).padStart(3, '0')}</span></div>
           <div>${d.types.map(typeText).join(' ')}</div>
-          <div><span class="cyan">Ability</span> ${d.abilities.map(esc).join(' / ')}</div>
+          ${itemLine || `<div><span class="cyan">Ability</span> ${d.abilities.map(esc).join(' / ')}</div>`}
         </div>
       </div>
       <div class="stats">
         <span><span class="cyan">HP</span>${s.hp}</span><span><span class="cyan">Atk</span>${s.atk}</span><span><span class="cyan">Def</span>${s.def}</span>
         <span><span class="cyan">SpA</span>${s.spa}</span><span><span class="cyan">SpD</span>${s.spd}</span><span><span class="cyan">Spe</span>${s.spe}</span>
-      </div>
-`;
-    $('.info', col).title = `Lv.50 · arena HP ${st.hp * HP_SCALE} · base stat total ${d.bst}`;
-    $('.moves', col).innerHTML = d.moves
+      </div>`;
+    $('.info', col).title = `Lv.50 · arena HP ${st.hp * HP_SCALE} · base stat total ${d.bst} · Ability: ${d.abilities.join(' / ')}`;
+    const win = $('.moves-win', col);
+    if (this.stage[i] === 'item') {
+      // PMD-style item description window while browsing the bag.
+      win.innerHTML = item
+        ? `<div>${itemIcon(item)}<span class="yellow">${item.name}</span></div><div class="item-desc">${esc(item.desc)}</div>`
+        : `<div class="dim">Fight without a held item.</div>`;
+      win.title = item ? `Original PMD description: ${item.pmdDesc}` : '';
+      return;
+    }
+    win.title = '';
+    win.innerHTML = `<ul class="moves">${d.moves
       .map((id) => {
         const m = DB.moves[id];
         const fx = MOVEFX.moves[id];
         const aimed = fx.aim === 'facing';
-        const tip = `${m.name} · ${m.type} ${m.category} · Power ${m.power} · ${BEHAVIOR_LABEL[fx.behavior]}${aimed ? ', fired where you face' : ', aims itself'}. ${m.shortDesc}`;
+        const tip = `${m.name} · ${m.type} ${m.category} · Power ${m.power} · ${BEHAVIOR_LABEL[fx.behavior] || fx.behavior}${aimed ? ', fired where you face' : ', aims itself'}. ${m.shortDesc}`;
         return `<li title="${esc(tip)}"><span class="mv-name">${orb(m.type)}<span class="green">${m.name}</span>${aimed ? ' <span class="cyan">→</span>' : ''}</span><span>${m.category === 'Physical' ? 'Phys' : 'Spec'} ${m.power}</span><span><span class="cyan">PP</span>${String(m.pp).padStart(3, ' ')} <span class="dim">${m.cooldown}s</span></span></li>`;
       })
-      .join('');
+      .join('')}</ul>`;
   }
 
   tickPreviews(dt) {
@@ -243,7 +319,7 @@ export class UI {
       <div class="win p${i + 1} hud-p p${i + 1}">
         <span class="frame p${i + 1}"><img class="hud-portrait" src="${f.art.portraits.Normal}" alt=""></span>
         <div class="hud-main">
-          <div class="hud-name"><span class="c-p${i + 1}">${f.data.name}</span> <span class="dim">Lv.50</span></div>
+          <div class="hud-name"><span class="c-p${i + 1}">${f.data.name}</span> <span class="dim">Lv.50</span>${f.item ? ` <span class="hud-item" title="${esc(f.item.name)}: ${esc(f.item.desc)}">${itemIcon(f.item)}</span>` : ''}</div>
           <div class="hp-line"><span class="cyan">HP</span><span class="hp-text"></span><span class="hp-bar"><i></i></span></div>
           <div class="cds">
             ${f.data.moves.map((id) => `<div class="cd" title="${DB.moves[id].name}">${orb(DB.moves[id].type)}<b><i></i></b></div>`).join('')}
@@ -264,6 +340,7 @@ export class UI {
         cds: [...el.querySelectorAll('.cd')],
         emotion: 'Normal',
         lastHp: -1,
+        item: $('.hud-item', el),
       };
     });
     this.clearLog();
@@ -290,6 +367,7 @@ export class UI {
         h.paused = !f.still;
         h.cds[0].parentElement.classList.toggle('paused', h.paused);
       }
+      if (h.item) h.item.classList.toggle('spent', f.itemSpent);
       const foe = fighters[1 - i];
       f.data.moves.forEach((id, j) => {
         const cd = DB.moves[id].cooldown;

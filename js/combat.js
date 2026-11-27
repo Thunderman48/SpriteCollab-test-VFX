@@ -28,9 +28,18 @@ export function computeDamage(attacker, defender, move, factor = 1) {
   const base = Math.floor(Math.floor((Math.floor((2 * LEVEL) / 5 + 2) * move.power * A) / D) / 50) + 2;
   const stab = attacker.data.types.includes(move.type) ? 1.5 : 1;
   const eff = effectiveness(move.type, defender.data.types);
-  const crit = Math.random() < 1 / 24;
+  const am = attacker.mods || {};
+  const dm = defender.mods || {};
+  const crit = Math.random() < (am.crit ?? 1 / 24);
   const rand = 0.85 + Math.random() * 0.15;
-  const dmg = eff === 0 ? 0 : Math.max(1, Math.floor(base * stab * eff * (crit ? 1.5 : 1) * rand * factor));
+  // Held items: type booster, Life Orb, Expert Belt, Metronome streak, Iron Ball.
+  const items =
+    (am.typeBoost?.[move.type] ?? 1) *
+    (am.dmgMul ?? 1) *
+    (eff > 1 ? am.superMul ?? 1 : 1) *
+    (1 + Math.min(0.5, (attacker.metroStacks || 0) * (am.metronome || 0))) *
+    (dm.takenMul ?? 1);
+  const dmg = eff === 0 ? 0 : Math.max(1, Math.floor(base * stab * eff * (crit ? 1.5 : 1) * rand * factor * items));
   return { dmg, eff, crit };
 }
 

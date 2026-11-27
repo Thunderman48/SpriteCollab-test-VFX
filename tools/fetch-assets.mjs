@@ -113,6 +113,22 @@ tasks.push(save(`${RA}/font/banner/FontData.xml`, 'assets/ui/raw/banner/FontData
 
 await Promise.all(tasks);
 
+// ---- Held items: real PMD: Origins names/sprites + this game's real-time effects ----
+const itemfx = JSON.parse(readFileSync(join(root, 'data/itemfx.json'), 'utf8'));
+const items = [];
+await Promise.all(
+  itemfx.items.map(async (it, i) => {
+    const raw = await get(`${DA}/Data/Item/${it.id}.json`, { text: true });
+    if (!raw) return;
+    const obj = JSON.parse(raw.replace(/^\uFEFF/, '')).Object;
+    const sprite = obj.Sprite;
+    await save(`${RA}/Item/${sprite}.None.png`, `assets/items/${sprite}.png`);
+    items[i] = { id: it.id, name: obj.Name.DefaultText, sprite, pmdDesc: obj.Desc.DefaultText, desc: it.desc, effect: it.effect };
+  }),
+);
+writeFileSync(join(root, 'data/items.json'), JSON.stringify(items.filter(Boolean), null, 2) + '\n');
+console.log(`Items: ${items.filter(Boolean).length}/${itemfx.items.length}`);
+
 // Manifest of what was actually downloaded, so the game never requests missing files.
 const manifest = { sprites: {}, portraits: {} };
 for (const r of roster) {
@@ -170,6 +186,11 @@ Menu window borders, portrait frames and the cursor are from
 [audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (\`Content/UI\`); the text font, banner font and
 type icons are the PMD: Origins fonts from [PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (\`font/\`).
 PMD: Origins © Audino 2021, which permits copying and redistribution.
+
+## Held items — PMD: Origins
+
+Item names and sprites come from [audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (\`Data/Item\`) and
+[PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (\`Item/\`); their effects were adapted to real-time play.
 
 ## Pokémon data — [@pkmn/dex](https://github.com/pkmn/ps)
 

@@ -214,7 +214,7 @@ body[data-screen='select'] #select { display: flex; }
 .moves li { display: grid; grid-template-columns: 1fr auto auto; column-gap: calc(6 * var(--u)); white-space: nowrap; }
 .moves li .mv-name { overflow: hidden; }
 .moves li .mv-desc { grid-column: 1 / -1; color: var(--dim); white-space: normal; padding-left: calc(13 * var(--u)); }
-.ready-win { text-align: center; cursor: pointer; }
+.ready-win { text-align: center; cursor: pointer; position: sticky; bottom: 0; z-index: 1; }
 .pcol.is-ready .ready-win { color: var(--yellow); }
 .cpu-toggle { color: var(--cyan); }
 .select-foot { display: flex; gap: calc(10 * var(--u)); }
@@ -231,3 +231,13 @@ body[data-screen='select'] #select { display: flex; }
 .win-stats th { font-weight: normal; color: var(--cyan); text-align: right; padding-left: calc(8 * var(--u)); }
 .win-stats td { text-align: right; padding-left: calc(8 * var(--u)); }
 .win-stats td:first-child, .win-stats th:first-child { text-align: left; padding-left: 0; }
+
+/* ---------- Held items ---------- */
+.item-ico { width: calc(16 * var(--u)); height: calc(16 * var(--u)); image-rendering: pixelated; vertical-align: calc(-4 * var(--u)); margin-right: calc(2 * var(--u)); }
+.hud-item .item-ico { width: calc(12 * var(--u)); height: calc(12 * var(--u)); vertical-align: calc(-2 * var(--u)); margin: 0; }
+.hud-item.spent { opacity: 0.3; filter: grayscale(1); }
+.list-head { display: flex; justify-content: space-between; color: var(--cyan); }
+.roster .menu { min-height: calc(5 * 13 * var(--u)); }
+.roster .menu li { height: calc(13 * var(--u)); }
+.moves-win { min-height: calc(16 * var(--u) + 4 * 13 * var(--u) + 2 * var(--u)); }
+.item-desc { white-space: normal; margin-top: calc(2 * var(--u)); }

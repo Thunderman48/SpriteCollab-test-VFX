@@ -161,5 +161,498 @@
     ],
     "hurtRadius": 16,
     "flying": false
+  },
+  "charizard": {
+    "key": "charizard",
+    "name": "Charizard",
+    "dex": 6,
+    "spriteId": "0006",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 78,
+      "atk": 84,
+      "def": 78,
+      "spa": 109,
+      "spd": 85,
+      "spe": 100
+    },
+    "bst": 534,
+    "abilities": [
+      "Blaze",
+      "Solar Power"
+    ],
+    "weightkg": 90.5,
+    "gen": 1,
+    "moves": [
+      "flamethrower",
+      "airslash",
+      "dragonclaw",
+      "fireblast"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "blastoise": {
+    "key": "blastoise",
+    "name": "Blastoise",
+    "dex": 9,
+    "spriteId": "0009",
+    "types": [
+      "Water"
+    ],
+    "baseStats": {
+      "hp": 79,
+      "atk": 83,
+      "def": 100,
+      "spa": 85,
+      "spd": 105,
+      "spe": 78
+    },
+    "bst": 530,
+    "abilities": [
+      "Torrent",
+      "Rain Dish"
+    ],
+    "weightkg": 85.5,
+    "gen": 1,
+    "moves": [
+      "waterpulse",
+      "aquatail",
+      "flashcannon",
+      "hydropump"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "venusaur": {
+    "key": "venusaur",
+    "name": "Venusaur",
+    "dex": 3,
+    "spriteId": "0003",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 82,
+      "def": 83,
+      "spa": 100,
+      "spd": 100,
+      "spe": 80
+    },
+    "bst": 525,
+    "abilities": [
+      "Overgrow",
+      "Chlorophyll"
+    ],
+    "weightkg": 100,
+    "gen": 1,
+    "moves": [
+      "razorleaf",
+      "sludgebomb",
+      "petaldance",
+      "solarbeam"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "pikachu": {
+    "key": "pikachu",
+    "name": "Pikachu",
+    "dex": 25,
+    "spriteId": "0025",
+    "types": [
+      "Electric"
+    ],
+    "baseStats": {
+      "hp": 35,
+      "atk": 55,
+      "def": 40,
+      "spa": 50,
+      "spd": 50,
+      "spe": 90
+    },
+    "bst": 320,
+    "abilities": [
+      "Static",
+      "Lightning Rod"
+    ],
+    "weightkg": 6,
+    "gen": 1,
+    "moves": [
+      "quickattack",
+      "thunderbolt",
+      "irontail",
+      "thunder"
+    ],
+    "hurtRadius": 12,
+    "flying": false
+  },
+  "dialga": {
+    "key": "dialga",
+    "name": "Dialga",
+    "dex": 483,
+    "spriteId": "0483",
+    "types": [
+      "Steel",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 120,
+      "def": 120,
+      "spa": 150,
+      "spd": 100,
+      "spe": 90
+    },
+    "bst": 680,
+    "abilities": [
+      "Pressure",
+      "Telepathy"
+    ],
+    "weightkg": 683,
+    "gen": 4,
+    "moves": [
+      "metalclaw",
+      "dragonpulse",
+      "flashcannon",
+      "roaroftime"
+    ],
+    "hurtRadius": 22,
+    "flying": false
+  },
+  "palkia": {
+    "key": "palkia",
+    "name": "Palkia",
+    "dex": 484,
+    "spriteId": "0484",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 120,
+      "def": 100,
+      "spa": 150,
+      "spd": 120,
+      "spe": 100
+    },
+    "bst": 680,
+    "abilities": [
+      "Pressure",
+      "Telepathy"
+    ],
+    "weightkg": 336,
+    "gen": 4,
+    "moves": [
+      "aquatail",
+      "dragonclaw",
+      "hydropump",
+      "spacialrend"
+    ],
+    "hurtRadius": 22,
+    "flying": false
+  },
+  "giratina": {
+    "key": "giratina",
+    "name": "Giratina",
+    "dex": 487,
+    "spriteId": "0487",
+    "types": [
+      "Ghost",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 150,
+      "atk": 100,
+      "def": 120,
+      "spa": 100,
+      "spd": 120,
+      "spe": 90
+    },
+    "bst": 680,
+    "abilities": [
+      "Pressure",
+      "Telepathy"
+    ],
+    "weightkg": 750,
+    "gen": 4,
+    "moves": [
+      "aurasphere",
+      "shadowball",
+      "dragonpulse",
+      "shadowforce"
+    ],
+    "hurtRadius": 22,
+    "flying": false
+  },
+  "blaziken": {
+    "key": "blaziken",
+    "name": "Blaziken",
+    "dex": 257,
+    "spriteId": "0257",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 120,
+      "def": 70,
+      "spa": 110,
+      "spd": 70,
+      "spe": 80
+    },
+    "bst": 530,
+    "abilities": [
+      "Blaze",
+      "Speed Boost"
+    ],
+    "weightkg": 52,
+    "gen": 3,
+    "moves": [
+      "skyuppercut",
+      "blazekick",
+      "flamethrower",
+      "flareblitz"
+    ],
+    "hurtRadius": 15,
+    "flying": false
+  },
+  "gardevoir": {
+    "key": "gardevoir",
+    "name": "Gardevoir",
+    "dex": 282,
+    "spriteId": "0282",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 68,
+      "atk": 65,
+      "def": 65,
+      "spa": 125,
+      "spd": 115,
+      "spe": 80
+    },
+    "bst": 518,
+    "abilities": [
+      "Synchronize",
+      "Trace",
+      "Telepathy"
+    ],
+    "weightkg": 48.4,
+    "gen": 3,
+    "moves": [
+      "moonblast",
+      "psychic",
+      "shadowball",
+      "focusblast"
+    ],
+    "hurtRadius": 14,
+    "flying": false
+  },
+  "metagross": {
+    "key": "metagross",
+    "name": "Metagross",
+    "dex": 376,
+    "spriteId": "0376",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 135,
+      "def": 130,
+      "spa": 95,
+      "spd": 90,
+      "spe": 70
+    },
+    "bst": 600,
+    "abilities": [
+      "Clear Body",
+      "Light Metal"
+    ],
+    "weightkg": 550,
+    "gen": 3,
+    "moves": [
+      "bulletpunch",
+      "zenheadbutt",
+      "meteormash",
+      "earthquake"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "tyranitar": {
+    "key": "tyranitar",
+    "name": "Tyranitar",
+    "dex": 248,
+    "spriteId": "0248",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 134,
+      "def": 110,
+      "spa": 95,
+      "spd": 100,
+      "spe": 61
+    },
+    "bst": 600,
+    "abilities": [
+      "Sand Stream",
+      "Unnerve"
+    ],
+    "weightkg": 202,
+    "gen": 2,
+    "moves": [
+      "crunch",
+      "rockslide",
+      "darkpulse",
+      "stoneedge"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "eevee": {
+    "key": "eevee",
+    "name": "Eevee",
+    "dex": 133,
+    "spriteId": "0133",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": {
+      "hp": 55,
+      "atk": 55,
+      "def": 50,
+      "spa": 45,
+      "spd": 65,
+      "spe": 55
+    },
+    "bst": 325,
+    "abilities": [
+      "Run Away",
+      "Adaptability",
+      "Anticipation"
+    ],
+    "weightkg": 6.5,
+    "gen": 1,
+    "moves": [
+      "quickattack",
+      "swift",
+      "bite",
+      "shadowball"
+    ],
+    "hurtRadius": 12,
+    "flying": false
+  },
+  "snorlax": {
+    "key": "snorlax",
+    "name": "Snorlax",
+    "dex": 143,
+    "spriteId": "0143",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": {
+      "hp": 160,
+      "atk": 110,
+      "def": 65,
+      "spa": 65,
+      "spd": 110,
+      "spe": 30
+    },
+    "bst": 540,
+    "abilities": [
+      "Immunity",
+      "Thick Fat",
+      "Gluttony"
+    ],
+    "weightkg": 460,
+    "gen": 1,
+    "moves": [
+      "bodyslam",
+      "crunch",
+      "earthquake",
+      "gigaimpact"
+    ],
+    "hurtRadius": 20,
+    "flying": false
+  },
+  "dragonite": {
+    "key": "dragonite",
+    "name": "Dragonite",
+    "dex": 149,
+    "spriteId": "0149",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 91,
+      "atk": 134,
+      "def": 95,
+      "spa": 100,
+      "spd": 100,
+      "spe": 80
+    },
+    "bst": 600,
+    "abilities": [
+      "Inner Focus",
+      "Multiscale"
+    ],
+    "weightkg": 210,
+    "gen": 1,
+    "moves": [
+      "wingattack",
+      "dragonrush",
+      "outrage",
+      "hyperbeam"
+    ],
+    "hurtRadius": 18,
+    "flying": false
+  },
+  "umbreon": {
+    "key": "umbreon",
+    "name": "Umbreon",
+    "dex": 197,
+    "spriteId": "0197",
+    "types": [
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 95,
+      "atk": 65,
+      "def": 110,
+      "spa": 60,
+      "spd": 130,
+      "spe": 65
+    },
+    "bst": 525,
+    "abilities": [
+      "Synchronize",
+      "Inner Focus"
+    ],
+    "weightkg": 27,
+    "gen": 2,
+    "moves": [
+      "feintattack",
+      "bite",
+      "darkpulse",
+      "payback"
+    ],
+    "hurtRadius": 13,
+    "flying": false
   }
 }

@@ -4,7 +4,9 @@ A small local **2-player** Pokémon arena for testing the [PMDCollab SpriteColla
 sprite library in the browser, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) VFX sheets.
 The interface uses PMD: Origins' own window borders, portrait frames, cursor, text/banner fonts and type icons, so it looks like Mystery Dungeon.
 
-**Roster:** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo. Each has 4 moves, and all 19 moves have their own VFX.
+**Roster (20):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon. Each has 4 moves (53 different moves), and every move has its own VFX.
+
+**Held items:** like in Mystery Dungeon, each Pokémon can hold one item, chosen on the select screen. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time, and the in-game description says what each item does here.
 
 ## How to play
 
@@ -12,7 +14,7 @@ The interface uses PMD: Origins' own window borders, portrait frames, cursor, te
 |---|---|---|
 | Move | `W A S D` | Arrow keys |
 | Dodge | `Space` (or `Left Shift` / `F`) | `Enter` (or `Right Shift` / `/`) |
-| Pick Pokémon | `A` / `D`, then `Space` to ready | `←` / `→`, then `Enter` to ready |
+| Pick Pokémon, then held item | `W` / `S` + `Space` to confirm, `Q` to go back | `↑` / `↓` + `Enter` to confirm, `Backspace` to go back |
 
 - **Mobile:** turn the phone sideways. P1 touches anywhere on the left half for a floating joystick and P2 on the right half. Each player has a **DODGE** button, or can double-tap their side to dodge.
 - **Stand still to attack.** Attacks are automatic, but they only recharge and fire while your Pokémon is standing still. Moving or dodging pauses every cooldown (the HUD bars turn grey), and while an attack plays you're rooted in place (a direction only turns your aim).
@@ -21,6 +23,7 @@ The interface uses PMD: Origins' own window borders, portrait frames, cursor, te
   - Low-PP moves fire rarely but hit hard, e.g. Hyper Beam (5 PP) every 9 s.
   - **Aimed moves** (marked → on the select screen) fire **in the direction you're facing**, shown by the small arrow at your Pokémon's feet: Air Slash, Dragon Pulse, Hyper Beam, Flash Cannon, Dragon Rush, Shadow Ball, Sludge Bomb, Psycho Cut. They wait until the opponent is roughly in front of you (within 70°), then fly exactly where you aim, so line up your shot. You can still turn while one is charging.
   - All other moves aim themselves at the opponent once they're in range: area attacks, bursts, melee, and Aura Sphere (it never misses in the games either).
+- **Sudden death:** after 90 seconds of fighting all damage is doubled, so no match can stall forever.
 - **Dodging** gives a short dash with invulnerability. Use it to slip through projectiles, beams and the red warning circles that area attacks show. Dodging during a wind-up cancels it, and the move stays ready.
 - **Auto-attacks never waste a move the target is immune to** (e.g. Earth Power vs Rayquaza). The HUD greys such moves out and marks super-effective ones with ▲.
 - `Esc` / `P` opens the menu (↑/↓ to move the cursor, Enter/Space to pick) and `M` mutes. On the select screen, **P2: CPU** lets you play solo.
@@ -54,6 +57,8 @@ js/ui.js                   PMD-style screens: select, HUD, message log, menus
 js/input.js, js/bot.js     keyboard + multi-touch joysticks, optional CPU player
 data/roster.json           which Pokémon and moves are in the game   (hand-edited)
 data/movefx.json           each move's behaviour, sprite anim and VFX (hand-edited)
+data/itemfx.json           held items: PMD item id -> real-time effect + description (hand-edited)
+data/items.json            generated: itemfx + real PMD names/sprites (from DumpAsset)
 data/pokedex.json, moves.json, typechart.json   generated database
 assets/                    downloaded sprites, portraits, VFX + manifest.json
 assets/ui/                 PMD window/portrait frames, cursor, pmd-text.ttf, type orbs, banner font

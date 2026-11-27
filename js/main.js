@@ -6,12 +6,14 @@ import { MOVEFX } from './moves.js';
 import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
 import { UI } from './ui.js';
+import { setItems } from './items.js';
 import { Bot } from './bot.js';
 import { Sfx } from './sfx.js';
 
 const W = 640; // arena size in game pixels
 const H = 360;
 const START_X = 150; // spawn distance from the side walls
+const SUDDEN_DEATH = 90; // seconds of fighting before all damage doubles
 const RES = 2; // backing-store pixels per arena pixel
 const STEP = 1 / 60;
 
@@ -87,7 +89,7 @@ class Game {
   applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false } = {}) {
     if (!def.alive || this.state === 'result') return;
     const move = cast.move;
-    const { dmg, eff, crit } = computeDamage(att, def, move, factor);
+    const { dmg, eff, crit } = computeDamage(att, def, move, factor * this.damageMul);
     const fxd = cast.def;
     const hx = at ? (at.x + def.x) / 2 : def.x;
     const hy = at ? (at.y + def.y) / 2 : def.y - 4;
@@ -103,6 +105,7 @@ class Game {
     if (eff > 1) s.supers++;
     this.moveLog[move.id] = (this.moveLog[move.id] || 0) + 1;
     def.takeHit(dmg, angle);
+    if (att.mods.drain && dmg > 0 && att.alive) att.heal(Math.max(1, Math.round(dmg * att.mods.drain))); // Shell Bell
     const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
     this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
     if (eff === 0) this.ui.log(`It doesn't affect ${this.who(def)}...`);
@@ -114,7 +117,21 @@ class Game {
     return dmg;
   }
 
-  onMoveUsed() {}
+  /** Called when a move actually fires (after any wind-up). */
+  onMoveUsed(c) {
+    const m = c.mods;
+    if (m.metronome) c.metroStacks = Math.min(5, (c.metroStacks || 0) + 1);
+    if (m.lifeOrb) this.recoil(c, Math.round(c.maxHp * m.lifeOrb), `its ${c.item.name}`, false);
+  }
+
+  /** Self-damage from moves like Flare Blitz (and Life Orb). */
+  recoil(f, amount, what = 'recoil', log = true) {
+    if (!f.alive || amount <= 0) return;
+    f.hp = Math.max(0, f.hp - amount);
+    if (log) this.ui.log(`${this.who(f)} is hurt by ${what}!`);
+    this.addEffect(new FloatText(String(amount), f.x, f.y - 20, '#f85840'));
+    if (f.hp <= 0) f.faint();
+  }
 
   onKO(f) {
     if (this.state !== 'fight') return;
@@ -138,8 +155,21 @@ class Game {
   }
 
   // ---------- screens ----------
-  startFight(keys, cpu) {
-    this.lastSetup = { keys, cpu };
+  /** Start a fight; loads the picked Pokémon's remaining animations first if needed. */
+  startFight(keys, cpu, items = [null, null]) {
+    const arts = keys.map((k) => this.arts[k]);
+    if (!arts.every((a) => a.full)) {
+      const status = document.getElementById('loading-status');
+      const screen = document.getElementById('loading');
+      status.textContent = 'Now loading...';
+      screen.classList.remove('done');
+      Promise.all(arts.map((a) => a.loadRest())).then(() => {
+        screen.classList.add('done');
+        this.startFight(keys, cpu, items);
+      });
+      return;
+    }
+    this.lastSetup = { keys, cpu, items };
     this.objects = [];
     this.timers = [];
     this.updaters = [];
@@ -147,7 +177,7 @@ class Game {
     this.stats = [0, 1].map(() => ({ damage: 0, casts: 0, hits: 0, dodges: 0, supers: 0 }));
     this.moveLog = {};
     const midY = (this.bounds.y0 + this.bounds.y1) / 2 + 6;
-    this.fighters = keys.map((k, i) => new Fighter(this, i, DB.pokedex[k], this.arts[k], i === 0 ? START_X : W - START_X, midY));
+    this.fighters = keys.map((k, i) => new Fighter(this, i, DB.pokedex[k], this.arts[k], i === 0 ? START_X : W - START_X, midY, items[i]));
     this.bots = cpu.map((on, i) => (on ? new Bot(this, i) : null));
     this.fighters.forEach((f) => this.addEffect(new Effect(MOVEFX.common.spawn, f.x, f.y, { layer: 'under' })));
     this.ui.buildHUD(this.fighters);
@@ -160,11 +190,15 @@ class Game {
       this.banner(s, i === 3 ? 0.8 : 0.55);
       this.sfx(i === 3 ? 'go' : 'tick');
     }));
-    this.after(steps.length * 0.6 - 0.6, () => (this.state = 'fight'));
+    this.after(steps.length * 0.6 - 0.6, () => {
+      this.state = 'fight';
+      this.fightTime = 0;
+    });
+    this.damageMul = 1;
   }
 
   rematch() {
-    if (this.lastSetup) this.startFight(this.lastSetup.keys, this.lastSetup.cpu);
+    if (this.lastSetup) this.startFight(this.lastSetup.keys, this.lastSetup.cpu, this.lastSetup.items);
   }
 
   toSelect() {
@@ -174,7 +208,8 @@ class Game {
     this.timers = [];
     document.getElementById('pause').classList.remove('show');
     this.ui.hideResult();
-    this.ui.ready = [false, this.ui.cpu[1]];
+    this.ui.stage = ['mon', 'mon'];
+    if (this.ui.cpu[1]) this.ui.cpuPick();
     this.ui.renderSelect();
     document.body.dataset.screen = 'select';
   }
@@ -211,6 +246,16 @@ class Game {
       if (this.bannerState.t >= this.bannerState.time) this.bannerState = null;
     }
     dt *= this.slowmo;
+    if (this.state === 'fight') {
+      this.fightTime += dt;
+      if (this.damageMul === 1 && this.fightTime >= SUDDEN_DEATH) {
+        // Stops stalemates (e.g. two Pokémon mostly immune to each other).
+        this.damageMul = 2;
+        this.banner('SUDDEN DEATH!', 1.2);
+        this.ui.log('<span class="yellow">Sudden death!</span> All damage is doubled.');
+        this.sfx('go');
+      }
+    }
     this.dodgeTextT = this.dodgeTextT.map((t) => Math.max(0, t - dt));
 
     for (const t of this.timers) t.t -= dt;
@@ -375,14 +420,16 @@ async function boot() {
   window.__arena = game; // handy for debugging / automated tests
 
   try {
-    const [pokedex, moves, typechart, movefx, roster, manifest] = await Promise.all([
+    const [pokedex, moves, typechart, movefx, roster, manifest, items] = await Promise.all([
       loadJSON('data/pokedex.json'),
       loadJSON('data/moves.json'),
       loadJSON('data/typechart.json'),
       loadJSON('data/movefx.json'),
       loadJSON('data/roster.json'),
       loadJSON('assets/manifest.json'),
+      loadJSON('data/items.json'),
     ]);
+    setItems(items);
     Object.assign(DB, { pokedex, moves, typechart });
     Object.assign(MOVEFX, movefx);
 
@@ -432,11 +479,13 @@ async function boot() {
     const params = new URLSearchParams(location.search);
     if (params.has('cpu')) {
       game.ui.cpu = [params.get('cpu') === 'both', true];
+      game.ui.cpuPick();
+      game.ui.renderSelect();
     }
     if (params.has('p1') || params.has('autostart')) {
       const p1 = params.get('p1') || 'rayquaza';
       const p2 = params.get('p2') || 'garchomp';
-      game.startFight([p1, p2], game.ui.cpu.slice());
+      game.startFight([p1, p2], game.ui.cpu.slice(), [params.get('i1'), params.get('i2')]);
     }
   } catch (e) {
     console.error(e);

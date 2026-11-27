@@ -1,7 +1,22 @@
 [
-  { "key": "rayquaza", "species": "Rayquaza", "dex": 384, "moves": ["airslash", "dragonpulse", "hyperbeam", "dracometeor"], "hurtRadius": 22, "flying": true },
-  { "key": "lucario",  "species": "Lucario",  "dex": 448, "moves": ["bulletpunch", "aurasphere", "flashcannon", "closecombat"], "hurtRadius": 14 },
-  { "key": "garchomp", "species": "Garchomp", "dex": 445, "moves": ["crunch", "dragonrush", "earthpower", "stoneedge"], "hurtRadius": 18 },
-  { "key": "gengar",   "species": "Gengar",   "dex": 94,  "moves": ["lick", "shadowball", "darkpulse", "sludgebomb"], "hurtRadius": 15 },
-  { "key": "mewtwo",   "species": "Mewtwo",   "dex": 150, "moves": ["psychocut", "aurasphere", "psychic", "psychoboost"], "hurtRadius": 16 }
+  {"key": "rayquaza", "species": "Rayquaza", "dex": 384, "moves": ["airslash", "dragonpulse", "hyperbeam", "dracometeor"], "hurtRadius": 22, "flying": true},
+  {"key": "lucario", "species": "Lucario", "dex": 448, "moves": ["bulletpunch", "aurasphere", "flashcannon", "closecombat"], "hurtRadius": 14},
+  {"key": "garchomp", "species": "Garchomp", "dex": 445, "moves": ["crunch", "dragonrush", "earthpower", "stoneedge"], "hurtRadius": 18},
+  {"key": "gengar", "species": "Gengar", "dex": 94, "moves": ["lick", "shadowball", "darkpulse", "sludgebomb"], "hurtRadius": 15},
+  {"key": "mewtwo", "species": "Mewtwo", "dex": 150, "moves": ["psychocut", "aurasphere", "psychic", "psychoboost"], "hurtRadius": 16},
+  {"key": "charizard", "species": "Charizard", "dex": 6, "moves": ["flamethrower", "airslash", "dragonclaw", "fireblast"], "hurtRadius": 18},
+  {"key": "blastoise", "species": "Blastoise", "dex": 9, "moves": ["waterpulse", "aquatail", "flashcannon", "hydropump"], "hurtRadius": 18},
+  {"key": "venusaur", "species": "Venusaur", "dex": 3, "moves": ["razorleaf", "sludgebomb", "petaldance", "solarbeam"], "hurtRadius": 18},
+  {"key": "pikachu", "species": "Pikachu", "dex": 25, "moves": ["quickattack", "thunderbolt", "irontail", "thunder"], "hurtRadius": 12},
+  {"key": "dialga", "species": "Dialga", "dex": 483, "moves": ["metalclaw", "dragonpulse", "flashcannon", "roaroftime"], "hurtRadius": 22},
+  {"key": "palkia", "species": "Palkia", "dex": 484, "moves": ["aquatail", "dragonclaw", "hydropump", "spacialrend"], "hurtRadius": 22},
+  {"key": "giratina", "species": "Giratina", "dex": 487, "moves": ["aurasphere", "shadowball", "dragonpulse", "shadowforce"], "hurtRadius": 22},
+  {"key": "blaziken", "species": "Blaziken", "dex": 257, "moves": ["skyuppercut", "blazekick", "flamethrower", "flareblitz"], "hurtRadius": 15},
+  {"key": "gardevoir", "species": "Gardevoir", "dex": 282, "moves": ["moonblast", "psychic", "shadowball", "focusblast"], "hurtRadius": 14},
+  {"key": "metagross", "species": "Metagross", "dex": 376, "moves": ["bulletpunch", "zenheadbutt", "meteormash", "earthquake"], "hurtRadius": 18},
+  {"key": "tyranitar", "species": "Tyranitar", "dex": 248, "moves": ["crunch", "rockslide", "darkpulse", "stoneedge"], "hurtRadius": 18},
+  {"key": "eevee", "species": "Eevee", "dex": 133, "moves": ["quickattack", "swift", "bite", "shadowball"], "hurtRadius": 12},
+  {"key": "snorlax", "species": "Snorlax", "dex": 143, "moves": ["bodyslam", "crunch", "earthquake", "gigaimpact"], "hurtRadius": 20},
+  {"key": "dragonite", "species": "Dragonite", "dex": 149, "moves": ["wingattack", "dragonrush", "outrage", "hyperbeam"], "hurtRadius": 18},
+  {"key": "umbreon", "species": "Umbreon", "dex": 197, "moves": ["feintattack", "bite", "darkpulse", "payback"], "hurtRadius": 13}
 ]
