@@ -123,7 +123,16 @@ await Promise.all(
     const obj = JSON.parse(raw.replace(/^\uFEFF/, '')).Object;
     const sprite = obj.Sprite;
     await save(`${RA}/Item/${sprite}.None.png`, `assets/items/${sprite}.png`);
-    items[i] = { id: it.id, name: obj.Name.DefaultText, sprite, pmdDesc: obj.Desc.DefaultText, desc: it.desc, effect: it.effect };
+    items[i] = {
+      id: it.id,
+      name: obj.Name.DefaultText,
+      nameKo: obj.Name.LocalTexts?.ko || obj.Name.DefaultText,
+      sprite,
+      pmdDesc: obj.Desc.DefaultText,
+      desc: it.desc,
+      descKo: it.descKo || it.desc,
+      effect: it.effect,
+    };
   }),
 );
 writeFileSync(join(root, 'data/items.json'), JSON.stringify(items.filter(Boolean), null, 2) + '\n');
@@ -186,6 +195,11 @@ Menu window borders, portrait frames and the cursor are from
 [audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (\`Content/UI\`); the text font, banner font and
 type icons are the PMD: Origins fonts from [PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (\`font/\`).
 PMD: Origins © Audino 2021, which permits copying and redistribution.
+
+## Korean font
+
+Korean text uses [Galmuri](https://github.com/quiple/galmuri) (Galmuri11) by Lee Minseo, licensed under the
+SIL Open Font License 1.1 (\`assets/ui/fonts/Galmuri-OFL.md\`).
 
 ## Held items — PMD: Origins
 

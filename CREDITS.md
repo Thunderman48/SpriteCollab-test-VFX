@@ -47,6 +47,11 @@ Menu window borders, portrait frames and the cursor are from
 type icons are the PMD: Origins fonts from [PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (`font/`).
 PMD: Origins © Audino 2021, which permits copying and redistribution.
 
+## Korean font
+
+Korean text uses [Galmuri](https://github.com/quiple/galmuri) (Galmuri11) by Lee Minseo, licensed under the
+SIL Open Font License 1.1 (`assets/ui/fonts/Galmuri-OFL.md`).
+
 ## Held items — PMD: Origins
 
 Item names and sprites come from [audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (`Data/Item`) and

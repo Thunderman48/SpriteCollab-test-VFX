@@ -10,8 +10,11 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
 
 ## Screens
 
-- **Lobby:** Play, Online Multiplayer (coming later), Sandbox (coming later) and Credits. The **battle mode** is picked in the top-right window.
-- **Team setup:** one card per player with a **Player / CPU** toggle and a **Random** button. Click or tap a Pokémon to open the **editor**:
+- **Title screen:** Play, Online Multiplayer (coming later), Sandbox (coming later), **Settings** and Credits.
+- **Settings:** language (**English / 한국어**), *prevent double-tap zoom* on phones (on by default) and sound. Settings are saved in the browser.
+  Korean uses the official Korean Pokémon, move, type and item names, and the Galmuri pixel font for Hangul.
+- **Team setup:** a versus screen. Pick the battle mode from the **Mode** dropdown (top right). Each player panel shows the Pokémon on a stage,
+  a **Player / CPU** switch, a **Random** button and (in Trio) the party of three. Click or tap a Pokémon to open the **editor**:
   all 20 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** (held item grid with descriptions) and **Personality** (coming later).
   Party members are stored as plain data (`species`, `item`, `moves`, `personality`, `statBoosts` in `js/modes.js`) so stat, skill and personality editing can be added later.
 - Everything works with the mouse, touch, the keyboard (arrows / WASD move the cursor, Enter / Space choose, Esc goes back, Tab changes editor tab) or any gamepad.
@@ -72,6 +75,7 @@ js/fighter.js              movement, dodge, auto-cast scheduler, hurt/faint
 js/combat.js               level-50 stats, damage formula, STAB, type chart
 js/ui.js                   PMD-style screens: lobby, mode window, team setup, editor, HUD, log, menus
 js/modes.js                battle modes + team setup data (party members)
+js/i18n.js, js/settings.js English / Korean text, saved settings
 js/input.js, js/bot.js     keyboard + multi-touch joysticks, optional CPU player
 data/roster.json           which Pokémon and moves are in the game   (hand-edited)
 data/movefx.json           each move's behaviour, sprite anim and VFX (hand-edited)

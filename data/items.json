@@ -2,9 +2,11 @@
   {
     "id": "held_power_band",
     "name": "Power Band",
+    "nameKo": "파워밴드",
     "sprite": "Band_Tan",
     "pmdDesc": "A hold item that slightly boosts the Pokémon's Attack.",
     "desc": "Raises Attack by 25%.",
+    "descKo": "공격이 25% 오른다.",
     "effect": {
       "stats": {
         "atk": 1.25
@@ -14,9 +16,11 @@
   {
     "id": "held_special_band",
     "name": "Special Band",
+    "nameKo": "스페셜밴드",
     "sprite": "Band_Pink",
     "pmdDesc": "A hold item that slightly boosts the Pokémon's Special Attack.",
     "desc": "Raises Sp. Atk by 25%.",
+    "descKo": "특수공격이 25% 오른다.",
     "effect": {
       "stats": {
         "spa": 1.25
@@ -26,9 +30,11 @@
   {
     "id": "held_defense_scarf",
     "name": "Defense Scarf",
+    "nameKo": "방어스카프",
     "sprite": "Scarf_Green",
     "pmdDesc": "A hold item that slightly boosts the Pokémon's Defense.",
     "desc": "Raises Defense by 25%.",
+    "descKo": "방어가 25% 오른다.",
     "effect": {
       "stats": {
         "def": 1.25
@@ -38,9 +44,11 @@
   {
     "id": "held_zinc_band",
     "name": "Zinc Band",
+    "nameKo": "키토산밴드",
     "sprite": "Band_Gray",
     "pmdDesc": "A hold item that slightly boosts the Pokémon's Special Defense.",
     "desc": "Raises Sp. Def by 25%.",
+    "descKo": "특수방어가 25% 오른다.",
     "effect": {
       "stats": {
         "spd": 1.25
@@ -50,9 +58,11 @@
   {
     "id": "held_choice_band",
     "name": "Choice Band",
+    "nameKo": "구애머리띠",
     "sprite": "Band_Gray",
     "pmdDesc": "A curious headband that boosts Attack, but only allows the use of one move. This item sticks when held.",
     "desc": "Attack ×1.5, but every move recharges 25% slower.",
+    "descKo": "공격이 1.5배가 되지만 모든 기술의 재사용 시간이 25% 늘어난다.",
     "effect": {
       "stats": {
         "atk": 1.5
@@ -63,9 +73,11 @@
   {
     "id": "held_choice_specs",
     "name": "Choice Specs",
+    "nameKo": "구애안경",
     "sprite": "Specs_Yellow",
     "pmdDesc": "Distinctive glasses that boost Special Attack, but only allows the use of one move. This item sticks when held.",
     "desc": "Sp. Atk ×1.5, but every move recharges 25% slower.",
+    "descKo": "특수공격이 1.5배가 되지만 모든 기술의 재사용 시간이 25% 늘어난다.",
     "effect": {
       "stats": {
         "spa": 1.5
@@ -76,9 +88,11 @@
   {
     "id": "held_choice_scarf",
     "name": "Choice Scarf",
+    "nameKo": "구애스카프",
     "sprite": "Scarf_2_LightBlue",
     "pmdDesc": "A curious scarf that boosts Movement Speed, but only allows the use of one move. This item sticks when held.",
     "desc": "Move 30% faster, but every move recharges 25% slower.",
+    "descKo": "이동 속도가 30% 빨라지지만 모든 기술의 재사용 시간이 25% 늘어난다.",
     "effect": {
       "speedMul": 1.3,
       "cooldownMul": 1.25
@@ -87,9 +101,11 @@
   {
     "id": "held_assault_vest",
     "name": "Assault Vest",
+    "nameKo": "돌격조끼",
     "sprite": "Silk_Red",
     "pmdDesc": "An offensive vest that raises Special Defense, but prevents the use of status moves. This item sticks when held.",
     "desc": "Raises Sp. Def by 50%.",
+    "descKo": "특수방어가 50% 오른다.",
     "effect": {
       "stats": {
         "spd": 1.5
@@ -99,9 +115,11 @@
   {
     "id": "held_scope_lens",
     "name": "Scope Lens",
+    "nameKo": "초점렌즈",
     "sprite": "Specs_Yellow",
     "pmdDesc": "A lens used for scoping out weak points. It boosts the holder’s critical-hit ratio.",
     "desc": "Critical hits happen far more often (1 in 8).",
+    "descKo": "급소에 훨씬 잘 맞는다 (8번 중 1번).",
     "effect": {
       "crit": 0.125
     }
@@ -109,9 +127,11 @@
   {
     "id": "held_life_orb",
     "name": "Life Orb",
+    "nameKo": "생명의구슬",
     "sprite": "Life_Orb",
     "pmdDesc": "A held item that boosts the power of moves, but at the cost of some HP on each use. This item sticks when held.",
     "desc": "Moves deal 30% more damage, but each attack costs 3% of max HP.",
+    "descKo": "기술의 위력이 30% 오르지만 공격할 때마다 최대 HP의 3%를 잃는다.",
     "effect": {
       "dmgMul": 1.3,
       "lifeOrb": 0.03
@@ -120,9 +140,11 @@
   {
     "id": "held_expert_belt",
     "name": "Expert Belt",
+    "nameKo": "달인의띠",
     "sprite": "Belt_Black",
     "pmdDesc": "A well-worn belt that boosts the power of super-effective moves.",
     "desc": "Super-effective hits deal 20% more damage.",
+    "descKo": "효과가 굉장한 공격의 데미지가 20% 오른다.",
     "effect": {
       "superMul": 1.2
     }
@@ -130,9 +152,11 @@
   {
     "id": "held_shell_bell",
     "name": "Shell Bell",
+    "nameKo": "조개껍질방울",
     "sprite": "Box_White",
     "pmdDesc": "A held item that restores a little HP to the holder every time it inflicts damage on others.",
     "desc": "Restores HP equal to 1/8 of the damage you deal.",
+    "descKo": "준 데미지의 1/8만큼 HP를 회복한다.",
     "effect": {
       "drain": 0.125
     }
@@ -140,9 +164,11 @@
   {
     "id": "held_big_root",
     "name": "Big Root",
+    "nameKo": "큰뿌리",
     "sprite": "Thorn_Brown",
     "pmdDesc": "A held item that increases HP recovery.",
     "desc": "Slowly restores HP while standing still.",
+    "descKo": "가만히 서 있으면 HP가 조금씩 회복된다.",
     "effect": {
       "regen": 0.006
     }
@@ -150,9 +176,11 @@
   {
     "id": "held_metronome",
     "name": "Metronome",
+    "nameKo": "메트로놈",
     "sprite": "Box_White",
     "pmdDesc": "An item to be held by a Pokémon. It boosts moves used consecutively, but only until a different move is used.",
     "desc": "Each attack in a row without getting hit deals 10% more damage (up to +50%).",
+    "descKo": "맞지 않고 연속으로 공격할 때마다 데미지가 10%씩 오른다 (최대 +50%).",
     "effect": {
       "metronome": 0.1
     }
@@ -160,9 +188,11 @@
   {
     "id": "held_wide_lens",
     "name": "Wide Lens",
+    "nameKo": "광각렌즈",
     "sprite": "Specs_LightBlue",
     "pmdDesc": "A magnifying lens that boosts the Pokémon's Accuracy.",
     "desc": "Your projectiles and area attacks have 40% bigger hitboxes.",
+    "descKo": "발사체와 범위 공격의 판정이 40% 커진다.",
     "effect": {
       "hitbox": 1.4
     }
@@ -170,9 +200,11 @@
   {
     "id": "held_iron_ball",
     "name": "Iron Ball",
+    "nameKo": "검은철구",
     "sprite": "Iron_Ball",
     "pmdDesc": "A held item that weighs the Pokémon down, forcing it to pause between moves. It also allows Ground-type moves to hit Flying-type and levitating holders. This item sticks when held.",
     "desc": "Move 25% slower, but take 15% less damage.",
+    "descKo": "이동 속도가 25% 느려지지만 받는 데미지가 15% 줄어든다.",
     "effect": {
       "speedMul": 0.75,
       "takenMul": 0.85
@@ -181,9 +213,11 @@
   {
     "id": "held_twist_band",
     "name": "Twist Band",
+    "nameKo": "꽈배기머리띠",
     "sprite": "Scarf_Red",
     "pmdDesc": "A held item that prevents the Pokémon's Attack and Special Attack from being reduced.",
     "desc": "You are never knocked back or flinched by hits.",
+    "descKo": "공격을 맞아도 밀려나거나 경직되지 않는다.",
     "effect": {
       "noKnockback": true
     }
@@ -191,9 +225,11 @@
   {
     "id": "held_warp_scarf",
     "name": "Warp Scarf",
+    "nameKo": "워프스카프",
     "sprite": "Scarf_Blue",
     "pmdDesc": "A held item that warps the Pokémon to another place on the floor after being attacked.",
     "desc": "Your dodge becomes a long-range teleport.",
+    "descKo": "회피가 먼 거리 순간이동으로 바뀐다.",
     "effect": {
       "warpDodge": true
     }
@@ -201,9 +237,11 @@
   {
     "id": "berry_sitrus",
     "name": "Sitrus Berry",
+    "nameKo": "자뭉열매",
     "sprite": "Berry_Sitrus",
     "pmdDesc": "A large berry with a well-rounded flavor. It gradually restores HP for a few turns.",
     "desc": "Once per fight, restores 25% HP when you drop below half.",
+    "descKo": "한 번의 배틀에 한 번, HP가 절반 아래로 떨어지면 HP를 25% 회복한다.",
     "effect": {
       "sitrus": 0.25
     }
@@ -211,9 +249,11 @@
   {
     "id": "seed_reviver",
     "name": "Reviver Seed",
+    "nameKo": "부활의씨앗",
     "sprite": "Seed_Yellow",
     "pmdDesc": "A seed that revives a fainted Pokémon, then becomes a Plain Seed after use.",
     "desc": "Once per fight, revives you with 30% HP instead of fainting.",
+    "descKo": "한 번의 배틀에 한 번, 쓰러지는 대신 HP 30%로 부활한다.",
     "effect": {
       "revive": 0.3
     }
@@ -221,9 +261,11 @@
   {
     "id": "held_charcoal",
     "name": "Charcoal",
+    "nameKo": "목탄",
     "sprite": "Box_DarkBlue",
     "pmdDesc": "An item to be held by a Pokémon. It is a combustible fuel that boosts the power of Fire-type moves.",
     "desc": "Fire-type moves deal 20% more damage.",
+    "descKo": "불꽃 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Fire": 1.2
@@ -233,9 +275,11 @@
   {
     "id": "held_mystic_water",
     "name": "Mystic Water",
+    "nameKo": "신비의물방울",
     "sprite": "Bottle_LightBlue",
     "pmdDesc": "An item to be held by a Pokémon. This teardrop-shaped gem boosts the power of Water-type moves.",
     "desc": "Water-type moves deal 20% more damage.",
+    "descKo": "물 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Water": 1.2
@@ -245,9 +289,11 @@
   {
     "id": "held_miracle_seed",
     "name": "Miracle Seed",
+    "nameKo": "기적의씨",
     "sprite": "Seed_Yellow",
     "pmdDesc": "An item to be held by a Pokémon. It is a seed imbued with life force that boosts the power of Grass-type moves.",
     "desc": "Grass-type moves deal 20% more damage.",
+    "descKo": "풀 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Grass": 1.2
@@ -257,9 +303,11 @@
   {
     "id": "held_magnet",
     "name": "Magnet",
+    "nameKo": "자석",
     "sprite": "Box_Yellow",
     "pmdDesc": "An item to be held by a Pokémon. It is a powerful magnet that boosts the power of Electric-type moves.",
     "desc": "Electric-type moves deal 20% more damage.",
+    "descKo": "전기 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Electric": 1.2
@@ -269,9 +317,11 @@
   {
     "id": "held_never_melt_ice",
     "name": "Never-Melt Ice",
+    "nameKo": "녹지않는얼음",
     "sprite": "Ore_Blue",
     "pmdDesc": "An item to be held by a Pokémon. It's a piece of ice that repels heat effects and boosts Ice-type moves.",
     "desc": "Ice-type moves deal 20% more damage.",
+    "descKo": "얼음 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Ice": 1.2
@@ -281,9 +331,11 @@
   {
     "id": "held_black_belt",
     "name": "Black Belt",
+    "nameKo": "검은띠",
     "sprite": "Belt_Black",
     "pmdDesc": "An item to be held by a Pokémon. This belt helps the wearer to focus and boosts the power of Fighting-type moves.",
     "desc": "Fighting-type moves deal 20% more damage.",
+    "descKo": "격투 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Fighting": 1.2
@@ -293,9 +345,11 @@
   {
     "id": "held_poison_barb",
     "name": "Poison Barb",
+    "nameKo": "독바늘",
     "sprite": "Stick_Pink",
     "pmdDesc": "An item to be held by a Pokémon. This small, poisonous barb boosts the power of Poison-type moves.",
     "desc": "Poison-type moves deal 20% more damage.",
+    "descKo": "독 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Poison": 1.2
@@ -305,9 +359,11 @@
   {
     "id": "held_soft_sand",
     "name": "Soft Sand",
+    "nameKo": "부드러운모래",
     "sprite": "Sack_LightBlue",
     "pmdDesc": "An item to be held by a Pokémon. It is a loose, silky sand that boosts the power of Ground-type moves.",
     "desc": "Ground-type moves deal 20% more damage.",
+    "descKo": "땅 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Ground": 1.2
@@ -317,9 +373,11 @@
   {
     "id": "held_sharp_beak",
     "name": "Sharp Beak",
+    "nameKo": "예리한부리",
     "sprite": "Stick_Yellow",
     "pmdDesc": "An item to be held by a Pokémon. It's a long, sharp beak that boosts the power of Flying-type moves.",
     "desc": "Flying-type moves deal 20% more damage.",
+    "descKo": "비행 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Flying": 1.2
@@ -329,9 +387,11 @@
   {
     "id": "held_twisted_spoon",
     "name": "Twisted Spoon",
+    "nameKo": "휘어진스푼",
     "sprite": "Box_Pink",
     "pmdDesc": "An item to be held by a Pokémon. This spoon is imbued with telekinetic power and boosts Psychic-type moves.",
     "desc": "Psychic-type moves deal 20% more damage.",
+    "descKo": "에스퍼 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Psychic": 1.2
@@ -341,9 +401,11 @@
   {
     "id": "held_silver_powder",
     "name": "Silver Powder",
+    "nameKo": "은빛가루",
     "sprite": "Sack_Gray",
     "pmdDesc": "An item to be held by a Pokémon. It is a shiny, silver powder that will boost the power of Bug-type moves.",
     "desc": "Bug-type moves deal 20% more damage.",
+    "descKo": "벌레 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Bug": 1.2
@@ -353,9 +415,11 @@
   {
     "id": "held_hard_stone",
     "name": "Hard Stone",
+    "nameKo": "딱딱한돌",
     "sprite": "Stone_Black",
     "pmdDesc": "An item to be held by a Pokémon. It is a durable stone that boosts the power of Rock-type moves.",
     "desc": "Rock-type moves deal 20% more damage.",
+    "descKo": "바위 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Rock": 1.2
@@ -365,9 +429,11 @@
   {
     "id": "held_spell_tag",
     "name": "Spell Tag",
+    "nameKo": "저주의부적",
     "sprite": "Tag_Purple",
     "pmdDesc": "An item to be held by a Pokémon. It is a sinister, eerie tag that boosts the power of Ghost-type moves.",
     "desc": "Ghost-type moves deal 20% more damage.",
+    "descKo": "고스트 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Ghost": 1.2
@@ -377,9 +443,11 @@
   {
     "id": "held_dragon_scale",
     "name": "Dragon Scale",
+    "nameKo": "용의비늘",
     "sprite": "Scale_Green",
     "pmdDesc": "An item to be held by a Pokémon. This thick, tough scale boosts the power of Dragon-type moves.",
     "desc": "Dragon-type moves deal 20% more damage.",
+    "descKo": "드래곤 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Dragon": 1.2
@@ -389,9 +457,11 @@
   {
     "id": "held_black_glasses",
     "name": "Black Glasses",
+    "nameKo": "검은안경",
     "sprite": "Specs_DarkBlue",
     "pmdDesc": "An item to be held by a Pokémon. A pair of shady-looking glasses that boost the power of Dark-type moves.",
     "desc": "Dark-type moves deal 20% more damage.",
+    "descKo": "악 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Dark": 1.2
@@ -401,9 +471,11 @@
   {
     "id": "held_metal_coat",
     "name": "Metal Coat",
+    "nameKo": "금속코트",
     "sprite": "Box_White",
     "pmdDesc": "An item to be held by a Pokémon. It is a special metallic film that can boost the power of Steel-type moves.",
     "desc": "Steel-type moves deal 20% more damage.",
+    "descKo": "강철 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Steel": 1.2
@@ -413,9 +485,11 @@
   {
     "id": "held_silk_scarf",
     "name": "Silk Scarf",
+    "nameKo": "실크스카프",
     "sprite": "Scarf_2_White",
     "pmdDesc": "An item to be held by a Pokémon. It's a sumptuous scarf that boosts the power of Normal-type moves.",
     "desc": "Normal-type moves deal 20% more damage.",
+    "descKo": "노말 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Normal": 1.2
@@ -425,9 +499,11 @@
   {
     "id": "held_pink_bow",
     "name": "Pink Bow",
+    "nameKo": "분홍리본",
     "sprite": "Bow_Pink",
     "pmdDesc": "An item to be held by a Pokémon. It's a cute bow that boosts the power of Fairy-type moves.",
     "desc": "Fairy-type moves deal 20% more damage.",
+    "descKo": "페어리 타입 기술의 데미지가 20% 오른다.",
     "effect": {
       "typeBoost": {
         "Fairy": 1.2

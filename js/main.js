@@ -11,6 +11,8 @@ import { UI } from './ui.js';
 import { setItems } from './items.js';
 import { Bot } from './bot.js';
 import { Sfx } from './sfx.js';
+import { t, monName, moveName } from './i18n.js';
+import { loadSettings, SETTINGS } from './settings.js';
 
 const W = 640; // arena size in game pixels
 const H = 360;
@@ -77,7 +79,7 @@ class Game {
 
   who(f) {
     const tag = this.parties.length > 2 ? `P${f.slot + 1} ` : '';
-    return `<span class="c-p${f.slot + 1}">${tag}${f.data.name}</span>`;
+    return `<span class="c-p${f.slot + 1}">${tag}${monName(f.data.key, f.data.name)}</span>`;
   }
 
   // ---------- teams ----------
@@ -131,21 +133,21 @@ class Game {
     const order = p.members.map((_, k) => p.members[(p.active + 1 + k) % p.members.length]);
     const next = order.find((m) => m !== cur && !m.ko);
     p.switchCd = SWITCH_COOLDOWN;
-    this.ui.log(`Come back, ${this.who(cur)}! Go, ${this.who(next)}!`);
+    this.ui.log(t('comeBack', { a: this.who(cur), b: this.who(next) }));
     this.sfx('dodge');
     this.sendOut(slot, next, { x: cur.x, y: cur.y });
   }
 
   announce(c, move) {
     this.stats[c.slot].casts++;
-    this.ui.log(`${this.who(c)} used <span class="green">${move.name}</span>!`);
+    this.ui.log(t('used', { who: this.who(c), move: `<span class="green">${moveName(move.id, move.name)}</span>` }));
   }
 
   dodgedText(f) {
     if (this.dodgeTextT[f.slot] > 0) return;
     this.dodgeTextT[f.slot] = 0.4;
     this.stats[f.slot].dodges++;
-    this.addEffect(new FloatText('Dodged!', f.x, f.y - 26, '#00f8f8'));
+    this.addEffect(new FloatText(t('dodged'), f.x, f.y - 26, '#00f8f8'));
   }
 
   applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false } = {}) {
@@ -170,10 +172,10 @@ class Game {
     if (att.mods.drain && dmg > 0 && att.alive) att.heal(Math.max(1, Math.round(dmg * att.mods.drain))); // Shell Bell
     const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
     this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
-    if (eff === 0) this.ui.log(`It doesn't affect ${this.who(def)}...`);
-    else if (eff > 1) this.ui.log(`It's <span class="yellow">super effective</span>!`);
-    else if (eff < 1) this.ui.log(`It's not very effective...`);
-    if (crit) this.ui.log(`A critical hit!`);
+    if (eff === 0) this.ui.log(t('noEffect', { who: this.who(def) }));
+    else if (eff > 1) this.ui.log(`<span class="yellow">${t('superEff')}</span>`);
+    else if (eff < 1) this.ui.log(t('notVery'));
+    if (crit) this.ui.log(t('crit'));
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
     return dmg;
@@ -190,21 +192,21 @@ class Game {
   recoil(f, amount, what = 'recoil', log = true) {
     if (!f.alive || amount <= 0) return;
     f.hp = Math.max(0, f.hp - amount);
-    if (log) this.ui.log(`${this.who(f)} is hurt by ${what}!`);
+    if (log) this.ui.log(t('recoil', { who: this.who(f) }));
     this.addEffect(new FloatText(String(amount), f.x, f.y - 20, '#f85840'));
     if (f.hp <= 0) f.faint();
   }
 
   onKO(f) {
     if (this.state !== 'fight') return;
-    this.ui.log(`${this.who(f)} fainted!`);
+    this.ui.log(t('fainted', { who: this.who(f) }));
     this.sfx('ko');
     const next = this.parties[f.slot].members.find((m) => !m.ko);
     if (next) {
       // Trio: the next party member is sent out where the trainer started.
       this.after(1.2, () => {
         if (this.state !== 'fight' && this.state !== 'ko') return;
-        this.ui.log(`P${f.slot + 1} sent out ${this.who(next)}!`);
+        this.ui.log(t('sentOut', { who: this.who(next) }));
         this.sendOut(f.slot, next, this.parties[f.slot].spawn);
       });
       return;
@@ -379,7 +381,7 @@ class Game {
         // Stops stalemates (e.g. two Pokémon mostly immune to each other).
         this.damageMul = 2;
         this.banner('SUDDEN DEATH!', 1.2);
-        this.ui.log('<span class="yellow">Sudden death!</span> All damage is doubled.');
+        this.ui.log(`<span class="yellow">${t('sudden')}</span>`);
         this.sfx('go');
       }
     }
@@ -445,7 +447,7 @@ class Game {
     };
     layer('ground');
     layer('under');
-    if (this.state === 'lobby' || this.state === 'setup') {
+    if (this.state === 'lobby') {
       for (const d of [...this.decor].sort((p, q) => p.y - q.y)) {
         ctx.fillStyle = 'rgba(0,0,0,0.3)';
         ctx.beginPath();
@@ -561,6 +563,7 @@ class Game {
 }
 
 async function boot() {
+  loadSettings();
   const status = document.getElementById('loading-status');
   const canvas = document.getElementById('arena');
   const game = new Game(canvas);
@@ -599,7 +602,12 @@ async function boot() {
       status.textContent = `Now loading... ${Math.round((done / total) * 100)}%`;
     };
     game.arts = {};
-    const [bannerImg, bannerMeta] = await Promise.all([loadImage('assets/ui/banner.png'), loadJSON('assets/ui/banner.json'), document.fonts.load('12px PMD')]);
+    const [bannerImg, bannerMeta] = await Promise.all([
+      loadImage('assets/ui/banner.png'),
+      loadJSON('assets/ui/banner.json'),
+      document.fonts.load('12px PMD'),
+      SETTINGS.lang === 'ko' ? document.fonts.load('12px Galmuri11', '한') : null,
+    ]);
     game.bannerFont = new BannerFont(bannerImg, bannerMeta);
     await Promise.all([
       ...keys.map(async (k) => {
@@ -617,6 +625,7 @@ async function boot() {
     ]);
 
     game.input = new Input(document.getElementById('app'));
+    game.input.setLabels(t('dodge'), t('switch'));
     if (game.input.touchMode) document.body.classList.add('touch');
     game.input.onKey((code) => game.onKey(code));
     game.setup = defaultSetup();

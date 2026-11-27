@@ -8,7 +8,8 @@
           "atk": 1.25
         }
       },
-      "desc": "Raises Attack by 25%."
+      "desc": "Raises Attack by 25%.",
+      "descKo": "공격이 25% 오른다."
     },
     {
       "id": "held_special_band",
@@ -17,7 +18,8 @@
           "spa": 1.25
         }
       },
-      "desc": "Raises Sp. Atk by 25%."
+      "desc": "Raises Sp. Atk by 25%.",
+      "descKo": "특수공격이 25% 오른다."
     },
     {
       "id": "held_defense_scarf",
@@ -26,7 +28,8 @@
           "def": 1.25
         }
       },
-      "desc": "Raises Defense by 25%."
+      "desc": "Raises Defense by 25%.",
+      "descKo": "방어가 25% 오른다."
     },
     {
       "id": "held_zinc_band",
@@ -35,7 +38,8 @@
           "spd": 1.25
         }
       },
-      "desc": "Raises Sp. Def by 25%."
+      "desc": "Raises Sp. Def by 25%.",
+      "descKo": "특수방어가 25% 오른다."
     },
     {
       "id": "held_choice_band",
@@ -45,7 +49,8 @@
         },
         "cooldownMul": 1.25
       },
-      "desc": "Attack ×1.5, but every move recharges 25% slower."
+      "desc": "Attack ×1.5, but every move recharges 25% slower.",
+      "descKo": "공격이 1.5배가 되지만 모든 기술의 재사용 시간이 25% 늘어난다."
     },
     {
       "id": "held_choice_specs",
@@ -55,7 +60,8 @@
         },
         "cooldownMul": 1.25
       },
-      "desc": "Sp. Atk ×1.5, but every move recharges 25% slower."
+      "desc": "Sp. Atk ×1.5, but every move recharges 25% slower.",
+      "descKo": "특수공격이 1.5배가 되지만 모든 기술의 재사용 시간이 25% 늘어난다."
     },
     {
       "id": "held_choice_scarf",
@@ -63,7 +69,8 @@
         "speedMul": 1.3,
         "cooldownMul": 1.25
       },
-      "desc": "Move 30% faster, but every move recharges 25% slower."
+      "desc": "Move 30% faster, but every move recharges 25% slower.",
+      "descKo": "이동 속도가 30% 빨라지지만 모든 기술의 재사용 시간이 25% 늘어난다."
     },
     {
       "id": "held_assault_vest",
@@ -72,14 +79,16 @@
           "spd": 1.5
         }
       },
-      "desc": "Raises Sp. Def by 50%."
+      "desc": "Raises Sp. Def by 50%.",
+      "descKo": "특수방어가 50% 오른다."
     },
     {
       "id": "held_scope_lens",
       "effect": {
         "crit": 0.125
       },
-      "desc": "Critical hits happen far more often (1 in 8)."
+      "desc": "Critical hits happen far more often (1 in 8).",
+      "descKo": "급소에 훨씬 잘 맞는다 (8번 중 1번)."
     },
     {
       "id": "held_life_orb",
@@ -87,42 +96,48 @@
         "dmgMul": 1.3,
         "lifeOrb": 0.03
       },
-      "desc": "Moves deal 30% more damage, but each attack costs 3% of max HP."
+      "desc": "Moves deal 30% more damage, but each attack costs 3% of max HP.",
+      "descKo": "기술의 위력이 30% 오르지만 공격할 때마다 최대 HP의 3%를 잃는다."
     },
     {
       "id": "held_expert_belt",
       "effect": {
         "superMul": 1.2
       },
-      "desc": "Super-effective hits deal 20% more damage."
+      "desc": "Super-effective hits deal 20% more damage.",
+      "descKo": "효과가 굉장한 공격의 데미지가 20% 오른다."
     },
     {
       "id": "held_shell_bell",
       "effect": {
         "drain": 0.125
       },
-      "desc": "Restores HP equal to 1/8 of the damage you deal."
+      "desc": "Restores HP equal to 1/8 of the damage you deal.",
+      "descKo": "준 데미지의 1/8만큼 HP를 회복한다."
     },
     {
       "id": "held_big_root",
       "effect": {
         "regen": 0.006
       },
-      "desc": "Slowly restores HP while standing still."
+      "desc": "Slowly restores HP while standing still.",
+      "descKo": "가만히 서 있으면 HP가 조금씩 회복된다."
     },
     {
       "id": "held_metronome",
       "effect": {
         "metronome": 0.1
       },
-      "desc": "Each attack in a row without getting hit deals 10% more damage (up to +50%)."
+      "desc": "Each attack in a row without getting hit deals 10% more damage (up to +50%).",
+      "descKo": "맞지 않고 연속으로 공격할 때마다 데미지가 10%씩 오른다 (최대 +50%)."
     },
     {
       "id": "held_wide_lens",
       "effect": {
         "hitbox": 1.4
       },
-      "desc": "Your projectiles and area attacks have 40% bigger hitboxes."
+      "desc": "Your projectiles and area attacks have 40% bigger hitboxes.",
+      "descKo": "발사체와 범위 공격의 판정이 40% 커진다."
     },
     {
       "id": "held_iron_ball",
@@ -130,35 +145,40 @@
         "speedMul": 0.75,
         "takenMul": 0.85
       },
-      "desc": "Move 25% slower, but take 15% less damage."
+      "desc": "Move 25% slower, but take 15% less damage.",
+      "descKo": "이동 속도가 25% 느려지지만 받는 데미지가 15% 줄어든다."
     },
     {
       "id": "held_twist_band",
       "effect": {
         "noKnockback": true
       },
-      "desc": "You are never knocked back or flinched by hits."
+      "desc": "You are never knocked back or flinched by hits.",
+      "descKo": "공격을 맞아도 밀려나거나 경직되지 않는다."
     },
     {
       "id": "held_warp_scarf",
       "effect": {
         "warpDodge": true
       },
-      "desc": "Your dodge becomes a long-range teleport."
+      "desc": "Your dodge becomes a long-range teleport.",
+      "descKo": "회피가 먼 거리 순간이동으로 바뀐다."
     },
     {
       "id": "berry_sitrus",
       "effect": {
         "sitrus": 0.25
       },
-      "desc": "Once per fight, restores 25% HP when you drop below half."
+      "desc": "Once per fight, restores 25% HP when you drop below half.",
+      "descKo": "한 번의 배틀에 한 번, HP가 절반 아래로 떨어지면 HP를 25% 회복한다."
     },
     {
       "id": "seed_reviver",
       "effect": {
         "revive": 0.3
       },
-      "desc": "Once per fight, revives you with 30% HP instead of fainting."
+      "desc": "Once per fight, revives you with 30% HP instead of fainting.",
+      "descKo": "한 번의 배틀에 한 번, 쓰러지는 대신 HP 30%로 부활한다."
     },
     {
       "id": "held_charcoal",
@@ -167,7 +187,8 @@
           "Fire": 1.2
         }
       },
-      "desc": "Fire-type moves deal 20% more damage."
+      "desc": "Fire-type moves deal 20% more damage.",
+      "descKo": "불꽃 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_mystic_water",
@@ -176,7 +197,8 @@
           "Water": 1.2
         }
       },
-      "desc": "Water-type moves deal 20% more damage."
+      "desc": "Water-type moves deal 20% more damage.",
+      "descKo": "물 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_miracle_seed",
@@ -185,7 +207,8 @@
           "Grass": 1.2
         }
       },
-      "desc": "Grass-type moves deal 20% more damage."
+      "desc": "Grass-type moves deal 20% more damage.",
+      "descKo": "풀 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_magnet",
@@ -194,7 +217,8 @@
           "Electric": 1.2
         }
       },
-      "desc": "Electric-type moves deal 20% more damage."
+      "desc": "Electric-type moves deal 20% more damage.",
+      "descKo": "전기 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_never_melt_ice",
@@ -203,7 +227,8 @@
           "Ice": 1.2
         }
       },
-      "desc": "Ice-type moves deal 20% more damage."
+      "desc": "Ice-type moves deal 20% more damage.",
+      "descKo": "얼음 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_black_belt",
@@ -212,7 +237,8 @@
           "Fighting": 1.2
         }
       },
-      "desc": "Fighting-type moves deal 20% more damage."
+      "desc": "Fighting-type moves deal 20% more damage.",
+      "descKo": "격투 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_poison_barb",
@@ -221,7 +247,8 @@
           "Poison": 1.2
         }
       },
-      "desc": "Poison-type moves deal 20% more damage."
+      "desc": "Poison-type moves deal 20% more damage.",
+      "descKo": "독 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_soft_sand",
@@ -230,7 +257,8 @@
           "Ground": 1.2
         }
       },
-      "desc": "Ground-type moves deal 20% more damage."
+      "desc": "Ground-type moves deal 20% more damage.",
+      "descKo": "땅 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_sharp_beak",
@@ -239,7 +267,8 @@
           "Flying": 1.2
         }
       },
-      "desc": "Flying-type moves deal 20% more damage."
+      "desc": "Flying-type moves deal 20% more damage.",
+      "descKo": "비행 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_twisted_spoon",
@@ -248,7 +277,8 @@
           "Psychic": 1.2
         }
       },
-      "desc": "Psychic-type moves deal 20% more damage."
+      "desc": "Psychic-type moves deal 20% more damage.",
+      "descKo": "에스퍼 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_silver_powder",
@@ -257,7 +287,8 @@
           "Bug": 1.2
         }
       },
-      "desc": "Bug-type moves deal 20% more damage."
+      "desc": "Bug-type moves deal 20% more damage.",
+      "descKo": "벌레 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_hard_stone",
@@ -266,7 +297,8 @@
           "Rock": 1.2
         }
       },
-      "desc": "Rock-type moves deal 20% more damage."
+      "desc": "Rock-type moves deal 20% more damage.",
+      "descKo": "바위 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_spell_tag",
@@ -275,7 +307,8 @@
           "Ghost": 1.2
         }
       },
-      "desc": "Ghost-type moves deal 20% more damage."
+      "desc": "Ghost-type moves deal 20% more damage.",
+      "descKo": "고스트 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_dragon_scale",
@@ -284,7 +317,8 @@
           "Dragon": 1.2
         }
       },
-      "desc": "Dragon-type moves deal 20% more damage."
+      "desc": "Dragon-type moves deal 20% more damage.",
+      "descKo": "드래곤 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_black_glasses",
@@ -293,7 +327,8 @@
           "Dark": 1.2
         }
       },
-      "desc": "Dark-type moves deal 20% more damage."
+      "desc": "Dark-type moves deal 20% more damage.",
+      "descKo": "악 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_metal_coat",
@@ -302,7 +337,8 @@
           "Steel": 1.2
         }
       },
-      "desc": "Steel-type moves deal 20% more damage."
+      "desc": "Steel-type moves deal 20% more damage.",
+      "descKo": "강철 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_silk_scarf",
@@ -311,7 +347,8 @@
           "Normal": 1.2
         }
       },
-      "desc": "Normal-type moves deal 20% more damage."
+      "desc": "Normal-type moves deal 20% more damage.",
+      "descKo": "노말 타입 기술의 데미지가 20% 오른다."
     },
     {
       "id": "held_pink_bow",
@@ -320,7 +357,8 @@
           "Fairy": 1.2
         }
       },
-      "desc": "Fairy-type moves deal 20% more damage."
+      "desc": "Fairy-type moves deal 20% more damage.",
+      "descKo": "페어리 타입 기술의 데미지가 20% 오른다."
     }
   ]
 }

@@ -132,6 +132,13 @@ export class Input {
     return h[(top ? 2 : 0) + (left ? 0 : 1)] ?? null;
   }
 
+  setLabels(dodge, swap) {
+    this.btns.forEach((b) => {
+      b.dodge.textContent = dodge;
+      b.swap.textContent = swap;
+    });
+  }
+
   /** Called when a battle starts: which slots are humans, and whether Switch is used. */
   setHumans(slots, teams, canSwitch) {
     this.humans = slots;

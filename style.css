@@ -1,6 +1,13 @@
 /* PMD: Origins look: real window borders, portrait frames, cursor, font and type orbs
    (see tools/build-ui.py). Everything is measured in whole "game pixels" (--u). */
 
+/* Korean text (Hangul only, downloaded only when needed): Galmuri11 by Lee Minseo, OFL. */
+@font-face {
+  font-family: 'Galmuri11';
+  src: url('assets/ui/fonts/Galmuri11.woff2') format('woff2');
+  unicode-range: U+1100-11FF, U+3130-318F, U+AC00-D7A3;
+  font-display: swap;
+}
 @font-face {
   font-family: 'PMD';
   src: url('assets/ui/pmd-text.ttf') format('truetype');
@@ -29,9 +36,11 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
+html.no-zoom, html.no-zoom body { touch-action: manipulation; } /* no double-tap zoom (Settings) */
+html[lang='ko'] body { line-height: calc(15 * var(--u)); } /* Hangul glyphs are taller */
 body {
   color: var(--ink);
-  font: calc(12 * var(--u)) / calc(13 * var(--u)) 'PMD', monospace;
+  font: calc(12 * var(--u)) / calc(13 * var(--u)) 'PMD', 'Galmuri11', monospace;
   -webkit-user-select: none; user-select: none;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: none; font-smooth: never;
@@ -225,43 +234,70 @@ body.touch[data-touch-layout='quad'][data-screen='fight'] #stage::after { conten
 button.nav.focus, .mon-cell.focus, .item-cell.focus { box-shadow: 0 0 0 var(--u) #000, 0 0 0 calc(2 * var(--u)) var(--yellow); }
 button.nav:not(.win):hover { color: var(--yellow); }
 
-/* ---------- Lobby ---------- */
-body[data-screen='lobby'] #lobby, body[data-screen='setup'] #setup { display: flex; }
-#mode-win { display: none; position: fixed; top: calc(6 * var(--u)); right: calc(6 * var(--u)); z-index: 11; width: calc(150 * var(--u)); }
-body[data-screen='lobby'] #mode-win, body[data-screen='setup'] #mode-win { display: block; }
-/* On the setup screen the mode picker becomes a slim one-line bar in the top-right corner. */
-body[data-screen='setup'] #mode-win { width: auto; }
-body[data-screen='setup'] #mode-win > .cyan, body[data-screen='setup'] .mode-desc { display: none; }
-body[data-screen='setup'] #mode-win .menu { display: flex; gap: calc(8 * var(--u)); }
-body[data-screen='setup'] #mode-win .menu .dim { display: none; }
-.mode-desc { white-space: normal; margin-top: calc(2 * var(--u)); }
-#lobby { flex-direction: column; align-items: center; justify-content: center; gap: calc(12 * var(--u)); background: rgba(0, 0, 0, 0.35); }
-.title-img { image-rendering: pixelated; }
-.lobby-menu { min-width: calc(160 * var(--u)); }
-.lobby-menu li { line-height: calc(18 * var(--u)); }
+/* ---------- Shared: prompt bar with key hints (like console games) ---------- */
+.promptbar { display: flex; justify-content: space-between; align-items: center; gap: calc(8 * var(--u)); }
+.key { display: inline-block; min-width: calc(12 * var(--u)); padding: 0 calc(3 * var(--u)); margin-right: calc(2 * var(--u)); border: var(--u) solid rgba(255, 255, 255, 0.6); border-radius: calc(2 * var(--u)); background: rgba(0, 0, 0, 0.6); text-align: center; }
+.big { font-size: calc(24 * var(--u)); line-height: calc(26 * var(--u)); }
 
-/* ---------- Team setup ---------- */
-#setup { flex-direction: column; align-items: center; gap: calc(3 * var(--u)); padding: calc(6 * var(--u)); background: rgba(0, 0, 0, 0.45); overflow-y: auto; }
-.setup-head { align-self: stretch; display: flex; align-items: flex-start; gap: calc(8 * var(--u)); min-height: calc(30 * var(--u)); padding-right: calc(250 * var(--u)); }
-.setup-head .back-btn { padding: 0 calc(3 * var(--u)); }
-.setup-head .yellow, .setup-head .dim { margin-top: calc(9 * var(--u)); white-space: nowrap; }
-.teams { display: flex; gap: calc(6 * var(--u)); align-items: center; }
-.team { display: flex; flex-direction: column; gap: calc(3 * var(--u)); }
-.team-name { text-align: center; }
-.vs { color: var(--yellow); }
-.slot-card { width: calc(236 * var(--u)); }
-.teams-showdown .slot-card { width: calc(180 * var(--u)); }
-.card-head { display: flex; gap: calc(8 * var(--u)); align-items: baseline; }
-.ctl-btn, .dice-btn { color: var(--cyan); }
-.dice-btn { margin-left: auto; }
-.ctl-hint { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.party { display: flex; gap: calc(4 * var(--u)); justify-content: center; margin-top: calc(2 * var(--u)); }
-.member { display: flex; flex-direction: column; align-items: center; width: calc(72 * var(--u)); padding: calc(2 * var(--u)); background: rgba(0, 0, 0, 0.25); }
-.member .frame img { width: calc(40 * var(--u)); height: calc(40 * var(--u)); }
-.m-name { white-space: nowrap; }
-.m-sub { min-height: calc(14 * var(--u)); }
-.m-sub .item-ico { margin: 0 0 0 calc(2 * var(--u)); vertical-align: calc(-3 * var(--u)); }
-.setup-foot .start-btn { padding: 0 calc(10 * var(--u)); color: var(--yellow); }
+/* ---------- Title screen ---------- */
+body[data-screen='lobby'] #lobby, body[data-screen='setup'] #setup { display: flex; }
+#lobby { flex-direction: column; align-items: center; justify-content: center; gap: calc(14 * var(--u)); background: rgba(0, 0, 0, 0.35); }
+.title-img { image-rendering: pixelated; }
+.lobby-menu { min-width: calc(190 * var(--u)); padding: calc(2 * var(--u)) calc(8 * var(--u)); }
+.lobby-menu li { font-size: calc(24 * var(--u)); line-height: calc(26 * var(--u)); padding-left: calc(18 * var(--u)); }
+.lobby-menu li.focus::before { width: calc(14 * var(--u)); height: calc(14 * var(--u)); top: calc(6 * var(--u)); }
+#lobby .promptbar { position: absolute; left: calc(8 * var(--u)); right: calc(8 * var(--u)); bottom: calc(6 * var(--u)); }
+
+/* ---------- Settings ---------- */
+.settings { min-width: calc(260 * var(--u)); }
+.opt-list li { display: flex; justify-content: space-between; gap: calc(16 * var(--u)); }
+
+/* ---------- Team setup: versus screen ---------- */
+#setup { flex-direction: column; gap: calc(4 * var(--u)); padding: calc(6 * var(--u)); background: rgba(8, 8, 20, 0.72); overflow-y: auto; }
+.topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: calc(8 * var(--u)); }
+.topbar .back-btn { justify-self: start; padding: 0 calc(4 * var(--u)); }
+.topbar-title { font-size: calc(24 * var(--u)); line-height: calc(26 * var(--u)); }
+.mode-dd { position: relative; justify-self: end; }
+.mode-btn { padding: 0 calc(4 * var(--u)); white-space: nowrap; }
+.dd-arrow { display: inline-block; width: calc(11 * var(--u)); height: calc(11 * var(--u)); background: url('assets/ui/cursor-down.png') 0 0 / 100% 100%; image-rendering: pixelated; vertical-align: calc(-2 * var(--u)); transition: transform 0.1s; }
+.mode-dd.open .dd-arrow { transform: rotate(180deg); }
+.dd-list { display: none; position: absolute; right: 0; top: calc(100% + 2 * var(--u)); width: calc(220 * var(--u)); z-index: 20; }
+.mode-dd.open .dd-list { display: block; }
+.dd-list li { padding-top: calc(1 * var(--u)); padding-bottom: calc(2 * var(--u)); white-space: normal; }
+.dd-desc { white-space: normal; }
+.versus { flex: 1; display: flex; align-items: center; justify-content: center; gap: calc(8 * var(--u)); }
+.side { display: flex; flex-direction: column; gap: calc(4 * var(--u)); }
+.vs-img { image-rendering: pixelated; }
+.ppanel { width: calc(214 * var(--u)); display: flex; flex-direction: column; align-items: stretch; gap: calc(2 * var(--u)); }
+.pp-head { display: flex; align-items: center; gap: calc(6 * var(--u)); }
+.p-tag { font-size: calc(24 * var(--u)); line-height: calc(24 * var(--u)); }
+.seg { display: inline-flex; border: var(--u) solid rgba(255, 255, 255, 0.4); background: rgba(0, 0, 0, 0.4); }
+.seg span { padding: 0 calc(4 * var(--u)); color: var(--dim); }
+.seg span.on { color: #000; background: var(--yellow); text-shadow: none; }
+.dice-btn { margin-left: auto; color: var(--cyan); }
+.stage { position: relative; display: grid; place-items: center; background: rgba(0, 0, 0, 0.35); padding: 0; }
+.stage canvas { width: calc(128 * var(--u)); height: calc(96 * var(--u)); image-rendering: pixelated; }
+.edit-tag { position: absolute; right: calc(3 * var(--u)); top: calc(1 * var(--u)); color: var(--cyan); opacity: 0; }
+.stage:hover .edit-tag, .stage.focus .edit-tag { opacity: 1; }
+.plate { text-align: center; }
+.plate-item .item-ico { vertical-align: calc(-4 * var(--u)); }
+.party-strip { display: flex; justify-content: center; gap: calc(6 * var(--u)); }
+.member { position: relative; padding: 0; }
+.member .frame img { width: calc(28 * var(--u)); height: calc(28 * var(--u)); }
+.member .item-ico { position: absolute; right: calc(-4 * var(--u)); bottom: calc(-4 * var(--u)); margin: 0; }
+.member.on .frame { filter: brightness(1.15); box-shadow: 0 0 0 var(--u) var(--yellow); }
+.member:not(.on) .frame img { filter: brightness(0.7); }
+.ctl-hint { text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* 2vs2: smaller side-by-side panels */
+.vs-duo .ppanel { width: calc(250 * var(--u)); display: grid; grid-template-columns: auto 1fr; grid-template-areas: 'head head' 'stage plate' 'stage hint'; column-gap: calc(6 * var(--u)); align-items: center; }
+.vs-duo .pp-head { grid-area: head; }
+.vs-duo .stage { grid-area: stage; }
+.vs-duo .stage canvas { width: calc(96 * var(--u)); height: calc(72 * var(--u)); }
+.vs-duo .plate { grid-area: plate; text-align: left; align-self: end; }
+.vs-duo .ctl-hint { grid-area: hint; text-align: left; align-self: start; white-space: normal; }
+#setup .promptbar { align-items: flex-end; }
+.battle-btn, .promptbar .version { margin-left: auto; }
+.battle-btn { font-size: calc(24 * var(--u)); line-height: calc(26 * var(--u)); padding: 0 calc(14 * var(--u)); color: var(--yellow); }
 
 /* ---------- Pokémon editor ---------- */
 #editor .editor { display: grid; grid-template-columns: auto calc(330 * var(--u)); gap: calc(4 * var(--u)) calc(8 * var(--u)); max-width: 100%; max-height: 100%; overflow: auto; }
@@ -286,7 +322,7 @@ body[data-screen='setup'] #mode-win .menu .dim { display: none; }
 .item-cell .item-ico { margin: 0; vertical-align: 0; }
 .item-cell.sel { background: rgba(248, 248, 0, 0.3); }
 .item-info { margin-top: calc(4 * var(--u)); white-space: normal; min-height: calc(39 * var(--u)); }
-.ed-foot { grid-column: 1 / -1; display: flex; justify-content: flex-end; }
+.ed-foot { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
 .ed-foot .done-btn { padding: 0 calc(10 * var(--u)); color: var(--yellow); }
 
 /* ---------- Result ---------- */

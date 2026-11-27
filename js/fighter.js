@@ -4,6 +4,7 @@ import { statsFor, HP_SCALE, DB, effectiveness } from './combat.js';
 import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { equip } from './items.js';
+import { t, itemName } from './i18n.js';
 
 export const PLAYER_COLORS = ['#88c8f8', '#f8a0c8', '#88f888', '#f8e860'];
 const DODGE_TIME = 0.2;
@@ -103,7 +104,7 @@ export class Fighter {
     if (this.hp <= 0) return this.faint();
     if (this.mods.sitrus && !this.itemSpent && this.hp < this.maxHp / 2) {
       const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus));
-      this.useItem(`${this.game.who(this)}'s <span class="yellow">${this.item.name}</span> restored ${healed} HP!`);
+      this.useItem(t('sitrus', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>`, n: healed }));
     }
     if (!this.cast && this.dodgeT <= 0 && !this.mods.noKnockback) {
       this.hurtT = 0.3;
@@ -118,9 +119,9 @@ export class Fighter {
       this.hp = Math.round(this.maxHp * this.mods.revive);
       this.invuln = 1;
       if (this.cast) cancelCast(this.game, this);
-      this.useItem(`${this.game.who(this)} was revived by its <span class="yellow">${this.item.name}</span>!`);
+      this.useItem(t('reviveLog', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>` }));
       this.game.addEffect(new Effect(MOVEFX.common.ko, this.x, this.y, { layer: 'over' }));
-      this.game.addEffect(new FloatText('Revived!', this.x, this.y - 26, '#f8f800'));
+      this.game.addEffect(new FloatText(t('revived'), this.x, this.y - 26, '#f8f800'));
       return;
     }
     this.ko = true;
@@ -269,7 +270,7 @@ export class Fighter {
     const y = Math.round(sy - Math.min(idle.fh / 2, 40) - 2);
     const text = `P${this.slot + 1}`;
     ctx.save();
-    ctx.font = '12px PMD';
+    ctx.font = '12px PMD, Galmuri11';
     const w = ctx.measureText(text).width;
     const x = Math.round(this.x - w / 2);
     ctx.fillStyle = '#000';

@@ -214,7 +214,7 @@ export class FloatText {
     const hop = this.t < 0.15 ? -Math.sin((this.t / 0.15) * Math.PI) * 4 : 0;
     ctx.save();
     ctx.globalAlpha = a;
-    ctx.font = `${size}px PMD`;
+    ctx.font = `${size}px PMD, Galmuri11`;
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
     const w = ctx.measureText(this.text).width;
