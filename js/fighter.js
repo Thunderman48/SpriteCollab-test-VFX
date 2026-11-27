@@ -5,16 +5,25 @@ import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { equip } from './items.js';
 
+export const PLAYER_COLORS = ['#88c8f8', '#f8a0c8', '#88f888', '#f8e860'];
 const DODGE_TIME = 0.2;
 const DODGE_SPEED = 400;
 const DODGE_INVULN = 0.3;
 export const DODGE_COOLDOWN = 1.2;
 
 export class Fighter {
-  constructor(game, slot, data, art, x, y, itemId = null) {
+  /**
+   * slot = player index (0-3), team = 0/1, member = party member data
+   * ({ species, item, moves, ... } from modes.js).
+   */
+  constructor(game, slot, team, member, art, x, y) {
+    const data = DB.pokedex[member.species];
     this.game = game;
     this.slot = slot;
+    this.team = team;
+    this.member = member;
     this.data = data;
+    this.moves = member.moves;
     this.art = art;
     this.sprite = new SpriteAnimator(art);
     this.stats = statsFor(data.baseStats);
@@ -23,13 +32,13 @@ export class Fighter {
     this.radius = data.hurtRadius;
     this.x = x;
     this.y = y;
-    this.dir = slot === 0 ? 2 : 6;
-    this.facing = slot === 0 ? 0 : Math.PI; // last movement direction (default dodge direction)
+    this.dir = team === 0 ? 2 : 6;
+    this.facing = team === 0 ? 0 : Math.PI; // last movement direction (default dodge direction)
     this.moveSpeed = 64 + this.stats.spe * 0.22;
     // Faster Pokémon recharge a little quicker (±~10%).
     this.recharge = 1 + (this.stats.spe - 115) / 350;
     this.cd = {};
-    for (const id of data.moves) this.cd[id] = DB.moves[id].cooldown * (0.35 + Math.random() * 0.3);
+    for (const id of this.moves) this.cd[id] = DB.moves[id].cooldown * (0.35 + Math.random() * 0.3);
     this.cast = null;
     this.castGap = 0.6;
     this.dodgeT = 0;
@@ -46,7 +55,7 @@ export class Fighter {
     this.still = true;
     this.emotion = 'Normal';
     this.emotionT = 0;
-    equip(this, itemId);
+    equip(this, member.item);
     for (const id in this.cd) this.cd[id] *= this.mods.cooldownMul;
   }
 
@@ -223,7 +232,7 @@ export class Fighter {
     if (this.cast || this.castGap > 0 || !this.still) return;
     const d = this.distTo(opp);
     let best = null;
-    for (const id of this.data.moves) {
+    for (const id of this.moves) {
       if (this.cd[id] > 0) continue;
       // Auto-attacks are smart enough not to waste a move the target is immune to.
       if (effectiveness(DB.moves[id].type, opp.data.types) === 0) continue;
@@ -249,7 +258,27 @@ export class Fighter {
     ctx.ellipse(Math.round(this.x), Math.round(this.y + 7), sw, sw * 0.38, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    this.sprite.draw(ctx, this.x, this.y + bob - (this.data.flying ? 6 : 0), this.dir, { flash: this.flash, alpha });
+    const sy = this.y + bob - (this.data.flying ? 6 : 0);
+    this.sprite.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha });
+    if (!this.ko) this.drawTag(ctx, sy);
+  }
+
+  /** "P1".."P4" tag above the head so every player can find their Pokémon. */
+  drawTag(ctx, sy) {
+    const idle = this.art.animData.anims.Idle;
+    const y = Math.round(sy - Math.min(idle.fh / 2, 40) - 2);
+    const text = `P${this.slot + 1}`;
+    ctx.save();
+    ctx.font = '12px PMD';
+    const w = ctx.measureText(text).width;
+    const x = Math.round(this.x - w / 2);
+    ctx.fillStyle = '#000';
+    ctx.fillText(text, x + 1, y);
+    ctx.fillText(text, x, y + 1);
+    ctx.fillText(text, x + 1, y + 1);
+    ctx.fillStyle = PLAYER_COLORS[this.slot];
+    ctx.fillText(text, x, y);
+    ctx.restore();
   }
 
 }

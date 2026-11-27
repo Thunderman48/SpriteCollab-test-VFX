@@ -1,27 +1,34 @@
-// Keyboard (P1: WASD + Space/LeftShift, P2: arrows + Enter/RightShift/Slash/Numpad0)
-// and touch (left-half joystick = P1, right-half joystick = P2, dodge buttons / double-tap).
+// Input for up to 4 players: keyboard layouts, gamepads (controller N = player N) and
+// touch (screen split into halves for 1-2 humans, quarters for 3-4).
 
-const KEYMAP = [
-  { up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'], dodge: ['Space', 'ShiftLeft', 'KeyF'] },
-  { up: ['ArrowUp'], down: ['ArrowDown'], left: ['ArrowLeft'], right: ['ArrowRight'], dodge: ['Enter', 'NumpadEnter', 'ShiftRight', 'Slash', 'Numpad0', 'Period'] },
+export const KEYMAP = [
+  { name: 'WASD', up: ['KeyW'], down: ['KeyS'], left: ['KeyA'], right: ['KeyD'], dodge: ['Space', 'KeyF'], swap: ['KeyE'], dodgeLabel: 'Space', swapLabel: 'E' },
+  { name: '←↑→↓', up: ['ArrowUp'], down: ['ArrowDown'], left: ['ArrowLeft'], right: ['ArrowRight'], dodge: ['Enter', 'Slash'], swap: ['ShiftRight', 'Period'], dodgeLabel: 'Enter', swapLabel: 'Right Shift' },
+  { name: 'IJKL', up: ['KeyI'], down: ['KeyK'], left: ['KeyJ'], right: ['KeyL'], dodge: ['KeyO'], swap: ['KeyU'], dodgeLabel: 'O', swapLabel: 'U' },
+  { name: 'Num 8456', up: ['Numpad8'], down: ['Numpad5', 'Numpad2'], left: ['Numpad4'], right: ['Numpad6'], dodge: ['Numpad0'], swap: ['NumpadDecimal'], dodgeLabel: 'Num 0', swapLabel: 'Num .' },
 ];
 
 const JOY_RADIUS = 46; // CSS px for full deflection
+const DEAD = 0.25;
 
 export class Input {
   constructor(root) {
+    this.root = root;
     this.down = new Set();
-    this.pressedQueue = [];
-    this.players = [0, 1].map(() => ({ x: 0, y: 0, dodgePressed: false, _dodge: false, touch: null }));
+    this.players = [0, 1, 2, 3].map(() => ({ x: 0, y: 0, _dodge: false, _swap: false, touch: null, pad: null }));
     this.listeners = [];
     this.touchMode = matchMedia('(pointer: coarse)').matches;
+    this.humans = [0, 1];
+    this.padPrev = {};
 
     addEventListener('keydown', (e) => {
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].includes(e.code)) e.preventDefault();
+      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space', 'Tab'].includes(e.code)) e.preventDefault();
       if (!this.down.has(e.code)) this.listeners.forEach((fn) => fn(e.code));
       this.down.add(e.code);
+      if (e.repeat) return;
       KEYMAP.forEach((m, i) => {
-        if (m.dodge.includes(e.code) && !e.repeat) this.players[i]._dodge = true;
+        if (m.dodge.includes(e.code)) this.players[i]._dodge = true;
+        if (m.swap.includes(e.code)) this.players[i]._swap = true;
       });
     });
     addEventListener('keyup', (e) => this.down.delete(e.code));
@@ -34,50 +41,52 @@ export class Input {
     this.listeners.push(fn);
   }
 
+  // ---------- touch ----------
   setupTouch(root) {
-    this.joyEls = [0, 1].map((i) => {
+    this.zone = root.querySelector('.touch-zone');
+    this.joyEls = [0, 1, 2, 3].map((i) => {
       const base = document.createElement('div');
       base.className = `joy joy-p${i + 1}`;
       base.innerHTML = '<div class="knob"></div>';
       root.appendChild(base);
       return base;
     });
-    this.dodgeBtns = [0, 1].map((i) => {
+    const mkBtn = (i, kind) => {
       const b = document.createElement('button');
-      b.className = `win p${i + 1} dodge-btn dodge-p${i + 1}`;
-      b.textContent = 'Dodge';
-      b.setAttribute('aria-label', `Player ${i + 1} dodge`);
+      b.className = `win touch-btn ${kind}-btn`;
+      b.textContent = kind === 'dodge' ? 'Dodge' : 'Switch';
+      b.setAttribute('aria-label', `Player ${i + 1} ${kind}`);
       b.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        this.players[i]._dodge = true;
+        this.players[i][kind === 'dodge' ? '_dodge' : '_swap'] = true;
         b.classList.add('pressed');
         setTimeout(() => b.classList.remove('pressed'), 120);
       });
       root.appendChild(b);
       return b;
-    });
+    };
+    this.btns = [0, 1, 2, 3].map((i) => ({ dodge: mkBtn(i, 'dodge'), swap: mkBtn(i, 'swap') }));
 
-    const zone = root.querySelector('.touch-zone');
-    const lastTap = [0, 0];
-    zone.addEventListener('pointerdown', (e) => {
+    const lastTap = [0, 0, 0, 0];
+    this.zone.addEventListener('pointerdown', (e) => {
       if (e.pointerType === 'mouse') return;
       this.touchMode = true;
       document.body.classList.add('touch');
-      const rect = zone.getBoundingClientRect();
-      const i = e.clientX < rect.left + rect.width / 2 ? 0 : 1;
+      const i = this.slotAt(e.clientX, e.clientY);
+      if (i == null) return;
       const p = this.players[i];
       if (p.touch) return;
       const now = performance.now();
       if (now - lastTap[i] < 280) p._dodge = true; // double-tap = dodge
       lastTap[i] = now;
       p.touch = { id: e.pointerId, ox: e.clientX, oy: e.clientY };
-      zone.setPointerCapture?.(e.pointerId);
+      this.zone.setPointerCapture?.(e.pointerId);
       this.showJoy(i, e.clientX, e.clientY, 0, 0);
       e.preventDefault();
     });
-    zone.addEventListener('pointermove', (e) => {
-      for (let i = 0; i < 2; i++) {
+    this.zone.addEventListener('pointermove', (e) => {
+      for (let i = 0; i < 4; i++) {
         const p = this.players[i];
         if (!p.touch || p.touch.id !== e.pointerId) continue;
         let dx = e.clientX - p.touch.ox;
@@ -97,7 +106,7 @@ export class Input {
       e.preventDefault();
     });
     const end = (e) => {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 4; i++) {
         const p = this.players[i];
         if (p.touch && p.touch.id === e.pointerId) {
           p.touch = null;
@@ -107,8 +116,38 @@ export class Input {
         }
       }
     };
-    zone.addEventListener('pointerup', end);
-    zone.addEventListener('pointercancel', end);
+    this.zone.addEventListener('pointerup', end);
+    this.zone.addEventListener('pointercancel', end);
+  }
+
+  /**
+   * Which human player owns a screen point: halves for 1-2 humans,
+   * quarters for 3-4 (order: bottom-left, bottom-right, top-left, top-right).
+   */
+  slotAt(x, y) {
+    const h = this.humans;
+    const left = x < innerWidth / 2;
+    if (h.length <= 2) return left ? h[0] : h[1] ?? null;
+    const top = y < innerHeight / 2;
+    return h[(top ? 2 : 0) + (left ? 0 : 1)] ?? null;
+  }
+
+  /** Called when a battle starts: which slots are humans, and whether Switch is used. */
+  setHumans(slots, teams, canSwitch) {
+    this.humans = slots;
+    const quad = slots.length > 2;
+    document.body.dataset.touchLayout = quad ? 'quad' : 'half';
+    this.btns.forEach((b, i) => {
+      const k = slots.indexOf(i);
+      const on = k >= 0;
+      const pos = quad ? ['bl', 'br', 'tl', 'tr'][k] : ['l', 'r'][k];
+      for (const [kind, el] of Object.entries(b)) {
+        el.hidden = !on || (kind === 'swap' && !canSwitch);
+        el.dataset.pos = pos || '';
+        el.classList.toggle('p1', teams[i] === 0);
+        el.classList.toggle('p2', teams[i] === 1);
+      }
+    });
   }
 
   showJoy(i, x, y, dx, dy) {
@@ -119,13 +158,54 @@ export class Input {
     el.firstChild.style.transform = `translate(${dx}px, ${dy}px)`;
   }
 
-  /** Snapshot for this frame. */
+  // ---------- gamepads ----------
+  /** Poll controllers every frame: menu keys for the UI, and movement/buttons for fights. */
+  pollPads() {
+    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    for (let i = 0; i < 4; i++) {
+      const gp = pads[i];
+      const p = this.players[i];
+      if (!gp) {
+        p.pad = null;
+        continue;
+      }
+      const btn = (n) => !!gp.buttons[n]?.pressed;
+      let x = gp.axes[0] || 0;
+      let y = gp.axes[1] || 0;
+      if (Math.hypot(x, y) < DEAD) x = y = 0;
+      if (btn(14)) x = -1;
+      if (btn(15)) x = 1;
+      if (btn(12)) y = -1;
+      if (btn(13)) y = 1;
+      p.pad = { x, y };
+      const prev = this.padPrev[i] || {};
+      const now = { a: btn(0), b: btn(1), x: btn(2), y: btn(3), lb: btn(4), rb: btn(5), start: btn(9), up: y < -0.6, down: y > 0.6, left: x < -0.6, right: x > 0.6 };
+      const edge = (k) => now[k] && !prev[k];
+      if (edge('a') || edge('rb')) p._dodge = true;
+      if (edge('y') || edge('lb') || edge('x')) p._swap = true;
+      // Menu navigation with any controller.
+      const emit = (code) => this.listeners.forEach((fn) => fn(code));
+      if (edge('up')) emit('ArrowUp');
+      if (edge('down')) emit('ArrowDown');
+      if (edge('left')) emit('ArrowLeft');
+      if (edge('right')) emit('ArrowRight');
+      if (edge('a')) emit('PadConfirm');
+      if (edge('b')) emit('Escape');
+      if (edge('start')) emit('KeyP');
+      this.padPrev[i] = now;
+    }
+  }
+
+  /** Snapshot of player i's controls for this frame. */
   read(i) {
     const p = this.players[i];
     const m = KEYMAP[i];
-    let x = p.x;
-    let y = p.y;
-    if (!p.touch) {
+    let x = 0;
+    let y = 0;
+    if (p.touch) {
+      x = p.x;
+      y = p.y;
+    } else {
       const k = (codes) => codes.some((c) => this.down.has(c));
       x = (k(m.right) ? 1 : 0) - (k(m.left) ? 1 : 0);
       y = (k(m.down) ? 1 : 0) - (k(m.up) ? 1 : 0);
@@ -133,13 +213,21 @@ export class Input {
         x *= Math.SQRT1_2;
         y *= Math.SQRT1_2;
       }
+      if (!x && !y && p.pad) {
+        x = p.pad.x;
+        y = p.pad.y;
+      }
     }
-    const dodgePressed = p._dodge;
+    const out = { x, y, dodgePressed: p._dodge, switchPressed: p._swap };
     p._dodge = false;
-    return { x, y, dodgePressed };
+    p._swap = false;
+    return out;
   }
 
   clearPresses() {
-    this.players.forEach((p) => (p._dodge = false));
+    this.players.forEach((p) => {
+      p._dodge = false;
+      p._swap = false;
+    });
   }
 }

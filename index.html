@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <meta name="theme-color" content="#14112a">
-  <title>SpriteCollab VFX Arena</title>
-  <meta name="description" content="Local 2-player Pokémon arena testing PMDCollab SpriteCollab sprites and PMD: Origins VFX.">
+  <title>Pokémon Clash</title>
+  <meta name="description" content="Pokémon Clash: a real-time Pokémon arena brawler with PMDCollab SpriteCollab sprites and PMD: Origins effects. 1v1, Trio 3v3 and 2vs2 for up to 4 players.">
   <link rel="preload" href="assets/ui/pmd-text.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,7 +18,17 @@
     </div>
     <div class="touch-zone" aria-hidden="true"></div>
 
-    <div id="select" class="screen"></div>
+    <div id="lobby" class="screen"></div>
+    <div id="setup" class="screen"></div>
+    <div id="mode-win" class="win"></div>
+    <div id="editor" class="screen overlay"></div>
+    <div id="info" class="screen overlay">
+      <div class="win solid dialog">
+        <h2 id="info-title"></h2>
+        <p id="info-text"></p>
+        <ul class="menu"><li class="nav" id="info-close">Close</li></ul>
+      </div>
+    </div>
     <div id="result" class="screen overlay"></div>
     <div id="pause" class="screen overlay"></div>
 
@@ -32,7 +42,7 @@
         <p><span class="cyan">Windows, font &amp; type icons</span><br>PMD: Origins (<a href="https://github.com/audinowho/DumpAsset" target="_blank" rel="noopener">DumpAsset</a>, RawAsset fonts).</p>
         <p><span class="cyan">Stats, moves, type chart</span><br><a href="https://github.com/pkmn/ps" target="_blank" rel="noopener">@pkmn/dex</a> (Pokémon Showdown data).</p>
         <p class="dim">Non-commercial fan test. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc. Not affiliated or endorsed.</p>
-        <ul class="menu"><li class="sel" id="credits-close">Close</li></ul>
+        <ul class="menu"><li class="nav" id="credits-close">Close</li></ul>
       </div>
     </div>
 

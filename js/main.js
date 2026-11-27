@@ -1,8 +1,10 @@
-// SpriteCollab VFX Arena — boot, game loop, arena rendering, hits, screens.
+// Pokémon Clash — boot, game loop, arena rendering, battles (Showdown / Trio / 2vs2), hits.
 import { loadJSON, loadImage, loadFighterArt, loadParticle, loadBeam } from './assets.js';
 import { DB, computeDamage } from './combat.js';
 import { Fighter } from './fighter.js';
-import { MOVEFX } from './moves.js';
+import { SpriteAnimator } from './sprite.js';
+import { MODES, defaultSetup, makeMember, partyFor, teamOf } from './modes.js';
+import { MOVEFX, cancelCast } from './moves.js';
 import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
 import { UI } from './ui.js';
@@ -13,7 +15,7 @@ import { Sfx } from './sfx.js';
 const W = 640; // arena size in game pixels
 const H = 360;
 const START_X = 150; // spawn distance from the side walls
-const SUDDEN_DEATH = 90; // seconds of fighting before all damage doubles
+const SWITCH_COOLDOWN = 6; // Trio: seconds between switches
 const RES = 2; // backing-store pixels per arena pixel
 const STEP = 1 / 60;
 
@@ -34,8 +36,11 @@ class Game {
     this.shakeT = 0;
     this.tints = [];
     this.slowmo = 1;
-    this.bots = [null, null];
-    this.dodgeTextT = [0, 0];
+    this.bots = [];
+    this.parties = [];
+    this.decor = [];
+    this.dodgeTextT = [0, 0, 0, 0];
+    this.setup = null; // filled once data is loaded (modes.defaultSetup)
     this.arena = this.renderArena();
     this.sfx = (name) => Sfx.play(name);
   }
@@ -71,7 +76,64 @@ class Game {
   }
 
   who(f) {
-    return `<span class="c-p${f.slot + 1}">${f.data.name}</span>`;
+    const tag = this.parties.length > 2 ? `P${f.slot + 1} ` : '';
+    return `<span class="c-p${f.slot + 1}">${tag}${f.data.name}</span>`;
+  }
+
+  // ---------- teams ----------
+  activeOf(slot) {
+    const p = this.parties[slot];
+    return p ? p.members[p.active] : null;
+  }
+  benchOf(slot) {
+    const p = this.parties[slot];
+    return p ? p.members.filter((m, i) => i !== p.active && !m.ko) : [];
+  }
+  enemiesOf(f) {
+    return this.fighters.filter((o) => o.team !== f.team && o.alive);
+  }
+  nearestEnemy(f) {
+    let best = null;
+    for (const o of this.enemiesOf(f)) if (!best || f.distTo(o) < f.distTo(best)) best = o;
+    return best;
+  }
+  teamAlive(team) {
+    return this.parties.some((p) => p.team === team && p.members.some((m) => !m.ko));
+  }
+  canSwitch(slot) {
+    const p = this.parties[slot];
+    return !!p && this.mode.party > 1 && this.state === 'fight' && p.switchCd <= 0 && this.benchOf(slot).length > 0;
+  }
+
+  /** Put a party member on the field in place of the current one (switch or send-out). */
+  sendOut(slot, next, at) {
+    const p = this.parties[slot];
+    const prev = p.members[p.active];
+    p.active = p.members.indexOf(next);
+    next.x = at.x;
+    next.y = at.y;
+    next.clamp();
+    next.invuln = Math.max(next.invuln, 0.6);
+    const i = this.fighters.indexOf(prev);
+    if (i >= 0) this.fighters[i] = next;
+    else this.fighters.push(next);
+    this.addEffect(new Effect(MOVEFX.common.spawn, next.x, next.y, { layer: 'under' }));
+    this.ui.buildHUD();
+  }
+
+  trySwitch(slot) {
+    if (!this.canSwitch(slot)) return;
+    const p = this.parties[slot];
+    const cur = p.members[p.active];
+    if (cur.ko || cur.cast?.released) return;
+    if (cur.cast) cancelCast(this, cur);
+    // Next healthy member after the current one in party order.
+    const order = p.members.map((_, k) => p.members[(p.active + 1 + k) % p.members.length]);
+    const next = order.find((m) => m !== cur && !m.ko);
+    p.switchCd = SWITCH_COOLDOWN;
+    this.ui.log(`Come back, ${this.who(cur)}! Go, ${this.who(next)}!`);
+    this.sfx('dodge');
+    this.sendOut(slot, next, { x: cur.x, y: cur.y });
   }
 
   announce(c, move) {
@@ -135,17 +197,28 @@ class Game {
 
   onKO(f) {
     if (this.state !== 'fight') return;
+    this.ui.log(`${this.who(f)} fainted!`);
+    this.sfx('ko');
+    const next = this.parties[f.slot].members.find((m) => !m.ko);
+    if (next) {
+      // Trio: the next party member is sent out where the trainer started.
+      this.after(1.2, () => {
+        if (this.state !== 'fight' && this.state !== 'ko') return;
+        this.ui.log(`P${f.slot + 1} sent out ${this.who(next)}!`);
+        this.sendOut(f.slot, next, this.parties[f.slot].spawn);
+      });
+      return;
+    }
+    if (this.teamAlive(f.team)) return; // 2vs2: the partner fights on
+    const winTeam = 1 - f.team;
     this.state = 'ko';
     this.slowmo = 0.3;
     this.banner('K.O.!', 1.5);
-    this.ui.log(`${this.who(f)} fainted!`);
-    this.sfx('ko');
-    const winner = this.fighters.find((x) => x !== f);
     this.after(1.6, () => {
       this.slowmo = 1;
       this.state = 'result';
-      winner.sprite.play('Pose', { loop: true, restart: true });
-      this.ui.showResult(winner, this.fighters, this.stats);
+      for (const w of this.fighters) if (w.team === winTeam && w.alive) w.sprite.play('Pose', { loop: true, restart: true });
+      this.ui.showResult(winTeam);
     });
   }
 
@@ -155,9 +228,11 @@ class Game {
   }
 
   // ---------- screens ----------
-  /** Start a fight; loads the picked Pokémon's remaining animations first if needed. */
-  startFight(keys, cpu, items = [null, null]) {
-    const arts = keys.map((k) => this.arts[k]);
+  /** Start a battle from a setup (mode + players + parties). Loads missing animations first. */
+  startBattle(setup = this.setup) {
+    const mode = MODES[setup.mode];
+    const slots = [...Array(mode.slots).keys()];
+    const arts = [...new Set(slots.flatMap((s) => partyFor(setup, s).map((m) => m.species)))].map((k) => this.arts[k]);
     if (!arts.every((a) => a.full)) {
       const status = document.getElementById('loading-status');
       const screen = document.getElementById('loading');
@@ -165,23 +240,35 @@ class Game {
       screen.classList.remove('done');
       Promise.all(arts.map((a) => a.loadRest())).then(() => {
         screen.classList.add('done');
-        this.startFight(keys, cpu, items);
+        this.startBattle(setup);
       });
       return;
     }
-    this.lastSetup = { keys, cpu, items };
+    this.mode = mode;
+    this.lastSetup = JSON.parse(JSON.stringify(setup));
     this.objects = [];
     this.timers = [];
     this.updaters = [];
     this.tints = [];
-    this.stats = [0, 1].map(() => ({ damage: 0, casts: 0, hits: 0, dodges: 0, supers: 0 }));
+    this.bannerState = null;
+    this.stats = [0, 1, 2, 3].map(() => ({ damage: 0, casts: 0, hits: 0, dodges: 0, supers: 0 }));
     this.moveLog = {};
     const midY = (this.bounds.y0 + this.bounds.y1) / 2 + 6;
-    this.fighters = keys.map((k, i) => new Fighter(this, i, DB.pokedex[k], this.arts[k], i === 0 ? START_X : W - START_X, midY, items[i]));
-    this.bots = cpu.map((on, i) => (on ? new Bot(this, i) : null));
+    this.parties = slots.map((s) => {
+      const team = teamOf(setup.mode, s);
+      const nth = mode.teams[team].indexOf(s);
+      const perTeam = mode.teams[team].length;
+      const spawn = { x: team === 0 ? START_X : W - START_X, y: perTeam > 1 ? midY + (nth === 0 ? -60 : 60) : midY };
+      const members = partyFor(setup, s).map((m) => new Fighter(this, s, team, m, this.arts[m.species], spawn.x, spawn.y));
+      return { slot: s, team, members, active: 0, switchCd: 0, spawn };
+    });
+    this.fighters = this.parties.map((p) => p.members[0]);
+    this.bots = slots.map((s) => (setup.players[s].human ? null : new Bot(this, s)));
+    const humans = slots.filter((s) => setup.players[s].human);
+    this.input.setHumans(humans, slots.map((s) => teamOf(setup.mode, s)), mode.party > 1);
     this.fighters.forEach((f) => this.addEffect(new Effect(MOVEFX.common.spawn, f.x, f.y, { layer: 'under' })));
-    this.ui.buildHUD(this.fighters);
-    this.ui.hideResult();
+    this.ui.buildHUD();
+    this.ui.hideOverlays();
     document.body.dataset.screen = 'fight';
     this.state = 'countdown';
     this.input.clearPresses();
@@ -197,21 +284,59 @@ class Game {
     this.damageMul = 1;
   }
 
-  rematch() {
-    if (this.lastSetup) this.startFight(this.lastSetup.keys, this.lastSetup.cpu, this.lastSetup.items);
+  /** Quick 1v1 helper (used by tests and URL shortcuts). */
+  startFight(keys, cpu = [false, false], items = [null, null]) {
+    const s = defaultSetup();
+    keys.forEach((k, i) => {
+      s.players[i].party = [makeMember(k, items[i] || null)];
+      s.players[i].human = !cpu[i];
+    });
+    this.setup = s;
+    this.startBattle(s);
   }
 
-  toSelect() {
-    this.state = 'select';
+  rematch() {
+    if (this.lastSetup) this.startBattle(this.lastSetup);
+  }
+
+  leaveBattle() {
     this.fighters = [];
+    this.parties = [];
     this.objects = [];
     this.timers = [];
-    document.getElementById('pause').classList.remove('show');
-    this.ui.hideResult();
-    this.ui.stage = ['mon', 'mon'];
-    if (this.ui.cpu[1]) this.ui.cpuPick();
-    this.ui.renderSelect();
-    document.body.dataset.screen = 'select';
+    this.bannerState = null;
+    this.ui.hideOverlays();
+  }
+
+  toLobby() {
+    this.leaveBattle();
+    this.state = 'lobby';
+    document.body.dataset.screen = 'lobby';
+    this.ui.showLobby();
+  }
+
+  toSetup() {
+    this.leaveBattle();
+    this.state = 'setup';
+    document.body.dataset.screen = 'setup';
+    this.ui.showSetup();
+  }
+
+  // Old name kept for test scripts.
+  toSelect() {
+    this.toSetup();
+  }
+
+  /** A few idle Pokémon standing around in the lobby / setup background. */
+  makeDecor() {
+    const keys = Object.keys(this.arts).sort(() => Math.random() - 0.5).slice(0, 6);
+    const spots = [[60, 200], [110, 330], [230, 335], [410, 335], [530, 330], [590, 210]]; // around the edges
+    this.decor = keys.map((k, i) => ({
+      anim: new SpriteAnimator(this.arts[k]),
+      x: spots[i][0],
+      y: spots[i][1],
+      dir: Math.floor(Math.random() * 8),
+    }));
   }
 
   togglePause() {
@@ -229,15 +354,17 @@ class Game {
   onKey(code) {
     if (code === 'KeyM') Sfx.toggle();
     if (this.ui.menuKey(code)) return;
-    if (this.state === 'select') return this.ui.selectKey(code);
+    if (this.state === 'lobby' || this.state === 'setup') return this.ui.navKey(code);
     if (code === 'Escape' || code === 'KeyP') return this.togglePause();
   }
 
   // ---------- loop ----------
   update(dt) {
     this.time += dt;
-    if (this.state === 'select') {
-      this.ui.tickPreviews(dt);
+    this.input.pollPads();
+    if (this.state === 'lobby' || this.state === 'setup') {
+      for (const d of this.decor) d.anim.update(dt);
+      this.ui.tick(dt);
       return;
     }
     if (this.state === 'paused' || this.state === 'loading') return;
@@ -248,7 +375,7 @@ class Game {
     dt *= this.slowmo;
     if (this.state === 'fight') {
       this.fightTime += dt;
-      if (this.damageMul === 1 && this.fightTime >= SUDDEN_DEATH) {
+      if (this.damageMul === 1 && this.fightTime >= this.mode.suddenDeath) {
         // Stops stalemates (e.g. two Pokémon mostly immune to each other).
         this.damageMul = 2;
         this.banner('SUDDEN DEATH!', 1.2);
@@ -263,25 +390,36 @@ class Game {
     this.timers = this.timers.filter((t) => t.t > 0);
     for (const t of due) t.fn();
 
-    const [a, b] = this.fighters;
-    this.fighters.forEach((f, i) => {
-      const inp = this.bots[i] ? this.bots[i].think(dt) : this.input.read(i);
-      if (this.bots[i]) this.input.read(i); // drain human presses
-      f.update(dt, inp, i === 0 ? b : a);
-    });
+    for (const p of this.parties) {
+      p.switchCd = Math.max(0, p.switchCd - dt);
+      const f = p.members[p.active];
+      const inp = this.bots[p.slot] ? this.bots[p.slot].think(dt) : this.input.read(p.slot);
+      if (this.bots[p.slot]) this.input.read(p.slot); // drain stray human presses
+      if (f.ko) continue;
+      if (inp.switchPressed) this.trySwitch(p.slot);
+      const cur = this.activeOf(p.slot);
+      cur.update(dt, inp, this.nearestEnemy(cur));
+    }
+    // Fainted Pokémon keep animating (fade out) until they're replaced.
+    for (const f of this.fighters) if (f.ko) f.update(dt, { x: 0, y: 0 }, null);
     // Push fighters apart so they can't stand inside each other.
-    if (a && b && a.alive && b.alive) {
-      const d = a.distTo(b);
-      const min = (a.radius + b.radius) * 0.75;
-      if (d < min && d > 0.01) {
-        const push = (min - d) / 2;
-        const ang = a.angleTo(b);
-        a.x -= Math.cos(ang) * push;
-        a.y -= Math.sin(ang) * push;
-        b.x += Math.cos(ang) * push;
-        b.y += Math.sin(ang) * push;
-        a.clamp();
-        b.clamp();
+    const live = this.fighters.filter((f) => f.alive);
+    for (let i = 0; i < live.length; i++) {
+      for (let j = i + 1; j < live.length; j++) {
+        const a = live[i];
+        const b = live[j];
+        const d = a.distTo(b);
+        const min = (a.radius + b.radius) * 0.75;
+        if (d < min && d > 0.01) {
+          const push = (min - d) / 2;
+          const ang = a.angleTo(b);
+          a.x -= Math.cos(ang) * push;
+          a.y -= Math.sin(ang) * push;
+          b.x += Math.cos(ang) * push;
+          b.y += Math.sin(ang) * push;
+          a.clamp();
+          b.clamp();
+        }
       }
     }
 
@@ -291,7 +429,7 @@ class Game {
     this.shakeT -= dt;
     for (const t of this.tints) t.t += dt;
     this.tints = this.tints.filter((t) => t.t < t.time);
-    this.ui.updateHUD(this.fighters);
+    this.ui.updateHUD();
   }
 
   render() {
@@ -307,6 +445,15 @@ class Game {
     };
     layer('ground');
     layer('under');
+    if (this.state === 'lobby' || this.state === 'setup') {
+      for (const d of [...this.decor].sort((p, q) => p.y - q.y)) {
+        ctx.fillStyle = 'rgba(0,0,0,0.3)';
+        ctx.beginPath();
+        ctx.ellipse(d.x, d.y + 7, 12, 4, 0, 0, Math.PI * 2);
+        ctx.fill();
+        d.anim.draw(ctx, d.x, d.y, d.dir);
+      }
+    }
     [...this.fighters].sort((p, q) => p.y - q.y).forEach((f) => f.draw(ctx));
     layer('over');
     for (const t of this.tints) {
@@ -472,21 +619,18 @@ async function boot() {
     game.input = new Input(document.getElementById('app'));
     if (game.input.touchMode) document.body.classList.add('touch');
     game.input.onKey((code) => game.onKey(code));
+    game.setup = defaultSetup();
+    game.makeDecor();
     game.ui = new UI(game, keys, game.arts);
     document.getElementById('loading').classList.add('done');
-    game.state = 'select';
-    document.body.dataset.screen = 'select';
+    game.toLobby();
+    // URL shortcuts for testing: ?mode=trio&cpu=all&autostart, ?p1=rayquaza&p2=mewtwo&cpu
     const params = new URLSearchParams(location.search);
-    if (params.has('cpu')) {
-      game.ui.cpu = [params.get('cpu') === 'both', true];
-      game.ui.cpuPick();
-      game.ui.renderSelect();
-    }
-    if (params.has('p1') || params.has('autostart')) {
-      const p1 = params.get('p1') || 'rayquaza';
-      const p2 = params.get('p2') || 'garchomp';
-      game.startFight([p1, p2], game.ui.cpu.slice(), [params.get('i1'), params.get('i2')]);
-    }
+    if (params.has('mode') && MODES[params.get('mode')]) game.setup.mode = params.get('mode');
+    if (params.has('cpu')) game.setup.players.forEach((p, i) => (p.human = params.get('cpu') !== 'all' && params.get('cpu') !== 'both' ? i === 0 : false));
+    if (params.has('p1') || params.has('p2')) {
+      game.startFight([params.get('p1') || 'rayquaza', params.get('p2') || 'garchomp'], game.setup.players.map((p) => !p.human), [params.get('i1'), params.get('i2')]);
+    } else if (params.has('autostart')) game.startBattle(game.setup);
   } catch (e) {
     console.error(e);
     status.textContent = `Failed to load: ${e.message}`;

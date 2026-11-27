@@ -106,7 +106,7 @@ const hex = (n) => n.toString(16).toUpperCase().padStart(4, '0');
 const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 const textGlyphs = [...range(0x21, 0x7e), ...range(0xa1, 0xff), 0x2026, 0x2640, 0x2642, 0x2190, 0x2191, 0x2192, 0x2193, 0x2605, 0x2606, 0x266a, ...range(0xe080, 0xe092)];
 for (const c of textGlyphs) tasks.push(save(`${RA}/font/text/${hex(c)}.png`, `assets/ui/raw/text/${hex(c)}.png`, { optional: true }));
-const bannerGlyphs = [...range(0x21, 0x5a), ...range(0x61, 0x7a)];
+const bannerGlyphs = [...range(0x21, 0x5a), ...range(0x61, 0x7a), 0xc9, 0xe9];
 for (const c of bannerGlyphs) tasks.push(save(`${RA}/font/banner/${hex(c)}.png`, `assets/ui/raw/banner/${hex(c)}.png`, { optional: true }));
 tasks.push(save(`${RA}/font/text/FontData.xml`, 'assets/ui/raw/text/FontData.xml'));
 tasks.push(save(`${RA}/font/banner/FontData.xml`, 'assets/ui/raw/banner/FontData.xml'));

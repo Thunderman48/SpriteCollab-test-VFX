@@ -274,14 +274,14 @@ export class BannerFont {
     ctx.restore();
   }
 
-  /** Render text into a <canvas> element sized in CSS game pixels (--u). */
-  toCanvas(cv, text) {
+  /** Render text into a <canvas> element sized in CSS game pixels (--u), optionally scaled up. */
+  toCanvas(cv, text, scale = 1) {
     cv.width = this.width(text) + 2;
     cv.height = this.meta.height + 2;
     const ctx = cv.getContext('2d');
     ctx.imageSmoothingEnabled = false;
     this.draw(ctx, text, (cv.width - 1) / 2, (cv.height - 1) / 2);
-    cv.style.width = `calc(${cv.width} * var(--u))`;
-    cv.style.height = `calc(${cv.height} * var(--u))`;
+    cv.style.width = `calc(${cv.width * scale} * var(--u))`;
+    cv.style.height = `calc(${cv.height * scale} * var(--u))`;
   }
 }

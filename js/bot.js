@@ -1,5 +1,5 @@
-// Optional CPU opponent (select "P2: CPU", or ?cpu / ?cpu=both in the URL).
-// It only produces the same inputs a human has: a movement vector and dodge presses.
+// CPU player for any slot. It only produces the inputs a human has:
+// a movement vector, dodge presses and (in Trio) switch presses.
 import { MOVEFX } from './moves.js';
 import { DB, effectiveness } from './combat.js';
 
@@ -14,13 +14,13 @@ export class Bot {
 
   think(dt) {
     const g = this.game;
-    const me = g.fighters[this.slot];
-    const foe = g.fighters[1 - this.slot];
-    if (!me || !foe || me.ko || foe.ko) return { x: 0, y: 0, dodgePressed: false };
+    const me = g.activeOf(this.slot);
+    const foe = me && g.nearestEnemy(me);
+    if (!me || !foe || me.ko) return { x: 0, y: 0, dodgePressed: false, switchPressed: false };
 
     // Preferred distance: reach of the move that's coming off cooldown soonest.
     let soon = null;
-    for (const id of me.data.moves) if (!soon || me.cd[id] < me.cd[soon]) soon = id;
+    for (const id of me.moves) if (!soon || me.cd[id] < me.cd[soon]) soon = id;
     const want = Math.max(50, Math.min(220, MOVEFX.moves[soon].range * 0.7));
     const d = me.distTo(foe);
     const a = me.angleTo(foe);
@@ -40,7 +40,7 @@ export class Bot {
     if (me.y > b.y1 - 20) y -= 1;
 
     // Moves only fire while standing still: stop when one is ready (or while attacking).
-    const ready = me.data.moves.find(
+    const ready = me.moves.find(
       (id) => me.cd[id] <= 0 && d <= MOVEFX.moves[id].range + foe.radius && effectiveness(DB.moves[id].type, foe.data.types) > 0,
     );
     if (me.cast || ready) {
@@ -51,7 +51,7 @@ export class Bot {
     // Dodge incoming projectiles / standing in a warning circle / point-blank dashes.
     let danger = null;
     for (const o of g.objects) {
-      if (o.target === me && o.speed) {
+      if (o.speed && o.owner && o.owner.team !== me.team) {
         const dx = me.x - o.x;
         const dy = me.y - o.y;
         const dist = Math.hypot(dx, dy);
@@ -72,7 +72,12 @@ export class Bot {
       }
       this.react = 0.35;
     }
+    // Trio: pull out a badly hurt Pokémon if a healthier one is waiting.
+    let switchPressed = false;
+    if (g.canSwitch(this.slot) && me.hp < me.maxHp * 0.25 && !me.cast && Math.random() < dt * 0.8) {
+      switchPressed = g.benchOf(this.slot).some((f) => f.hp > me.hp * 2);
+    }
     const len = Math.hypot(x, y);
-    return len ? { x: x / len, y: y / len, dodgePressed } : { x: 0, y: 0, dodgePressed };
+    return len ? { x: x / len, y: y / len, dodgePressed, switchPressed } : { x: 0, y: 0, dodgePressed, switchPressed };
   }
 }

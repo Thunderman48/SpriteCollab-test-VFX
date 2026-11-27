@@ -1,35 +1,53 @@
-# SpriteCollab VFX Arena
+# Pokémon Clash
 
-A small local **2-player** Pokémon arena for testing the [PMDCollab SpriteCollab](https://github.com/PMDCollab/SpriteCollab)
-sprite library in the browser, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) VFX sheets.
-The interface uses PMD: Origins' own window borders, portrait frames, cursor, text/banner fonts and type icons, so it looks like Mystery Dungeon.
+A real-time Pokémon arena brawler for the browser, built on the [PMDCollab SpriteCollab](https://github.com/PMDCollab/SpriteCollab)
+sprites, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) sheets. The interface uses PMD: Origins'
+own window borders, portrait frames, cursor, fonts and type icons, so it looks like Mystery Dungeon.
 
 **Roster (20):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon. Each has 4 moves (53 different moves), and every move has its own VFX.
 
-**Held items:** like in Mystery Dungeon, each Pokémon can hold one item, chosen on the select screen. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time, and the in-game description says what each item does here.
+**Held items:** like in Mystery Dungeon, each Pokémon holds one item. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time; the in-game description says what each item does here.
 
-## How to play
+## Screens
 
-| | Player 1 | Player 2 |
+- **Lobby:** Play, Online Multiplayer (coming later), Sandbox (coming later) and Credits. The **battle mode** is picked in the top-right window.
+- **Team setup:** one card per player with a **Player / CPU** toggle and a **Random** button. Click or tap a Pokémon to open the **editor**:
+  all 20 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** (held item grid with descriptions) and **Personality** (coming later).
+  Party members are stored as plain data (`species`, `item`, `moves`, `personality`, `statBoosts` in `js/modes.js`) so stat, skill and personality editing can be added later.
+- Everything works with the mouse, touch, the keyboard (arrows / WASD move the cursor, Enter / Space choose, Esc goes back, Tab changes editor tab) or any gamepad.
+
+## Battle modes
+
+| Mode | Players | Rules |
 |---|---|---|
-| Move | `W A S D` | Arrow keys |
-| Dodge | `Space` (or `Left Shift` / `F`) | `Enter` (or `Right Shift` / `/`) |
-| Pick Pokémon, then held item | `W` / `S` + `Space` to confirm, `Q` to go back | `↑` / `↓` + `Enter` to confirm, `Backspace` to go back |
+| **Showdown** | 1 vs 1 | One Pokémon each. Last one standing wins. |
+| **Trio** | 1 vs 1, parties of 3 | One Pokémon on the field at a time. When it faints the next one is sent out. You can **switch** (6 s cooldown). |
+| **2vs2 Showdown** | 2 vs 2 (4 players) | Blue team (P1 + P3) against Pink team (P2 + P4). Knock out both opponents. |
 
-- **Mobile:** turn the phone sideways. P1 touches anywhere on the left half for a floating joystick and P2 on the right half. Each player has a **DODGE** button, or can double-tap their side to dodge.
+Every slot can be a human or the CPU. Moves auto-target the nearest opponent, and projectiles, beams and area attacks hit any opponent in their path.
+
+## Controls
+
+| | Move | Dodge | Switch (Trio) |
+|---|---|---|---|
+| Player 1 | `W A S D` | `Space` | `E` |
+| Player 2 | Arrow keys | `Enter` | `Right Shift` |
+| Player 3 | `I J K L` | `O` | `U` |
+| Player 4 | Numpad `8 4 5 6` | Numpad `0` | Numpad `.` |
+
+- **Gamepads:** controller 1 plays as P1, controller 2 as P2, and so on (stick or d-pad to move, **A** to dodge, **Y / X / LB** to switch, **Start** for the menu). Controllers also navigate the menus.
+- **Phones:** turn the phone sideways. With 1–2 human players the screen splits into left / right halves; with 3–4 it splits into four corners (P1 bottom-left, P2 bottom-right, P3 top-left, P4 top-right). Touch anywhere in your area for a floating joystick; each player has a **Dodge** button (and **Switch** in Trio), or can double-tap to dodge.
+- `Esc` / `P` opens the in-battle menu and `M` mutes.
+
+## Rules
+
 - **Stand still to attack.** Attacks are automatic and their cooldowns always recharge, but a ready move only fires while your Pokémon is standing still (not moving or dodging). While an attack plays you're rooted in place.
-- Every move has its own cooldown based on its PP: `cooldown = 45 / PP` seconds, plus a short pause after each attack.
-  - High-PP moves fire often, e.g. Bullet Punch (30 PP) every 1.5 s.
-  - Low-PP moves fire rarely but hit hard, e.g. Hyper Beam (5 PP) every 9 s.
-  - Every move aims itself at the opponent: it fires as soon as it's ready and the opponent is in range.
-- **Sudden death:** after 90 seconds of fighting all damage is doubled, so no match can stall forever.
+- Every move has its own cooldown based on its PP: `cooldown = 45 / PP` seconds, plus a short pause after each attack. High-PP moves fire often (Bullet Punch, 30 PP: every 1.5 s); low-PP moves fire rarely but hit hard (Hyper Beam, 5 PP: every 9 s).
 - **Dodging** gives a short dash with invulnerability. Use it to slip through projectiles, beams and the red warning circles that area attacks show. Dodging during a wind-up cancels it, and the move stays ready.
-- **Auto-attacks never waste a move the target is immune to** (e.g. Earth Power vs Rayquaza). The HUD greys such moves out and marks super-effective ones with ▲.
-- `Esc` / `P` opens the menu (↑/↓ to move the cursor, Enter/Space to pick) and `M` mutes. On the select screen, **P2: CPU** lets you play solo.
+- **Auto-attacks never waste a move the target is immune to** (e.g. Earth Power vs Rayquaza); the HUD greys such moves out.
+- **Sudden death:** after a while (90 s in Showdown, 100 s in 2vs2, 200 s in Trio) all damage is doubled, so no match can stall forever.
 
-URL shortcuts for testing:
-- `?cpu=both&p1=rayquaza&p2=mewtwo` starts a CPU-vs-CPU fight straight away.
-- `?cpu` makes P2 a CPU.
+URL shortcuts for testing: `?mode=trio&cpu=all&autostart` starts an all-CPU Trio battle; `?p1=rayquaza&p2=mewtwo&cpu=all` starts a CPU 1v1.
 
 ## Publishing on GitHub Pages
 
@@ -37,7 +55,7 @@ It's a static site with no build step.
 
 1. Open **Settings → Pages**.
 2. Under *Build and deployment*, set **Source: Deploy from a branch**.
-3. Pick the branch (`main` once merged, or the working branch) and the **`/ (root)`** folder, then save.
+3. Pick the `main` branch and the **`/ (root)`** folder, then save.
 4. The site appears at `https://<user>.github.io/<repo>/` after a minute.
 
 To try it locally, serve the folder over HTTP, e.g. `python3 -m http.server`, and open `http://localhost:8000`. Opening `index.html` directly from disk won't work because ES modules need HTTP.
@@ -52,7 +70,8 @@ js/vfx.js                  RawAsset particle player, beams (Head/Body/Tail), war
 js/moves.js                move behaviours: projectile, beam, melee, dash, targetArea, burst
 js/fighter.js              movement, dodge, auto-cast scheduler, hurt/faint
 js/combat.js               level-50 stats, damage formula, STAB, type chart
-js/ui.js                   PMD-style screens: select, HUD, message log, menus
+js/ui.js                   PMD-style screens: lobby, mode window, team setup, editor, HUD, log, menus
+js/modes.js                battle modes + team setup data (party members)
 js/input.js, js/bot.js     keyboard + multi-touch joysticks, optional CPU player
 data/roster.json           which Pokémon and moves are in the game   (hand-edited)
 data/movefx.json           each move's behaviour, sprite anim and VFX (hand-edited)
@@ -66,7 +85,7 @@ tools/                     scripts that generate data/ and assets/
 
 ### The Pokémon database
 
-`data/pokedex.json` (base stats, types, abilities), `data/moves.json` (type, category, power, accuracy, PP, cooldown, description) and `data/typechart.json` are generated from [`@pkmn/dex`](https://www.npmjs.com/package/@pkmn/dex), the Pokémon Showdown data. The select screen shows this data on each Pokémon's card.
+`data/pokedex.json` (base stats, types, abilities), `data/moves.json` (type, category, power, accuracy, PP, cooldown, description) and `data/typechart.json` are generated from [`@pkmn/dex`](https://www.npmjs.com/package/@pkmn/dex), the Pokémon Showdown data. The editor's Stats and Skills tabs show this data.
 
 ### Adding a Pokémon or changing moves
 

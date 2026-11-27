@@ -127,15 +127,16 @@ class Projectile {
       }
     }
 
-    const tg = this.target;
-    if (tg.alive && Math.hypot(tg.x - this.x, tg.y - this.y) < pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) {
+    // Hits the first enemy it touches (not only the one it was aimed at).
+    for (const tg of this.game.enemiesOf(this.owner)) {
+      if (Math.hypot(tg.x - this.x, tg.y - this.y) >= pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) continue;
       if (tg.invuln > 0) {
         if (!this.dodged) {
           this.dodged = true;
           this.game.dodgedText(tg);
         }
       } else {
-        this.explode(true);
+        this.explode(tg);
         return;
       }
     }
@@ -144,17 +145,19 @@ class Projectile {
     if (out || this.t > (pd.life || 2)) this.explode(false);
   }
 
-  explode(direct) {
+  /** victim = the enemy hit directly, or false when it ran out / hit a wall. */
+  explode(victim) {
     this.dead = true;
     const g = this.game;
-    const tg = this.target;
-    if (direct) {
-      g.applyHit(this.owner, tg, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
+    if (victim) {
+      g.applyHit(this.owner, victim, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
     } else if (this.pd.splash) {
       spawnFx(g, this.def.hit, this.x, this.y);
       spawnFx(g, this.def.hit2, this.x, this.y, { layer: 'under' });
-      if (tg.alive && tg.invuln <= 0 && Math.hypot(tg.x - this.x, tg.y - this.y) < this.pd.splash + tg.radius) {
-        g.applyHit(this.owner, tg, this.cast, { angle: this.angle, factor: 0.6, noFx: true });
+      for (const tg of g.enemiesOf(this.owner)) {
+        if (tg.invuln <= 0 && Math.hypot(tg.x - this.x, tg.y - this.y) < this.pd.splash + tg.radius) {
+          g.applyHit(this.owner, tg, this.cast, { angle: this.angle, factor: 0.6, noFx: true });
+        }
       }
     } else {
       spawnFx(g, MOVEFX.common.dodge, this.x, this.y, { scale: 0.6 });
@@ -226,18 +229,17 @@ const BEHAVIORS = {
         game.addEffect(beam);
         game.shake(d.shake || 0, d.beam.time);
         game.sfx?.('beam');
-        let hit = false;
+        const hit = new Set();
         game.addUpdater(() => {
           if (beam.dead) return true;
-          if (!hit && beam.t < beam.time * 0.75 && t.alive) {
+          if (beam.t < beam.time * 0.75) {
             const w = Math.max(6, beam.halfWidth);
-            if (distToSegment(t.x, t.y, beam.x, beam.y, a, beam.length) < w + t.radius) {
-              if (t.invuln > 0) {
-                if (!cast.dodgeShown) game.dodgedText(t);
-                cast.dodgeShown = true;
-              } else {
-                hit = true;
-                game.applyHit(c, t, cast, { angle: a });
+            for (const e of game.enemiesOf(c)) {
+              if (hit.has(e) || distToSegment(e.x, e.y, beam.x, beam.y, a, beam.length) >= w + e.radius) continue;
+              if (e.invuln > 0) game.dodgedText(e);
+              else {
+                hit.add(e);
+                game.applyHit(c, e, cast, { angle: a });
               }
             }
           }
@@ -311,13 +313,14 @@ const BEHAVIORS = {
       c.x += Math.cos(a) * d.dashSpeed * dt;
       c.y += Math.sin(a) * d.dashSpeed * dt;
       c.clamp();
-      if (t.alive && c.distTo(t) <= c.radius + t.radius + 6) {
-        if (t.invuln > 0) {
-          if (!cast.dodgeShown) game.dodgedText(t);
+      const e = game.enemiesOf(c).find((o) => c.distTo(o) <= c.radius + o.radius + 6);
+      if (e) {
+        if (e.invuln > 0) {
+          if (!cast.dodgeShown) game.dodgedText(e);
           cast.dodgeShown = true;
         } else {
           hit = true;
-          const dmg = game.applyHit(c, t, cast, { angle: a });
+          const dmg = game.applyHit(c, e, cast, { angle: a });
           game.shake(d.shake || 0, 0.25);
           if (d.recoil && dmg) game.recoil(c, Math.floor(dmg * d.recoil));
         }
@@ -390,9 +393,10 @@ const BEHAVIORS = {
           spawnFx(game, d.hit2, p.x, p.y - 4, { layer: 'under' });
           game.shake(d.shake || 0, 0.25);
           game.sfx?.('boom');
-          if (t.alive && Math.hypot(t.x - p.x, (t.y - p.y) / 0.7) <= radius + t.radius) {
-            if (t.invuln > 0) game.dodgedText(t);
-            else game.applyHit(c, t, cast, { angle: Math.atan2(t.y - p.y, t.x - p.x), factor: d.damageFactor ?? 1, noFx: true });
+          for (const e of game.enemiesOf(c)) {
+            if (Math.hypot(e.x - p.x, (e.y - p.y) / 0.7) > radius + e.radius) continue;
+            if (e.invuln > 0) game.dodgedText(e);
+            else game.applyHit(c, e, cast, { angle: Math.atan2(e.y - p.y, e.x - p.x), factor: d.damageFactor ?? 1, noFx: true });
           }
         }, null);
       });
@@ -425,9 +429,10 @@ const BEHAVIORS = {
       if (d.tint) game.tint(d.tint, 0.5);
       game.shake(d.shake || 2, 0.3);
       game.sfx?.('boom');
-      if (t.alive && c.distTo(t) <= d.radius + t.radius) {
-        if (t.invuln > 0) game.dodgedText(t);
-        else game.applyHit(c, t, cast, { angle: c.angleTo(t) });
+      for (const e of game.enemiesOf(c)) {
+        if (c.distTo(e) > d.radius + e.radius) continue;
+        if (e.invuln > 0) game.dodgedText(e);
+        else game.applyHit(c, e, cast, { angle: c.angleTo(e) });
       }
     }, null);
     game.after(Math.max(d.delay + 0.25, c.sprite.duration(d.anim)), cast.finish, null);
