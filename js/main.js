@@ -3,7 +3,8 @@ import { loadJSON, loadImage, loadFighterArt, loadParticle, loadBeam } from './a
 import { DB, computeDamage } from './combat.js';
 import { Fighter } from './fighter.js';
 import { SpriteAnimator } from './sprite.js';
-import { MODES, defaultSetup, makeMember, partyFor, teamOf } from './modes.js';
+import { MODES, defaultSetup, makeMember, partyFor, teamOf, battleSetup } from './modes.js';
+import { ITEMS } from './items.js';
 import { MOVEFX, cancelCast } from './moves.js';
 import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
@@ -230,8 +231,14 @@ class Game {
   }
 
   // ---------- screens ----------
-  /** Start a battle from a setup (mode + players + parties). Loads missing animations first. */
-  startBattle(setup = this.setup) {
+  /** Start a battle from a setup template (Random Battle rolls fresh teams here every time). */
+  startBattle(template = this.setup) {
+    this.lastTemplate = JSON.parse(JSON.stringify(template));
+    this.launch(battleSetup(template, ITEMS.list));
+  }
+
+  /** Start a battle from a concrete, rule-checked setup. Loads missing animations first. */
+  launch(setup) {
     const mode = MODES[setup.mode];
     const slots = [...Array(mode.slots).keys()];
     const arts = [...new Set(slots.flatMap((s) => partyFor(setup, s).map((m) => m.species)))].map((k) => this.arts[k]);
@@ -242,11 +249,12 @@ class Game {
       screen.classList.remove('done');
       Promise.all(arts.map((a) => a.loadRest())).then(() => {
         screen.classList.add('done');
-        this.startBattle(setup);
+        this.launch(setup);
       });
       return;
     }
     this.mode = mode;
+    this.rule = setup.rule || 'standard';
     this.lastSetup = JSON.parse(JSON.stringify(setup));
     this.objects = [];
     this.timers = [];
@@ -298,7 +306,7 @@ class Game {
   }
 
   rematch() {
-    if (this.lastSetup) this.startBattle(this.lastSetup);
+    if (this.lastTemplate) this.startBattle(this.lastTemplate);
   }
 
   leaveBattle() {
@@ -308,6 +316,7 @@ class Game {
     this.timers = [];
     this.bannerState = null;
     this.ui.hideOverlays();
+    this.ui.clearHUD();
   }
 
   toLobby() {

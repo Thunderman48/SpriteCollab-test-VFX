@@ -6,7 +6,7 @@ import { SpriteAnimator } from './sprite.js';
 import { MOVEFX } from './moves.js';
 import { DODGE_COOLDOWN } from './fighter.js';
 import { ITEMS, itemSprite } from './items.js';
-import { MODES, MODE_ORDER, makeMember, partyFor, teamOf } from './modes.js';
+import { MODES, MODE_ORDER, RULES, RULE_ORDER, makeMember, partyFor, teamOf, canPick, enforceRules, effectiveBase, randomParty, isMirrorCopy, isLegendary } from './modes.js';
 import { KEYMAP } from './input.js';
 import { t, LANGS, monName, moveName, typeName, itemName, itemDesc, I18N } from './i18n.js';
 import { SETTINGS, saveSettings } from './settings.js';
@@ -170,7 +170,9 @@ export class UI {
   }
 
   renderSetup() {
+    enforceRules(this.setup); // never show an illegal team (legendary limit, All Legendary, Mirror)
     const mode = MODES[this.setup.mode];
+    const rule = RULES[this.setup.rule];
     const root = $('#setup');
     const panel = (slot) => {
       const team = teamOf(this.setup.mode, slot);
@@ -180,26 +182,31 @@ export class UI {
       const m = party[shown];
       const d = DB.pokedex[m.species];
       const item = m.item ? ITEMS.byId[m.item] : null;
+      const mystery = rule.randomTeams; // Random Battle: teams are rolled when the battle starts
+      const mirror = isMirrorCopy(this.setup, slot); // Mirror Match: copies the other team
+      const locked = mystery || mirror;
+      const nav = locked ? '' : 'nav';
       const strip =
         party.length > 1
           ? `<div class="party-strip">${party
-              .map((pm, idx) => `<button class="nav member ${idx === shown ? 'on' : ''}" type="button" data-slot="${slot}" data-idx="${idx}" title="${t('edit')}: ${esc(mon(pm.species))}">
-                  <span class="frame p${team + 1}"><img src="${this.arts[pm.species].portraits.Normal}" alt=""></span>
-                  ${pm.item ? itemIcon(ITEMS.byId[pm.item]) : ''}
+              .map((pm, idx) => `<button class="${nav} member ${idx === shown ? 'on' : ''}" type="button" ${locked ? 'disabled' : ''} data-slot="${slot}" data-idx="${idx}" title="${mystery ? '' : `${t('edit')}: ${esc(mon(pm.species))}`}">
+                  <span class="frame p${team + 1}">${mystery ? '<span class="mystery-mini">?</span>' : `<img src="${this.arts[pm.species].portraits.Normal}" alt="">`}</span>
+                  ${!mystery && pm.item ? itemIcon(ITEMS.byId[pm.item]) : ''}
                 </button>`)
               .join('')}</div>`
           : '';
-      return `<div class="win p${team + 1} ppanel" data-slot="${slot}">
+      const plate = mystery
+        ? `<div class="yellow">${t('mystery')}</div><div class="plate-item dim">${t('rule_random')}</div>`
+        : `<div><span class="yellow">${mon(m.species)}</span> ${d.types.map(orb).join('')}</div>
+           <div class="plate-item">${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('noItem')}</span>`}</div>`;
+      return `<div class="win p${team + 1} ppanel ${mystery ? 'mystery' : ''} ${mirror ? 'mirror' : ''}" data-slot="${slot}">
         <div class="pp-head">
           <span class="p-tag c-p${slot + 1}">P${slot + 1}</span>
           <button class="nav seg ctl-btn" type="button" data-slot="${slot}"><span class="${p.human ? 'on' : ''}">${t('player')}</span><span class="${p.human ? '' : 'on'}">${t('cpu')}</span></button>
-          <button class="nav dice-btn" type="button" data-slot="${slot}">${t('random')}</button>
+          ${mirror ? `<span class="mirror-tag">${t('mirrorTag')}</span>` : mystery ? '' : `<button class="nav dice-btn" type="button" data-slot="${slot}">${t('random')}</button>`}
         </div>
-        <button class="nav stage" type="button" data-slot="${slot}" data-idx="${shown}" title="${t('edit')}"><canvas width="128" height="96"></canvas><span class="edit-tag">${t('edit')}</span></button>
-        <div class="plate">
-          <div><span class="yellow">${mon(m.species)}</span> ${d.types.map(orb).join('')}</div>
-          <div class="plate-item">${item ? `${itemIcon(item)}${itemName(item)}` : `<span class="dim">${t('noItem')}</span>`}</div>
-        </div>
+        <button class="${nav} stage" type="button" ${locked ? 'disabled' : ''} data-slot="${slot}" data-idx="${shown}" title="${locked ? '' : t('edit')}"><canvas width="128" height="96"></canvas>${locked ? '' : `<span class="edit-tag">${t('edit')}</span>`}</button>
+        <div class="plate">${plate}</div>
         ${strip}
         <div class="dim ctl-hint">${this.controlHint(slot)}</div>
       </div>`;
@@ -210,13 +217,14 @@ export class UI {
         <div class="topbar-title yellow">${t('teamSetup')}</div>
         <div class="mode-dd ${this.ddOpen ? 'open' : ''}">
           <button class="win nav mode-btn" type="button" aria-haspopup="listbox" aria-expanded="${this.ddOpen}">
-            <span class="cyan">${t('mode')}</span> ${t('m_' + mode.id)} <span class="dim">${mode.short}</span> <i class="dd-arrow"></i>
+            ${t('m_' + mode.id)} <span class="dim">·</span> ${t('rule_' + rule.id)} <i class="dd-arrow"></i>
           </button>
-          <div class="win solid dd-list" role="listbox"><ul class="menu">
-            ${MODE_ORDER.map((id) => `<li class="nav ${id === mode.id ? 'sel' : ''}" data-mode="${id}" role="option">
-                <div>${t('m_' + id)} <span class="dim">${MODES[id].short}</span></div>
-                <div class="dim dd-desc">${t('d_' + id)}</div></li>`).join('')}
-          </ul></div>
+          <div class="win solid dd-list" role="listbox">
+            <div class="cyan dd-head">${t('gameMode')}</div>
+            <ul class="menu">${MODE_ORDER.map((id) => `<li class="nav ${id === mode.id ? 'sel' : ''}" data-mode="${id}" role="option">${t('m_' + id)} <span class="dim">${MODES[id].short}</span></li>`).join('')}</ul>
+            <div class="cyan dd-head">${t('rules')}</div>
+            <ul class="menu">${RULE_ORDER.map((id) => `<li class="nav ${id === rule.id ? 'sel' : ''}" data-rule="${id}" role="option">${t('rule_' + id)}</li>`).join('')}</ul>
+          </div>
         </div>
       </div>
       <div class="versus vs-${mode.id}">
@@ -234,7 +242,8 @@ export class UI {
     $('.mode-btn', root).addEventListener('click', () => this.toggleDropdown(!this.ddOpen));
     $$('.dd-list li', root).forEach((li) =>
       li.addEventListener('click', () => {
-        this.setup.mode = li.dataset.mode;
+        if (li.dataset.mode) this.setup.mode = li.dataset.mode;
+        if (li.dataset.rule) this.setup.rule = li.dataset.rule;
         this.game.sfx('go');
         this.ddOpen = false;
         this.renderSetup();
@@ -264,7 +273,7 @@ export class UI {
       const slot = Number(el.dataset.slot);
       const party = partyFor(this.setup, slot);
       const m = party[Math.min(this.shown[slot], party.length - 1)];
-      this.stages[slot] = { cv: $('.stage canvas', el), anim: new SpriteAnimator(this.arts[m.species]), dir: teamOf(this.setup.mode, slot) === 0 ? 1 : 7 };
+      this.stages[slot] = { cv: $('.stage canvas', el), anim: new SpriteAnimator(this.arts[m.species]), dir: teamOf(this.setup.mode, slot) === 0 ? 1 : 7, mystery: rule.randomTeams };
     });
   }
 
@@ -273,14 +282,12 @@ export class UI {
     $('#setup .mode-dd')?.classList.toggle('open', open);
     $('#setup .mode-btn')?.setAttribute('aria-expanded', String(open));
     this.game.sfx('tick');
-    if (open) this.setFocus($('#setup .dd-list li.sel'), false);
+    if (open) this.setFocus($('#setup .dd-list li[data-mode].sel'), false);
     else this.setFocus($('#setup .mode-btn'), false);
   }
 
   randomParty(slot) {
-    const pool = [...this.roster].sort(() => Math.random() - 0.5);
-    const items = ITEMS.list;
-    this.setup.players[slot].party = pool.slice(0, 3).map((s) => makeMember(s, Math.random() < 0.85 ? items[Math.floor(Math.random() * items.length)].id : null));
+    randomParty(this.setup, slot, ITEMS.list); // respects the rule + one legendary per team
     this.game.sfx('go');
   }
 
@@ -306,6 +313,7 @@ export class UI {
     $$('.mon-cell', root).forEach((b) =>
       b.addEventListener('click', () => {
         const m = this.member();
+        if (!canPick(this.setup, slot, idx, b.dataset.species)) return this.game.sfx('tick');
         this.setup.players[slot].party[idx] = makeMember(b.dataset.species, m.item);
         this.game.sfx('tick');
         this.renderEditor();
@@ -343,9 +351,15 @@ export class UI {
     const partySize = MODES[this.setup.mode].party;
     $('.ed-label', root).textContent = t('pokemon');
     $('.done-btn', root).textContent = t('done');
+    const onlyLegend = RULES[this.setup.rule].onlyLegend;
     $$('.mon-cell', root).forEach((b) => {
-      b.classList.toggle('sel', b.dataset.species === m.species);
-      b.title = mon(b.dataset.species);
+      const sp = b.dataset.species;
+      const ok = canPick(this.setup, this.edit.slot, this.edit.idx, sp);
+      b.classList.toggle('sel', sp === m.species);
+      b.classList.toggle('legend', isLegendary(sp));
+      b.classList.toggle('locked', !ok);
+      b.disabled = !ok;
+      b.title = ok ? mon(sp) : `${mon(sp)} · ${onlyLegend ? t('onlyLegend') : t('lockLegend')}`;
     });
     $$('.tab', root).forEach((b) => {
       b.classList.toggle('sel', b.dataset.tab === this.edit.tab);
@@ -366,11 +380,13 @@ export class UI {
     const panel = $('.tab-panel', root);
     const tab = this.edit.tab;
     if (tab === 'Stats') {
-      const st = statsFor(d.baseStats);
-      panel.innerHTML = `<div class="stat-list">${Object.entries(d.baseStats)
+      const base = effectiveBase(this.setup.rule, m.species); // Balanced scales non-legendaries to 600
+      const st = statsFor(base);
+      const total = Object.values(base).reduce((a, b) => a + b, 0);
+      panel.innerHTML = `<div class="stat-list">${Object.entries(base)
         .map(([k, v]) => `<div class="stat-row"><span class="cyan">${t('s_' + k)}</span><b>${v}</b><i style="--w:${Math.min(100, (v / 160) * 100)}%"></i></div>`)
         .join('')}</div>
-        <div class="row"><span><span class="cyan">${t('total')}</span> ${d.bst}</span><span><span class="cyan">${t('arenaHp')}</span> ${st.hp * HP_SCALE}</span></div>`;
+        <div class="row"><span><span class="cyan">${t('total')}</span> ${total}${total !== d.bst ? ` <span class="dim">(${d.bst})</span>` : ''}</span><span><span class="cyan">${t('arenaHp')}</span> ${st.hp * HP_SCALE}</span></div>`;
     } else if (tab === 'Skills') {
       panel.innerHTML = `<ul class="skill-list">${m.moves
         .map((id) => {
@@ -429,7 +445,21 @@ export class UI {
       anim.draw(ctx, cv.width / 2, base - 7 * s, dir, { scale: s });
     };
     if (this.game.state === 'setup' && !$('#editor').classList.contains('show')) {
-      for (const st of Object.values(this.stages)) if (st.cv.isConnected) draw(st.cv, st.anim, st.dir, true);
+      for (const st of Object.values(this.stages)) {
+        if (!st.cv.isConnected) continue;
+        if (!st.mystery) draw(st.cv, st.anim, st.dir, true);
+        else if (!st.drawn) {
+          // Random Battle: a "?" on the pedestal until the battle rolls the team.
+          const ctx = st.cv.getContext('2d');
+          ctx.clearRect(0, 0, st.cv.width, st.cv.height);
+          ctx.fillStyle = 'rgba(255,255,255,0.12)';
+          ctx.beginPath();
+          ctx.ellipse(st.cv.width / 2, st.cv.height - 12, st.cv.width * 0.32, 9, 0, 0, Math.PI * 2);
+          ctx.fill();
+          this.game.bannerFont?.draw(ctx, '?', st.cv.width / 2, st.cv.height / 2 - 4, 2);
+          st.drawn = true;
+        }
+      }
     }
     const p = this.preview;
     if (p && p.cv && $('#editor').classList.contains('show')) draw(p.cv, p.anim, 1, false);
@@ -607,7 +637,7 @@ export class UI {
           <div class="hp-line"><span class="cyan">HP</span><span class="hp-text"></span><span class="hp-bar"><i></i></span></div>
           <div class="cds">
             ${f.moves.map((id) => `<div class="cd" title="${moveName(id, DB.moves[id].name)}">${orb(DB.moves[id].type)}<b><i></i></b></div>`).join('')}
-            <div class="cd dodge" title="${t('dodge')}"><span class="dodge-ico">${right ? '←' : '→'}</span><b><i></i></b></div>
+            <div class="cd dodge" title="${t('dodge')}"><img class="dodge-ico" src="assets/ui/icon-dash.png" alt=""><b><i></i></b></div>
           </div>
         </div>
       </div>`;
@@ -624,6 +654,12 @@ export class UI {
       return { slot: p.slot, f: p.members[p.active], portrait: $('.hud-portrait', el), hp: $('.hp-bar i', el), hpText: $('.hp-text', el), cds: $$('.cd', el), item: $('.hud-item', el), minis: $$('.mini', el), emotion: 'Normal', lastHp: -1 };
     });
     if (g.state === 'countdown' || g.state === 'loading') this.clearLog();
+  }
+
+  clearHUD() {
+    $('#hud').innerHTML = '';
+    this.hudEls = null;
+    this.clearLog();
   }
 
   updateHUD() {

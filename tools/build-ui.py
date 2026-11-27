@@ -4,6 +4,7 @@ into files the web page can use directly:
   assets/ui/window-{green,blue,pink}.png    24x24 9-slice window borders (CSS border-image, slice 8)
   assets/ui/portrait-{green,blue,pink}.png  12x12 9-slice portrait frames (slice 4)
   assets/ui/cursor.png, cursor-down.png     menu cursor arrows
+  assets/ui/icon-dash.png, icon-switch-*.png touch / HUD control icons
   assets/ui/pmd-text.ttf                    the PMD text font (white pixels; shadow is added with CSS)
   assets/ui/types.png + types.json          PMD type orbs (glyphs E080-E092)
   assets/ui/banner.png + banner.json        PMD banner font atlas for canvas titles
@@ -37,6 +38,11 @@ def slices():
     for i, c in enumerate(COLORS):
         border.crop((0, i * 24, 24, i * 24 + 24)).save(os.path.join(OUT, f'window-{c}.png'))
         portrait.crop((0, i * 12, 12, i * 12 + 12)).save(os.path.join(OUT, f'portrait-{c}.png'))
+    # Touch-control icons: fast-forward (dash/dodge) and blue/pink Poké Balls (switch).
+    dash_icon().save(os.path.join(OUT, 'icon-dash.png'))
+    balls = rgba(os.path.join(RAW, 'BattleFactors.png'))
+    balls.crop((16, 0, 32, 16)).save(os.path.join(OUT, 'icon-switch-blue.png'))
+    balls.crop((16, 16, 32, 32)).save(os.path.join(OUT, 'icon-switch-pink.png'))
     cur = rgba(os.path.join(RAW, 'Cursor.png'))
     cur.crop((0, 0, 11, 11)).save(os.path.join(OUT, 'cursor.png'))
     cur.crop((11, 0, 22, 11)).save(os.path.join(OUT, 'cursor-down.png'))
@@ -45,6 +51,26 @@ def slices():
 def is_fill(px):
     r, g, b, a = px
     return a > 0 and r > 128 and g > 128 and b > 128
+
+
+def dash_icon():
+    """16x16 white double chevron (>>) with a black outline, matching the PMD icon style."""
+    im = Image.new('RGBA', (16, 16))
+    fill = set()
+    for x0 in (2, 8):
+        for r in range(10):
+            off = r if r < 5 else 9 - r
+            for k in range(3):
+                fill.add((x0 + off + k - 1, 3 + r))
+    for (x, y) in fill:
+        for dx in (-1, 0, 1):
+            for dy in (-1, 0, 1):
+                if 0 <= x + dx < 16 and 0 <= y + dy < 16 and (x + dx, y + dy) not in fill:
+                    im.putpixel((x + dx, y + dy), (0, 0, 0, 255))
+    for (x, y) in fill:
+        if 0 <= x < 16:
+            im.putpixel((x, y), (248, 248, 248, 255))
+    return im
 
 
 def build_font():

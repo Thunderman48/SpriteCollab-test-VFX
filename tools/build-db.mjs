@@ -33,6 +33,8 @@ for (const r of roster) {
     moves: r.moves,
     hurtRadius: r.hurtRadius,
     flying: !!r.flying,
+    // Legendary / mythical (limited to one per team in most rules).
+    legendary: s.tags.some((t) => /Legendary|Mythical/.test(t)),
   };
   for (const id of r.moves) {
     if (moves[id]) continue;

@@ -53,8 +53,9 @@ export class Input {
     });
     const mkBtn = (i, kind) => {
       const b = document.createElement('button');
-      b.className = `win touch-btn ${kind}-btn`;
-      b.textContent = kind === 'dodge' ? 'Dodge' : 'Switch';
+      b.className = `touch-btn ${kind}-btn`;
+      // Round button: pixel icon + small label (icons from tools/build-ui.py).
+      b.innerHTML = `<img class="tb-ico" src="assets/ui/${kind === 'dodge' ? 'icon-dash' : 'icon-switch-blue'}.png" alt=""><span class="tb-label">${kind === 'dodge' ? 'Dodge' : 'Switch'}</span>`;
       b.setAttribute('aria-label', `Player ${i + 1} ${kind}`);
       b.addEventListener('pointerdown', (e) => {
         e.preventDefault();
@@ -134,8 +135,8 @@ export class Input {
 
   setLabels(dodge, swap) {
     this.btns.forEach((b) => {
-      b.dodge.textContent = dodge;
-      b.swap.textContent = swap;
+      b.dodge.lastChild.textContent = dodge;
+      b.swap.lastChild.textContent = swap;
     });
   }
 
@@ -151,8 +152,9 @@ export class Input {
       for (const [kind, el] of Object.entries(b)) {
         el.hidden = !on || (kind === 'swap' && !canSwitch);
         el.dataset.pos = pos || '';
-        el.classList.toggle('p1', teams[i] === 0);
-        el.classList.toggle('p2', teams[i] === 1);
+        el.classList.toggle('t0', teams[i] === 0);
+        el.classList.toggle('t1', teams[i] === 1);
+        if (kind === 'swap') el.firstChild.src = `assets/ui/icon-switch-${teams[i] === 1 ? 'pink' : 'blue'}.png`;
       }
     });
   }

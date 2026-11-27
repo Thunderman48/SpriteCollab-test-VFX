@@ -29,7 +29,8 @@
       "dracometeor"
     ],
     "hurtRadius": 22,
-    "flying": true
+    "flying": true,
+    "legendary": true
   },
   "lucario": {
     "key": "lucario",
@@ -63,7 +64,8 @@
       "closecombat"
     ],
     "hurtRadius": 14,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "garchomp": {
     "key": "garchomp",
@@ -96,7 +98,8 @@
       "stoneedge"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "gengar": {
     "key": "gengar",
@@ -128,7 +131,8 @@
       "sludgebomb"
     ],
     "hurtRadius": 15,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "mewtwo": {
     "key": "mewtwo",
@@ -160,7 +164,8 @@
       "psychoboost"
     ],
     "hurtRadius": 16,
-    "flying": false
+    "flying": false,
+    "legendary": true
   },
   "charizard": {
     "key": "charizard",
@@ -193,7 +198,8 @@
       "fireblast"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "blastoise": {
     "key": "blastoise",
@@ -225,7 +231,8 @@
       "hydropump"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "venusaur": {
     "key": "venusaur",
@@ -258,7 +265,8 @@
       "solarbeam"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "pikachu": {
     "key": "pikachu",
@@ -290,7 +298,8 @@
       "thunder"
     ],
     "hurtRadius": 12,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "dialga": {
     "key": "dialga",
@@ -323,7 +332,8 @@
       "roaroftime"
     ],
     "hurtRadius": 22,
-    "flying": false
+    "flying": false,
+    "legendary": true
   },
   "palkia": {
     "key": "palkia",
@@ -356,7 +366,8 @@
       "spacialrend"
     ],
     "hurtRadius": 22,
-    "flying": false
+    "flying": false,
+    "legendary": true
   },
   "giratina": {
     "key": "giratina",
@@ -389,7 +400,8 @@
       "shadowforce"
     ],
     "hurtRadius": 22,
-    "flying": false
+    "flying": false,
+    "legendary": true
   },
   "blaziken": {
     "key": "blaziken",
@@ -422,7 +434,8 @@
       "flareblitz"
     ],
     "hurtRadius": 15,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "gardevoir": {
     "key": "gardevoir",
@@ -456,7 +469,8 @@
       "focusblast"
     ],
     "hurtRadius": 14,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "metagross": {
     "key": "metagross",
@@ -489,7 +503,8 @@
       "earthquake"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "tyranitar": {
     "key": "tyranitar",
@@ -522,7 +537,8 @@
       "stoneedge"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "eevee": {
     "key": "eevee",
@@ -555,7 +571,8 @@
       "shadowball"
     ],
     "hurtRadius": 12,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "snorlax": {
     "key": "snorlax",
@@ -588,7 +605,8 @@
       "gigaimpact"
     ],
     "hurtRadius": 20,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "dragonite": {
     "key": "dragonite",
@@ -621,7 +639,8 @@
       "hyperbeam"
     ],
     "hurtRadius": 18,
-    "flying": false
+    "flying": false,
+    "legendary": false
   },
   "umbreon": {
     "key": "umbreon",
@@ -653,6 +672,7 @@
       "payback"
     ],
     "hurtRadius": 13,
-    "flying": false
+    "flying": false,
+    "legendary": false
   }
 }

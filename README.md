@@ -29,6 +29,21 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
 
 Every slot can be a human or the CPU. Moves auto-target the nearest opponent, and projectiles, beams and area attacks hit any opponent in their path.
 
+## Rules
+
+Picked under **Rules** in the Mode dropdown, on top of any game mode:
+
+| Rule | Effect |
+|---|---|
+| **Standard** | Normal stats. |
+| **Balanced** | Every non-legendary's base stats are scaled to a **600** total (same proportions; e.g. Pikachu 320 → 600). Legendaries keep 680. |
+| **All Legendary** | Only legendary / mythical Pokémon can be picked. |
+| **Random Battle** | Every battle (and rematch) each player gets random Pokémon and random held items. |
+| **Mirror Match** | The Pink team copies the Blue team (P2 = P1's party, P4 = P3's). |
+
+**One legendary or mythical per team** (all rules except All Legendary): legendaries a team can't take are locked in the editor
+(legendaries are marked with a gold diamond), Random never gives a team two, and switching mode or rule fixes any team that breaks the limit.
+
 ## Controls
 
 | | Move | Dodge | Switch (Trio) |
@@ -39,7 +54,7 @@ Every slot can be a human or the CPU. Moves auto-target the nearest opponent, an
 | Player 4 | Numpad `8 4 5 6` | Numpad `0` | Numpad `.` |
 
 - **Gamepads:** controller 1 plays as P1, controller 2 as P2, and so on (stick or d-pad to move, **A** to dodge, **Y / X / LB** to switch, **Start** for the menu). Controllers also navigate the menus.
-- **Phones:** turn the phone sideways. With 1–2 human players the screen splits into left / right halves; with 3–4 it splits into four corners (P1 bottom-left, P2 bottom-right, P3 top-left, P4 top-right). Touch anywhere in your area for a floating joystick; each player has a **Dodge** button (and **Switch** in Trio), or can double-tap to dodge.
+- **Phones:** turn the phone sideways (the round **»** button dodges, the **Poké Ball** button switches). With 1–2 human players the screen splits into left / right halves; with 3–4 it splits into four corners (P1 bottom-left, P2 bottom-right, P3 top-left, P4 top-right). Touch anywhere in your area for a floating joystick; each player has a **Dodge** button (and **Switch** in Trio), or can double-tap to dodge.
 - `Esc` / `P` opens the in-battle menu and `M` mutes.
 
 ## Rules

@@ -36,7 +36,10 @@
 
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; background: var(--bg); overflow: hidden; }
-html.no-zoom, html.no-zoom body { touch-action: manipulation; } /* no double-tap zoom (Settings) */
+/* No double-tap zoom (Settings). touch-action doesn't reach into scrolling areas from <html>,
+   so it is set on every element; the battle touch area keeps "none" for the joysticks. */
+html.no-zoom, html.no-zoom * { touch-action: manipulation; }
+html.no-zoom .touch-zone, html.no-zoom .touch-btn { touch-action: none; }
 html[lang='ko'] body { line-height: calc(15 * var(--u)); } /* Hangul glyphs are taller */
 body {
   color: var(--ink);
@@ -168,7 +171,7 @@ body.touch .kb-only { display: none; }
 .cd.ready b i { background: var(--yellow); }
 .cd.casting .orb { filter: brightness(1.6); }
 .cd.immune { opacity: 0.3; }
-.cd.dodge .dodge-ico { height: calc(11 * var(--u)); line-height: calc(11 * var(--u)); font-size: calc(12 * var(--u)); }
+.cd.dodge .dodge-ico { width: calc(11 * var(--u)); height: calc(11 * var(--u)); image-rendering: pixelated; }
 .party-minis { margin-left: calc(2 * var(--u)); }
 .mini { width: calc(12 * var(--u)); height: calc(12 * var(--u)); vertical-align: calc(-2 * var(--u)); margin-left: var(--u); outline: var(--u) solid #000; }
 .mini.on { outline-color: var(--yellow); }
@@ -190,28 +193,30 @@ body.touch #log { bottom: auto; top: calc(62 * var(--u)); height: calc(16 * var(
 /* ---------- Touch controls ---------- */
 .touch-zone { position: fixed; inset: 0; display: none; touch-action: none; z-index: 2; }
 body.touch[data-screen='fight'] .touch-zone { display: block; }
-.joy { position: fixed; width: 104px; height: 104px; margin: -52px 0 0 -52px; border-radius: 50%; border: 4px solid var(--p1); background: rgba(32, 32, 32, 0.45); pointer-events: none; z-index: 4; opacity: 0; display: grid; place-items: center; }
+.joy { position: fixed; width: 96px; height: 96px; margin: -48px 0 0 -48px; border-radius: 50%; border: 3px solid var(--p1); box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #000; background: rgba(16, 16, 24, 0.5); pointer-events: none; z-index: 4; opacity: 0; display: grid; place-items: center; }
 .joy.active { opacity: 1; }
-.joy .knob { width: 44px; height: 44px; border-radius: 50%; background: #f8f8f8; border: 4px solid #000; }
+.joy .knob { width: 40px; height: 40px; border-radius: 50%; background: rgba(248, 248, 248, 0.85); border: 3px solid #000; box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.25); }
 .joy-p2 { border-color: var(--p2); }
 .joy-p3 { border-color: var(--green); }
 .joy-p4 { border-color: #f8e860; }
-.touch-btn { display: none; position: fixed; width: 76px; height: 44px; z-index: 4; touch-action: none; text-align: center; font-size: 12px; line-height: 13px; }
-body.touch[data-screen='fight'] .touch-btn:not([hidden]) { display: block; }
-.touch-btn { opacity: 0.8; }
-.touch-btn.pressed { filter: brightness(1.8); }
+.touch-btn { display: none; position: fixed; width: 64px; height: 64px; z-index: 4; touch-action: none; border-radius: 50%; border: 3px solid var(--p1); box-shadow: 0 0 0 2px #000, inset 0 0 0 2px #000, inset 0 -6px 0 rgba(0, 0, 0, 0.35); background: rgba(16, 16, 24, 0.72); flex-direction: column; align-items: center; justify-content: center; gap: 1px; padding: 0; opacity: 0.9; font-size: 12px; line-height: 13px; text-align: center; }
+.touch-btn.t1 { border-color: var(--p2); }
+body.touch[data-screen='fight'] .touch-btn:not([hidden]) { display: flex; }
+.tb-ico { width: 32px; height: 32px; image-rendering: pixelated; }
+.tb-label { font-size: 12px; line-height: 12px; }
+.touch-btn.pressed { transform: scale(0.9); filter: brightness(1.5); }
 /* 1-2 humans: left / right halves */
 .touch-btn[data-pos='l'] { left: calc(50% - 88px); }
 .touch-btn[data-pos='r'] { right: calc(50% - 88px); }
 .touch-btn[data-pos='l'], .touch-btn[data-pos='r'] { bottom: max(10px, env(safe-area-inset-bottom)); }
-.swap-btn[data-pos='l'], .swap-btn[data-pos='r'] { bottom: calc(max(10px, env(safe-area-inset-bottom)) + 52px); }
+.swap-btn[data-pos='l'], .swap-btn[data-pos='r'] { bottom: calc(max(10px, env(safe-area-inset-bottom)) + 74px); }
 /* 3-4 humans: four corners (P1 bottom-left, P2 bottom-right, P3 top-left, P4 top-right) */
 .touch-btn[data-pos='bl'], .touch-btn[data-pos='tl'] { left: calc(50% - 88px); }
 .touch-btn[data-pos='br'], .touch-btn[data-pos='tr'] { right: calc(50% - 88px); }
 .touch-btn[data-pos='bl'], .touch-btn[data-pos='br'] { bottom: max(10px, env(safe-area-inset-bottom)); }
-.touch-btn[data-pos='tl'], .touch-btn[data-pos='tr'] { top: calc(50% - 54px); }
-.swap-btn[data-pos='bl'], .swap-btn[data-pos='tl'] { left: calc(50% - 168px); }
-.swap-btn[data-pos='br'], .swap-btn[data-pos='tr'] { right: calc(50% - 168px); }
+.touch-btn[data-pos='tl'], .touch-btn[data-pos='tr'] { top: calc(50% - 74px); }
+.swap-btn[data-pos='bl'], .swap-btn[data-pos='tl'] { left: calc(50% - 160px); }
+.swap-btn[data-pos='br'], .swap-btn[data-pos='tr'] { right: calc(50% - 160px); }
 body.touch[data-touch-layout='quad'][data-screen='fight'] #stage::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; border-top: 1px dashed rgba(255, 255, 255, 0.25); pointer-events: none; }
 #rotate-hint { display: none; position: fixed; top: 8px; left: 50%; transform: translateX(-50%); z-index: 6; pointer-events: none; white-space: nowrap; }
 @media (orientation: portrait) { body.touch[data-screen='fight'] #rotate-hint { display: block; } }
@@ -264,7 +269,17 @@ body[data-screen='lobby'] #lobby, body[data-screen='setup'] #setup { display: fl
 .dd-list { display: none; position: absolute; right: 0; top: calc(100% + 2 * var(--u)); width: calc(220 * var(--u)); z-index: 20; }
 .mode-dd.open .dd-list { display: block; }
 .dd-list li { padding-top: calc(1 * var(--u)); padding-bottom: calc(2 * var(--u)); white-space: normal; }
-.dd-desc { white-space: normal; }
+.dd-head { margin-top: calc(2 * var(--u)); }
+.dd-list .menu + .dd-head { border-top: var(--u) solid rgba(255, 255, 255, 0.25); padding-top: calc(2 * var(--u)); margin-top: calc(3 * var(--u)); }
+.dd-list { width: auto; min-width: calc(160 * var(--u)); }
+.dd-list li { white-space: nowrap; }
+.mon-cell.legend::after { content: ''; position: absolute; right: var(--u); top: var(--u); width: calc(5 * var(--u)); height: calc(5 * var(--u)); background: var(--yellow); box-shadow: 0 0 0 var(--u) #000; transform: rotate(45deg); }
+.mon-cell { position: relative; }
+.mon-cell.locked { cursor: not-allowed; }
+.mon-cell.locked img { filter: grayscale(1) brightness(0.45); }
+.mirror-tag { margin-left: auto; color: var(--pink); }
+.mystery-mini { display: grid; place-items: center; width: calc(28 * var(--u)); height: calc(28 * var(--u)); color: var(--yellow); }
+.ppanel.mystery .member, .ppanel.mirror .member, .ppanel.mystery .stage, .ppanel.mirror .stage { cursor: default; }
 .versus { flex: 1; display: flex; align-items: center; justify-content: center; gap: calc(8 * var(--u)); }
 .side { display: flex; flex-direction: column; gap: calc(4 * var(--u)); }
 .vs-img { image-rendering: pixelated; }

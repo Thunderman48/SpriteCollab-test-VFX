@@ -1,6 +1,7 @@
 // A Pokémon in the arena: movement, dodge, auto-cast scheduling, hurt/faint.
 import { SpriteAnimator, angleToDir } from './sprite.js';
 import { statsFor, HP_SCALE, DB, effectiveness } from './combat.js';
+import { effectiveBase } from './modes.js';
 import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { equip } from './items.js';
@@ -27,7 +28,7 @@ export class Fighter {
     this.moves = member.moves;
     this.art = art;
     this.sprite = new SpriteAnimator(art);
-    this.stats = statsFor(data.baseStats);
+    this.stats = statsFor(effectiveBase(game.rule || 'standard', member.species)); // rule-adjusted (Balanced)
     this.maxHp = this.stats.hp * HP_SCALE;
     this.hp = this.maxHp;
     this.radius = data.hurtRadius;

@@ -99,7 +99,7 @@ for (const b of beams) {
   }
 }
 // ---- PMD: Origins UI art + fonts (turned into CSS/fonts by tools/build-ui.py) ----
-for (const f of ['MenuBorder', 'MenuBG', 'PortraitBorder', 'Cursor']) {
+for (const f of ['MenuBorder', 'MenuBG', 'PortraitBorder', 'Cursor', 'Buttons', 'BattleFactors']) {
   tasks.push(save(`${DA}/Content/UI/${f}.png`, `assets/ui/raw/${f}.png`));
 }
 const hex = (n) => n.toString(16).toUpperCase().padStart(4, '0');
