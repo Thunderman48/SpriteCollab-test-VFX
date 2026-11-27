@@ -187,11 +187,11 @@ export class Fighter {
       this.moving = true;
       this.dir = angleToDir(a);
     }
-    // Attacks only recharge (and fire) while standing still; moving or dodging pauses them.
+    // Cooldowns always recharge, but a ready move only fires while standing still.
     this.still = !this.moving && this.dodgeT <= 0;
-    if (this.game.state === 'fight' && this.still) {
+    if (this.game.state === 'fight') {
       for (const id in this.cd) this.cd[id] = Math.max(0, this.cd[id] - dt * this.recharge);
-      if (this.mods.regen) this.heal(this.maxHp * this.mods.regen * dt); // Big Root
+      if (this.still && this.mods.regen) this.heal(this.maxHp * this.mods.regen * dt); // Big Root
     }
     this.x += (vx + this.kbx) * dt;
     this.y += (vy + this.kby) * dt;

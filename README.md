@@ -17,8 +17,8 @@ The interface uses PMD: Origins' own window borders, portrait frames, cursor, te
 | Pick Pokémon, then held item | `W` / `S` + `Space` to confirm, `Q` to go back | `↑` / `↓` + `Enter` to confirm, `Backspace` to go back |
 
 - **Mobile:** turn the phone sideways. P1 touches anywhere on the left half for a floating joystick and P2 on the right half. Each player has a **DODGE** button, or can double-tap their side to dodge.
-- **Stand still to attack.** Attacks are automatic, but they only recharge and fire while your Pokémon is standing still. Moving or dodging pauses every cooldown (the HUD bars turn grey), and while an attack plays you're rooted in place.
-- Every move has its own cooldown based on its PP: `cooldown = 45 / PP` seconds of standing still, plus a short pause after each attack.
+- **Stand still to attack.** Attacks are automatic and their cooldowns always recharge, but a ready move only fires while your Pokémon is standing still (not moving or dodging). While an attack plays you're rooted in place.
+- Every move has its own cooldown based on its PP: `cooldown = 45 / PP` seconds, plus a short pause after each attack.
   - High-PP moves fire often, e.g. Bullet Punch (30 PP) every 1.5 s.
   - Low-PP moves fire rarely but hit hard, e.g. Hyper Beam (5 PP) every 9 s.
   - Every move aims itself at the opponent: it fires as soon as it's ready and the opponent is in range.

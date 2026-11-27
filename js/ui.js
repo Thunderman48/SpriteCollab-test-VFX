@@ -362,10 +362,6 @@ export class UI {
         h.emotion = emo;
         h.portrait.src = f.art.portraits[emo];
       }
-      if (h.paused !== !f.still) {
-        h.paused = !f.still;
-        h.cds[0].parentElement.classList.toggle('paused', h.paused);
-      }
       if (h.item) h.item.classList.toggle('spent', f.itemSpent);
       const foe = fighters[1 - i];
       f.data.moves.forEach((id, j) => {

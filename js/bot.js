@@ -10,8 +10,6 @@ export class Bot {
     this.strafe = Math.random() < 0.5 ? 1 : -1;
     this.strafeT = 0;
     this.react = 0;
-    this.planted = false;
-    this.phaseT = 0.5;
   }
 
   think(dt) {
@@ -41,17 +39,11 @@ export class Bot {
     if (me.y < b.y0 + 30) y += 1;
     if (me.y > b.y1 - 20) y -= 1;
 
-    // Attacks only charge and fire while standing still, so alternate repositioning with planting.
-    this.phaseT -= dt;
-    if (this.phaseT <= 0) {
-      this.planted = !this.planted;
-      this.phaseT = this.planted ? 1 + Math.random() * 1.2 : 0.5 + Math.random() * 0.8;
-    }
+    // Moves only fire while standing still: stop when one is ready (or while attacking).
     const ready = me.data.moves.find(
       (id) => me.cd[id] <= 0 && d <= MOVEFX.moves[id].range + foe.radius && effectiveness(DB.moves[id].type, foe.data.types) > 0,
     );
-    if (me.cast || ready || this.planted) {
-      // Stand still: while attacking, to let a ready move fire, or to recharge.
+    if (me.cast || ready) {
       x = 0;
       y = 0;
     }

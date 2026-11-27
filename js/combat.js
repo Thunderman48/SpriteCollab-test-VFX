@@ -1,7 +1,7 @@
 // Stats + damage, loosely following the main-series formulas at level 50.
 
 export const LEVEL = 50;
-export const HP_SCALE = 8; // stretch fights: CPU-vs-CPU averages ~45 s (attacks only fire while standing still)
+export const HP_SCALE = 10; // stretch fights: CPU-vs-CPU averages ~45 s
 export const DB = { pokedex: {}, moves: {}, typechart: {} };
 
 export function statsFor(base) {
