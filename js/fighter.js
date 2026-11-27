@@ -42,6 +42,7 @@ export class Fighter {
     this.ko = false;
     this.koT = 0;
     this.moving = false;
+    this.still = true;
     this.emotion = 'Normal';
     this.emotionT = 0;
   }
@@ -117,10 +118,6 @@ export class Fighter {
     this.dodgeCd = Math.max(0, this.dodgeCd - dt);
     this.castGap = Math.max(0, this.castGap - dt);
     this.hurtT = Math.max(0, this.hurtT - dt);
-    if (this.game.state === 'fight') {
-      for (const id in this.cd) this.cd[id] = Math.max(0, this.cd[id] - dt * this.recharge);
-    }
-
     if (input.dodgePressed && this.game.state === 'fight') this.startDodge(input);
 
     let vx = 0;
@@ -141,13 +138,18 @@ export class Fighter {
       }
     } else if (this.cast?.drive) {
       this.cast.drive(dt);
-    } else if (len > 0.15 && this.game.state === 'fight') {
-      const mul = this.cast ? this.cast.moveMul ?? 0.35 : 1;
+    } else if (len > 0.15 && this.game.state === 'fight' && !this.cast) {
+      // While attacking you're rooted: a direction only turns your aim (handled above).
       const a = Math.atan2(input.y, input.x);
-      vx = Math.cos(a) * len * this.moveSpeed * mul;
-      vy = Math.sin(a) * len * this.moveSpeed * mul;
-      this.moving = mul > 0;
-      if (!this.cast) this.dir = angleToDir(a);
+      vx = Math.cos(a) * len * this.moveSpeed;
+      vy = Math.sin(a) * len * this.moveSpeed;
+      this.moving = true;
+      this.dir = angleToDir(a);
+    }
+    // Attacks only recharge (and fire) while standing still; moving or dodging pauses them.
+    this.still = !this.moving && this.dodgeT <= 0;
+    if (this.game.state === 'fight' && this.still) {
+      for (const id in this.cd) this.cd[id] = Math.max(0, this.cd[id] - dt * this.recharge);
     }
     this.x += (vx + this.kbx) * dt;
     this.y += (vy + this.kby) * dt;
@@ -176,7 +178,7 @@ export class Fighter {
 
   /** Fire the strongest ready move whose range reaches the opponent. */
   tryAutoCast(opp) {
-    if (this.cast || this.castGap > 0 || this.dodgeT > 0) return;
+    if (this.cast || this.castGap > 0 || !this.still) return;
     const d = this.distTo(opp);
     let best = null;
     for (const id of this.data.moves) {

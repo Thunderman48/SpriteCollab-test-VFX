@@ -148,6 +148,7 @@ body.touch .kb-only { display: none; }
 .cd b { display: block; width: 100%; height: calc(2 * var(--u)); background: #484848; position: relative; }
 .cd b i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--cyan); }
 .cd.ready b i { background: var(--yellow); }
+.cds.paused .cd:not(.dodge):not(.ready) b i { background: #787878; }
 .cd.casting .orb { filter: brightness(1.6); }
 .cd.immune { opacity: 0.3; }
 .cd.dodge .dodge-ico { height: calc(11 * var(--u)); line-height: calc(11 * var(--u)); font-size: calc(12 * var(--u)); }

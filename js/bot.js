@@ -1,6 +1,7 @@
 // Optional CPU opponent (select "P2: CPU", or ?cpu / ?cpu=both in the URL).
 // It only produces the same inputs a human has: a movement vector and dodge presses.
 import { MOVEFX } from './moves.js';
+import { DB, effectiveness } from './combat.js';
 
 export class Bot {
   constructor(game, slot) {
@@ -9,6 +10,8 @@ export class Bot {
     this.strafe = Math.random() < 0.5 ? 1 : -1;
     this.strafeT = 0;
     this.react = 0;
+    this.planted = false;
+    this.phaseT = 0.5;
   }
 
   think(dt) {
@@ -38,15 +41,33 @@ export class Bot {
     if (me.y < b.y0 + 30) y += 1;
     if (me.y > b.y1 - 20) y -= 1;
 
-    // Turn toward the opponent when an aimed (facing) move is ready, with a little aim error.
-    const aimReady = me.data.moves.some((id) => me.cd[id] <= 0 && MOVEFX.moves[id].aim === 'facing' && d <= MOVEFX.moves[id].range + foe.radius);
-    if (aimReady && !me.cast) {
-      const err = (Math.random() - 0.5) * 0.3;
-      x = Math.cos(a + err);
-      y = Math.sin(a + err);
-    } else if (me.cast?.aimFacing && !me.cast.released) {
-      x = Math.cos(a) * 0.3;
-      y = Math.sin(a) * 0.3;
+    // Attacks only charge and fire while standing still, so alternate repositioning with planting.
+    this.phaseT -= dt;
+    if (this.phaseT <= 0) {
+      this.planted = !this.planted;
+      this.phaseT = this.planted ? 1 + Math.random() * 1.2 : 0.5 + Math.random() * 0.8;
+    }
+    const ready = me.data.moves.find(
+      (id) => me.cd[id] <= 0 && d <= MOVEFX.moves[id].range + foe.radius && effectiveness(DB.moves[id].type, foe.data.types) > 0,
+    );
+    const aimOff = Math.abs(Math.atan2(Math.sin(a - me.aimAngle), Math.cos(a - me.aimAngle)));
+    if (me.cast) {
+      // Rooted while attacking: a direction only turns the aim of a charging aimed move.
+      const turn = me.cast.aimFacing && !me.cast.released;
+      x = turn ? Math.cos(a) : 0;
+      y = turn ? Math.sin(a) : 0;
+    } else if (ready) {
+      if (MOVEFX.moves[ready].aim === 'facing' && aimOff > 0.25) {
+        const err = (Math.random() - 0.5) * 0.3; // tap toward the target to aim, a bit sloppily
+        x = Math.cos(a + err);
+        y = Math.sin(a + err);
+      } else {
+        x = 0;
+        y = 0;
+      }
+    } else if (this.planted) {
+      x = 0;
+      y = 0;
     }
 
     // Dodge incoming projectiles / standing in a warning circle / point-blank dashes.
@@ -73,7 +94,7 @@ export class Bot {
       }
       this.react = 0.35;
     }
-    const len = Math.hypot(x, y) || 1;
-    return { x: x / len, y: y / len, dodgePressed };
+    const len = Math.hypot(x, y);
+    return len ? { x: x / len, y: y / len, dodgePressed } : { x: 0, y: 0, dodgePressed };
   }
 }

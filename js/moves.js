@@ -34,7 +34,6 @@ export function startCast(game, c, t, id) {
     done: false,
     track: def.aim !== 'facing',
     aimFacing: def.aim === 'facing',
-    moveMul: 0.35,
     drive: null,
     faceAngle: def.aim === 'facing' ? c.aimAngle : c.angleTo(t),
   };
@@ -89,7 +88,6 @@ function withCharge(game, c, t, cast, then) {
     loop: true,
     life: time,
   }).owner = cast;
-  cast.moveMul = 0.2;
   game.after(time, then, cast);
 }
 
@@ -182,7 +180,6 @@ const BEHAVIORS = {
   projectile(game, c, t, cast) {
     const d = cast.def;
     withCharge(game, c, t, cast, () => {
-      cast.moveMul = 0.35;
       const fire = () => {
         cast.release();
         const a = aimOf(c, t, cast);
@@ -204,7 +201,6 @@ const BEHAVIORS = {
   beam(game, c, t, cast) {
     const d = cast.def;
     withCharge(game, c, t, cast, () => {
-      cast.moveMul = 0;
       let fired = false;
       const fire = () => {
         if (fired) return;
@@ -245,7 +241,6 @@ const BEHAVIORS = {
 
   melee(game, c, t, cast) {
     const d = cast.def;
-    cast.moveMul = 0;
     const anim = c.sprite.art.animData.anims[c.sprite.resolve(d.anim)];
     const hitFrame = anim.hit ?? anim.durations.length - 1;
     const hitTime = Math.max(0.06, anim.durations.slice(0, hitFrame).reduce((s, x) => s + x, 0) / 60);
@@ -321,7 +316,6 @@ const BEHAVIORS = {
 
   targetArea(game, c, t, cast) {
     const d = cast.def;
-    cast.moveMul = 0.2;
     const go = () => {
       if (cast.released) return;
       cast.release();
@@ -390,7 +384,6 @@ const BEHAVIORS = {
   burst(game, c, t, cast) {
     const d = cast.def;
     cast.release();
-    cast.moveMul = 0;
     spawnFx(game, d.under, c.x, c.y, { follow: c, layer: 'under' });
     spawnFx(game, d.over, c.x, c.y, { follow: c, layer: 'over' });
     if (d.chargeAnim) {

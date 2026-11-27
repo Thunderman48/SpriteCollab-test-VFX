@@ -84,7 +84,7 @@ export class UI {
     root.innerHTML = `
       <header class="select-title">
         <canvas class="banner-img" aria-label="SpriteCollab VFX Arena"></canvas>
-        <span class="dim">Attacks fire on their own (high PP = fast, low PP = strong). <span class="cyan">→</span> moves fire where you face.</span>
+        <span class="dim">Stand still to attack: moves fire on their own (high PP = fast, low PP = strong). <span class="cyan">→</span> moves fire where you face.</span>
       </header>
       <div class="select-cols">
         ${[0, 1].map((i) => `
@@ -285,6 +285,10 @@ export class UI {
       if (emo !== h.emotion && f.art.portraits[emo]) {
         h.emotion = emo;
         h.portrait.src = f.art.portraits[emo];
+      }
+      if (h.paused !== !f.still) {
+        h.paused = !f.still;
+        h.cds[0].parentElement.classList.toggle('paused', h.paused);
       }
       const foe = fighters[1 - i];
       f.data.moves.forEach((id, j) => {
