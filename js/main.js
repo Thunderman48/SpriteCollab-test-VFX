@@ -1,9 +1,9 @@
 // SpriteCollab VFX Arena — boot, game loop, arena rendering, hits, screens.
-import { loadJSON, loadFighterArt, loadParticle, loadBeam } from './assets.js';
-import { DB, computeDamage, TYPE_COLORS } from './combat.js';
+import { loadJSON, loadImage, loadFighterArt, loadParticle, loadBeam } from './assets.js';
+import { DB, computeDamage } from './combat.js';
 import { Fighter } from './fighter.js';
 import { MOVEFX } from './moves.js';
-import { FX, Effect, FloatText } from './vfx.js';
+import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
 import { UI } from './ui.js';
 import { Bot } from './bot.js';
@@ -67,16 +67,20 @@ class Game {
     this.tints.push({ color, time, t: 0 });
   }
 
+  who(f) {
+    return `<span class="c-p${f.slot + 1}">${f.data.name}</span>`;
+  }
+
   announce(c, move) {
     this.stats[c.slot].casts++;
-    this.addEffect(new FloatText(move.name, c.x, c.y - 30, TYPE_COLORS[move.type] || '#fff', 7));
+    this.ui.log(`${this.who(c)} used <span class="green">${move.name}</span>!`);
   }
 
   dodgedText(f) {
     if (this.dodgeTextT[f.slot] > 0) return;
     this.dodgeTextT[f.slot] = 0.4;
     this.stats[f.slot].dodges++;
-    this.addEffect(new FloatText('Dodged!', f.x, f.y - 24, '#7dd3fc', 7));
+    this.addEffect(new FloatText('Dodged!', f.x, f.y - 26, '#00f8f8'));
   }
 
   applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false } = {}) {
@@ -98,10 +102,12 @@ class Game {
     if (eff > 1) s.supers++;
     this.moveLog[move.id] = (this.moveLog[move.id] || 0) + 1;
     def.takeHit(dmg, angle);
-    const color = eff === 0 ? '#9ca3af' : eff > 1 ? '#fde047' : eff < 1 ? '#cbd5e1' : '#fff';
-    this.addEffect(new FloatText(eff === 0 ? '0' : String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 18, color, eff > 1 ? 11 : 9));
-    const label = eff === 0 ? 'No effect...' : eff > 1 ? 'Super effective!' : eff < 1 ? 'Not very effective' : crit ? 'Critical hit!' : null;
-    if (label) this.addEffect(new FloatText(label, def.x, def.y - 40, color, 6));
+    const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
+    this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
+    if (eff === 0) this.ui.log(`It doesn't affect ${this.who(def)}...`);
+    else if (eff > 1) this.ui.log(`It's <span class="yellow">super effective</span>!`);
+    else if (eff < 1) this.ui.log(`It's not very effective...`);
+    if (crit) this.ui.log(`A critical hit!`);
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
     return dmg;
@@ -113,7 +119,8 @@ class Game {
     if (this.state !== 'fight') return;
     this.state = 'ko';
     this.slowmo = 0.3;
-    this.banner('K.O.!');
+    this.banner('K.O.!', 1.5);
+    this.ui.log(`${this.who(f)} fainted!`);
     this.sfx('ko');
     const winner = this.fighters.find((x) => x !== f);
     this.after(1.6, () => {
@@ -124,12 +131,9 @@ class Game {
     });
   }
 
-  banner(text, cls = '') {
-    const b = document.getElementById('banner');
-    b.textContent = text;
-    b.className = `show ${cls}`;
-    clearTimeout(this.bannerTimer);
-    this.bannerTimer = setTimeout(() => (b.className = ''), 900);
+  /** Big centred title drawn on the canvas with the PMD banner font. */
+  banner(text, time = 0.55) {
+    this.bannerState = { text, t: 0, time };
   }
 
   // ---------- screens ----------
@@ -152,7 +156,7 @@ class Game {
     this.input.clearPresses();
     const steps = ['3', '2', '1', 'FIGHT!'];
     steps.forEach((s, i) => this.after(i * 0.6, () => {
-      this.banner(s, i === 3 ? 'go' : '');
+      this.banner(s, i === 3 ? 0.8 : 0.55);
       this.sfx(i === 3 ? 'go' : 'tick');
     }));
     this.after(steps.length * 0.6 - 0.6, () => (this.state = 'fight'));
@@ -182,17 +186,15 @@ class Game {
       this.pausedFrom = this.state;
       this.state = 'paused';
       document.getElementById('pause').classList.add('show');
+      this.ui.pauseMenu.set(0);
     }
   }
 
   onKey(code) {
     if (code === 'KeyM') Sfx.toggle();
+    if (this.ui.menuKey(code)) return;
     if (this.state === 'select') return this.ui.selectKey(code);
-    if (code === 'Escape' || code === 'KeyP') {
-      if (this.state === 'result' && code === 'Escape') return this.toSelect();
-      return this.togglePause();
-    }
-    if (this.state === 'result' && ['Space', 'Enter', 'NumpadEnter'].includes(code)) this.rematch();
+    if (code === 'Escape' || code === 'KeyP') return this.togglePause();
   }
 
   // ---------- loop ----------
@@ -203,6 +205,10 @@ class Game {
       return;
     }
     if (this.state === 'paused' || this.state === 'loading') return;
+    if (this.bannerState) {
+      this.bannerState.t += dt;
+      if (this.bannerState.t >= this.bannerState.time) this.bannerState = null;
+    }
     dt *= this.slowmo;
     this.dodgeTextT = this.dodgeTextT.map((t) => Math.max(0, t - dt));
 
@@ -265,6 +271,12 @@ class Game {
       ctx.restore();
     }
     layer('text');
+    if (this.bannerState && this.bannerFont) {
+      const b = this.bannerState;
+      const pop = Math.min(1, b.t / 0.08);
+      const fade = Math.min(1, (b.time - b.t) / 0.15);
+      this.bannerFont.draw(ctx, b.text, W / 2, H / 2 + 8, pop < 1 ? 3 : 2, fade);
+    }
   }
 
   // ---------- arena art (procedural pixel tiles) ----------
@@ -357,7 +369,6 @@ class Game {
 
 async function boot() {
   const status = document.getElementById('loading-status');
-  const bar = document.getElementById('loading-bar');
   const canvas = document.getElementById('arena');
   const game = new Game(canvas);
   window.__arena = game; // handy for debugging / automated tests
@@ -390,10 +401,11 @@ async function boot() {
     const total = particles.size + beams.size + keys.length;
     const tick = (label) => {
       done++;
-      bar.style.width = `${(done / total) * 100}%`;
-      status.textContent = label;
+      status.textContent = `Now loading... ${Math.round((done / total) * 100)}%`;
     };
     game.arts = {};
+    const [bannerImg, bannerMeta] = await Promise.all([loadImage('assets/ui/banner.png'), loadJSON('assets/ui/banner.json'), document.fonts.load('12px PMD')]);
+    game.bannerFont = new BannerFont(bannerImg, bannerMeta);
     await Promise.all([
       ...keys.map(async (k) => {
         game.arts[k] = await loadFighterArt(pokedex[k], manifest);
@@ -431,7 +443,6 @@ async function boot() {
     return;
   }
 
-  document.getElementById('credits-close').addEventListener('click', () => document.getElementById('credits').classList.remove('show'));
 
   let last = performance.now();
   let acc = 0;
@@ -442,7 +453,7 @@ async function boot() {
       game.update(STEP);
       acc -= STEP;
     }
-    if (game.state !== 'select' && game.state !== 'loading') game.render();
+    if (game.state !== 'loading') game.render();
     requestAnimationFrame(frame);
   };
   game.render();

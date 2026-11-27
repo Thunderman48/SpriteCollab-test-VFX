@@ -44,8 +44,8 @@ export class Input {
     });
     this.dodgeBtns = [0, 1].map((i) => {
       const b = document.createElement('button');
-      b.className = `dodge-btn dodge-p${i + 1}`;
-      b.textContent = 'DODGE';
+      b.className = `win p${i + 1} dodge-btn dodge-p${i + 1}`;
+      b.textContent = 'Dodge';
       b.setAttribute('aria-label', `Player ${i + 1} dodge`);
       b.addEventListener('pointerdown', (e) => {
         e.preventDefault();

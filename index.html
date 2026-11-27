@@ -6,9 +6,7 @@
   <meta name="theme-color" content="#14112a">
   <title>SpriteCollab VFX Arena</title>
   <meta name="description" content="Local 2-player Pokémon arena testing PMDCollab SpriteCollab sprites and PMD: Origins VFX.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="preload" href="assets/ui/pmd-text.ttf" as="font" type="font/ttf" crossorigin>
   <link rel="stylesheet" href="style.css">
 </head>
 <body data-screen="loading">
@@ -16,7 +14,7 @@
     <div id="stage">
       <canvas id="arena" aria-label="Battle arena"></canvas>
       <div id="hud"></div>
-      <div id="banner"></div>
+      <div id="log" class="win" aria-live="polite"></div>
     </div>
     <div class="touch-zone" aria-hidden="true"></div>
 
@@ -25,27 +23,25 @@
     <div id="pause" class="screen overlay"></div>
 
     <div id="credits" class="screen overlay">
-      <div class="panel credits-panel">
+      <div class="win solid dialog">
         <h2>Credits</h2>
-        <p><b>Sprites &amp; portraits:</b> <a href="https://github.com/PMDCollab/SpriteCollab" target="_blank" rel="noopener">PMDCollab/SpriteCollab</a>
-          (CC BY-NC 4.0) by CHUNSOFT and the PMDCollab artists. Full per-Pokémon artist list in
-          <a href="CREDITS.md" target="_blank" rel="noopener">CREDITS.md</a>.</p>
-        <p><b>Move VFX:</b> particle &amp; beam sheets from <a href="https://github.com/PMDCollab/RawAsset" target="_blank" rel="noopener">PMDCollab/RawAsset</a>,
+        <p><span class="cyan">Sprites &amp; portraits</span><br><a href="https://github.com/PMDCollab/SpriteCollab" target="_blank" rel="noopener">PMDCollab/SpriteCollab</a>
+          (CC BY-NC 4.0) by CHUNSOFT and the PMDCollab artists. Every artist is listed in <a href="CREDITS.md" target="_blank" rel="noopener">CREDITS.md</a>.</p>
+        <p><span class="cyan">Move effects</span><br>Particle and beam sheets from <a href="https://github.com/PMDCollab/RawAsset" target="_blank" rel="noopener">PMDCollab/RawAsset</a>,
           the asset repo of <a href="https://github.com/audinowho/PMDODump" target="_blank" rel="noopener">PMD: Origins</a>.</p>
-        <p><b>Stats, moves, type chart:</b> generated from <a href="https://github.com/pkmn/ps" target="_blank" rel="noopener">@pkmn/dex</a> (Pokémon Showdown data).</p>
-        <p class="small">Non-commercial fan test. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc. Not affiliated or endorsed.</p>
-        <div class="btns"><button id="credits-close" type="button">Close</button></div>
+        <p><span class="cyan">Windows, font &amp; type icons</span><br>PMD: Origins (<a href="https://github.com/audinowho/DumpAsset" target="_blank" rel="noopener">DumpAsset</a>, RawAsset fonts).</p>
+        <p><span class="cyan">Stats, moves, type chart</span><br><a href="https://github.com/pkmn/ps" target="_blank" rel="noopener">@pkmn/dex</a> (Pokémon Showdown data).</p>
+        <p class="dim">Non-commercial fan test. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc. Not affiliated or endorsed.</p>
+        <ul class="menu"><li class="sel" id="credits-close">Close</li></ul>
       </div>
     </div>
 
     <div id="loading" class="screen">
-      <div class="panel">
-        <h1>SpriteCollab <span>VFX Arena</span></h1>
-        <div class="loadbar"><i id="loading-bar"></i></div>
-        <p id="loading-status">Loading sprites…</p>
+      <div class="win solid">
+        <span id="loading-status">Now loading...</span>
       </div>
     </div>
-    <div id="rotate-hint">Rotate your phone sideways for 2-player controls</div>
+    <div id="rotate-hint" class="win solid">Turn your phone sideways for 2 players.</div>
   </div>
   <noscript>This game needs JavaScript.</noscript>
   <script type="module" src="js/main.js"></script>

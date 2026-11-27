@@ -2,6 +2,7 @@
 
 A small local **2-player** Pokémon arena for testing the [PMDCollab SpriteCollab](https://github.com/PMDCollab/SpriteCollab)
 sprite library in the browser, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) VFX sheets.
+The interface uses PMD: Origins' own window borders, portrait frames, cursor, text/banner fonts and type icons, so it looks like Mystery Dungeon.
 
 **Roster:** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo. Each has 4 moves, and all 19 moves have their own VFX.
 
@@ -20,7 +21,7 @@ sprite library in the browser, with move effects from PMD: Origins' [RawAsset](h
   - A move fires as soon as it's ready and the opponent is in its range.
 - **Dodging** gives a short dash with invulnerability. Use it to slip through projectiles, beams and the red warning circles that area attacks show. Dodging during a wind-up cancels it, and the move stays ready.
 - **Auto-attacks never waste a move the target is immune to** (e.g. Earth Power vs Rayquaza). The HUD greys such moves out and marks super-effective ones with ▲.
-- `Esc` / `P` pauses and `M` mutes. On the select screen, **P2: CPU** lets you play solo.
+- `Esc` / `P` opens the menu (↑/↓ to move the cursor, Enter/Space to pick) and `M` mutes. On the select screen, **P2: CPU** lets you play solo.
 
 URL shortcuts for testing:
 - `?cpu=both&p1=rayquaza&p2=mewtwo` starts a CPU-vs-CPU fight straight away.
@@ -47,11 +48,13 @@ js/vfx.js                  RawAsset particle player, beams (Head/Body/Tail), war
 js/moves.js                move behaviours: projectile, beam, melee, dash, targetArea, burst
 js/fighter.js              movement, dodge, auto-cast scheduler, hurt/faint
 js/combat.js               level-50 stats, damage formula, STAB, type chart
+js/ui.js                   PMD-style screens: select, HUD, message log, menus
 js/input.js, js/bot.js     keyboard + multi-touch joysticks, optional CPU player
 data/roster.json           which Pokémon and moves are in the game   (hand-edited)
 data/movefx.json           each move's behaviour, sprite anim and VFX (hand-edited)
 data/pokedex.json, moves.json, typechart.json   generated database
 assets/                    downloaded sprites, portraits, VFX + manifest.json
+assets/ui/                 PMD window/portrait frames, cursor, pmd-text.ttf, type orbs, banner font
 tools/                     scripts that generate data/ and assets/
 ```
 
@@ -72,12 +75,15 @@ tools/                     scripts that generate data/ and assets/
    cd tools
    npm install
    node build-db.mjs        # database
-   node fetch-assets.mjs    # sprites, portraits, VFX, manifest, CREDITS.md
+   node fetch-assets.mjs    # sprites, portraits, VFX, PMD UI art + font glyphs, manifest, CREDITS.md
+   cd ..
+   pip install pillow fonttools
+   python3 -I tools/build-ui.py   # PMD window frames, pmd-text.ttf, type orbs, banner atlas
    ```
    Behind an HTTPS proxy, run the second step as `NODE_USE_ENV_PROXY=1 node fetch-assets.mjs`.
 
 ## Credits
 
-Sprites and portraits are by the SpriteCollab contributors, licensed [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). VFX come from PMDCollab RawAsset / PMD: Origins. The full per-Pokémon artist list is in [CREDITS.md](CREDITS.md).
+Sprites and portraits are by the SpriteCollab contributors, licensed [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). VFX come from PMDCollab RawAsset / PMD: Origins. The window art, fonts and type icons come from PMD: Origins (DumpAsset `Content/UI`, RawAsset `font/`). The full per-Pokémon artist list is in [CREDITS.md](CREDITS.md).
 
 This is a non-commercial fan test. Pokémon © Nintendo / Creatures Inc. / GAME FREAK inc., and this project is not affiliated with or endorsed by them.

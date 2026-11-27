@@ -25,6 +25,13 @@ Used unmodified for this non-commercial demo; all rights remain with their creat
 
 Files used: `Air_Slash_Particle.Flip`, `Air_Slash_Slash.None`, `Aura_Sphere.None`, `Aura_Sphere_Shoot.Dir8`, `Aura_Sphere_Shot.Dir8`, `Bullet_Punch.None`, `Charge_Up.None`, `Circle_Small_White_Out.None`, `Circle_White_Out.None`, `Close_Combat.None`, `Crunch.Dir8`, `Dark_Pulse_Back.None`, `Dark_Pulse_Front.None`, `Dark_Pulse_Particle.None`, `Draco_Meteor_Dust.None`, `Draco_Meteor_Explosion.None`, `Draco_Meteor_Streaks.None`, `Dragon_Pulse_Ball.None`, `Dragon_Pulse_Charge.None`, `Dragon_Pulse_Particle_Purple.Dir2`, `Dragon_Pulse_Particle_Red.Dir2`, `Dragon_Rush_Back.Flip`, `Dragon_Rush_Front.Flip`, `Earth_Power_Back.None`, `Earth_Power_Eruption.None`, `Earth_Power_Front.None`, `Explosion.None`, `Flash_Cannon.None`, `Flash_Cannon_Release.None`, `Flash_Cannon_Sparkle_Gather.None`, `Gunk_Shot.Dir8`, `Gunk_Shot_Hit.None`, `Gunk_Shot_Particle.None`, `Hit_Neutral.None`, `Hit_Super_Effective.None`, `Lick.None`, `Psycho_Boost_Back.None`, `Psycho_Boost_Front.None`, `Psycho_Cut.None`, `Psycho_Cut_Hole.None`, `Psycho_Cut_Shot.Dir8`, `Psycho_Shift_Charge.None`, `Psycho_Shift_Hit.None`, `Puff_Purple.None`, `Puff_White.None`, `Rock_Pieces.None`, `Shadow_Ball.None`, `Shadow_Force_Hit.None`, `Smoke_Purple.None`, `Stone_Edge.38`, `Stone_Edge_Rock.None`; beams `Beam/Beam`, `Beam/Column_White`.
 
+## Interface — PMD: Origins
+
+Menu window borders, portrait frames and the cursor are from
+[audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (`Content/UI`); the text font, banner font and
+type icons are the PMD: Origins fonts from [PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (`font/`).
+PMD: Origins © Audino 2021, which permits copying and redistribution.
+
 ## Pokémon data — [@pkmn/dex](https://github.com/pkmn/ps)
 
 Base stats, types, abilities, moves and the type chart are generated from `@pkmn/dex` (MIT),

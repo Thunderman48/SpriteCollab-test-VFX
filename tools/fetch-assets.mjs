@@ -9,6 +9,7 @@ import { dirname, join } from 'node:path';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SC = 'https://raw.githubusercontent.com/PMDCollab/SpriteCollab/master';
 const RA = 'https://raw.githubusercontent.com/PMDCollab/RawAsset/master';
+const DA = 'https://raw.githubusercontent.com/audinowho/DumpAsset/master';
 const FORCE = process.argv.includes('--force');
 
 const roster = JSON.parse(readFileSync(join(root, 'data/roster.json'), 'utf8'));
@@ -97,6 +98,19 @@ for (const b of beams) {
     tasks.push(save(`${RA}/${b}/${part}`, `assets/vfx/${b.toLowerCase()}/${part}`));
   }
 }
+// ---- PMD: Origins UI art + fonts (turned into CSS/fonts by tools/build-ui.py) ----
+for (const f of ['MenuBorder', 'MenuBG', 'PortraitBorder', 'Cursor']) {
+  tasks.push(save(`${DA}/Content/UI/${f}.png`, `assets/ui/raw/${f}.png`));
+}
+const hex = (n) => n.toString(16).toUpperCase().padStart(4, '0');
+const range = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
+const textGlyphs = [...range(0x21, 0x7e), ...range(0xa1, 0xff), 0x2026, 0x2640, 0x2642, 0x2190, 0x2191, 0x2192, 0x2193, 0x2605, 0x2606, 0x266a, ...range(0xe080, 0xe092)];
+for (const c of textGlyphs) tasks.push(save(`${RA}/font/text/${hex(c)}.png`, `assets/ui/raw/text/${hex(c)}.png`, { optional: true }));
+const bannerGlyphs = [...range(0x21, 0x5a), ...range(0x61, 0x7a)];
+for (const c of bannerGlyphs) tasks.push(save(`${RA}/font/banner/${hex(c)}.png`, `assets/ui/raw/banner/${hex(c)}.png`, { optional: true }));
+tasks.push(save(`${RA}/font/text/FontData.xml`, 'assets/ui/raw/text/FontData.xml'));
+tasks.push(save(`${RA}/font/banner/FontData.xml`, 'assets/ui/raw/banner/FontData.xml'));
+
 await Promise.all(tasks);
 
 // Manifest of what was actually downloaded, so the game never requests missing files.
@@ -149,6 +163,13 @@ Particle and beam sheets from the asset repository of
 Used unmodified for this non-commercial demo; all rights remain with their creators.
 
 Files used: ${[...particles].sort().map((p) => `\`${p}\``).join(', ')}; beams ${[...beams].map((b) => `\`${b}\``).join(', ')}.
+
+## Interface — PMD: Origins
+
+Menu window borders, portrait frames and the cursor are from
+[audinowho/DumpAsset](https://github.com/audinowho/DumpAsset) (\`Content/UI\`); the text font, banner font and
+type icons are the PMD: Origins fonts from [PMDCollab/RawAsset](https://github.com/PMDCollab/RawAsset) (\`font/\`).
+PMD: Origins © Audino 2021, which permits copying and redistribution.
 
 ## Pokémon data — [@pkmn/dex](https://github.com/pkmn/ps)
 

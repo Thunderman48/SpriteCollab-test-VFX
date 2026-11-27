@@ -189,27 +189,91 @@ export class Telegraph {
   }
 }
 
+/** Damage numbers etc. in the PMD text font (12px = one line of PMD text). */
 export class FloatText {
-  constructor(text, x, y, color = '#fff', size = 12) {
-    Object.assign(this, { text, x, y, color, size, t: 0, time: 0.9, layer: 'text', dead: false });
+  constructor(text, x, y, color = '#f8f8f8', big = false) {
+    Object.assign(this, { text, x, y, color, big, t: 0, time: 0.9, layer: 'text', dead: false });
   }
   update(dt) {
     this.t += dt;
-    this.y -= 28 * dt;
+    if (this.t > 0.15) this.y -= 20 * dt;
     if (this.t >= this.time) this.dead = true;
   }
   draw(ctx) {
-    const a = Math.min(1, (this.time - this.t) / 0.3);
-    const pop = this.t < 0.08 ? 1.4 - this.t * 5 : 1;
+    const a = Math.min(1, (this.time - this.t) / 0.25);
+    const size = this.big ? 24 : 12;
+    const px = size / 12;
+    const hop = this.t < 0.15 ? -Math.sin((this.t / 0.15) * Math.PI) * 4 : 0;
     ctx.save();
     ctx.globalAlpha = a;
-    ctx.font = `bold ${Math.round(this.size * pop)}px "Press Start 2P", monospace`;
-    ctx.textAlign = 'center';
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = 'rgba(0,0,0,0.85)';
-    ctx.strokeText(this.text, this.x, this.y);
+    ctx.font = `${size}px PMD`;
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'alphabetic';
+    const w = ctx.measureText(this.text).width;
+    const x = Math.round(this.x - w / 2);
+    const y = Math.round(this.y + hop);
+    ctx.fillStyle = '#000';
+    ctx.fillText(this.text, x + px, y);
+    ctx.fillText(this.text, x, y + px);
+    ctx.fillText(this.text, x + px, y + px);
     ctx.fillStyle = this.color;
-    ctx.fillText(this.text, this.x, this.y);
+    ctx.fillText(this.text, x, y);
     ctx.restore();
+  }
+}
+
+/** PMD: Origins banner font (assets/ui/banner.png + banner.json, built by tools/build-ui.py). */
+export class BannerFont {
+  constructor(img, meta) {
+    this.img = img;
+    this.meta = meta;
+    // Black copy for the drop shadow.
+    const c = document.createElement('canvas');
+    c.width = img.width;
+    c.height = img.height;
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    g.globalCompositeOperation = 'source-in';
+    g.fillStyle = '#000';
+    g.fillRect(0, 0, c.width, c.height);
+    this.shadow = c;
+  }
+
+  width(text) {
+    let w = 0;
+    for (const ch of text) w += ch === ' ' ? this.meta.space : (this.meta.glyphs[ch]?.[1] ?? this.meta.space) + 1;
+    return w;
+  }
+
+  /** Draw centred on (cx, cy) in the current canvas transform. */
+  draw(ctx, text, cx, cy, scale = 1, alpha = 1) {
+    const h = this.meta.height;
+    let x = Math.round(cx - (this.width(text) * scale) / 2);
+    const y = Math.round(cy - (h * scale) / 2);
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    for (const ch of text) {
+      const g = this.meta.glyphs[ch];
+      if (!g) {
+        x += this.meta.space * scale;
+        continue;
+      }
+      const [sx, w, gh] = g;
+      ctx.drawImage(this.shadow, sx, 0, w, gh, x + scale, y + scale, w * scale, gh * scale);
+      ctx.drawImage(this.img, sx, 0, w, gh, x, y, w * scale, gh * scale);
+      x += (w + 1) * scale;
+    }
+    ctx.restore();
+  }
+
+  /** Render text into a <canvas> element sized in CSS game pixels (--u). */
+  toCanvas(cv, text) {
+    cv.width = this.width(text) + 2;
+    cv.height = this.meta.height + 2;
+    const ctx = cv.getContext('2d');
+    ctx.imageSmoothingEnabled = false;
+    this.draw(ctx, text, (cv.width - 1) / 2, (cv.height - 1) / 2);
+    cv.style.width = `calc(${cv.width} * var(--u))`;
+    cv.style.height = `calc(${cv.height} * var(--u))`;
   }
 }

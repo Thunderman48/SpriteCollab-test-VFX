@@ -5,7 +5,8 @@
   "description": "Build-time helpers: generate the Pokémon database and download the SpriteCollab / RawAsset files.",
   "scripts": {
     "db": "node build-db.mjs",
-    "assets": "node fetch-assets.mjs"
+    "assets": "node fetch-assets.mjs",
+    "ui": "python3 -I build-ui.py"
   },
   "devDependencies": {
     "@pkmn/dex": "0.11.0"
