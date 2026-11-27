@@ -145,6 +145,7 @@ class Game {
     const order = p.members.map((_, k) => p.members[(p.active + 1 + k) % p.members.length]);
     const next = order.find((m) => m !== cur && !m.ko);
     p.switchCd = SWITCH_COOLDOWN;
+    FXE.onSwitchOut(this, cur); // Regenerator, Natural Cure
     this.ui.log(t('comeBack', { a: this.who(cur), b: this.who(next) }));
     this.sfx('dodge');
     this.sendOut(slot, next, { x: cur.x, y: cur.y });
@@ -180,7 +181,9 @@ class Game {
       return 0;
     }
     const x = FXE.damageMods(this, att, def, cast);
-    const { dmg, eff, crit } = computeDamage(att, def, move, factor * this.damageMul, x);
+    const r = computeDamage(att, def, move, factor * this.damageMul, x);
+    const { eff, crit } = r;
+    const dmg = FXE.adjustDamage(this, att, def, r.dmg); // Disguise
     if (eff > 1) this.addEffect(new Effect(MOVEFX.common.hitSuper, def.x, def.y - 6, { scale: 1.2 }));
     else if (noFx && eff > 0) this.addEffect(new Effect(MOVEFX.common.hitNeutral, def.x, def.y - 6));
     const s = this.stats[att.slot];

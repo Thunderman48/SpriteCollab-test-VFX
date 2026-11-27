@@ -1981,5 +1981,263 @@
         "status": "brn"
       }
     ]
+  },
+  "firepunch": {
+    "id": "firepunch",
+    "name": "Fire Punch",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to burn the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "icepunch": {
+    "id": "icepunch",
+    "name": "Ice Punch",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to freeze the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "thunderpunch": {
+    "id": "thunderpunch",
+    "name": "Thunder Punch",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "10% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "hypervoice": {
+    "id": "hypervoice",
+    "name": "Hyper Voice",
+    "type": "Normal",
+    "category": "Special",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect. Hits adjacent foes.",
+    "flags": [
+      "sound"
+    ]
+  },
+  "playrough": {
+    "id": "playrough",
+    "name": "Play Rough",
+    "type": "Fairy",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "10% chance to lower the target's Attack by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "atk": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "bugbuzz": {
+    "id": "bugbuzz",
+    "name": "Bug Buzz",
+    "type": "Bug",
+    "category": "Special",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "10% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ],
+    "flags": [
+      "sound"
+    ]
+  },
+  "quiverdance": {
+    "id": "quiverdance",
+    "name": "Quiver Dance",
+    "type": "Bug",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Sp. Atk, Sp. Def, Speed by 1.",
+    "boosts": {
+      "spa": 1,
+      "spd": 1,
+      "spe": 1
+    }
+  },
+  "aeroblast": {
+    "id": "aeroblast",
+    "name": "Aeroblast",
+    "type": "Flying",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 9,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2
+  },
+  "sacredfire": {
+    "id": "sacredfire",
+    "name": "Sacred Fire",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "50% chance to burn the target. Thaws user.",
+    "secondary": [
+      {
+        "chance": 50,
+        "status": "brn"
+      }
+    ]
+  },
+  "bravebird": {
+    "id": "bravebird",
+    "name": "Brave Bird",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 3,
+    "shortDesc": "Has 33% recoil.",
+    "recoil": 0.33,
+    "flags": [
+      "contact"
+    ]
+  },
+  "waterspout": {
+    "id": "waterspout",
+    "name": "Water Spout",
+    "type": "Water",
+    "category": "Special",
+    "power": 150,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "Less power as user's HP decreases. Hits foe(s)."
+  },
+  "dragondarts": {
+    "id": "dragondarts",
+    "name": "Dragon Darts",
+    "type": "Dragon",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits twice. Doubles: Tries to hit each foe once.",
+    "multihit": 2
+  },
+  "shadowclaw": {
+    "id": "shadowclaw",
+    "name": "Shadow Claw",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact"
+    ]
   }
 }

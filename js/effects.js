@@ -15,6 +15,12 @@ const WEATHER_TIME = 20;
 export const STAT_KEYS = ['atk', 'def', 'spa', 'spd', 'spe', 'crit'];
 
 export const ab = (f, id) => !!f && f.ability === id;
+/** Mold Breaker / Turboblaze: the attacker ignores the target's ability. */
+const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze');
+/** The defender's ability, unless the attacker ignores it. */
+const defAb = (att, def, id) => !breaks(att) && ab(def, id);
+/** A move's type for this user (Pixilate turns Normal moves into Fairy moves). */
+export const moveType = (f, m) => (m.type === 'Normal' && ab(f, 'pixilate') ? 'Fairy' : m.type);
 export const stageMul = (n) => (n >= 0 ? (2 + n) / 2 : 2 / (2 - n));
 const chance = (pct) => Math.random() * 100 < pct;
 const say = (game, key, vars) => game.ui?.log(t(key, vars));
@@ -68,6 +74,10 @@ export function boost(game, f, boosts, source = null) {
   if (up) statFx(game, f, true);
   if (down) statFx(game, f, false);
   if (up || down) game.sfx?.(up ? 'go' : 'tick');
+  if (down && enemy && ab(f, 'competitive')) {
+    ability(game, f);
+    boost(game, f, { spa: 2 }, f);
+  }
 }
 
 /** PMD-style stat change: streaks rising (raised) or falling (lowered) around the Pokémon + a ring. */
@@ -208,7 +218,7 @@ export function tickFighter(game, f, dt) {
 
   const s = f.status;
   if (s) {
-    s.t -= dt;
+    s.t -= dt * (ab(f, 'naturalcure') ? 2 : 1);
     if (perSecond) {
       s.n++;
       if (s.id === 'brn') hurt(game, f, 0.02, '#f89858');
@@ -232,7 +242,9 @@ export function tickFighter(game, f, dt) {
   }
 
   if (perSecond && f.alive) {
-    if (w === 'sandstorm' && !f.types.some((x) => ['Rock', 'Ground', 'Steel'].includes(x)) && !ab(f, 'sandveil')) hurt(game, f, 0.01, '#d8b878');
+    const sandProof = ['sandveil', 'sandrush', 'sandforce'].some((a) => ab(f, a));
+    if (w === 'sandstorm' && !f.types.some((x) => ['Rock', 'Ground', 'Steel'].includes(x)) && !sandProof) hurt(game, f, 0.01, '#d8b878');
+    if (ab(f, 'regenerator') && game.mode?.party === 1 && f.still && !f.cast) f.heal(f.maxHp * 0.01);
     if (w === 'raindance' && ab(f, 'raindish')) f.heal(f.maxHp * 0.01);
     if (w === 'sunnyday' && ab(f, 'solarpower')) hurt(game, f, 0.01, '#f8d858');
     // Bad Dreams: sleeping foes lose HP.
@@ -274,6 +286,33 @@ export function onEntry(game, f) {
     }
   }
   if (ab(f, 'sandstream')) setWeather(game, 'sandstorm', f);
+  if (ab(f, 'drought')) setWeather(game, 'sunnyday', f);
+  if (ab(f, 'drizzle')) setWeather(game, 'raindance', f);
+  // Illusion: looks like the nearest foe until it's hit.
+  if (ab(f, 'illusion') && !f.illusionBroken) {
+    const near = game.nearestEnemy(f);
+    if (near) f.setIllusion(near.art);
+  }
+}
+
+/** Switching out (Trio): Regenerator heals, Natural Cure cures. */
+export function onSwitchOut(game, f) {
+  if (ab(f, 'regenerator') && f.alive) f.heal(f.maxHp / 3);
+  if (ab(f, 'naturalcure') && f.status) {
+    f.status = null;
+    f.statusImmune = 0;
+  }
+}
+
+/** Final damage tweaks: Disguise blocks the first hit. */
+export function adjustDamage(game, att, def, dmg) {
+  if (dmg > 0 && defAb(att, def, 'disguise') && !def.disguiseBroken) {
+    def.disguiseBroken = true;
+    ability(game, def);
+    game.ui?.log(t('disguiseBusted', { who: game.who(def) }));
+    return Math.floor(def.maxHp / 8);
+  }
+  return dmg;
 }
 
 // ---------- casting ----------
@@ -331,13 +370,15 @@ export function wantsMove(game, f, id, foe) {
   if (!foe || !foe.alive) return false;
   if (f.distTo(foe) > fx.range + foe.radius) return false;
   if (m.category === 'Status') {
+    if (ab(foe, 'magicbounce')) return false;
     if (m.status) return !statusBlock(game, foe, m.status, f) && !(m.status === 'par' && effectiveness('Electric', foe.types) === 0);
     if (m.volatile === 'confusion') return foe.confusedT <= 0;
     return true;
   }
   // Damaging: never waste a move the target is immune to (or absorbs).
-  if (effectiveness(m.type, foe.types) === 0) return false;
-  if (absorbs(foe, m.type)) return false;
+  const type = moveType(f, m);
+  if (effectiveness(type, foe.types) === 0) return false;
+  if (!breaks(f) && immuneAbility(foe, type)) return false;
   if (id === 'solarbeam' && w === 'raindance') return Math.random() < 0.02;
   return true;
 }
@@ -358,8 +399,11 @@ export function threatened(game, f) {
   return false;
 }
 
-const ABSORB = { Water: 'waterabsorb', Fire: 'flashfire', Electric: 'lightningrod' };
-const absorbs = (f, type) => ab(f, ABSORB[type]);
+// Abilities that make a Pokémon immune to a type (and what they do when hit by it).
+const IMMUNE = {
+  waterabsorb: 'Water', flashfire: 'Fire', lightningrod: 'Electric', voltabsorb: 'Electric', sapsipper: 'Grass', levitate: 'Ground',
+};
+const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
 
 // ---------- hits ----------
 /**
@@ -368,23 +412,24 @@ const absorbs = (f, type) => ab(f, ABSORB[type]);
  */
 export function preHit(game, att, def, cast) {
   const m = cast.move;
-  if (def.protectT > 0) {
+  if (def.protectT > 0 && !ab(att, 'infiltrator')) {
     float(game, def, t('protected'), '#88f8f8');
     fxAt(game, MOVEFX.status.protect, def, { follow: def });
     return true;
   }
-  if (m.category !== 'Status' && absorbs(def, m.type)) {
+  if (m.category !== 'Status' && !breaks(att) && immuneAbility(def, moveType(att, m))) {
     ability(game, def);
-    if (ab(def, 'waterabsorb')) def.heal(def.maxHp * 0.25);
+    if (ab(def, 'waterabsorb') || ab(def, 'voltabsorb')) def.heal(def.maxHp * 0.25);
     if (ab(def, 'flashfire') && !def.flashFire) def.flashFire = true;
     if (ab(def, 'lightningrod')) boost(game, def, { spa: 1 }, def);
+    if (ab(def, 'sapsipper')) boost(game, def, { atk: 1 }, def);
     game.ui?.log(t('noEffect', { who: game.who(def) }));
     return true;
   }
   if (m.category === 'Physical' && ab(att, 'hustle') && Math.random() < 0.2) return miss(game, att, def);
   if (m.category !== 'Status' && !noGuard(att, def)) {
-    if (ab(def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
-    if (ab(def, 'sandveil') && weatherNow(game) === 'sandstorm' && Math.random() < 0.2) return miss(game, att, def);
+    if (defAb(att, def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
+    if (defAb(att, def, 'sandveil') && weatherNow(game) === 'sandstorm' && Math.random() < 0.2) return miss(game, att, def);
   }
   return false;
 }
@@ -401,25 +446,29 @@ export function damageMods(game, att, def, cast) {
   const x = MOVEFX.moves[m.id]?.extra || {};
   let mul = 1;
   let power = m.power;
+  const type = moveType(att, m);
   const pinch = att.hp <= att.maxHp / 3;
   const PINCH = { blaze: 'Fire', overgrow: 'Grass', torrent: 'Water', swarm: 'Bug' };
-  if (pinch && PINCH[att.ability] === m.type) mul *= 1.5;
+  if (pinch && PINCH[att.ability] === type) mul *= 1.5;
+  if (type !== m.type) mul *= 1.2; // Pixilate
+  if (ab(att, 'sharpness') && m.flags?.includes('slicing')) mul *= 1.5;
   if (ab(att, 'technician') && power <= 60) mul *= 1.5;
   if (ab(att, 'ironfist') && m.flags?.includes('punch')) mul *= 1.2;
-  if (att.flashFire && m.type === 'Fire') mul *= 1.5;
-  if (ab(def, 'multiscale') && def.hp >= def.maxHp) mul *= 0.5;
-  if (ab(def, 'thickfat') && (m.type === 'Fire' || m.type === 'Ice')) mul *= 0.5;
-  if (ab(def, 'damp') && MOVEFX.moves[m.id]?.behavior === 'burst') mul *= 0.75;
+  if (att.flashFire && type === 'Fire') mul *= 1.5;
+  if (defAb(att, def, 'multiscale') && def.hp >= def.maxHp) mul *= 0.5;
+  if (defAb(att, def, 'thickfat') && (type === 'Fire' || type === 'Ice')) mul *= 0.5;
+  if (defAb(att, def, 'damp') && MOVEFX.moves[m.id]?.behavior === 'burst') mul *= 0.75;
   if (m.category === 'Physical' && att.status?.id === 'brn' && !ab(att, 'guts')) mul *= 0.5;
   const w = weatherNow(game);
-  if (w === 'raindance') mul *= m.type === 'Water' ? 1.5 : m.type === 'Fire' ? 0.5 : 1;
-  if (w === 'sunnyday') mul *= m.type === 'Fire' ? 1.5 : m.type === 'Water' ? 0.5 : 1;
+  if (w === 'raindance') mul *= type === 'Water' ? 1.5 : type === 'Fire' ? 0.5 : 1;
+  if (w === 'sunnyday') mul *= type === 'Fire' ? 1.5 : type === 'Water' ? 0.5 : 1;
+  if (w === 'sandstorm' && ab(att, 'sandforce') && ['Rock', 'Ground', 'Steel'].includes(type)) mul *= 1.3;
   if (x.hpPower) power = Math.max(1, Math.floor((power * att.hp) / att.maxHp)); // Eruption
   if (m.id === 'knockoff' && def.item && !def.itemSpent) power *= 1.5;
   if (x.punish && def.cast) mul *= x.punish; // Sucker Punch
-  const stab = ab(att, 'protean') || att.types.includes(m.type) ? (ab(att, 'adaptability') ? 2 : 1.5) : 1;
+  const stab = ab(att, 'protean') || ab(att, 'libero') || att.types.includes(type) ? (ab(att, 'adaptability') ? 2 : 1.5) : 1;
   const critStage = (m.critRatio ? m.critRatio - 1 : 0) + stageOf(att, 'crit') + (ab(att, 'superluck') ? 1 : 0);
-  return { mul, power, stab, critStage, noCrit: ab(def, 'shellarmor') };
+  return { mul, power, stab, critStage, noCrit: defAb(att, def, 'shellarmor'), type };
 }
 
 /** After a hit landed: original secondary effects + this game's extra properties + contact abilities. */
@@ -466,6 +515,23 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
         ability(game, def);
         hurt(game, att, 0.06, '#f8a858');
       }
+      if (ab(def, 'flamebody') && chance(30)) {
+        ability(game, def);
+        inflict(game, att, 'brn', def);
+      }
+      if (ab(def, 'cutecharm') && chance(30)) {
+        ability(game, def);
+        confuse(game, att);
+      }
+      if (ab(def, 'gooey')) {
+        ability(game, def);
+        boost(game, att, { spe: -1 }, def);
+      }
+      if (ab(def, 'pickpocket') && att.item && !att.itemSpent) {
+        ability(game, def);
+        say(game, 'knockedOff', { who: game.who(att), item: att.itemLabel() });
+        att.loseItem();
+      }
     }
     if (ab(def, 'cursedbody') && chance(30) && att.cd[m.id] !== undefined) {
       ability(game, def);
@@ -479,6 +545,13 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
   // Status moves aimed at a foe (Will-O-Wisp, Thunder Wave, Toxic, Confuse Ray, Dark Void).
   if (m.category === 'Status' && first) {
     let ok = false;
+    if (ab(def, 'magicbounce') && att.alive && att !== def) {
+      // Bounced back at the user.
+      ability(game, def);
+      if (m.status) inflict(game, att, m.status, def);
+      else if (m.volatile === 'confusion') confuse(game, att);
+      return;
+    }
     if (m.status) {
       if (m.status === 'par' && effectiveness('Electric', def.types) === 0) ok = false;
       else ok = inflict(game, def, m.status, att);

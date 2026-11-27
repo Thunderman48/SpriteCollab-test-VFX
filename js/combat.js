@@ -49,13 +49,14 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
   const D = defender.statVal ? defender.statVal(physical ? 'def' : 'spd', crit ? 'def' : null) : physical ? defender.stats.def : defender.stats.spd;
   const power = x.power ?? move.power;
   const base = Math.floor(Math.floor((Math.floor((2 * LEVEL) / 5 + 2) * power * A) / D) / 50) + 2;
+  const type = x.type || move.type; // Pixilate can change it
   const atkTypes = attacker.types || attacker.data.types;
-  const stab = x.stab ?? (atkTypes.includes(move.type) ? 1.5 : 1);
-  const eff = effectiveness(move.type, defender.types || defender.data.types);
+  const stab = x.stab ?? (atkTypes.includes(type) ? 1.5 : 1);
+  const eff = effectiveness(type, defender.types || defender.data.types);
   const rand = 0.85 + Math.random() * 0.15;
   // Held items: type booster, Life Orb, Expert Belt, Metronome streak, Iron Ball.
   const items =
-    (am.typeBoost?.[move.type] ?? 1) *
+    (am.typeBoost?.[type] ?? 1) *
     (am.dmgMul ?? 1) *
     (eff > 1 ? am.superMul ?? 1 : 1) *
     (1 + Math.min(0.5, (attacker.metroStacks || 0) * (am.metronome || 0))) *

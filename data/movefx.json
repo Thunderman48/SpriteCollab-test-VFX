@@ -2440,6 +2440,328 @@
         "desc": "A rapid stream of hot water.",
         "descKo": "뜨거운 물줄기를 연속으로 쏜다."
       }
+    },
+    "firepunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 46,
+      "hit": {
+        "fx": "Bullet_Punch.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.5
+      },
+      "extra": {
+        "desc": "10% burn. Punch: boosted by Iron Fist.",
+        "descKo": "10% 화상. 펀치 기술: 철주먹으로 강해진다."
+      }
+    },
+    "icepunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 46,
+      "hit": {
+        "fx": "Bullet_Punch.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Ice_Shard_Hit.None",
+        "fps": 40,
+        "scale": 1.6
+      },
+      "extra": {
+        "chill": 1.2,
+        "desc": "Chills the target: slower for 1.2 s.",
+        "descKo": "상대를 얼려 1.2초 동안 느리게 한다."
+      }
+    },
+    "thunderpunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 46,
+      "hit": {
+        "fx": "Bullet_Punch.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Spark.None",
+        "fps": 14,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "10% paralysis. Punch: boosted by Iron Fist.",
+        "descKo": "10% 마비. 펀치 기술: 철주먹으로 강해진다."
+      }
+    },
+    "hypervoice": {
+      "behavior": "burst",
+      "anim": "Shoot",
+      "range": 120,
+      "radius": 120,
+      "delay": 0.3,
+      "under": {
+        "fx": "Circle_Uproar_Yellow_Out.None",
+        "fps": 20,
+        "scale": 2.6
+      },
+      "over": {
+        "fx": "Music_Notes_Uproar.None",
+        "fps": 14,
+        "scale": 1.6
+      },
+      "ring": {
+        "fx": "Uproar.None",
+        "fps": 20,
+        "scale": 1.2,
+        "n": 6,
+        "r": 80
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Sound: hits everyone around the user.",
+        "descKo": "소리 기술: 주위 모두를 공격한다."
+      }
+    },
+    "playrough": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 50,
+      "hits": 3,
+      "hitGap": 0.12,
+      "hit": {
+        "fx": "Captivate_Hearts.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Dizzy_Punch_Hit.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "shake": 3
+    },
+    "bugbuzz": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Bug_Buzz.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 260,
+        "radius": 16,
+        "life": 1.4
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "pierce": true,
+        "desc": "The sound wave passes through every foe in line.",
+        "descKo": "음파가 직선상의 모든 상대를 통과한다."
+      }
+    },
+    "quiverdance": {
+      "behavior": "self",
+      "anim": "Rotate",
+      "range": 9999,
+      "time": 0.8,
+      "over": {
+        "fx": "Petal_Dance_Flower_Pink.None",
+        "fps": 16,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Petal_Dance_Back.None",
+        "fps": 16,
+        "scale": 1.4
+      }
+    },
+    "aeroblast": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "chargeAnim": "Charge",
+      "range": 360,
+      "charge": {
+        "fx": "Air_Slash_Particle.Flip",
+        "fps": 20,
+        "scale": 1.6,
+        "time": 0.45,
+        "at": "front",
+        "loop": true
+      },
+      "beam": {
+        "set": "Beam/Column_White",
+        "length": 360,
+        "width": 1.4,
+        "time": 0.6,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Air_Slash_Slash.None",
+        "fps": 30,
+        "scale": 2.2
+      },
+      "hit2": {
+        "fx": "Puff_White.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 5,
+      "extra": {
+        "desc": "A huge air vortex beam. High critical-hit ratio.",
+        "descKo": "거대한 공기 소용돌이 광선. 급소에 맞기 쉽다."
+      }
+    },
+    "sacredfire": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 320,
+      "warn": 0.7,
+      "count": 1,
+      "radius": 44,
+      "under": {
+        "fx": "Weather_Ball_Fire.None",
+        "fps": 16,
+        "scale": 1.3
+      },
+      "hit": {
+        "fx": "Sacred_Fire_Pillar.None",
+        "fps": 16,
+        "scale": 1.8,
+        "anchor": "bottom",
+        "anchorPad": 14
+      },
+      "hit2": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.2
+      },
+      "tint": "rgba(255,160,60,0.2)",
+      "shake": 6,
+      "extra": {
+        "desc": "A pillar of sacred fire; 50% burn.",
+        "descKo": "성스러운 불기둥. 50% 화상."
+      }
+    },
+    "bravebird": {
+      "behavior": "dash",
+      "anim": "Walk",
+      "range": 240,
+      "dashSpeed": 640,
+      "dashTime": 0.4,
+      "over": {
+        "fx": "Brave_Bird.Dir8",
+        "fps": 20,
+        "scale": 1.4,
+        "follow": true,
+        "dirRows": true
+      },
+      "hit": {
+        "fx": "Brave_Bird_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 6
+    },
+    "waterspout": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 320,
+      "warn": 0.8,
+      "count": 4,
+      "scatter": 60,
+      "radius": 34,
+      "under": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 16,
+        "scale": 1.2
+      },
+      "hit": {
+        "fx": "Water_Spout_Down_Single.None",
+        "fps": 20,
+        "scale": 1.8,
+        "anchor": "bottom",
+        "anchorPad": 8
+      },
+      "hit2": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 22,
+        "scale": 1.4
+      },
+      "damageFactor": 0.45,
+      "shake": 5,
+      "extra": {
+        "hpPower": true,
+        "desc": "Water rains down on 4 spots. Stronger the more HP the user has.",
+        "descKo": "4곳에 물이 쏟아진다. HP가 많을수록 강하다."
+      }
+    },
+    "dragondarts": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "projectile": {
+        "fx": "Dragon_Pulse_Ball.None",
+        "fps": 20,
+        "scale": 1.1,
+        "loop": true,
+        "speed": 330,
+        "radius": 12,
+        "count": 2,
+        "spread": 0.22,
+        "homing": 3.5,
+        "life": 1.5,
+        "trail": {
+          "fx": "Dragon_Pulse_Particle_Purple.Dir2",
+          "fps": 20,
+          "scale": 1.2,
+          "every": 0.06
+        }
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Two homing darts, 50 power each.",
+        "descKo": "따라가는 다트 두 개, 각각 위력 50."
+      }
+    },
+    "shadowclaw": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 74,
+      "lunge": 46,
+      "hit": {
+        "fx": "Shadow_Claw.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Shadow_Claw_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      }
     }
   },
   "status": {

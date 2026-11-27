@@ -100,6 +100,20 @@ export class Fighter {
     this.refreshSpeed();
   }
 
+  /** Illusion: look like another Pokémon (the foe) until hit. */
+  setIllusion(art) {
+    this.illusion = new SpriteAnimator(art);
+  }
+
+  breakIllusion() {
+    if (!this.illusion) return;
+    this.illusion = null;
+    this.illusionBroken = true;
+    this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y - 6, { scale: 1.4 }));
+    this.game.addEffect(new FloatText(this.abilityName(), this.x, this.y - 44, '#f8e048'));
+    this.game.ui.log(t('illusionBroke', { who: this.game.who(this) }));
+  }
+
   get stunned() {
     return this.status?.id === 'slp' || this.status?.id === 'frz' || this.rechargeT > 0;
   }
@@ -119,6 +133,9 @@ export class Fighter {
     if (k === 'spd' && w === 'sandstorm' && this.types.includes('Rock')) v *= 1.5;
     if (k === 'spe' && ab(this, 'chlorophyll') && w === 'sunnyday') v *= 1.5;
     if (k === 'spe' && ab(this, 'unburden') && this.itemGone) v *= 1.5;
+    if (k === 'spe' && ab(this, 'quickfeet') && this.status) v *= 1.5;
+    if (k === 'spe' && ab(this, 'sandrush') && w === 'sandstorm') v *= 1.5;
+    if (k === 'def' && ab(this, 'marvelscale') && this.status) v *= 1.5;
     return v;
   }
 
@@ -128,7 +145,7 @@ export class Fighter {
     const ratio = Math.sqrt(spe / this.stats.spe); // stages help, but walking speed can't explode
     let move = (64 + this.stats.spe * 0.22 * ratio) * (this.mods?.speedMul ?? 1);
     if (ab(this, 'lightmetal')) move *= 1.1;
-    if (this.status?.id === 'par') move *= 0.5;
+    if (this.status?.id === 'par' && !ab(this, 'quickfeet')) move *= 0.5;
     if (this.chillT > 0) move *= 0.6;
     this.moveSpeed = move;
     // Faster Pokémon recharge a little quicker (±~10% at +0).
@@ -174,6 +191,7 @@ export class Fighter {
 
   takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
+    if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
     this.metroStacks = 0; // Metronome streak breaks when you're hit
     const kb = this.mods.noKnockback ? 0 : (dmg > 0 ? 160 : 40) * kbMul;
@@ -361,7 +379,14 @@ export class Fighter {
     const pulse = 0.5 + 0.5 * Math.sin(this.game.time * 6);
     const tint = frozen ? '#a8e0ff' : this.protectT > 0 ? '#88f8f8' : st === 'brn' ? '#f86030' : st === 'par' ? '#f8e048' : st === 'psn' || st === 'tox' ? '#b048f8' : null;
     const tintAmt = frozen ? 0.6 : this.protectT > 0 ? 0.35 : tint ? 0.15 + 0.15 * pulse : 0;
-    this.sprite.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
+    // Illusion: the disguise copies whatever animation the real sprite is playing.
+    let spr = this.sprite;
+    if (this.illusion) {
+      spr = this.illusion;
+      if (spr.name !== spr.resolve(this.sprite.name)) spr.play(this.sprite.name, { loop: this.sprite.loop, restart: true });
+      spr.update(1 / 60);
+    }
+    spr.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
     if (!this.ko) this.drawTag(ctx, sy);
   }
 

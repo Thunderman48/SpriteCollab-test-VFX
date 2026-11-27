@@ -50,7 +50,7 @@ const STR = {
     stn_brn: 'BRN', stn_psn: 'PSN', stn_tox: 'PSN', stn_par: 'PAR', stn_slp: 'SLP', stn_frz: 'FRZ', stn_confusion: 'Confused', stn_flinch: 'Flinch',
     wokeUp: '{who} woke up!', thawed: '{who} thawed out!', fullPara: "{who} is paralyzed! It can't move!", hitSelf: 'It hurt itself in its confusion!',
     protectLog: '{who} protected itself!', protected: 'Protected!', healLog: '{who} restored HP!', mustRecharge: '{who} must recharge!',
-    knockedOff: "{who} lost its {item}!", missed: 'Miss', avoided: '{who} avoided the attack!', failed: 'Failed', traced: '{who} traced {ability}!',
+    knockedOff: "{who} lost its {item}!", missed: 'Miss', avoided: '{who} avoided the attack!', failed: 'Failed', traced: '{who} traced {ability}!', disguiseBusted: "{who}'s disguise was busted!", illusionBroke: "{who}'s illusion wore off!",
     w_raindance: 'It started to rain!', w_sunnyday: 'The sunlight turned harsh!', w_sandstorm: 'A sandstorm kicked up!',
     w_end_raindance: 'The rain stopped.', w_end_sunnyday: 'The sunlight faded.', w_end_sandstorm: 'The sandstorm subsided.',
     wn_raindance: 'Rain', wn_sunnyday: 'Sun', wn_sandstorm: 'Sandstorm',
@@ -113,7 +113,7 @@ const STR = {
     stn_brn: '화상', stn_psn: '독', stn_tox: '맹독', stn_par: '마비', stn_slp: '잠듦', stn_frz: '얼음', stn_confusion: '혼란', stn_flinch: '풀죽음',
     wokeUp: '{who}{eun} 눈을 떴다!', thawed: '{who}의 얼음이 녹았다!', fullPara: '{who}{eun} 몸이 저려서 움직일 수 없다!', hitSelf: '영문도 모른 채 자신을 공격했다!',
     protectLog: '{who}{eun} 방어 태세에 들어갔다!', protected: '방어!', healLog: '{who}의 HP가 회복되었다!', mustRecharge: '{who}{eun} 반동으로 움직일 수 없다!',
-    knockedOff: '{who}의 {item}을(를) 떨어뜨렸다!', missed: '빗나감', avoided: '{who}에게는 맞지 않았다!', failed: '실패', traced: '{who}{eun} {ability}을(를) 트레이스했다!',
+    knockedOff: '{who}의 {item}을(를) 떨어뜨렸다!', missed: '빗나감', avoided: '{who}에게는 맞지 않았다!', failed: '실패', traced: '{who}{eun} {ability}을(를) 트레이스했다!', disguiseBusted: '{who}의 탈이 벗겨졌다!', illusionBroke: '{who}의 일루전이 풀렸다!',
     w_raindance: '비가 내리기 시작했다!', w_sunnyday: '햇살이 강해졌다!', w_sandstorm: '모래바람이 불기 시작했다!',
     w_end_raindance: '비가 그쳤다.', w_end_sunnyday: '햇살이 약해졌다.', w_end_sandstorm: '모래바람이 가라앉았다.',
     wn_raindance: '비', wn_sunnyday: '쾌청', wn_sandstorm: '모래바람',
@@ -140,6 +140,10 @@ const MON_KO = {
   gyarados: '갸라도스', alakazam: '후딘', machamp: '괴력몬', lapras: '라프라스', scizor: '핫삼',
   typhlosion: '블레이범', sceptile: '나무킹', swampert: '대짱이', infernape: '초염몽', salamence: '보만다',
   absol: '앱솔', togekiss: '토게키스', mew: '뮤', jirachi: '지라치', darkrai: '다크라이', greninja: '개굴닌자',
+  arcanine: '윈디', ninetales: '나인테일', vaporeon: '샤미드', jolteon: '쥬피썬더', flareon: '부스터', espeon: '에브이',
+  sylveon: '님피아', gallade: '엘레이드', zoroark: '조로아크', mimikyu: '따라큐', hydreigon: '삼삼드래', volcarona: '불카모스',
+  heracross: '헤라크로스', milotic: '밀로틱', lugia: '루기아', hooh: '칠색조', kyogre: '가이오가', groudon: '그란돈',
+  celebi: '세레비', chandelure: '샹델라', excadrill: '몰드류', weavile: '포푸니라', dragapult: '드래펄트', goodra: '미끄래곤',
 };
 
 const MOVE_KO = {
@@ -165,6 +169,9 @@ const MOVE_KO = {
   rest: '잠자기', protect: '방어', raindance: '비바라기', sunnyday: '쾌청', sandstorm: '모래바람', firefang: '불꽃엄니',
   icefang: '얼음엄니', thunderfang: '번개엄니', shadowsneak: '야습', extremespeed: '신속', uturn: '유턴', knockoff: '탁쳐서떨구기',
   gigadrain: '기가드레인', drainpunch: '드레인펀치', superpower: '엄청난힘', scald: '열탕',
+  firepunch: '불꽃펀치', icepunch: '냉동펀치', thunderpunch: '번개펀치', hypervoice: '하이퍼보이스', playrough: '치근거리기',
+  bugbuzz: '벌레의야단법석', quiverdance: '나비춤', aeroblast: '에어로블라스트', sacredfire: '성스러운불꽃', bravebird: '브레이브버드',
+  waterspout: '해수스파우팅', dragondarts: '드래곤애로', shadowclaw: '섀도크루',
 };
 
 const NATURE_KO = {

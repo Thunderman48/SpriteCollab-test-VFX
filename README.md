@@ -4,7 +4,7 @@ A real-time Pokémon arena brawler for the browser, built on the [PMDCollab Spri
 sprites, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) sheets. The interface uses PMD: Origins'
 own window borders, portrait frames, cursor, fonts and type icons, so it looks like Mystery Dungeon.
 
-**Roster (36):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon, Gyarados, Alakazam, Machamp, Lapras, Scizor, Typhlosion, Sceptile, Swampert, Infernape, Salamence, Absol, Togekiss, Mew, Jirachi, Darkrai, Greninja. Each Pokémon picks 4 skills from the moves it can learn in the main games (105 skills in the game), and every skill has its own VFX.
+**Roster (60):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon, Gyarados, Alakazam, Machamp, Lapras, Scizor, Typhlosion, Sceptile, Swampert, Infernape, Salamence, Absol, Togekiss, Mew, Jirachi, Darkrai, Greninja, Arcanine, Ninetales, Vaporeon, Jolteon, Flareon, Espeon, Sylveon, Gallade, Zoroark, Mimikyu, Hydreigon, Volcarona, Heracross, Milotic, Lugia, Ho-Oh, Kyogre, Groudon, Celebi, Chandelure, Excadrill, Weavile, Dragapult, Goodra. Each Pokémon picks 4 skills from the moves it can learn in the main games (118 skills in the game), and every skill has its own VFX.
 
 **Held items:** like in Mystery Dungeon, each Pokémon holds one item. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time; the in-game description says what each item does here.
 
@@ -15,7 +15,7 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
   Korean uses the official Korean Pokémon, move, type and item names, and the Galmuri pixel font for Hangul.
 - **Team setup:** a versus screen. Pick the battle mode from the **Mode** dropdown (top right). Each player panel shows the Pokémon on a stage,
   a **Player / CPU** switch, a **Random** button and (in Trio) the party of three. Click or tap a Pokémon to open the **editor**:
-  all 36 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** and **Personality** (see *Customizing a Pokémon* below).
+  all 60 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** and **Personality** (see *Customizing a Pokémon* below).
   Builds and the team are saved in the browser: picking a Pokémon again brings back its last build, and **Reset to default** clears it.
 - Everything works with the mouse, touch, the keyboard (arrows / WASD move the cursor, Enter / Space choose, Esc goes back, Tab changes editor tab) or any gamepad.
 
@@ -36,7 +36,7 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
 - **Weather** (Rain Dance, Sunny Day, Sandstorm, Sand Stream) lasts 20 s: Water/Fire ×1.5 or ×0.5, sandstorm chip damage, Thunder strikes instantly in rain, Solar Beam needs no charge in sun.
 - Drain, recoil, high critical-hit ratio, **priority** (faster wind-up), Hyper Beam's recharge, Outrage's rampage + confusion, U-turn (switches out in Trio), Knock Off (removes the held item), Protect, Recover / Roost / Moonlight / Synthesis / Rest all work.
 - **Extra properties** make similar skills different, e.g. Flamethrower pierces through everyone in a line, Fire Blast leaves burning ground, Ice Beam chills (slows), Hydro Pump knocks far back, Sucker Punch hits harder mid-attack, Dragon Claw recharges faster, Mach Punch lunges from farther away.
-- **All 51 abilities** of the roster work in real time (Intimidate, Multiscale, Rough Skin, Static, Sand Stream, Speed Boost, Moxie, Technician, Water Absorb / Flash Fire / Lightning Rod, Protean, No Guard...). The Personality tab describes each one.
+- **All 74 abilities** of the roster work in real time (Intimidate, Multiscale, Rough Skin, Static, Sand Stream, Drought, Drizzle, Speed Boost, Moxie, Technician, Water / Volt Absorb, Levitate, Mold Breaker, Magic Bounce, Disguise, Illusion, Pixilate, Regenerator, No Guard...). The Personality tab describes each one.
 
 ## Battle modes
 
