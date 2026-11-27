@@ -1,5 +1,5 @@
 {
-  "_comment": "aim: facing = fired in the direction the player faces (otherwise auto-aimed at the opponent). Hand-authored move behaviour + VFX mapping. Particle names are files from PMDCollab/RawAsset/Particle (Name.Tag), beams are folders from RawAsset/Beam. Distances are arena pixels, times are seconds. Damage numbers come from data/moves.json (generated from @pkmn/dex).",
+  "_comment": "Hand-authored move behaviour + VFX mapping. Particle names are files from PMDCollab/RawAsset/Particle (Name.Tag), beams are folders from RawAsset/Beam. Distances are arena pixels, times are seconds. Damage numbers come from data/moves.json (generated from @pkmn/dex).",
   "common": {
     "hitNeutral": {
       "fx": "Hit_Neutral.None",
@@ -26,7 +26,6 @@
   },
   "moves": {
     "airslash": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
@@ -54,7 +53,6 @@
       }
     },
     "dragonpulse": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
@@ -92,7 +90,6 @@
       }
     },
     "hyperbeam": {
-      "aim": "facing",
       "behavior": "beam",
       "anim": "SpAttack",
       "chargeAnim": "Charge",
@@ -217,7 +214,6 @@
       }
     },
     "flashcannon": {
-      "aim": "facing",
       "behavior": "beam",
       "anim": "SpAttack",
       "range": 320,
@@ -274,7 +270,6 @@
       }
     },
     "dragonrush": {
-      "aim": "facing",
       "behavior": "dash",
       "anim": "Attack",
       "range": 260,
@@ -374,7 +369,6 @@
       }
     },
     "shadowball": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
@@ -440,7 +434,6 @@
       }
     },
     "sludgebomb": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 300,
@@ -473,7 +466,6 @@
       }
     },
     "psychocut": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Attack",
       "range": 320,
@@ -547,7 +539,6 @@
       "shake": 7
     },
     "flamethrower": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 220,
@@ -621,7 +612,6 @@
       "shake": 6
     },
     "waterpulse": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 320,
@@ -670,7 +660,6 @@
       "shake": 3
     },
     "hydropump": {
-      "aim": "facing",
       "behavior": "beam",
       "anim": "Shoot",
       "chargeAnim": "Charge",
@@ -699,7 +688,6 @@
       "shake": 4
     },
     "razorleaf": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "Shoot",
       "range": 300,
@@ -758,7 +746,6 @@
       }
     },
     "solarbeam": {
-      "aim": "facing",
       "behavior": "beam",
       "anim": "Shoot",
       "chargeAnim": "Charge",
@@ -804,7 +791,6 @@
       }
     },
     "thunderbolt": {
-      "aim": "facing",
       "behavior": "beam",
       "anim": "Shock",
       "range": 300,
@@ -1019,7 +1005,6 @@
       "shake": 6
     },
     "moonblast": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "SpAttack",
       "range": 320,
@@ -1059,7 +1044,6 @@
       }
     },
     "focusblast": {
-      "aim": "facing",
       "behavior": "projectile",
       "anim": "SpAttack",
       "range": 320,

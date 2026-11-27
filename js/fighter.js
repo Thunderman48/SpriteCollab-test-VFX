@@ -1,7 +1,7 @@
 // A Pokémon in the arena: movement, dodge, auto-cast scheduling, hurt/faint.
 import { SpriteAnimator, angleToDir } from './sprite.js';
 import { statsFor, HP_SCALE, DB, effectiveness } from './combat.js';
-import { startCast, cancelCast, MOVEFX, FACING_CONE } from './moves.js';
+import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { equip } from './items.js';
 
@@ -24,7 +24,7 @@ export class Fighter {
     this.x = x;
     this.y = y;
     this.dir = slot === 0 ? 2 : 6;
-    this.aimAngle = slot === 0 ? 0 : Math.PI; // where facing-aimed moves go
+    this.facing = slot === 0 ? 0 : Math.PI; // last movement direction (default dodge direction)
     this.moveSpeed = 64 + this.stats.spe * 0.22;
     // Faster Pokémon recharge a little quicker (±~10%).
     this.recharge = 1 + (this.stats.spe - 115) / 350;
@@ -128,7 +128,7 @@ export class Fighter {
     // one keeps whatever it already fired (projectiles, beams, pending hits).
     if (this.cast) cancelCast(this.game, this);
     const len = Math.hypot(input.x, input.y);
-    this.dodgeAngle = len > 0.2 ? Math.atan2(input.y, input.x) : this.aimAngle;
+    this.dodgeAngle = len > 0.2 ? Math.atan2(input.y, input.x) : this.facing;
     if (this.mods.warpDodge) {
       // Warp Scarf: blink a long way instead of dashing.
       this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y + 6, { layer: 'under' }));
@@ -169,11 +169,7 @@ export class Fighter {
     let vy = 0;
     const len = Math.min(1, Math.hypot(input.x, input.y));
     this.moving = false;
-    // Steering sets the aim — also while charging a facing move (not once it has fired).
-    if (len > 0.15 && this.game.state === 'fight' && this.dodgeT <= 0 && !(this.cast && this.cast.released)) {
-      this.aimAngle = Math.atan2(input.y, input.x);
-      if (this.cast?.aimFacing) this.cast.faceAngle = this.aimAngle;
-    }
+    if (len > 0.15 && this.game.state === 'fight' && this.dodgeT <= 0 && !this.cast) this.facing = Math.atan2(input.y, input.x);
     if (this.dodgeT > 0) {
       this.dodgeT -= dt;
       vx = Math.cos(this.dodgeAngle) * DODGE_SPEED;
@@ -184,7 +180,7 @@ export class Fighter {
     } else if (this.cast?.drive) {
       this.cast.drive(dt);
     } else if (len > 0.15 && this.game.state === 'fight' && !this.cast) {
-      // While attacking you're rooted: a direction only turns your aim (handled above).
+      // While attacking you're rooted in place.
       const a = Math.atan2(input.y, input.x);
       vx = Math.cos(a) * len * this.moveSpeed;
       vy = Math.sin(a) * len * this.moveSpeed;
@@ -233,11 +229,6 @@ export class Fighter {
       if (effectiveness(DB.moves[id].type, opp.data.types) === 0) continue;
       const fx = MOVEFX.moves[id];
       if (d > fx.range + opp.radius) continue;
-      if (fx.aim === 'facing') {
-        // Wait until you're roughly facing the opponent; the shot still flies exactly where you aim.
-        const off = Math.atan2(Math.sin(this.angleTo(opp) - this.aimAngle), Math.cos(this.angleTo(opp) - this.aimAngle));
-        if (Math.abs(off) > FACING_CONE) continue;
-      }
       if (!best || DB.moves[id].cooldown > DB.moves[best].cooldown) best = id;
     }
     if (best) startCast(this.game, this, opp, best);
@@ -258,28 +249,7 @@ export class Fighter {
     ctx.ellipse(Math.round(this.x), Math.round(this.y + 7), sw, sw * 0.38, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    if (!this.ko) this.drawAim(ctx, alpha);
     this.sprite.draw(ctx, this.x, this.y + bob - (this.data.flying ? 6 : 0), this.dir, { flash: this.flash, alpha });
   }
 
-  /** Small pixel arrow on the ground showing where facing-aimed moves will go. */
-  drawAim(ctx, alpha) {
-    const a = this.cast?.aimFacing ? this.cast.faceAngle : this.aimAngle;
-    const r = this.radius + 10;
-    const x = this.x + Math.cos(a) * r;
-    const y = this.y + 7 + Math.sin(a) * r * 0.55;
-    ctx.save();
-    ctx.globalAlpha = alpha * (this.cast?.aimFacing && !this.cast.released ? 1 : 0.75);
-    ctx.translate(Math.round(x), Math.round(y));
-    ctx.rotate(Math.atan2(Math.sin(a) * 0.55, Math.cos(a)));
-    ctx.fillStyle = '#000';
-    ctx.beginPath();
-    ctx.moveTo(6, 0); ctx.lineTo(-4, -5); ctx.lineTo(-4, 5); ctx.closePath();
-    ctx.fill();
-    ctx.fillStyle = this.slot === 0 ? '#58a8f8' : '#f878b0';
-    ctx.beginPath();
-    ctx.moveTo(4, 0); ctx.lineTo(-3, -3); ctx.lineTo(-3, 3); ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
 }

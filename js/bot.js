@@ -50,22 +50,8 @@ export class Bot {
     const ready = me.data.moves.find(
       (id) => me.cd[id] <= 0 && d <= MOVEFX.moves[id].range + foe.radius && effectiveness(DB.moves[id].type, foe.data.types) > 0,
     );
-    const aimOff = Math.abs(Math.atan2(Math.sin(a - me.aimAngle), Math.cos(a - me.aimAngle)));
-    if (me.cast) {
-      // Rooted while attacking: a direction only turns the aim of a charging aimed move.
-      const turn = me.cast.aimFacing && !me.cast.released;
-      x = turn ? Math.cos(a) : 0;
-      y = turn ? Math.sin(a) : 0;
-    } else if (ready) {
-      if (MOVEFX.moves[ready].aim === 'facing' && aimOff > 0.25) {
-        const err = (Math.random() - 0.5) * 0.3; // tap toward the target to aim, a bit sloppily
-        x = Math.cos(a + err);
-        y = Math.sin(a + err);
-      } else {
-        x = 0;
-        y = 0;
-      }
-    } else if (this.planted) {
+    if (me.cast || ready || this.planted) {
+      // Stand still: while attacking, to let a ready move fire, or to recharge.
       x = 0;
       y = 0;
     }

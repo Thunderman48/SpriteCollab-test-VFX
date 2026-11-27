@@ -6,8 +6,6 @@ import { Effect, Beam, Telegraph } from './vfx.js';
 export const MOVEFX = { common: {}, moves: {} };
 /** Pause after every attack before the next one can start. */
 export const CAST_GAP = 0.5;
-/** Facing moves only fire when the opponent is within this angle of where you're aiming. */
-export const FACING_CONE = (70 * Math.PI) / 180;
 
 const MOUTH_Y = -4;
 
@@ -32,10 +30,9 @@ export function startCast(game, c, t, id) {
     released: false,
     cancelable: false,
     done: false,
-    track: def.aim !== 'facing',
-    aimFacing: def.aim === 'facing',
+    track: true,
     drive: null,
-    faceAngle: def.aim === 'facing' ? c.aimAngle : c.angleTo(t),
+    faceAngle: c.angleTo(t),
   };
   cast.release = () => {
     if (cast.released) return;
@@ -58,9 +55,8 @@ export function startCast(game, c, t, id) {
   return cast;
 }
 
-/** Facing moves go where the caster is aiming; the rest at the opponent. */
+/** Every move auto-targets the opponent (falls back to the last direction if it fainted). */
 function aimOf(c, t, cast) {
-  if (cast.aimFacing) return c.aimAngle;
   return t.alive ? c.angleTo(t) : cast.faceAngle;
 }
 
@@ -453,8 +449,8 @@ const BEHAVIORS = {
     game.after(d.vanishTime, () => {
       c.hidden = false;
       if (!t.alive) return cast.finish();
-      // Reappear behind the target (opposite the way it's aiming).
-      const back = t.aimAngle + Math.PI;
+      // Reappear behind the target (opposite the way it last moved).
+      const back = t.facing + Math.PI;
       c.x = t.x + Math.cos(back) * (t.radius + c.radius + 4);
       c.y = t.y + Math.sin(back) * (t.radius + c.radius + 4) * 0.7;
       c.clamp();

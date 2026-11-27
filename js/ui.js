@@ -88,7 +88,7 @@ export class UI {
     root.innerHTML = `
       <header class="select-title">
         <canvas class="banner-img" aria-label="SpriteCollab VFX Arena"></canvas>
-        <span class="dim">Stand still to attack: moves fire on their own (high PP = fast, low PP = strong). <span class="cyan">→</span> moves fire where you face. <button class="credits-btn cyan" type="button">Credits</button></span>
+        <span class="dim">Stand still to attack: moves fire at the opponent on their own (high PP = fast, low PP = strong). <button class="credits-btn cyan" type="button">Credits</button></span>
       </header>
       <div class="select-cols">
         ${[0, 1].map((i) => `
@@ -288,9 +288,8 @@ export class UI {
       .map((id) => {
         const m = DB.moves[id];
         const fx = MOVEFX.moves[id];
-        const aimed = fx.aim === 'facing';
-        const tip = `${m.name} · ${m.type} ${m.category} · Power ${m.power} · ${BEHAVIOR_LABEL[fx.behavior] || fx.behavior}${aimed ? ', fired where you face' : ', aims itself'}. ${m.shortDesc}`;
-        return `<li title="${esc(tip)}"><span class="mv-name">${orb(m.type)}<span class="green">${m.name}</span>${aimed ? ' <span class="cyan">→</span>' : ''}</span><span>${m.category === 'Physical' ? 'Phys' : 'Spec'} ${m.power}</span><span><span class="cyan">PP</span>${String(m.pp).padStart(3, ' ')} <span class="dim">${m.cooldown}s</span></span></li>`;
+        const tip = `${m.name} · ${m.type} ${m.category} · Power ${m.power} · ${BEHAVIOR_LABEL[fx.behavior] || fx.behavior}. ${m.shortDesc}`;
+        return `<li title="${esc(tip)}"><span class="mv-name">${orb(m.type)}<span class="green">${m.name}</span></span><span>${m.category === 'Physical' ? 'Phys' : 'Spec'} ${m.power}</span><span><span class="cyan">PP</span>${String(m.pp).padStart(3, ' ')} <span class="dim">${m.cooldown}s</span></span></li>`;
       })
       .join('')}</ul>`;
   }
