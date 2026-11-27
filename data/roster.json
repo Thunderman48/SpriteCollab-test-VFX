@@ -1,0 +1,7 @@
+[
+  { "key": "rayquaza", "species": "Rayquaza", "dex": 384, "moves": ["airslash", "dragonpulse", "hyperbeam", "dracometeor"], "hurtRadius": 22, "flying": true },
+  { "key": "lucario",  "species": "Lucario",  "dex": 448, "moves": ["bulletpunch", "aurasphere", "flashcannon", "closecombat"], "hurtRadius": 14 },
+  { "key": "garchomp", "species": "Garchomp", "dex": 445, "moves": ["crunch", "dragonrush", "earthpower", "stoneedge"], "hurtRadius": 18 },
+  { "key": "gengar",   "species": "Gengar",   "dex": 94,  "moves": ["lick", "shadowball", "darkpulse", "sludgebomb"], "hurtRadius": 15 },
+  { "key": "mewtwo",   "species": "Mewtwo",   "dex": 150, "moves": ["psychocut", "aurasphere", "psychic", "psychoboost"], "hurtRadius": 16 }
+]

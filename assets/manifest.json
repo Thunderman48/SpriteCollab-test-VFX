@@ -1,0 +1,91 @@
+{
+  "sprites": {
+    "0384": [
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Shoot",
+      "Walk"
+    ],
+    "0448": [
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "QuickStrike",
+      "RearUp",
+      "Strike",
+      "Walk"
+    ],
+    "0445": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Walk"
+    ],
+    "0094": [
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Rotate",
+      "Shoot",
+      "Walk"
+    ],
+    "0150": [
+      "Attack",
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hover",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Walk"
+    ]
+  },
+  "portraits": {
+    "0384": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0448": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0445": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0094": [
+      "Happy",
+      "Normal",
+      "Pain"
+    ],
+    "0150": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ]
+  }
+}
