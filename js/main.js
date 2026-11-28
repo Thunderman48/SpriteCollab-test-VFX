@@ -7,7 +7,8 @@ import { Fighter } from './fighter.js';
 import { SpriteAnimator } from './sprite.js';
 import { MODES, defaultSetup, makeMember, partyFor, teamOf, battleSetup } from './modes.js';
 import { ITEMS } from './items.js';
-import { MOVEFX, cancelCast } from './moves.js';
+import { MOVEFX, cancelCast, startCast } from './moves.js';
+import { equip } from './items.js';
 import { clearHazards, hazardCount, placeHazard } from './patterns.js';
 import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
@@ -107,6 +108,9 @@ class Game {
     return this.fighters.filter((o) => o.team !== f.team && o.alive);
   }
   nearestEnemy(f) {
+    // Follow Me: a foe calling attention gets targeted first.
+    const caller = this.enemiesOf(f).find((o) => o.followT > 0);
+    if (caller) return caller;
     let best = null;
     for (const o of this.enemiesOf(f)) if (!best || f.distTo(o) < f.distTo(best)) best = o;
     return best;
@@ -195,6 +199,24 @@ class Game {
     }
     const x = FXE.damageMods(this, att, def, cast);
     const r = computeDamage(att, def, move, factor * this.damageMul, x);
+    // Substitute takes the hit instead (sound moves and Infiltrator go around it).
+    if (def.sub && att !== def && !move.flags?.includes('sound') && !FXE.ab(att, 'infiltrator')) {
+      def.sub.hp -= r.dmg;
+      this.addEffect(new FloatText(String(r.dmg), def.x, def.y - 20, '#c8c8c8'));
+      if (def.sub.hp <= 0) {
+        def.sub = null;
+        this.ui.log(t('subFaded', { who: this.who(def) }));
+        this.addEffect(new Effect(MOVEFX.common.dodge, def.x, def.y - 6, { scale: 1.4 }));
+      }
+      return 0;
+    }
+    // Ice Face: Eiscue's ice head takes the first physical hit.
+    if (FXE.ab(def, 'iceface') && !def.faceBroken && move.category === 'Physical' && r.dmg > 0) {
+      def.faceBroken = true;
+      this.ui.log(t('iceFaceBroke', { who: this.who(def) }));
+      this.addEffect(new Effect(MOVEFX.common.hitNeutral, def.x, def.y - 6, { scale: 1.4 }));
+      return 0;
+    }
     const { eff, crit } = r;
     const dmg = FXE.adjustDamage(this, att, def, r.dmg); // Disguise
     if (eff > 1) this.addEffect(new Effect(MOVEFX.common.hitSuper, def.x, def.y - 6, { scale: 1.2 }));
@@ -256,6 +278,35 @@ class Game {
   placeHazard(c, kind, x, y) {
     placeHazard(this, c, kind, x, y);
   }
+  /** Trick: the two Pokémon swap held items. */
+  swapItems(a, b) {
+    const ia = a.item && !a.itemSpent ? a.item.id : null;
+    const ib = b.item && !b.itemSpent ? b.item.id : null;
+    for (const [f, id] of [[a, ib], [b, ia]]) {
+      f.stats = { ...f.rawStats };
+      equip(f, id);
+      f.refreshSpeed();
+    }
+  }
+  /** Pickup: hand a Pokémon an item mid-battle. */
+  giveItem(f, id) {
+    f.stats = { ...f.rawStats };
+    equip(f, id);
+    this.ui.log(t('pickedUp', { who: this.who(f), item: f.itemLabel() }));
+  }
+  /** Symbiosis: gives its own item to a partner. */
+  passItem(from, to) {
+    const id = from.item?.id;
+    if (!id) return;
+    to.stats = { ...to.rawStats };
+    equip(to, id);
+    from.loseItem();
+    this.ui.log(t('symbiosisLog', { who: this.who(from), foe: this.who(to) }));
+  }
+  /** Metronome: start another skill right away. */
+  forceCast(c, t2, id) {
+    startCast(this, c, t2, id);
+  }
   /** Tidy Up: every hazard on the field is cleared. */
   clearAllHazards() {
     for (const o of this.objects) if (o.hazard) o.dead = true;
@@ -264,7 +315,7 @@ class Game {
   dragOut(f) {
     const p = this.parties[f.slot];
     const bench = this.benchOf(f.slot);
-    if (!f.alive || this.mode.party < 2 || !bench.length || this.activeOf(f.slot) !== f || this.state !== 'fight') return;
+    if (!f.alive || this.mode.party < 2 || !bench.length || this.activeOf(f.slot) !== f || this.state !== 'fight' || FXE.ab(f, 'suctioncups')) return;
     const next = bench[Math.floor(Math.random() * bench.length)];
     if (f.cast) cancelCast(this, f);
     FXE.onSwitchOut(this, f);
@@ -400,6 +451,8 @@ class Game {
     this.terrain = null;
     this.room = null;
     this.sides = [{}, {}];
+    this.gravity = null;
+    this.healWish = {};
   }
 
   /** Quick 1v1 helper (used by tests and URL shortcuts). */
@@ -418,6 +471,8 @@ class Game {
   }
 
   leaveBattle() {
+    this.gravity = null;
+    this.healWish = {};
     this.weather = null;
     this.terrain = null;
     this.room = null;

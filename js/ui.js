@@ -20,7 +20,7 @@ const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const TYPE_ORDER = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
 const TABS = ['Stats', 'Skills', 'Equipment', 'Personality'];
 const OVERLAYS = ['settings', 'credits', 'info', 'editor', 'pause', 'result'];
-export const VERSION = 'v1.3';
+export const VERSION = 'v1.4';
 
 const KEYS = {
   up: ['ArrowUp', 'KeyW'],
@@ -454,7 +454,7 @@ export class UI {
         <span class="sp-val">${st[k]}</span><i style="--w:${Math.min(100, (st[k] / (k === 'hp' ? 300 : 260)) * 100)}%"></i></button>`;
     }).join('')}</div>
       <div class="row stat-foot"><span><span class="cyan">${t('statPoints')}</span> <span class="${used === SP_TOTAL ? 'yellow' : ''}">${used}/${SP_TOTAL}</span> <span class="dim">${t('base')} ${total}${total !== d.bst ? ` (${d.bst})` : ''}</span></span>
-      <span><span class="cyan">${t('arenaHp')}</span> ${st.hp * HP_SCALE}</span><button class="nav sp-reset" type="button">${t('reset')}</button></div>`;
+      <span><span class="cyan">${t('arenaHp')}</span> ${DB.pokedex[m.species].baseStats.hp === 1 ? HP_SCALE : st.hp * HP_SCALE}</span><button class="nav sp-reset" type="button">${t('reset')}</button></div>`;
     $$('.sp-row', panel).forEach((row) => {
       const k = row.dataset.stat;
       // Enter / tap on the row fills the stat (or empties it if already filled).

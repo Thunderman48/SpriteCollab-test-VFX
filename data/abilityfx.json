@@ -999,5 +999,130 @@
     "ko": "미라클스킨",
     "desc": "Foes' status skills fail half the time against it.",
     "descKo": "상대의 변화 기술이 절반의 확률로 실패한다."
+  },
+  "imposter": {
+    "ko": "괴짜",
+    "desc": "When it enters it transforms into the foe.",
+    "descKo": "등장하면 상대로 변신한다."
+  },
+  "wonderguard": {
+    "ko": "불가사의부적",
+    "desc": "Only super-effective hits can hurt it.",
+    "descKo": "효과가 굉장한 공격만 통한다."
+  },
+  "aftermath": {
+    "ko": "유폭",
+    "desc": "Knocked out by a contact move: the attacker loses 12% HP.",
+    "descKo": "접촉 기술로 쓰러지면 상대는 HP 12%를 잃는다."
+  },
+  "forecast": {
+    "ko": "기분파",
+    "desc": "Its type changes with the weather (Fire in sun, Water in rain, Ice in snow).",
+    "descKo": "날씨에 따라 타입이 바뀐다 (쾌청 불꽃, 비 물, 눈 얼음)."
+  },
+  "colorchange": {
+    "ko": "변색",
+    "desc": "Becomes the type of the move that hit it.",
+    "descKo": "맞은 기술의 타입으로 바뀐다."
+  },
+  "hungerswitch": {
+    "ko": "꼬르륵스위치",
+    "desc": "Aura Wheel alternates between Electric and Dark every use.",
+    "descKo": "오라휠을 쓸 때마다 전기와 악 타입이 번갈아 바뀐다."
+  },
+  "gulpmissile": {
+    "ko": "그대로꿀꺽미사일",
+    "desc": "After Surf it holds a catch in its mouth; the next foe to hit it gets it spat at them (12% HP, Defense −1).",
+    "descKo": "파도타기 후 먹이를 물고 있다가, 다음에 공격한 상대에게 뱉는다 (HP 12%, 방어 −1)."
+  },
+  "iceface": {
+    "ko": "아이스페이스",
+    "desc": "Its ice head takes the first physical hit. It grows back in snow.",
+    "descKo": "얼음 머리가 첫 물리 공격을 대신 받는다. 눈이 오면 다시 생긴다."
+  },
+  "forewarn": {
+    "ko": "예지몽",
+    "desc": "When it enters, reveals the foe's strongest skill.",
+    "descKo": "등장하면 상대의 가장 강한 기술을 알아낸다."
+  },
+  "refrigerate": {
+    "ko": "프리즈스킨",
+    "desc": "Its Normal moves become Ice type and ×1.2.",
+    "descKo": "노말 기술이 얼음 타입이 되고 1.2배."
+  },
+  "pickup": {
+    "ko": "픽업",
+    "desc": "Empty-handed, it may pick up a Sitrus Berry when it enters.",
+    "descKo": "도구가 없으면 등장할 때 자뭉열매를 주울 수도 있다."
+  },
+  "flowerveil": {
+    "ko": "플라워베일",
+    "desc": "Grass types on its team can't have their stats lowered by foes.",
+    "descKo": "같은 팀 풀 타입의 능력이 떨어지지 않는다."
+  },
+  "symbiosis": {
+    "ko": "공생",
+    "desc": "In 2vs2, when its partner uses up its item, it hands over its own.",
+    "descKo": "2vs2에서 동료가 도구를 다 쓰면 자신의 도구를 건네준다."
+  },
+  "suctioncups": {
+    "ko": "흡반",
+    "desc": "It can't be dragged out (Dragon Tail, Circle Throw).",
+    "descKo": "드래곤테일·배대뒤치기로 교체되지 않는다."
+  },
+  "toughclaws": {
+    "ko": "단단한발톱",
+    "desc": "Contact moves ×1.3.",
+    "descKo": "접촉 기술 1.3배."
+  },
+  "berserk": {
+    "ko": "발끈",
+    "desc": "When a hit drops it below half HP: Sp. Atk +1.",
+    "descKo": "공격으로 HP가 절반 아래가 되면 특수공격 +1."
+  },
+  "dazzling": {
+    "ko": "비비드바디",
+    "desc": "Foes' priority skills can't hit it or its partner.",
+    "descKo": "상대의 선제 기술이 자신과 동료에게 통하지 않는다."
+  },
+  "comatose": {
+    "ko": "절대안깸",
+    "desc": "Always half asleep: no status conditions, but Hex treats it as statused.",
+    "descKo": "늘 잠에 취해 있다: 상태 이상이 되지 않지만 병상첨병에는 상태 이상으로 취급된다."
+  },
+  "receiver": {
+    "ko": "리시버",
+    "desc": "In 2vs2, takes over the ability of a partner who faints.",
+    "descKo": "2vs2에서 쓰러진 동료의 특성을 이어받는다."
+  },
+  "wanderingspirit": {
+    "ko": "떠도는영혼",
+    "desc": "A foe that touches it swaps abilities with it.",
+    "descKo": "접촉한 상대와 특성을 바꾼다."
+  },
+  "icescales": {
+    "ko": "얼음인분",
+    "desc": "Special damage against it ×0.5.",
+    "descKo": "받는 특수 데미지 0.5배."
+  },
+  "waterveil": {
+    "ko": "수의베일",
+    "desc": "Can't be burned.",
+    "descKo": "화상에 걸리지 않는다."
+  },
+  "cudchew": {
+    "ko": "되새김질",
+    "desc": "After eating a berry it chews it again 3 s later.",
+    "descKo": "나무열매를 먹으면 3초 뒤에 한 번 더 먹는다."
+  },
+  "armortail": {
+    "ko": "테일아머",
+    "desc": "Foes' priority skills can't hit it or its partner.",
+    "descKo": "상대의 선제 기술이 자신과 동료에게 통하지 않는다."
+  },
+  "beadsofruin": {
+    "ko": "재앙의구슬",
+    "desc": "While it's out, everyone else's Sp. Def is lowered (special hits ×1.33).",
+    "descKo": "나와 있는 동안 다른 모든 포켓몬의 특수방어가 떨어진다 (특수 공격 1.33배)."
   }
 }

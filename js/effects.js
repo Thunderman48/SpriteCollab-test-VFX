@@ -18,7 +18,7 @@ export const STAT_KEYS = ['atk', 'def', 'spa', 'spd', 'spe', 'crit'];
 const UNSUPPRESSED = ['neutralizinggas', 'multitype', 'stancechange', 'zerotohero', 'zenmode', 'disguise'];
 /** Neutralizing Gas: while one is out, every other Pokémon's ability stops working. */
 const gassed = (f) => !UNSUPPRESSED.includes(f.ability) && !!f.game?.fighters?.some((o) => o !== f && !o.ko && o.ability === 'neutralizinggas');
-export const ab = (f, id) => !!f && f.ability === id && !gassed(f);
+export const ab = (f, id) => !!f && f.ability === id && !gassed(f) && !(f.gastroT > 0 && !UNSUPPRESSED.includes(id));
 /** Mold Breaker / Turboblaze: the attacker ignores the target's ability. */
 // The move landing the current hit (Sunsteel Strike / Moongeist Beam ignore the target's ability).
 let hitMove = null;
@@ -26,12 +26,16 @@ export const setHitMove = (m) => {
   hitMove = m;
 };
 const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze') || ab(att, 'teravolt') || !!hitMove?.ignoreAbility;
-const PROTECTS = ['protect', 'spikyshield', 'kingsshield'];
+const PROTECTS = ['protect', 'spikyshield', 'kingsshield', 'banefulbunker', 'obstruct', 'silktrap'];
 /** The defender's ability, unless the attacker ignores it. */
 const defAb = (att, def, id) => !breaks(att) && ab(def, id);
 /** A move's type for this user (Pixilate turns Normal moves into Fairy moves). */
 export function moveType(f, m) {
+  // Weather Ball takes the weather's type; Aura Wheel turns Dark when Morpeko is hangry.
+  if (m.id === 'weatherball') return { sunnyday: 'Fire', raindance: 'Water', sandstorm: 'Rock', snowscape: 'Ice' }[weatherNow(f.game)] || 'Normal';
+  if (m.id === 'aurawheel' && f.hangry) return 'Dark';
   if (m.type === 'Normal' && ab(f, 'pixilate')) return 'Fairy';
+  if (m.type === 'Normal' && ab(f, 'refrigerate')) return 'Ice';
   if (m.flags?.includes('sound') && ab(f, 'liquidvoice')) return 'Water';
   return m.type;
 }
@@ -40,7 +44,7 @@ export function moveType(f, m) {
 export const hasPriority = (f, m) =>
   m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp) || (ab(f, 'prankster') && m.category === 'Status');
 /** Grounded (not flying / Levitate): affected by terrain. */
-const grounded = (f) => f.smackT > 0 || (!f.data.flying && !ab(f, 'levitate'));
+const grounded = (f) => f.smackT > 0 || f.game?.gravity?.t > 0 || (!(f.magnetT > 0) && !f.data.flying && !ab(f, 'levitate'));
 export const isGrounded = grounded;
 /** Arena Trap (grounded foes) / Magnet Pull (Steel foes): their dodge recharges slower. */
 export const trapped = (game, f) =>
@@ -57,7 +61,7 @@ export function setTerrain(game, id) {
 export const terrainEndKey = (id) => ({ grassy: 'terrainEnd', electric: 'terrainEndElectric', psychic: 'terrainEndPsychic', misty: 'terrainEndMisty' })[id];
 
 // ---------- team / field effects (Tailwind, Reflect, Light Screen, Trick Room) ----------
-const SIDE_TIME = { tailwind: 12, reflect: 12, lightscreen: 12 };
+const SIDE_TIME = { tailwind: 12, reflect: 12, lightscreen: 12, auroraveil: 12, safeguard: 12 };
 /** Time left on a team effect for f's team (0 = off). */
 export const sideOn = (game, team, id) => game.sides?.[team]?.[id] > 0;
 function setSide(game, c, id) {
@@ -103,7 +107,9 @@ export function boost(game, f, boosts, source = null, bounced = false) {
   for (let [k, raw] of Object.entries(boosts)) {
     if (!raw || !STAT_KEYS.includes(k)) continue;
     if (ab(f, 'contrary')) raw = -raw; // Contrary: reversed
-    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter'));
+    // Flower Veil: Grass-type Pokémon on its team keep their stats.
+    const veiled = f.types.includes('Grass') && f.game?.fighters?.some((o) => o.alive && o.team === f.team && ab(o, 'flowerveil'));
+    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter')) || veiled;
     if (raw < 0 && enemy && guarded) {
       ability(game, f);
       continue;
@@ -176,6 +182,9 @@ export function statusBlock(game, f, id, source) {
   if (id === 'brn' && (ab(f, 'thermalexchange') || ab(f, 'waterbubble'))) return 'type';
   if (id === 'slp' && ab(f, 'insomnia')) return 'type';
   if (terrainNow(game) === 'misty' && grounded(f)) return 'type'; // Misty Terrain: no status on the ground
+  if (sideOn(game, f.team, 'safeguard') && source && source.team !== f.team) return 'type'; // Safeguard
+  if (ab(f, 'comatose')) return 'type'; // Komala is always half asleep
+  if (id === 'brn' && ab(f, 'waterveil')) return 'type';
   if (ab(f, 'purifyingsalt') || (ab(f, 'leafguard') && weatherNow(game) === 'sunnyday')) return 'type';
   return null;
 }
@@ -245,6 +254,10 @@ export function tickGame(game, dt) {
     say(game, terrainEndKey(game.terrain.id));
     game.terrain = null;
   }
+  if (game.gravity && (game.gravity.t -= dt) <= 0) {
+    say(game, 'gravityEnd');
+    game.gravity = null;
+  }
   if (game.room && (game.room.t -= dt) <= 0) {
     say(game, 'roomEnd');
     game.room = null;
@@ -306,6 +319,11 @@ export function tickFighter(game, f, dt) {
   if (f.bladeT > 0 && (f.bladeT -= dt) <= 0) formChange(game, f, false); // Stance Change: back to Shield Forme
   f.glaiveT = Math.max(0, (f.glaiveT || 0) - dt);
   f.tauntT = Math.max(0, (f.tauntT || 0) - dt);
+  f.gastroT = Math.max(0, (f.gastroT || 0) - dt);
+  f.magnetT = Math.max(0, (f.magnetT || 0) - dt);
+  f.followT = Math.max(0, (f.followT || 0) - dt);
+  // Yawn: drowsy now, asleep in a moment.
+  if (f.yawnT > 0 && (f.yawnT -= dt) <= 0) inflict(game, f, 'slp', f.yawnBy);
   f.bondT = Math.max(0, (f.bondT || 0) - dt);
   f.smackT = Math.max(0, (f.smackT || 0) - dt);
   f.trapT = Math.max(0, (f.trapT || 0) - dt);
@@ -373,6 +391,22 @@ export function tickFighter(game, f, dt) {
     fxAt(game, MOVEFX.status.seed, f, { dy: -10 });
     if ((f.seed.t -= 1) <= 0) f.seed = null;
   }
+  if (f.cursed && perSecond && f.alive) {
+    hurt(game, f, 0.025, '#a058f8');
+    fxAt(game, MOVEFX.status.curse, f, { dy: -20 });
+    if ((f.cursed.t -= 1) <= 0) f.cursed = null;
+  }
+  // Octolock: Defense and Sp. Def keep dropping while it's held.
+  if (f.octo && perSecond && f.alive) {
+    boost(game, f, { def: -1, spd: -1 }, f.octo.by);
+    if ((f.octo.t -= 1) <= 0) f.octo = null;
+  }
+  // Aqua Ring / Ingrain: slowly heal.
+  if (f.ringT > 0 && perSecond && f.alive) {
+    f.heal(f.maxHp * 0.02);
+    fxAt(game, MOVEFX.status[f.ringKind] || MOVEFX.status.heal, f, { dy: 4, layer: 'under' });
+    f.ringT -= 1;
+  }
   if (f.salt && perSecond && f.alive) {
     hurt(game, f, f.types.some((x) => x === 'Water' || x === 'Steel') ? 0.03 : 0.015, '#e8e8f8');
     fxAt(game, MOVEFX.status.salt, f, { dy: -8 });
@@ -384,6 +418,19 @@ export function tickFighter(game, f, dt) {
       cureStatus(game, f);
     }
     if (ab(f, 'icebody') && w === 'snowscape') f.heal(f.maxHp * 0.01);
+    // Ice Face comes back in snow.
+    if (ab(f, 'iceface') && f.faceBroken && w === 'snowscape') {
+      f.faceBroken = false;
+      ability(game, f);
+    }
+    // Symbiosis: hands its item to a partner who used theirs up.
+    if (ab(f, 'symbiosis') && f.item && !f.itemSpent) {
+      const mate = allies(game, f).find((o) => o.itemSpent && !o.itemPassed);
+      if (mate) {
+        mate.itemPassed = true;
+        game.passItem?.(f, mate);
+      }
+    }
     // Honey Gather: now and then it finds honey and eats it.
     if (ab(f, 'honeygather') && (f.honeyT = (f.honeyT ?? 8) - 1) <= 0) {
       f.honeyT = 8;
@@ -461,6 +508,27 @@ export function onEntry(game, f) {
   if (ab(f, 'grassysurge')) setTerrain(game, 'grassy');
   if (ab(f, 'snowwarning')) setWeather(game, 'snowscape', f);
   if (ab(f, 'psychicsurge')) setTerrain(game, 'psychic');
+  // Pickup: empty-handed, it may find a Sitrus Berry.
+  if (ab(f, 'pickup') && !f.item && !f.pickedUp && Math.random() < 0.5) {
+    f.pickedUp = true;
+    game.giveItem?.(f, 'berry_sitrus');
+  }
+  // Imposter: transforms into the foe right away.
+  if (ab(f, 'imposter') && !f.transformed) {
+    const near = game.nearestEnemy(f);
+    if (near) game.after(0.3, () => f.alive && near.alive && !f.transformed && transform(game, f, near), null);
+  }
+  // Forewarn: reveals the foe's strongest skill.
+  if (ab(f, 'forewarn')) {
+    const best = foes.flatMap((e) => e.moves.map((id) => [e, DB.moves[id]])).sort((a, b) => (b[1].power || 0) - (a[1].power || 0))[0];
+    if (best) game.ui?.log(t('forewarned', { who: game.who(f), foe: game.who(best[0]), move: best[1].name }));
+  }
+  if (game.healWish?.[f.slot]) {
+    // Healing Wish: the next Pokémon in comes in fully healed.
+    game.healWish[f.slot] = false;
+    f.status = null;
+    healText(game, f, f.heal(f.maxHp));
+  }
   if (ab(f, 'mistysurge')) setTerrain(game, 'misty');
   if (ab(f, 'slowstart')) {
     ability(game, f);
@@ -589,7 +657,21 @@ export function wantsMove(game, f, id, foe) {
   if (f.tauntT > 0 && m.category === 'Status') return false; // Taunt
   if (fx.stance) return threatenedBy(game, f, fx.stance.cat);
   if (fx.behavior === 'self') {
+    if (id === 'auroraveil') return w === 'snowscape' && !sideOn(game, f.team, id);
     if (SIDE_TIME[id]) return !sideOn(game, f.team, id);
+    if (id === 'transform') return !!foe && !f.transformed && foe.data.key !== 'ditto';
+    if (id === 'metronome') return !!foe && f.distTo(foe) < 260;
+    if (id === 'curse') return f.types.includes('Ghost') ? !!foe && !foe.cursed && f.hp > f.maxHp * 0.5 : stageOf(f, 'atk') < 4;
+    if (id === 'wish') return f.hp < f.maxHp * 0.7;
+    if (id === 'healingwish') return f.hp < f.maxHp * 0.3 && (game.benchOf?.(f.slot) || []).some((o) => o.hp < o.maxHp * 0.7);
+    if (id === 'aromatherapy' || id === 'healbell') return [...(game.parties[f.slot]?.members || []), ...allies(game, f)].some((o) => o.status && !o.ko);
+    if (id === 'substitute') return !f.sub && f.hp > f.maxHp * 0.5;
+    if (id === 'gravity') return !(game.gravity?.t > 0) && !!foe && foe.dodgeCd <= 0;
+    if (id === 'magnetrise') return !(f.magnetT > 0) && !!foe && foe.moves.some((x) => DB.moves[x]?.type === 'Ground');
+    if (id === 'aquaring' || id === 'ingrain') return !(f.ringT > 0) && f.hp < f.maxHp * 0.85;
+    if (id === 'followme') return allies(game, f).length > 0 && !(f.followT > 0);
+    if (id === 'powertrick') return !f.powerTrick && f.stats.def > f.stats.atk;
+    if (id === 'teleport') return f.hp < f.maxHp * 0.35 && !!foe && f.distTo(foe) < 90;
     if (id === 'trickroom') return !trickRoom(game) && foe && foe.statVal('spe') > f.statVal('spe');
     if (id === 'psychicterrain' || id === 'mistyterrain') return terrainNow(game) !== id.replace('terrain', '');
     if (id === 'haze') return !!foe && Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
@@ -612,6 +694,15 @@ export function wantsMove(game, f, id, foe) {
     if (m.status) return !statusBlock(game, foe, m.status, f) && !(m.status === 'par' && effectiveness('Electric', foe.types) === 0);
     if (m.volatile === 'confusion') return foe.confusedT <= 0;
     if (m.volatile === 'leechseed') return !foe.seed && !foe.types.includes('Grass');
+    if (m.volatile === 'yawn') return !foe.status && !(foe.yawnT > 0) && !statusBlock(game, foe, 'slp', f);
+    if (m.volatile === 'octolock') return !foe.octo;
+    if (m.volatile === 'gastroacid') return !(foe.gastroT > 0) && !UNSUPPRESSED.includes(foe.ability);
+    if (id === 'painsplit') return f.hp / f.maxHp < foe.hp / foe.maxHp - 0.2;
+    if (id === 'trick') return !!(f.item && !f.itemSpent) !== !!(foe.item && !foe.itemSpent) || Math.random() < 0.1;
+    if (id === 'topsyturvy') return Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
+    if (id === 'psychup') return Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
+    if (id === 'skillswap') return !UNSUPPRESSED.includes(foe.ability) && Math.random() < 0.3;
+    if (id === 'partingshot') return true;
     if (m.volatile === 'taunt') return !(foe.tauntT > 0) && foe.moves.some((x) => DB.moves[x]?.category === 'Status');
     if (m.volatile === 'encore') return !!foe.lastMove && !foe.encore && (game.fightTime || 0) - (foe.lastMoveAt || 0) < 3;
     if (id === 'strengthsap') return f.hp < f.maxHp * 0.7;
@@ -628,6 +719,11 @@ export function wantsMove(game, f, id, foe) {
   if (id === 'focuspunch') return !threatened(game, f); // don't tighten focus with an attack coming
   if (id === 'mindblown') return f.hp > f.maxHp * 0.55 || foe.hp < foe.maxHp * 0.3;
   if (id === 'saltcure' && foe.salt) return Math.random() < 0.3;
+  if (id === 'explosion') return !game.fighters.some((o) => o.alive && ab(o, 'damp')) && (f.hp < f.maxHp * 0.25 || ((game.benchOf?.(f.slot) || []).length > 0 && f.hp < f.maxHp * 0.5)) && f.distTo(foe) < 90;
+  if (id === 'poltergeist') return !!foe.item && !foe.itemSpent;
+  if (id === 'doubleshock') return f.types.includes('Electric');
+  if (m.category !== 'Status' && foe.magnetT > 0 && type === 'Ground') return false;
+  if (m.category !== 'Status' && ab(foe, 'wonderguard') && !breaks(f) && effectiveness(type, foe.types) <= 1) return false;
   return true;
 }
 
@@ -722,6 +818,9 @@ export function preHit(game, att, def, cast) {
       if (m.flags?.includes('contact') && att.alive && att !== def && !ab(att, 'longreach')) {
         if (def.protectKind === 'spikyshield') hurt(game, att, 0.125, '#78c850');
         if (def.protectKind === 'kingsshield') boost(game, att, { atk: -1 }, def);
+        if (def.protectKind === 'obstruct') boost(game, att, { def: -2 }, def);
+        if (def.protectKind === 'silktrap') boost(game, att, { spe: -1 }, def);
+        if (def.protectKind === 'banefulbunker') inflict(game, att, 'psn', def);
       }
       return true;
     }
@@ -742,8 +841,24 @@ export function preHit(game, att, def, cast) {
       return true;
     }
     if (m.category === 'Status' && defAb(att, def, 'wonderskin') && Math.random() < 0.5) return nope();
-    // Queenly Majesty: foes' priority moves can't touch it (or its partner).
-    if (hasPriority(att, m) && [def, ...allies(game, def)].some((o) => defAb(att, o, 'queenlymajesty'))) return nope();
+    // Queenly Majesty / Dazzling / Armor Tail: foes' priority moves can't touch it (or its partner).
+    if (hasPriority(att, m) && [def, ...allies(game, def)].some((o) => ['queenlymajesty', 'dazzling', 'armortail'].some((a2) => defAb(att, o, a2)))) return nope();
+    if (m.id === 'present' && att.presentPower === 0) {
+      // Present: sometimes it's a gift that heals the target instead.
+      healText(game, def, def.heal(def.maxHp * 0.08));
+      say(game, 'presentHeal', { who: game.who(def) });
+      return true;
+    }
+    if (m.id === 'poltergeist' && (!def.item || def.itemSpent)) {
+      float(game, def, t('failed'), '#c8c8c8');
+      return true;
+    }
+    if (m.category !== 'Status' && def.magnetT > 0 && moveType(att, m) === 'Ground' && !(game.gravity?.t > 0)) {
+      game.ui?.log(t('noEffect', { who: game.who(def) }));
+      return true;
+    }
+    // Wonder Guard: only super-effective hits get through.
+    if (m.category !== 'Status' && defAb(att, def, 'wonderguard') && m.id !== 'struggle' && effectiveness(moveType(att, m), def.types) <= 1) return nope();
     if (m.category === 'Status' && ab(att, 'prankster') && def.types.includes('Dark')) {
       game.ui?.log(t('noEffect', { who: game.who(def) }));
       return true;
@@ -837,7 +952,7 @@ export function damageMods(game, att, def, cast) {
     power = r >= 5 ? 120 : r >= 4 ? 100 : r >= 3 ? 80 : r >= 2 ? 60 : 40;
   }
   if (m.id === 'acrobatics' && (!att.item || att.itemSpent)) power *= 2;
-  if (m.id === 'hex' && def.status) power *= 2;
+  if (m.id === 'hex' && (def.status || ab(def, 'comatose'))) power *= 2;
   if (m.id === 'ragefist') power = Math.min(350, 50 + 50 * (att.timesHit || 0));
   // Gyro Ball: stronger the slower the user is. Electro Ball: stronger the faster it is.
   if (m.id === 'gyroball') power = Math.max(1, Math.min(150, Math.floor((25 * def.statVal('spe')) / att.statVal('spe')) + 1));
@@ -852,6 +967,19 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'lastrespects') power = 50 + 50 * (game.parties?.[att.slot]?.members.filter((o) => o !== att && o.ko).length || 0);
   if (m.id === 'storedpower') power = 20 + 20 * Object.values(att.boosts).reduce((n, b) => n + Math.max(0, b.n), 0);
   if (m.id === 'crushgrip') power = Math.max(1, Math.floor((120 * def.hp) / def.maxHp));
+  if (m.id === 'weatherball' && weatherNow(game)) power *= 2;
+  if (m.id === 'avalanche' && (game.fightTime || 0) - (att.lastHurtAt ?? -99) < 2) power *= 2; // hit back harder
+  if (m.id === 'risingvoltage' && terrainNow(game) === 'electric' && grounded(def)) power *= 2;
+  if (m.id === 'heatcrash') {
+    const r = (att.data.weightkg || 1) / (def.data.weightkg || 1);
+    power = r >= 5 ? 120 : r >= 4 ? 100 : r >= 3 ? 80 : r >= 2 ? 60 : 40;
+  }
+  if (m.id === 'present') power = att.presentPower || 40;
+  if (m.flags?.includes('contact') && ab(att, 'toughclaws')) mul *= 1.3;
+  if (m.category === 'Special' && defAb(att, def, 'icescales')) mul *= 0.5;
+  // Beads of Ruin: everyone else's Sp. Def is lowered.
+  if (m.category === 'Special' && game.fighters.some((o) => o.alive && o !== def && ab(o, 'beadsofruin'))) mul *= 4 / 3;
+  if (type !== m.type && ab(att, 'refrigerate')) mul *= 1;
   // Bolt Beak / Fishious Rend: double power if the target hasn't attacked in the last 2 s.
   if (x.firstStrike && (game.fightTime || 0) - (def.lastMoveAt ?? -99) > 2) mul *= 2;
   if (m.id === 'ficklebeam' && Math.random() < 0.3) {
@@ -862,7 +990,7 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'psyblade' && terrainNow(game) === 'electric') power *= 1.5;
   if (terrainNow(game) === 'psychic' && type === 'Psychic' && grounded(att)) mul *= 1.3;
   if (terrainNow(game) === 'misty' && type === 'Dragon' && grounded(def)) mul *= 0.5;
-  if (sideOn(game, def.team, m.category === 'Physical' ? 'reflect' : 'lightscreen') && m.category !== 'Status') mul *= 0.5;
+  if ((sideOn(game, def.team, m.category === 'Physical' ? 'reflect' : 'lightscreen') || sideOn(game, def.team, 'auroraveil')) && m.category !== 'Status') mul *= 0.5;
   if (type === 'Steel' && ab(att, 'steelworker')) mul *= 1.5;
   if (type === 'Dragon' && ab(att, 'dragonsmaw')) mul *= 1.5;
   if (m.flags?.includes('bite') && ab(att, 'strongjaw')) mul *= 1.5;
@@ -894,8 +1022,8 @@ export function damageMods(game, att, def, cast) {
     defStat, // Psyshock hits Defense
     eff: scrappy || typeless ? eff : undefined,
     offFrom: m.id === 'foulplay' ? 'def' : null, // Foul Play uses the target's Attack
-    // Seismic Toss: damage equal to the user's level.
-    fixed: m.id === 'seismictoss' ? LEVEL : 0,
+    // Seismic Toss: damage equal to the user's level. Ruination: 1/8 of the target's current HP.
+    fixed: m.id === 'seismictoss' ? LEVEL : m.id === 'ruination' ? Math.max(1, Math.floor(def.hp / 8)) : 0,
     noCrit: defAb(att, def, 'shellarmor') || defAb(att, def, 'battlearmor'),
     critMul: ab(att, 'sniper') ? 2.25 : 1.5,
     noKnock: ab(def, 'stalwart'),
@@ -940,6 +1068,31 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       def.trapT = x.trap;
       def.chillT = Math.max(def.chillT, x.trap);
       say(game, 'trappedLog', { who: game.who(def) });
+    }
+    if (x.jawlock && def.alive) {
+      def.trapT = Math.max(def.trapT || 0, 6);
+      att.trapT = Math.max(att.trapT || 0, 6);
+      say(game, 'jawLocked');
+    }
+    // Color Change: becomes the type of the move that hit it.
+    if (ab(def, 'colorchange') && dmg > 0 && def.alive && !def.types.includes(moveType(att, m))) {
+      ability(game, def);
+      def.colorType = moveType(att, m);
+    }
+    // Gulp Missile: spits out its catch at whoever hits it.
+    if (def.gulp && dmg > 0 && def.alive && att.alive) {
+      def.gulp = false;
+      ability(game, def);
+      hurt(game, att, 0.12, '#58a8f8');
+      boost(game, att, { def: -1 }, def);
+    }
+    if (ab(def, 'berserk') && def.alive && def.hp < def.maxHp / 2 && def.hp + dmg >= def.maxHp / 2) {
+      ability(game, def);
+      boost(game, def, { spa: 1 }, def);
+    }
+    if (m.flags?.includes('contact') && ab(def, 'wanderingspirit') && att.alive && def.alive && !UNSUPPRESSED.includes(att.ability)) {
+      ability(game, def);
+      [att.ability, def.ability] = [def.ability, att.ability];
     }
     if (ab(def, 'stamina') && dmg > 0 && def.alive) {
       ability(game, def);
@@ -1070,6 +1223,61 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
         def.encore = { id: def.lastMove, t: 5 };
         say(game, 'encored', { who: game.who(def) });
       }
+    } else if (m.volatile === 'yawn') {
+      ok = !def.status && !(def.yawnT > 0) && !statusBlock(game, def, 'slp', att);
+      if (ok) {
+        def.yawnT = 2.5;
+        def.yawnBy = att;
+        say(game, 'yawned', { who: game.who(def) });
+      }
+    } else if (m.volatile === 'octolock') {
+      ok = !def.octo;
+      if (ok) {
+        def.octo = { by: att, t: 6 };
+        def.trapT = Math.max(def.trapT || 0, 6);
+        say(game, 'octolocked', { who: game.who(def) });
+      }
+    } else if (m.volatile === 'gastroacid') {
+      ok = !UNSUPPRESSED.includes(def.ability);
+      if (ok) {
+        def.gastroT = 10;
+        say(game, 'gastroLog', { who: game.who(def) });
+      }
+    } else if (m.id === 'painsplit') {
+      ok = def.alive && att.alive;
+      if (ok) {
+        // Pain Split: share the HP evenly (by fraction of max HP).
+        const k = (att.hp / att.maxHp + def.hp / def.maxHp) / 2;
+        att.hp = Math.max(1, Math.round(att.maxHp * k));
+        def.hp = Math.max(1, Math.round(def.maxHp * k));
+        say(game, 'painSplit');
+      }
+    } else if (m.id === 'trick') {
+      ok = (att.item && !att.itemSpent) || (def.item && !def.itemSpent);
+      if (ok && !ab(def, 'stickyhold')) {
+        game.swapItems?.(att, def);
+        say(game, 'tricked', { who: game.who(att) });
+      }
+    } else if (m.id === 'topsyturvy') {
+      ok = Object.keys(def.boosts).length > 0;
+      for (const b of Object.values(def.boosts)) b.n = -b.n;
+      if (ok) say(game, 'topsy', { who: game.who(def) });
+    } else if (m.id === 'psychup') {
+      ok = true;
+      att.boosts = JSON.parse(JSON.stringify(def.boosts));
+      say(game, 'psychedUp', { who: game.who(att), foe: game.who(def) });
+    } else if (m.id === 'skillswap') {
+      ok = !UNSUPPRESSED.includes(def.ability) && !UNSUPPRESSED.includes(att.ability);
+      if (ok) {
+        [att.ability, def.ability] = [def.ability, att.ability];
+        say(game, 'skillSwapped', { who: game.who(att) });
+      }
+    } else if (m.id === 'partingshot') {
+      ok = true;
+      boost(game, def, { atk: -1, spa: -1 }, att);
+    } else if (m.boosts && m.target !== 'self') {
+      ok = true;
+      boost(game, def, m.boosts, att); // Parting Shot
     } else if (m.id === 'strengthsap') {
       ok = def.alive;
       if (ok) {
@@ -1091,6 +1299,22 @@ export function onMoveUsed(game, c, id) {
   c.lastMoveAt = game.fightTime || 0;
   if (m.category !== 'Status' && !MOVEFX.moves[id]?.stance) c.lastAttackAt = game.fightTime || 0;
   if (id === 'mortalspin') game.clearHazards?.(c);
+  if (id === 'aurawheel' && ab(c, 'hungerswitch')) c.hangry = !c.hangry; // Hunger Switch
+  if (id === 'doubleshock') c.lostElectric = true;
+  if ((id === 'surf' || id === 'dive') && ab(c, 'gulpmissile')) c.gulp = true;
+  if (id === 'present') {
+    const r = Math.random();
+    c.presentPower = r < 0.4 ? 40 : r < 0.7 ? 80 : r < 0.8 ? 120 : 0; // 0 = it heals the target
+  }
+  if (id === 'explosion') {
+    // Explosion: the user faints when it goes off.
+    const d = MOVEFX.moves[id];
+    game.after((d.delay || 0.5) + 0.05, () => {
+      if (!c.alive) return;
+      c.hp = 0;
+      c.faint();
+    }, null);
+  }
   if (id === 'struggle') game.after(0.4, () => game.recoil(c, Math.ceil(c.maxHp * 0.025)), null);
   if (id === 'electroshot') boost(game, c, { spa: 1 }, c);
   const xs = MOVEFX.moves[id]?.extra;
@@ -1159,6 +1383,95 @@ export function selfMove(game, c, cast) {
   }
   if (m.id === 'focusenergy') return boost(game, c, { crit: 2 }, c);
   if (SIDE_TIME[m.id]) return setSide(game, c, m.id);
+  const foe = game.nearestEnemy(c);
+  if (m.id === 'transform') return foe ? transform(game, c, foe) : null;
+  if (m.id === 'metronome') {
+    // Waggles a finger: a random attacking skill comes out.
+    const pool = Object.keys(MOVEFX.moves).filter((k) => DB.moves[k]?.category !== 'Status' && !['struggle', 'metronome', 'explosion'].includes(k));
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    game.ui?.log(t('metronomeLog', { move: DB.moves[pick].name }));
+    if (foe) game.after(0.18, () => c.alive && !c.cast && foe.alive && game.forceCast?.(c, foe, pick), null);
+    return;
+  }
+  if (m.id === 'curse') {
+    if (c.types.includes('Ghost')) {
+      // Ghost Curse: cuts its own HP to lay a curse on the foe.
+      if (!foe || foe.cursed) return float(game, c, t('failed'), '#c8c8c8');
+      const cost = Math.floor(c.maxHp / 4);
+      c.hp = Math.max(1, c.hp - cost);
+      game.addEffect(new FloatText(String(cost), c.x + 6, c.y - 18, '#a058f8'));
+      foe.cursed = { by: c, t: 10 };
+      fxAt(game, MOVEFX.status.curse, foe, { dy: -20 });
+      return say(game, 'cursedLog', { who: game.who(c), foe: game.who(foe) });
+    }
+    return boost(game, c, { spe: -1, atk: 1, def: 1 }, c);
+  }
+  if (m.id === 'wish') {
+    say(game, 'wishMade', { who: game.who(c) });
+    const slot = c.slot;
+    game.after(2, () => {
+      const f = game.activeOf(slot);
+      if (f?.alive) {
+        say(game, 'wishCame', { who: game.who(f) });
+        healText(game, f, f.heal(f.maxHp / 2));
+      }
+    }, null);
+    return;
+  }
+  if (m.id === 'healingwish') {
+    game.healWish ||= {};
+    game.healWish[c.slot] = true;
+    say(game, 'healingWishLog', { who: game.who(c) });
+    c.hp = 0;
+    c.faint();
+    return;
+  }
+  if (m.id === 'aromatherapy' || m.id === 'healbell') {
+    for (const f of game.parties[c.slot]?.members || [c]) if (f.status && !f.ko) cureStatus(game, f);
+    for (const f of allies(game, c)) if (f.status) cureStatus(game, f);
+    return say(game, 'teamCured', { who: game.who(c) });
+  }
+  if (m.id === 'substitute') {
+    const cost = Math.floor(c.maxHp / 4);
+    if (c.hp <= cost || c.sub) return float(game, c, t('failed'), '#c8c8c8');
+    c.hp -= cost;
+    c.sub = { hp: cost };
+    game.addEffect(new FloatText(String(cost), c.x + 6, c.y - 18, '#f8a858'));
+    return say(game, 'subMade', { who: game.who(c) });
+  }
+  if (m.id === 'gravity') {
+    game.gravity = { t: 8 };
+    return say(game, 'gravityLog');
+  }
+  if (m.id === 'magnetrise') {
+    c.magnetT = 8;
+    return say(game, 'magnetRose', { who: game.who(c) });
+  }
+  if (m.id === 'aquaring' || m.id === 'ingrain') {
+    c.ringT = m.id === 'ingrain' ? 20 : 15;
+    c.ringKind = m.id;
+    if (m.id === 'ingrain') c.trapT = Math.max(c.trapT || 0, 20);
+    return say(game, m.id === 'ingrain' ? 'ingrainLog' : 'aquaRingLog', { who: game.who(c) });
+  }
+  if (m.id === 'followme') {
+    c.followT = 5;
+    return say(game, 'followMe', { who: game.who(c) });
+  }
+  if (m.id === 'powertrick') {
+    c.powerTrick = !c.powerTrick;
+    return say(game, 'powerTrickLog', { who: game.who(c) });
+  }
+  if (m.id === 'teleport') {
+    // Blinks away to the spot farthest from the foes (in Trio it then switches out).
+    const b = game.bounds;
+    const spots = [[b.x0 + 30, b.y0 + 20], [b.x1 - 30, b.y0 + 20], [b.x0 + 30, b.y1 - 20], [b.x1 - 30, b.y1 - 20]];
+    const far = spots.sort((p, q) => Math.hypot(q[0] - (foe?.x || 0), q[1] - (foe?.y || 0)) - Math.hypot(p[0] - (foe?.x || 0), p[1] - (foe?.y || 0)))[0];
+    fxAt(game, MOVEFX.common.dodge, c, { scale: 1.3 });
+    c.x = far[0];
+    c.y = far[1];
+    fxAt(game, MOVEFX.common.spawn, c);
+    return;
+  }
   if (m.id === 'trickroom') {
     if (trickRoom(game)) {
       game.room = null;
@@ -1216,6 +1529,16 @@ function formChange(game, f, blade) {
 
 /** A Pokémon was knocked out by an attack from `killer`. */
 export function onKnockOut(game, killer, move = null, victim = null) {
+  // Aftermath: knocked out by a contact move, it hurts the attacker.
+  if (victim && ab(victim, 'aftermath') && killer?.alive && move?.flags?.includes('contact')) {
+    ability(game, victim);
+    hurt(game, killer, 0.12, '#f8a858');
+  }
+  // Receiver: takes over the ability of a partner who fainted.
+  if (victim) for (const f of allies(game, victim)) if (ab(f, 'receiver') && !UNSUPPRESSED.includes(victim.ability)) {
+    ability(game, f);
+    f.ability = victim.ability;
+  }
   // Soul-Heart: any Pokémon fainting raises its Sp. Atk.
   for (const f of game.fighters) if (f.alive && ab(f, 'soulheart')) boost(game, f, { spa: 1 }, f);
   if (!killer?.alive) return;
@@ -1303,3 +1626,12 @@ export function loseFocus(game, f) {
 
 /** Secondary effects that only touch the user (Shield Dust doesn't stop them). */
 const s_selfOnly = (m) => (m.secondary || []).every((s2) => s2.selfBoosts && !s2.boosts && !s2.status && !s2.volatile);
+
+/** Transform / Imposter: becomes a copy of the foe (look, types, stats except HP, skills, ability, stat changes). */
+export function transform(game, f, foe) {
+  if (f.transformed || !foe?.alive) return;
+  game.addEffect(new Effect(MOVEFX.status.transform, f.x, f.y - 6, { scale: 1.4 }));
+  f.transformInto(foe);
+  say(game, 'transformed', { who: game.who(f), foe: game.who(foe) });
+  game.ui?.buildHUD?.();
+}

@@ -1091,6 +1091,7 @@ export const MELEE = {
     }
     spawnFx(game, d.land, c.x + Math.cos(a) * 18, c.y + Math.sin(a) * 12, { layer: 'under' });
     game.shake(any ? d.shake || 7 : 3, 0.25);
+    if (!any && d.crash) game.crash(c, d.crash); // Axe Kick: crashes on a miss
   },
 
   /** Double Iron Bash: two heavy blows, one from each side, each with a shockwave. */

@@ -291,9 +291,11 @@ const BEHAVIORS = {
           }
         } else {
           const n = pd.count || 1;
+          // Weather Ball changes with the weather.
+          const wpd = d.byWeather?.[weatherNow(game)] ? { ...pd, ...d.byWeather[weatherNow(game)] } : pd;
           for (let i = 0; i < n; i++) {
             const ang = a + (i - (n - 1) / 2) * (pd.spread || 0);
-            game.addObject(new Projectile(game, c, t, cast, ang, p.x, p.y));
+            game.addObject(new Projectile(game, c, t, cast, ang, p.x, p.y, wpd));
           }
         }
         game.sfx?.('shoot');

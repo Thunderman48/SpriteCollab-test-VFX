@@ -33,7 +33,8 @@ export class Fighter {
     this.rawStats = statsFor(effectiveBase(game.rule || 'standard', member.species), member);
     this.stats = { ...this.rawStats };
     this.ability = data.abilities.includes(member.ability) ? member.ability : data.abilities[0];
-    this.maxHp = this.stats.hp * HP_SCALE;
+    // Shedinja always has 1 HP.
+    this.maxHp = data.baseStats.hp === 1 ? HP_SCALE : this.stats.hp * HP_SCALE;
     this.hp = this.maxHp;
     this.radius = data.hurtRadius;
     this.x = x;
@@ -99,6 +100,17 @@ export class Fighter {
 
   /** Types right now (Roost removes Flying for a moment). */
   get types() {
+    if (ab(this, 'forecast')) {
+      const ft = { sunnyday: 'Fire', raindance: 'Water', snowscape: 'Ice' }[weatherNow(this.game)];
+      if (ft) return [ft];
+    }
+    if (this.colorType) return [this.colorType]; // Color Change
+    if (this.transformed) return this.transformed.types;
+    if (this.lostElectric) {
+      // Double Shock: no longer Electric type.
+      const rest = this.data.types.filter((x) => x !== 'Electric');
+      return rest.length ? rest : ['Normal'];
+    }
     if (this.zen) return ['Fire', 'Psychic'];
     if (this.pirouette) return ['Normal', 'Fighting']; // Meloetta Pirouette Forme
     if (this.roostT > 0) {
@@ -154,8 +166,10 @@ export class Fighter {
     let n = ignoreStages ? 0 : stageOf(this, k);
     if ((critSide === 'atk' && n < 0) || (critSide === 'def' && n > 0)) n = 0;
     // Stance Change: Blade Forme swaps attack and defense stats.
-    const key = this.bladeT > 0 && ab(this, 'stancechange') ? { atk: 'def', def: 'atk', spa: 'spd', spd: 'spa' }[k] || k : k;
+    let key = this.bladeT > 0 && ab(this, 'stancechange') ? { atk: 'def', def: 'atk', spa: 'spd', spd: 'spa' }[k] || k : k;
     // Zen Mode: Attack and Sp. Atk trade places; Hero Palafin is far stronger.
+    // Power Trick swaps Attack and Defense.
+    if (this.powerTrick && (key === 'atk' || key === 'def')) key = key === 'atk' ? 'def' : 'atk';
     const swap = this.zen || this.pirouette; // Zen Mode / Pirouette Forme swap Attack and Sp. Atk
     const k2 = swap && (key === 'atk' || key === 'spa') ? (key === 'atk' ? 'spa' : 'atk') : key;
     let v = this.stats[k2] * stageMul(n);
@@ -248,6 +262,7 @@ export class Fighter {
   takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
     if (dmg > 0) this.timesHit++;
+    if (dmg > 0) this.lastHurtAt = this.game.fightTime || 0; // Avalanche
     if (dmg > 0 && this.cast?.focusing) loseFocus(this.game, this); // Focus Punch
     if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
@@ -263,6 +278,11 @@ export class Fighter {
       const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus));
       this.useItem(t('sitrus', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>`, n: healed }));
       if (ab(this, 'cheekpouch')) this.heal(this.maxHp / 3); // Cheek Pouch
+      // Cud Chew: chews the berry again a moment later.
+      if (ab(this, 'cudchew') && !this.chewed) {
+        this.chewed = true;
+        this.game.after(3, () => this.alive && this.heal(this.maxHp * this.mods.sitrus), null);
+      }
     }
     if (!this.cast && this.dodgeT <= 0 && !this.mods.noKnockback) {
       this.hurtT = 0.3;
@@ -312,7 +332,7 @@ export class Fighter {
     }
     this.dodgeT = DODGE_TIME;
     this.invuln = DODGE_INVULN;
-    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1) * (trapped(this.game, this) ? 1.5 : 1) * (this.syrupT > 0 ? 1.3 : 1);
+    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1) * (trapped(this.game, this) ? 1.5 : 1) * (this.syrupT > 0 ? 1.3 : 1) * (this.game.gravity?.t > 0 ? 2 : 1); // Gravity
     this.dir = angleToDir(this.dodgeAngle);
     this.sprite.play('Hop', { loop: false, restart: true, speed: 1.6 });
     this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y + 6, { layer: 'under' }));
@@ -425,6 +445,23 @@ export class Fighter {
     }
   }
 
+  /** Transform: becomes a copy of the foe (look, types, stats except HP, skills, ability, stat changes). */
+  transformInto(foe) {
+    this.transformed = { types: [...foe.types], from: foe.data.key };
+    this.art = foe.art;
+    this.sprite = new SpriteAnimator(foe.art);
+    this.radius = foe.radius;
+    const hp = this.stats.hp;
+    this.stats = { ...foe.stats, hp };
+    this.rawStats = { ...foe.rawStats, hp };
+    this.moves = [...foe.moves];
+    this.cd = {};
+    this.moves.forEach((id, i) => (this.cd[id] = 0.4 + 0.5 * i));
+    this.ability = foe.ability;
+    this.boosts = JSON.parse(JSON.stringify(foe.boosts));
+    this._cantHurt = undefined;
+  }
+
   /** Struggle time: no way to deal damage and nothing thrown for 5 s. */
   wantsStruggle(opp) {
     return !this.lock && !this.encore && !!opp && this.cantHurt() && (this.game.fightTime || 0) - (this.lastAttackAt ?? this.enteredAt ?? 0) > 5 && this.distTo(opp) < 220;
@@ -472,7 +509,11 @@ export class Fighter {
       spr.draw(ctx, g.x, g.y + (sy - this.y + this.lift), g.dir, { alpha: 0.45 * (1 - g.t / 0.3), tint: g.tint || '#ffffff', tintAmt: 0.5 });
       [spr.anim, spr.frame] = keep;
     }
-    spr.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
+    if (this.sub) {
+      // Substitute: a pale decoy stands in front; the real one hides behind it.
+      spr.draw(ctx, this.x - 6, sy - 3, this.dir, { alpha: alpha * 0.35 });
+      spr.draw(ctx, this.x + 4, sy + 2, this.dir, { flash: this.flash, alpha, tint: '#f8f8f8', tintAmt: 0.75 });
+    } else spr.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
     if (!this.ko) this.drawTag(ctx, sy);
   }
 
