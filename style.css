@@ -62,6 +62,7 @@ body.touch .kb-only { display: none; }
 .green { color: var(--green); }
 .dim { color: var(--dim); }
 .c-p1 { color: var(--blue); }
+.purple { color: #c890f8; }
 .c-p2 { color: var(--pink); }
 .c-p3 { color: var(--green); }
 .c-p4 { color: #f8e860; }

@@ -20,7 +20,7 @@ const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const TYPE_ORDER = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
 const TABS = ['Stats', 'Skills', 'Equipment', 'Personality'];
 const OVERLAYS = ['settings', 'credits', 'info', 'editor', 'pause', 'result'];
-export const VERSION = 'v1.2';
+export const VERSION = 'v1.3';
 
 const KEYS = {
   up: ['ArrowUp', 'KeyW'],
@@ -920,6 +920,10 @@ export class UI {
     const parts = [];
     if (w) parts.push(`${t('wn_' + w)} <span class="dim">${Math.ceil(g.weather.t)}</span>`);
     if (tr) parts.push(`<span class="green">${t('wn_' + tr.id)}</span> <span class="dim">${Math.ceil(tr.t)}</span>`);
+    if (g.room) parts.push(`<span class="purple">${t('wn_trickroom')}</span> <span class="dim">${Math.ceil(g.room.t)}</span>`);
+    (g.sides || []).forEach((side, team) => {
+      for (const [k, v] of Object.entries(side)) parts.push(`<span class="c-p${team + 1}">${t('wn_' + k)}</span> <span class="dim">${Math.ceil(v)}</span>`);
+    });
     const wsig = parts.join(' · ');
     if (wsig !== this.weatherSig && this.weatherEl) {
       this.weatherSig = wsig;

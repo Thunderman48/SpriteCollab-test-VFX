@@ -7184,6 +7184,1869 @@
         "fps": 20,
         "scale": 1.4
       }
+    },
+    "counter": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.1,
+      "over": {
+        "fx": "Metal_Burst_Charge.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "stance": {
+        "cat": "Physical",
+        "time": 1.0,
+        "fx": {
+          "fx": "Rage.None",
+          "fps": 30,
+          "scale": 1.0
+        }
+      },
+      "hit": {
+        "fx": "Revenge.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "A 1 s stance: if a physical attack hits it, it strikes back for double the damage.",
+        "descKo": "1초 동안 자세를 잡는다: 물리 공격을 받으면 2배로 되갚는다."
+      }
+    },
+    "mirrorcoat": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.1,
+      "over": {
+        "fx": "Mirror_Shot_Glow.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "stance": {
+        "cat": "Special",
+        "time": 1.0,
+        "fx": {
+          "fx": "Mirror_Shot_Glow.None",
+          "fps": 20,
+          "scale": 1.4
+        }
+      },
+      "hit": {
+        "fx": "Mirror_Shot_Hit.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "A 1 s stance: if a special attack hits it, it reflects double the damage back.",
+        "descKo": "1초 동안 자세를 잡는다: 특수 공격을 받으면 2배로 반사한다."
+      }
+    },
+    "shelltrap": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.15,
+      "over": {
+        "fx": "Flare_Blitz_Charge_Back.None",
+        "fps": 30,
+        "scale": 1.2
+      },
+      "stance": {
+        "cat": "Physical",
+        "time": 1.6,
+        "burst": true,
+        "radius": 95,
+        "fx": {
+          "fx": "Flare_Blitz_Charge_Front.None",
+          "fps": 30,
+          "scale": 1.0
+        }
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 2.2
+      },
+      "hit2": {
+        "fx": "Lava_Plume_Fire.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "Sets a shell trap for 1.6 s: a physical hit sets it off, blasting every foe around.",
+        "descKo": "1.6초 동안 껍질 트랩을 설치한다: 물리 공격을 받으면 폭발해 주위 모두를 공격한다."
+      }
+    },
+    "destinybond": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Destiny_Bond.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Grudge_Back.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "For 3 s: if a foe knocks it out, that foe faints too.",
+        "descKo": "3초 동안: 상대가 자신을 쓰러뜨리면 그 상대도 함께 쓰러진다."
+      }
+    },
+    "tailwind": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Gust_Wind.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "A tailwind blows behind its team for 12 s: their Speed is doubled.",
+        "descKo": "12초 동안 팀 뒤로 순풍이 분다: 스피드 2배."
+      }
+    },
+    "reflect": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Screen_RSE_Blue.None",
+        "fps": 20,
+        "scale": 1.2,
+        "alpha": 0.45
+      },
+      "extra": {
+        "desc": "A wall of light protects its team for 12 s: physical damage ×0.5.",
+        "descKo": "12초 동안 빛의 벽이 팀을 지킨다: 물리 데미지 0.5배."
+      }
+    },
+    "lightscreen": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Screen_RSE_Yellow.None",
+        "fps": 20,
+        "scale": 1.2,
+        "alpha": 0.45
+      },
+      "extra": {
+        "desc": "A screen of light protects its team for 12 s: special damage ×0.5.",
+        "descKo": "12초 동안 빛의 장막이 팀을 지킨다: 특수 데미지 0.5배."
+      }
+    },
+    "trickroom": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.7,
+      "over": {
+        "fx": "Gravity.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "under": {
+        "fx": "Wave_Circle_Pink.Dir5",
+        "fps": 16,
+        "scale": 2.4
+      },
+      "extra": {
+        "desc": "Twists the field for 10 s: slower Pokémon move and recharge faster. Using it again ends it.",
+        "descKo": "10초 동안 공간을 비튼다: 느린 포켓몬이 더 빨리 움직이고 충전된다. 다시 쓰면 끝난다."
+      }
+    },
+    "psychicterrain": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "under": {
+        "fx": "Wave_Circle_Pink.Dir5",
+        "fps": 16,
+        "scale": 2.6
+      },
+      "extra": {
+        "desc": "Psychic Terrain for 20 s: Psychic moves ×1.3; grounded Pokémon can't be hit by priority moves.",
+        "descKo": "20초 동안 사이코필드: 에스퍼 기술 1.3배, 땅에 있는 포켓몬은 선제공격을 받지 않는다."
+      }
+    },
+    "mistyterrain": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "under": {
+        "fx": "Wave_Circle_White.Dir5",
+        "fps": 16,
+        "scale": 2.6
+      },
+      "extra": {
+        "desc": "Misty Terrain for 20 s: grounded Pokémon can't get status conditions; Dragon moves against them ×0.5.",
+        "descKo": "20초 동안 미스트필드: 땅에 있는 포켓몬은 상태 이상이 되지 않고, 드래곤 기술을 0.5배로 받는다."
+      }
+    },
+    "haze": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Smoke_Black.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "extra": {
+        "desc": "A black haze: every Pokémon's stat changes are removed.",
+        "descKo": "검은 안개: 모든 포켓몬의 능력 변화가 원래대로 돌아간다."
+      }
+    },
+    "tidyup": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Sparkle_RSE.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "under": {
+        "fx": "Cleanse_Brown.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Tidies up: every hazard on the field is cleared; Attack and Speed +1.",
+        "descKo": "정리정돈: 필드의 모든 압정·바위를 치우고 공격·스피드 +1."
+      }
+    },
+    "shiftgear": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Metal_Burst_Charge.None",
+        "fps": 24,
+        "scale": 1.4
+      }
+    },
+    "taunt": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Emote_Angry.None",
+        "fps": 16,
+        "scale": 1.6,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.2
+      },
+      "hit": {
+        "fx": "Taunt_Veins.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Taunts the target: for 6 s it can't use status skills.",
+        "descKo": "도발: 6초 동안 상대가 변화 기술을 쓸 수 없다."
+      }
+    },
+    "encore": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Encore_Clap.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.2
+      },
+      "hit": {
+        "fx": "Encore_Spotlight_Front.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Encore_Spotlight_Base.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Encore! For 5 s the target can only repeat the skill it just used.",
+        "descKo": "앙코르! 5초 동안 상대는 방금 쓴 기술만 반복한다."
+      }
+    },
+    "strengthsap": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Light_Ball_Green.None",
+        "fps": 24,
+        "scale": 1.1,
+        "loop": true,
+        "speed": 260,
+        "radius": 13,
+        "life": 1.3,
+        "frames": 5,
+        "homing": 2
+      },
+      "hit": {
+        "fx": "Absorb.None",
+        "fps": 24,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "Saps the target's strength: heals by its Attack stat and lowers its Attack.",
+        "descKo": "상대의 힘을 빨아들인다: 상대의 공격 수치만큼 회복하고 공격을 떨어뜨린다."
+      }
+    },
+    "stickyweb": {
+      "behavior": "hazard",
+      "anim": "Shoot",
+      "range": 320,
+      "count": 3,
+      "max": 4,
+      "scatter": 60,
+      "grounded": true,
+      "lasts": 30,
+      "reach": 14,
+      "piece": {
+        "fx": "String_Shot_Web.None",
+        "fps": 12,
+        "scale": 1.0
+      },
+      "burst": {
+        "fx": "String_Shot_Ball.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "land": {
+        "fx": "Puff_White.None",
+        "fps": 24,
+        "scale": 0.8
+      },
+      "extra": {
+        "desc": "Lays sticky webs around the foe for 30 s: a grounded foe that walks into one gets Speed −1.",
+        "descKo": "30초 동안 상대 주변에 끈적한 거미줄을 친다: 걸린 땅의 포켓몬은 스피드 −1."
+      }
+    },
+    "bleakwindstorm": {
+      "behavior": "projectile",
+      "style": "tornado",
+      "anim": "SpAttack",
+      "range": 320,
+      "projectile": {
+        "fx": "Gust_Blue.None",
+        "fps": 24,
+        "scale": 1.1,
+        "loop": true,
+        "speed": 150,
+        "radius": 22,
+        "life": 2.2,
+        "homing": 1.6,
+        "ticks": 3,
+        "tickGap": 0.35,
+        "pull": 80,
+        "trail": {
+          "fx": "Ice_Shard_Hit_Sparkle.None",
+          "fps": 30,
+          "scale": 0.8,
+          "every": 0.05,
+          "jitter": 24
+        },
+        "stack": 6,
+        "stackGap": 13,
+        "frames": 10
+      },
+      "hit": {
+        "fx": "Icy_Wind.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "A freezing twister roams after the target, dragging foes in and hitting up to 3 times. 30% Speed −1.",
+        "descKo": "얼어붙은 회오리가 상대를 쫓아가며 끌어당겨 최대 3번 공격한다. 30% 스피드 −1."
+      }
+    },
+    "sandsearstorm": {
+      "behavior": "projectile",
+      "style": "tornado",
+      "anim": "SpAttack",
+      "range": 320,
+      "projectile": {
+        "fx": "Gust.None",
+        "fps": 24,
+        "scale": 1.1,
+        "loop": true,
+        "speed": 150,
+        "radius": 22,
+        "life": 2.2,
+        "homing": 1.6,
+        "ticks": 3,
+        "tickGap": 0.35,
+        "pull": 80,
+        "trail": {
+          "fx": "Puff_Brown.None",
+          "fps": 24,
+          "scale": 0.7,
+          "every": 0.04,
+          "jitter": 26
+        },
+        "stack": 6,
+        "stackGap": 13,
+        "frames": 10
+      },
+      "hit": {
+        "fx": "Sand_Tomb_Sand.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "A scorching sand twister roams after the target, dragging foes in and hitting up to 3 times. 20% burn.",
+        "descKo": "뜨거운 모래 회오리가 상대를 쫓아가며 끌어당겨 최대 3번 공격한다. 20% 화상."
+      }
+    },
+    "springtidestorm": {
+      "behavior": "projectile",
+      "style": "tornado",
+      "anim": "SpAttack",
+      "range": 320,
+      "projectile": {
+        "fx": "Gust_Purple.None",
+        "fps": 24,
+        "scale": 1.1,
+        "loop": true,
+        "speed": 150,
+        "radius": 22,
+        "life": 2.2,
+        "homing": 1.6,
+        "ticks": 3,
+        "tickGap": 0.35,
+        "pull": 80,
+        "trail": {
+          "fx": "Petal_Dance_Flower_Pink.None",
+          "fps": 20,
+          "scale": 0.8,
+          "every": 0.05,
+          "jitter": 26
+        },
+        "stack": 6,
+        "stackGap": 13,
+        "frames": 10
+      },
+      "hit": {
+        "fx": "Captivate_Hearts.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "A twister of love and hate roams after the target, dragging foes in and hitting up to 3 times. 30% Attack −1.",
+        "descKo": "사랑과 미움의 회오리가 상대를 쫓아가며 끌어당겨 최대 3번 공격한다. 30% 공격 −1."
+      }
+    },
+    "psystrike": {
+      "behavior": "projectile",
+      "style": "wave",
+      "anim": "SpAttack",
+      "range": 320,
+      "charge": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 24,
+        "scale": 1.4,
+        "time": 0.35,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Psycho_Boost_Front.None",
+        "fps": 20,
+        "scale": 0.9,
+        "loop": true,
+        "speed": 260,
+        "radius": 16,
+        "life": 1.2,
+        "grow": 1.6
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 30,
+        "scale": 1.8
+      },
+      "shake": 5,
+      "extra": {
+        "desc": "A growing wave of psychic power that passes through every foe. Hits Defense instead of Sp. Def.",
+        "descKo": "점점 커지는 염력의 파동이 모든 상대를 통과한다. 특수방어 대신 방어로 데미지를 받는다."
+      }
+    },
+    "originpulse": {
+      "behavior": "projectile",
+      "style": "wave",
+      "anim": "SpAttack",
+      "range": 320,
+      "charge": {
+        "fx": "Water_Spout_Up.None",
+        "fps": 20,
+        "scale": 1.4,
+        "time": 0.35,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Light_Ball_Blue.None",
+        "fps": 24,
+        "scale": 1.0,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.1,
+        "frames": 5,
+        "grow": 1.4,
+        "count": 3,
+        "spread": 0.3,
+        "trail": {
+          "fx": "Bubbles_Blue.None",
+          "fps": 24,
+          "scale": 0.8,
+          "every": 0.04,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 4,
+      "extra": {
+        "desc": "Three waves of light fan out and grow, passing through every foe.",
+        "descKo": "세 갈래의 빛의 파동이 퍼지며 커져 모든 상대를 통과한다."
+      }
+    },
+    "electroweb": {
+      "behavior": "projectile",
+      "style": "expand",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "String_Shot_Web.None",
+        "fps": 16,
+        "scale": 1.0,
+        "loop": true,
+        "speed": 240,
+        "radius": 12,
+        "life": 1.1,
+        "grow": 2.2,
+        "trail": {
+          "fx": "Spark.None",
+          "fps": 14,
+          "scale": 0.7,
+          "every": 0.05,
+          "jitter": 14
+        }
+      },
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "An electric net that widens as it flies, catching every foe it touches. Speed −1.",
+        "descKo": "날아가며 넓게 퍼지는 전기 그물. 닿는 모든 상대를 붙잡는다. 스피드 −1."
+      }
+    },
+    "anchorshot": {
+      "behavior": "projectile",
+      "style": "hook",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Metal_Ball_Ranger.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 380,
+        "radius": 13,
+        "life": 0.9,
+        "reel": true,
+        "chainColor": "#b0b0c0"
+      },
+      "hit": {
+        "fx": "Iron_Head.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Metal_Burst_Hit.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 4,
+      "extra": {
+        "trap": 4,
+        "desc": "Throws its anchor on a chain and reels the target in; it can't switch out or move fast for 4 s.",
+        "descKo": "사슬 달린 닻을 던져 상대를 끌어당긴다. 4초 동안 교체할 수 없고 느려진다."
+      }
+    },
+    "malignantchain": {
+      "behavior": "projectile",
+      "style": "hook",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Poison_Ball_Ranger.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 360,
+        "radius": 13,
+        "life": 1.0,
+        "chainColor": "#c058f8"
+      },
+      "hit": {
+        "fx": "Gunk_Shot_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Cross_Poison_Bubbles.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Lashes the target with a chain of toxins. 50% bad poison.",
+        "descKo": "독의 사슬로 휘감는다. 50% 맹독."
+      }
+    },
+    "populationbomb": {
+      "behavior": "projectile",
+      "style": "volley",
+      "anim": "Attack",
+      "range": 220,
+      "projectile": {
+        "fx": "Swift_Star.None",
+        "fps": 20,
+        "scale": 1.0,
+        "loop": true,
+        "speed": 420,
+        "radius": 10,
+        "life": 0.8,
+        "gap": 0.06,
+        "spread": 0.35,
+        "chain": 0.9,
+        "max": 10
+      },
+      "hit": {
+        "fx": "Scratch.Dir1",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "The whole family attacks: 1-10 hits in a row, each 90% likely to follow the last (Skill Link: always 10).",
+        "descKo": "가족 모두가 공격한다: 1~10번 연속 공격 (스킬링크: 항상 10번)."
+      }
+    },
+    "rockblast": {
+      "behavior": "projectile",
+      "style": "volley",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Rock_Piece_Rotating.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 360,
+        "radius": 12,
+        "life": 1.0,
+        "gap": 0.1,
+        "spread": 0.12
+      },
+      "hit": {
+        "fx": "Rock_Smash.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "Hurls 2-5 rocks in a row (Skill Link: always 5).",
+        "descKo": "바위를 2~5번 연속으로 던진다 (스킬링크: 항상 5번)."
+      }
+    },
+    "watershuriken": {
+      "behavior": "projectile",
+      "style": "volley",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Bubbles_Blue.None",
+        "fps": 24,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 460,
+        "radius": 10,
+        "life": 0.8,
+        "gap": 0.07,
+        "spread": 0.1,
+        "spin": 20
+      },
+      "hit": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Priority: 2-5 water shuriken in a row.",
+        "descKo": "선제공격: 물의 수리검을 2~5번 연속으로 던진다."
+      }
+    },
+    "scaleshot": {
+      "behavior": "projectile",
+      "style": "volley",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Dragon_Pulse_Particle_Purple.Dir2",
+        "fps": 16,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 400,
+        "radius": 10,
+        "life": 0.9,
+        "gap": 0.08,
+        "spread": 0.14
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "extra": {
+        "afterBoost": {
+          "spe": 1,
+          "def": -1
+        },
+        "desc": "Fires 2-5 scales in a row, then Speed +1 and Defense −1.",
+        "descKo": "비늘을 2~5번 연속으로 쏜 뒤 스피드 +1, 방어 −1."
+      }
+    },
+    "storedpower": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 300,
+      "projectile": {
+        "fx": "Light_Ball_Purple.None",
+        "fps": 24,
+        "scale": 1.2,
+        "loop": true,
+        "speed": 280,
+        "radius": 13,
+        "life": 1.4,
+        "frames": 5,
+        "homing": 2.4,
+        "trail": {
+          "fx": "Psycho_Cut_Hole.None",
+          "fps": 24,
+          "scale": 0.6,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 30,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "+20 power for every stat boost the user has.",
+        "descKo": "자신의 능력 상승 한 단계마다 위력 +20."
+      }
+    },
+    "glaciallance": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 320,
+      "charge": {
+        "fx": "Ice_Shard_Hit_Sparkle.None",
+        "fps": 30,
+        "scale": 1.4,
+        "time": 0.35,
+        "at": "front"
+      },
+      "projectile": {
+        "fx": "Icicle_Spear.Dir8",
+        "fps": 20,
+        "scale": 2.6,
+        "loop": true,
+        "speed": 440,
+        "radius": 16,
+        "life": 1.0,
+        "dirRows": true,
+        "trail": {
+          "fx": "Ice_Shard_Hit_Sparkle.None",
+          "fps": 30,
+          "scale": 0.9,
+          "every": 0.03,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Avalanche_Hit.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "shake": 6,
+      "extra": {
+        "pierce": true,
+        "desc": "Hurls a giant lance of ice that pierces every foe in line.",
+        "descKo": "거대한 얼음 창을 던져 직선상의 모든 상대를 꿰뚫는다."
+      }
+    },
+    "pollenpuff": {
+      "behavior": "projectile",
+      "style": "lob",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Cotton_Spore.None",
+        "fps": 20,
+        "scale": 1.5,
+        "loop": true,
+        "speed": 300,
+        "radius": 13,
+        "life": 1.6,
+        "blast": 34,
+        "height": 70,
+        "trail": {
+          "fx": "Spores_RSE_Yellow.None",
+          "fps": 16,
+          "scale": 0.7,
+          "every": 0.06
+        }
+      },
+      "hit": {
+        "fx": "Bubble_Pop_Pink.None",
+        "fps": 20,
+        "scale": 2.0
+      },
+      "hit2": {
+        "fx": "Spores_RSE_Yellow.None",
+        "fps": 16,
+        "scale": 1.6
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Lobs an exploding ball of pollen onto the target.",
+        "descKo": "터지는 꽃가루 경단을 상대에게 던진다."
+      }
+    },
+    "hydrosteam": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 230,
+      "projectile": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 24,
+        "scale": 0.9,
+        "loop": true,
+        "speed": 320,
+        "radius": 12,
+        "life": 0.75,
+        "stream": 6,
+        "streamGap": 0.07,
+        "spread": 0.12,
+        "trail": {
+          "fx": "Smoke_White.None",
+          "fps": 20,
+          "scale": 0.8,
+          "every": 0.04,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Brine_Splashes.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "pierce": true,
+        "desc": "A stream of scalding steam. In sun it's ×1.5 instead of weakened.",
+        "descKo": "뜨거운 증기를 뿜는다. 쾌청이면 약해지지 않고 1.5배."
+      }
+    },
+    "fleurcannon": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "chargeAnim": "Charge",
+      "range": 360,
+      "charge": {
+        "fx": "Captivate_Sparkles.None",
+        "fps": 20,
+        "scale": 1.6,
+        "time": 0.6,
+        "at": "front",
+        "loop": true
+      },
+      "beam": {
+        "set": "Beam/Beam_Pink",
+        "length": 360,
+        "width": 1.8,
+        "time": 0.7,
+        "fps": 20,
+        "growTime": 0.12
+      },
+      "hit": {
+        "fx": "Captivate_Heart.None",
+        "fps": 20,
+        "scale": 2.0
+      },
+      "hit2": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "shake": 6,
+      "extra": {
+        "desc": "A huge beam of pink light. Sp. Atk −2.",
+        "descKo": "거대한 분홍빛 광선. 특수공격 −2."
+      }
+    },
+    "dragonenergy": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "chargeAnim": "Charge",
+      "range": 340,
+      "charge": {
+        "fx": "Dragon_Pulse_Charge.None",
+        "fps": 30,
+        "scale": 1.8,
+        "time": 0.55,
+        "at": "front",
+        "loop": true
+      },
+      "beam": {
+        "set": "Beam/Column_Green",
+        "length": 340,
+        "width": 2.2,
+        "time": 0.7,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Draco_Meteor_Dust.None",
+        "fps": 12,
+        "scale": 1.8
+      },
+      "shake": 6,
+      "extra": {
+        "hpPower": true,
+        "desc": "A wide beam of dragon energy. Its power falls as the user loses HP.",
+        "descKo": "넓은 용의 기운 광선. 자신의 HP가 줄수록 위력이 떨어진다."
+      }
+    },
+    "ficklebeam": {
+      "behavior": "beam",
+      "style": "pulse",
+      "pulses": 2,
+      "pulseGap": 0.25,
+      "anim": "SpAttack",
+      "chargeAnim": "Charge",
+      "range": 320,
+      "charge": {
+        "fx": "Light_Ball_Green.None",
+        "fps": 24,
+        "scale": 1.0,
+        "time": 0.3,
+        "at": "front",
+        "loop": true,
+        "frames": 5
+      },
+      "beam": {
+        "set": "Beam/Column_Green",
+        "length": 320,
+        "width": 1.1,
+        "time": 0.6,
+        "frameDriven": true
+      },
+      "hit": {
+        "fx": "Energy_Ball_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Two beams from its heads. 30%: all heads join in for double power.",
+        "descKo": "머리에서 광선 2발. 30% 확률로 모든 머리가 함께 쏴서 위력 2배."
+      }
+    },
+    "electroshot": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "chargeAnim": "Charge",
+      "range": 340,
+      "charge": {
+        "fx": "Charge_Beam_Charge.None",
+        "fps": 20,
+        "scale": 1.8,
+        "time": 0.9,
+        "at": "front",
+        "loop": true
+      },
+      "beam": {
+        "set": "Beam/Lightning",
+        "length": 340,
+        "width": 1.4,
+        "time": 0.5,
+        "fps": 24,
+        "tile": true,
+        "growTime": 0.05
+      },
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.6
+      },
+      "shake": 6,
+      "extra": {
+        "noChargeRain": true,
+        "desc": "Charges electricity (Sp. Atk +1), then fires a bolt. In rain it fires with no charge.",
+        "descKo": "전기를 모은 뒤 (특수공격 +1) 번개를 쏜다. 비가 오면 바로 쏜다."
+      }
+    },
+    "precipiceblades": {
+      "behavior": "burst",
+      "style": "line",
+      "anim": "Attack",
+      "range": 260,
+      "radius": 260,
+      "delay": 0.25,
+      "points": 7,
+      "gap": 0.06,
+      "width": 28,
+      "spike": {
+        "fx": "Earth_Power_Eruption.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "crack": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "hit": {
+        "fx": "Rock_Smash.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 4,
+      "extra": {
+        "desc": "Blades of stone burst from the ground in a line to the target.",
+        "descKo": "땅에서 돌의 칼날이 상대까지 줄지어 솟아오른다."
+      }
+    },
+    "thousandwaves": {
+      "behavior": "burst",
+      "style": "line",
+      "anim": "Attack",
+      "range": 240,
+      "radius": 240,
+      "delay": 0.25,
+      "points": 7,
+      "gap": 0.07,
+      "width": 32,
+      "spike": {
+        "fx": "Hammer_Arm_Smoke.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "crack": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 0.9
+      },
+      "hit": {
+        "fx": "Rock_Pieces.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 3,
+      "extra": {
+        "trap": 4,
+        "desc": "A wave runs along the ground to the target; it can't switch out or move fast for 4 s.",
+        "descKo": "땅의 물결이 상대까지 달려간다. 4초 동안 교체할 수 없고 느려진다."
+      }
+    },
+    "fierydance": {
+      "behavior": "burst",
+      "style": "spiral",
+      "anim": "SpAttack",
+      "range": 110,
+      "radius": 115,
+      "delay": 0.2,
+      "arms": 3,
+      "steps": 9,
+      "flame": {
+        "fx": "Ember.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "under": {
+        "fx": "Circle_Red_Out.None",
+        "fps": 20,
+        "scale": 2.0
+      },
+      "hit": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "shake": 2,
+      "extra": {
+        "desc": "Spins in a dance while flames spiral outwards. 50%: Sp. Atk +1.",
+        "descKo": "춤추며 회전해 불꽃이 나선형으로 퍼진다. 50% 특수공격 +1."
+      }
+    },
+    "relicsong": {
+      "behavior": "burst",
+      "anim": "SpAttack",
+      "range": 120,
+      "radius": 120,
+      "delay": 0.35,
+      "under": {
+        "fx": "Circle_Uproar_Yellow_Out.None",
+        "fps": 20,
+        "scale": 2.6
+      },
+      "ring": {
+        "fx": "Music_Notes.None",
+        "fps": 16,
+        "scale": 1.4,
+        "n": 8,
+        "r": 80
+      },
+      "over": {
+        "fx": "Chatter_Notes.None",
+        "fps": 16,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Music_Notes_Uproar.None",
+        "fps": 14,
+        "scale": 1.4
+      },
+      "shake": 2,
+      "extra": {
+        "desc": "Sound: an ancient song around the user. 10% sleep. Meloetta switches forme (Pirouette: Fighting type, Attack ↔ Sp. Atk).",
+        "descKo": "소리 기술: 고대의 노래. 10% 잠듦. 메로엣타는 폼이 바뀐다 (스텝폼: 격투 타입, 공격 ↔ 특수공격)."
+      }
+    },
+    "lastrespects": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 110,
+      "radius": 115,
+      "delay": 0.35,
+      "under": {
+        "fx": "Grudge_Back.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "ring": {
+        "fx": "Grudge_Lights.None",
+        "fps": 16,
+        "scale": 1.4,
+        "n": 8,
+        "r": 75
+      },
+      "over": {
+        "fx": "Grudge_Front.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "hit": {
+        "fx": "Shadow_Force_Hit_Dark.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Honours fallen teammates: +50 power for each one that has fainted.",
+        "descKo": "쓰러진 동료를 기린다: 쓰러진 동료 한 마리마다 위력 +50."
+      }
+    },
+    "whirlpool": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 300,
+      "warn": 0.5,
+      "count": 1,
+      "radius": 38,
+      "under": {
+        "fx": "Circle_Small_Blue_Out.None",
+        "fps": 20,
+        "scale": 2.0
+      },
+      "hit": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "zone": {
+        "time": 4,
+        "every": 0.5,
+        "factor": 0.2,
+        "loopFx": {
+          "fx": "Wave_Circle_Blue.Dir5",
+          "fps": 16,
+          "scale": 1.8
+        },
+        "edge": {
+          "fx": "Bubbles_Blue.None",
+          "fps": 20,
+          "scale": 1.2
+        },
+        "edgeEvery": 0.06
+      },
+      "extra": {
+        "desc": "A whirlpool traps the target for 4 s: it keeps taking damage and is slowed inside.",
+        "descKo": "4초 동안 소용돌이에 가둔다: 안에 있으면 계속 데미지를 받고 느려진다."
+      }
+    },
+    "expandingforce": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 330,
+      "warn": 0.55,
+      "count": 1,
+      "radius": 36,
+      "under": {
+        "fx": "Wave_Circle_Pink.Dir5",
+        "fps": 16,
+        "scale": 2.0
+      },
+      "hit": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 30,
+        "scale": 2.0
+      },
+      "hit2": {
+        "fx": "Wave_Circle_Purple.Dir5",
+        "fps": 16,
+        "scale": 2.4
+      },
+      "shake": 4,
+      "extra": {
+        "terrainGrow": "psychic",
+        "desc": "A burst of psychic power on the target. In Psychic Terrain: ×1.5 power and a much wider burst.",
+        "descKo": "상대에게 염력을 폭발시킨다. 사이코필드에서는 위력 1.5배, 범위가 훨씬 넓어진다."
+      }
+    },
+    "thousandarrows": {
+      "behavior": "targetArea",
+      "anim": "Attack",
+      "range": 330,
+      "warn": 0.75,
+      "count": 7,
+      "scatter": 75,
+      "radius": 26,
+      "damageFactor": 0.35,
+      "meteor": {
+        "fx": "Arrow_Shot.Dir2",
+        "fps": 20,
+        "scale": 1.4,
+        "fall": 0.3,
+        "fromX": 0,
+        "fromY": -240,
+        "trail": {
+          "fx": "Puff_Brown.None",
+          "fps": 24,
+          "scale": 0.5,
+          "every": 0.05,
+          "jitter": 3
+        }
+      },
+      "hit": {
+        "fx": "Earth_Power_Eruption.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 4,
+      "extra": {
+        "desc": "Arrows of earth rain down; they hit flying foes too and knock them to the ground for 8 s.",
+        "descKo": "땅의 화살이 쏟아진다. 날아 있는 상대에게도 맞고 8초 동안 땅으로 떨어뜨린다."
+      }
+    },
+    "doubleironbash": {
+      "behavior": "melee",
+      "style": "twin",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 50,
+      "hitGap": 0.24,
+      "hit": {
+        "fx": "Iron_Head.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "land": {
+        "fx": "Hammer_Arm_Smoke.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 7,
+      "ghostTint": "#d0d0e0",
+      "extra": {
+        "desc": "Two heavy blows with its hex-nut arms, left then right. 30% flinch.",
+        "descKo": "육각 너트 팔로 왼쪽, 오른쪽 두 번 강타한다. 30% 풀죽음."
+      }
+    },
+    "dragontail": {
+      "behavior": "melee",
+      "style": "hurl",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 50,
+      "fling": 3.6,
+      "hit": {
+        "fx": "Aqua_Tail_Wave.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 6,
+      "extra": {
+        "desc": "Flings the target far away with its tail. In Trio the target is dragged out and a random teammate comes in.",
+        "descKo": "꼬리로 상대를 멀리 날려 버린다. 트리오에서는 상대를 강제로 교체시킨다."
+      }
+    },
+    "icehammer": {
+      "behavior": "melee",
+      "style": "slam",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 50,
+      "hop": 34,
+      "splash": 34,
+      "hit": {
+        "fx": "Ice_Shard_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "land": {
+        "fx": "Ice_Pieces.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "shake": 7,
+      "extra": {
+        "desc": "Swings its heavy fist down with a shockwave of ice. Speed −1.",
+        "descKo": "무거운 주먹을 내려쳐 얼음 충격파를 일으킨다. 스피드 −1."
+      }
+    },
+    "crushgrip": {
+      "behavior": "melee",
+      "style": "clamp",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 46,
+      "hold": 0.5,
+      "hit": {
+        "fx": "Crush_Grip_Hand.Dir8",
+        "fps": 20,
+        "scale": 1.4,
+        "dirRows": true
+      },
+      "hit2": {
+        "fx": "Crush_Grip_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 5,
+      "extra": {
+        "desc": "Crushes the target in its grip: stronger the more HP the target has left.",
+        "descKo": "강하게 쥐어 짓누른다: 상대의 HP가 많을수록 강하다."
+      }
+    },
+    "foulplay": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 54,
+      "hit": {
+        "fx": "Thief_Hit_Dark.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Payback_Hit.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Turns the target's power against it: uses the target's Attack instead of its own.",
+        "descKo": "상대의 힘을 역이용한다: 자신이 아닌 상대의 공격으로 데미지를 계산한다."
+      }
+    },
+    "psyblade": {
+      "behavior": "melee",
+      "style": "sweep",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 52,
+      "reach": 52,
+      "arc": 1.3,
+      "arcFx": {
+        "fx": "Psycho_Cut.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "hit": {
+        "fx": "Psycho_Cut_Cut.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "A slash with a blade of psychic light. ×1.5 in Electric Terrain.",
+        "descKo": "빛의 칼로 벤다. 일렉트릭필드에서 1.5배."
+      }
+    },
+    "fishiousrend": {
+      "behavior": "melee",
+      "style": "clamp",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 50,
+      "hold": 0.4,
+      "hit": {
+        "fx": "Fangs_RSE.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "hit2": {
+        "fx": "Brine_Splashes.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "firstStrike": true,
+        "desc": "Bites with its gills. ×2 if the target hasn't attacked in the last 2 s.",
+        "descKo": "아가미로 문다. 상대가 2초 동안 공격하지 않았다면 위력 2배."
+      }
+    },
+    "tailslap": {
+      "behavior": "melee",
+      "style": "combo",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "randomHits": true,
+      "hitGap": 0.09,
+      "hit": {
+        "fx": "Wake_Up_Slap.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Slaps 2-5 times with its tail (Skill Link: always 5).",
+        "descKo": "꼬리로 2~5번 연속으로 때린다 (스킬링크: 항상 5번)."
+      }
+    },
+    "highhorsepower": {
+      "behavior": "dash",
+      "style": "hops",
+      "anim": "Attack",
+      "range": 230,
+      "hops": 4,
+      "hopTime": 0.13,
+      "height": 12,
+      "radius": 32,
+      "step": {
+        "fx": "Puff_Brown.None",
+        "fps": 24,
+        "scale": 0.8
+      },
+      "land": {
+        "fx": "Hammer_Arm_Smoke.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "impact": {
+        "fx": "Rock_Smash.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "ghostTint": "#c0a070",
+      "shake": 6,
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Gallops over in quick strides and tramples the target.",
+        "descKo": "빠르게 질주해 와서 상대를 짓밟는다."
+      }
+    },
+    "lunge": {
+      "behavior": "dash",
+      "style": "charge",
+      "anim": "Attack",
+      "range": 230,
+      "windup": 0.3,
+      "dashSpeed": 600,
+      "dashTime": 0.35,
+      "charge": {
+        "fx": "Puff_White.None",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "trail": {
+        "fx": "Puff_Green.None",
+        "fps": 24,
+        "scale": 0.7
+      },
+      "impact": {
+        "fx": "Bug_Bite.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "ghostTint": "#a0d060",
+      "shake": 5,
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.2
+      }
+    },
+    "zingzap": {
+      "behavior": "dash",
+      "style": "zigzag",
+      "anim": "Walk",
+      "range": 210,
+      "dashSpeed": 640,
+      "dashTime": 0.35,
+      "legs": 3,
+      "zig": 30,
+      "trail": {
+        "fx": "Spark.None",
+        "fps": 16,
+        "scale": 0.9
+      },
+      "trailHazard": {
+        "dmg": 0.006,
+        "status": "par",
+        "chance": 6,
+        "time": 1.0
+      },
+      "ghostTint": "#f8e870",
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Zig-zags in with its spines charged, leaving sparks. 30% flinch.",
+        "descKo": "가시에 전기를 띠고 지그재그로 파고든다. 30% 풀죽음."
+      }
+    },
+    "boltbeak": {
+      "behavior": "dash",
+      "style": "straight",
+      "anim": "Walk",
+      "range": 230,
+      "dashSpeed": 760,
+      "dashTime": 0.32,
+      "under": {
+        "fx": "Spark.None",
+        "fps": 16,
+        "scale": 1.0,
+        "follow": true
+      },
+      "trail": {
+        "fx": "Spark.None",
+        "fps": 16,
+        "scale": 0.8
+      },
+      "ghostTint": "#f8e060",
+      "hit": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Pluck.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 4,
+      "extra": {
+        "firstStrike": true,
+        "desc": "Stabs with an electrified beak. ×2 if the target hasn't attacked in the last 2 s.",
+        "descKo": "전기를 띤 부리로 찌른다. 상대가 2초 동안 공격하지 않았다면 위력 2배."
+      }
+    },
+    "smartstrike": {
+      "behavior": "dash",
+      "style": "through",
+      "anim": "Attack",
+      "range": 230,
+      "dashSpeed": 820,
+      "passes": 1,
+      "overshoot": 50,
+      "trail": {
+        "fx": "Flash_Cannon_Sparkle_Single.None",
+        "fps": 24,
+        "scale": 0.9
+      },
+      "slash": {
+        "fx": "Megahorn_Front.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "ghostTint": "#d8d8f0",
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "extra": {
+        "unblockable": true,
+        "desc": "Pierces through the target with a sharp horn. Can't be dodged.",
+        "descKo": "날카로운 뿔로 꿰뚫는다. 회피할 수 없다."
+      }
+    },
+    "spinout": {
+      "behavior": "dash",
+      "style": "spin",
+      "anim": "Walk",
+      "range": 210,
+      "dashSpeed": 520,
+      "dashTime": 0.5,
+      "ticks": 3,
+      "tickGap": 0.1,
+      "trail": {
+        "fx": "Smoke_Black.None",
+        "fps": 24,
+        "scale": 0.8
+      },
+      "hit": {
+        "fx": "Metal_Burst_Hit.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "ghostTint": "#a0a0b0",
+      "extra": {
+        "desc": "Spins its wheels hard into the target, hitting 3 times. Speed −2.",
+        "descKo": "바퀴를 세게 돌려 3번 부딪친다. 스피드 −2."
+      }
+    },
+    "mortalspin": {
+      "behavior": "dash",
+      "style": "spin",
+      "anim": "Walk",
+      "range": 210,
+      "dashSpeed": 470,
+      "dashTime": 0.5,
+      "ticks": 3,
+      "tickGap": 0.11,
+      "trail": {
+        "fx": "Bubbles_Purple.None",
+        "fps": 24,
+        "scale": 0.8
+      },
+      "trailHazard": {
+        "dmg": 0.006,
+        "status": "psn",
+        "chance": 6,
+        "time": 1.0
+      },
+      "hit": {
+        "fx": "Poison_Jab.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "ghostTint": "#c080f8",
+      "extra": {
+        "desc": "Spins through the target, poisoning it, and blows away the foe's hazards.",
+        "descKo": "회전하며 상대를 독에 걸리게 하고, 상대가 깔아 둔 압정과 바위를 날려 버린다."
+      }
+    },
+    "dragonascent": {
+      "behavior": "dash",
+      "style": "dive",
+      "anim": "Walk",
+      "range": 260,
+      "riseAnim": "Hop",
+      "upTime": 0.3,
+      "hang": 0.35,
+      "downTime": 0.14,
+      "radius": 38,
+      "over": {
+        "fx": "Dragon_Rush_Front.Flip",
+        "fps": 24,
+        "scale": 1.2,
+        "follow": true
+      },
+      "land": {
+        "fx": "Draco_Meteor_Explosion.None",
+        "fps": 20,
+        "scale": 0.8
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "ghostTint": "#70f070",
+      "shake": 8,
+      "extra": {
+        "desc": "Soars to the sky and plunges down on the marked spot. Defense and Sp. Def −1.",
+        "descKo": "하늘 높이 날아올랐다가 표시된 곳으로 내리꽂힌다. 방어·특수방어 −1."
+      }
+    },
+    "supercellslam": {
+      "behavior": "dash",
+      "style": "dive",
+      "anim": "Attack",
+      "range": 230,
+      "riseAnim": "Hop",
+      "upTime": 0.25,
+      "hang": 0.3,
+      "downTime": 0.14,
+      "radius": 34,
+      "crash": 0.5,
+      "over": {
+        "fx": "Spark.None",
+        "fps": 16,
+        "scale": 1.4,
+        "follow": true
+      },
+      "land": {
+        "fx": "Discharge_Hit.None",
+        "fps": 30,
+        "scale": 1.6
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "ghostTint": "#f8f070",
+      "shake": 7,
+      "extra": {
+        "desc": "Leaps up charged with electricity and slams down. If it misses it crashes and loses half its HP.",
+        "descKo": "전기를 두르고 뛰어올라 내리찍는다. 빗나가면 HP 절반을 잃는다."
+      }
+    },
+    "flipturn": {
+      "behavior": "dash",
+      "style": "bounce",
+      "anim": "Walk",
+      "range": 220,
+      "dashSpeed": 620,
+      "dashTime": 0.35,
+      "under": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 24,
+        "scale": 0.9,
+        "follow": true
+      },
+      "trail": {
+        "fx": "Bubbles_Blue.None",
+        "fps": 24,
+        "scale": 0.8
+      },
+      "hit": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Flips into the target and back. In Trio the user switches out after hitting.",
+        "descKo": "몸을 뒤집어 공격하고 돌아온다. 트리오에서는 공격 후 교체된다."
+      }
+    },
+    "phantomforce": {
+      "behavior": "vanish",
+      "anim": "Attack",
+      "range": 300,
+      "vanishTime": 0.6,
+      "under": {
+        "fx": "Shadow_Force_Back.None",
+        "fps": 40,
+        "scale": 1.6
+      },
+      "over": {
+        "fx": "Shadow_Force_Front.None",
+        "fps": 40,
+        "scale": 1.6
+      },
+      "hit": {
+        "fx": "Shadow_Claw_Hit.None",
+        "fps": 24,
+        "scale": 1.8
+      },
+      "hit2": {
+        "fx": "Shadow_Force_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "tint": "rgba(60,20,90,0.25)",
+      "shake": 6,
+      "extra": {
+        "desc": "Vanishes (can't be hit), then strikes from behind the target. Goes through Protect.",
+        "descKo": "사라졌다가 (공격받지 않는다) 상대 뒤에서 공격한다. 방어를 무시한다."
+      }
+    },
+    "struggle": {
+      "behavior": "dash",
+      "style": "straight",
+      "anim": "Walk",
+      "range": 220,
+      "dashSpeed": 520,
+      "dashTime": 0.45,
+      "trail": {
+        "fx": "Puff_White.None",
+        "fps": 24,
+        "scale": 0.7
+      },
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "ghostTint": "#e0e0e0",
+      "extra": {
+        "desc": "Used only when a Pokémon has no way to deal damage: a desperate charge that hurts the user too (2.5% HP).",
+        "descKo": "데미지를 줄 방법이 없을 때만 쓰는 필사적인 돌진. 자신도 HP 2.5%를 잃는다."
+      }
     }
   },
   "status": {
@@ -7311,6 +9174,11 @@
     },
     "salt": {
       "fx": "Sand_Tomb_Sand_White.None",
+      "fps": 20,
+      "scale": 0.9
+    },
+    "tailwind": {
+      "fx": "Tailwind.Dir1",
       "fps": 20,
       "scale": 0.9
     }

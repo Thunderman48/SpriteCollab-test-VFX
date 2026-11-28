@@ -4,9 +4,9 @@ import { statsFor, HP_SCALE, DB, effectiveness } from './combat.js';
 import { effectiveBase } from './modes.js';
 import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
-import { equip, unequip } from './items.js';
+import { equip, unequip, baseMods } from './items.js';
 import { t, itemName, abilityName } from './i18n.js';
-import { ab, stageOf, stageMul, tickFighter, beforeCast, wantsMove, weatherNow, loseFocus, trapped } from './effects.js';
+import { ab, stageOf, stageMul, tickFighter, beforeCast, wantsMove, weatherNow, loseFocus, trapped, sideOn, trickRoom, terrainNow } from './effects.js';
 
 export const PLAYER_COLORS = ['#88c8f8', '#f8a0c8', '#88f888', '#f8e860'];
 const DODGE_TIME = 0.2;
@@ -88,12 +88,19 @@ export class Fighter {
     this.emotion = 'Normal';
     this.emotionT = 0;
     equip(this, member.item);
+    // Klutz: it can't use its held item at all.
+    if (this.ability === 'klutz' && this.item) {
+      this.stats = { ...this.rawStats };
+      this.mods = baseMods();
+      this.itemSpent = true;
+    }
     this.refreshSpeed();
   }
 
   /** Types right now (Roost removes Flying for a moment). */
   get types() {
     if (this.zen) return ['Fire', 'Psychic'];
+    if (this.pirouette) return ['Normal', 'Fighting']; // Meloetta Pirouette Forme
     if (this.roostT > 0) {
       const t2 = this.data.types.filter((x) => x !== 'Flying');
       return t2.length ? t2 : ['Normal'];
@@ -149,13 +156,16 @@ export class Fighter {
     // Stance Change: Blade Forme swaps attack and defense stats.
     const key = this.bladeT > 0 && ab(this, 'stancechange') ? { atk: 'def', def: 'atk', spa: 'spd', spd: 'spa' }[k] || k : k;
     // Zen Mode: Attack and Sp. Atk trade places; Hero Palafin is far stronger.
-    const k2 = this.zen && (key === 'atk' || key === 'spa') ? (key === 'atk' ? 'spa' : 'atk') : key;
+    const swap = this.zen || this.pirouette; // Zen Mode / Pirouette Forme swap Attack and Sp. Atk
+    const k2 = swap && (key === 'atk' || key === 'spa') ? (key === 'atk' ? 'spa' : 'atk') : key;
     let v = this.stats[k2] * stageMul(n);
     if (this.zen && (k2 === 'def' || k2 === 'spd')) v *= 1.6;
     if (this.hero) v *= { atk: 2, def: 1.27, spa: 1.72, spd: 1.3 }[k] || 1;
     const w = weatherNow(this.game);
-    // Protosynthesis: in sun its best stat goes up (Speed ×1.5, others ×1.3).
-    if (w === 'sunnyday' && ab(this, 'protosynthesis')) {
+    if (k === 'spe' && sideOn(this.game, this.team, 'tailwind')) v *= 2;
+    if ((k === 'atk' || k === 'spe') && this.slowT > 0) v *= 0.5; // Slow Start
+    // Protosynthesis (sun) / Quark Drive (Electric Terrain): its best stat goes up (Speed ×1.5, others ×1.3).
+    if ((w === 'sunnyday' && ab(this, 'protosynthesis')) || (terrainNow(this.game) === 'electric' && ab(this, 'quarkdrive'))) {
       const best = ['atk', 'def', 'spa', 'spd', 'spe'].reduce((b, s) => (this.stats[s] > this.stats[b] ? s : b), 'atk');
       if (k === best) v *= k === 'spe' ? 1.5 : 1.3;
     }
@@ -182,7 +192,9 @@ export class Fighter {
 
   /** Movement speed + cooldown recharge from Speed (stages, paralysis, chill, Pressure...). */
   refreshSpeed() {
-    const spe = this.statVal('spe');
+    let spe = this.statVal('spe');
+    // Trick Room: the slower you are, the faster you move and recharge.
+    if (trickRoom(this.game)) spe = Math.max(20, 260 - spe);
     const ratio = Math.sqrt(spe / this.stats.spe); // stages help, but walking speed can't explode
     let move = (64 + this.stats.spe * 0.22 * ratio) * (this.mods?.speedMul ?? 1);
     if (ab(this, 'lightmetal')) move *= 1.1;
@@ -250,6 +262,7 @@ export class Fighter {
     if (this.mods.sitrus && !this.itemSpent && !unnerved && this.hp < this.maxHp * berryAt) {
       const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus));
       this.useItem(t('sitrus', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>`, n: healed }));
+      if (ab(this, 'cheekpouch')) this.heal(this.maxHp / 3); // Cheek Pouch
     }
     if (!this.cast && this.dodgeT <= 0 && !this.mods.noKnockback) {
       this.hurtT = 0.3;
@@ -299,7 +312,7 @@ export class Fighter {
     }
     this.dodgeT = DODGE_TIME;
     this.invuln = DODGE_INVULN;
-    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1) * (trapped(this.game, this) ? 1.5 : 1);
+    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1) * (trapped(this.game, this) ? 1.5 : 1) * (this.syrupT > 0 ? 1.3 : 1);
     this.dir = angleToDir(this.dodgeAngle);
     this.sprite.play('Hop', { loop: false, restart: true, speed: 1.6 });
     this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y + 6, { layer: 'under' }));
@@ -397,13 +410,29 @@ export class Fighter {
    */
   tryAutoCast(opp) {
     if (this.cast || this.castGap > 0 || !this.still || this.stunned) return;
-    const list = this.lock ? [this.lock.id] : this.moves;
+    // Outrage keeps raging; Encore repeats the last skill.
+    const list = this.lock ? [this.lock.id] : this.encore ? [this.encore.id] : this.moves;
+    // Struggle: a Pokémon with no way to deal damage (Wobbuffet) struggles after 5 s without attacking.
+    if (this.wantsStruggle(opp)) {
+      if (beforeCast(this.game, this, opp, 'struggle')) startCast(this.game, this, opp, 'struggle');
+      return;
+    }
     for (const id of list) {
       if (this.cd[id] > 0) continue;
       if (!wantsMove(this.game, this, id, opp)) continue;
       if (beforeCast(this.game, this, opp, id)) startCast(this.game, this, opp, id);
       return;
     }
+  }
+
+  /** Struggle time: no way to deal damage and nothing thrown for 5 s. */
+  wantsStruggle(opp) {
+    return !this.lock && !this.encore && !!opp && this.cantHurt() && (this.game.fightTime || 0) - (this.lastAttackAt ?? this.enteredAt ?? 0) > 5 && this.distTo(opp) < 220;
+  }
+
+  /** No skill that can deal damage (Counter / Mirror Coat only answer hits). */
+  cantHurt() {
+    return (this._cantHurt ??= this.moves.every((id) => DB.moves[id].category === 'Status' || MOVEFX.moves[id]?.stance));
   }
 
   draw(ctx) {

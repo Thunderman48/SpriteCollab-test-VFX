@@ -2,9 +2,9 @@
 // sprite anim / RawAsset VFX it uses. Damage numbers come from data/moves.json.
 import { DB } from './combat.js';
 import { Effect, Beam, Telegraph } from './vfx.js';
-import { selfMove, burnGround, weatherNow, hasPriority } from './effects.js';
+import { selfMove, burnGround, weatherNow, hasPriority, terrainNow, ab } from './effects.js';
 import { DASH, MELEE } from './motion.js';
-import { PROJ, BEAMS, BURSTS, zone, pull, hazardMove } from './patterns.js';
+import { PROJ, BEAMS, BURSTS, zone, pull, hazardMove, drawChain } from './patterns.js';
 import { inflict } from './effects.js';
 
 export const MOVEFX = { common: {}, moves: {} };
@@ -38,7 +38,7 @@ export function startCast(game, c, t, id) {
     drive: null,
     faceAngle: c.angleTo(t),
     // Priority moves (Quick Attack, Bullet Punch...) wind up faster and skip most of the gap.
-    speed: hasPriority(c, move) ? 1.6 : 1,
+    speed: hasPriority(c, move) ? 1.6 : ab(c, 'stall') ? 0.85 : 1, // Stall: winds up slower
   };
   cast.release = () => {
     if (cast.released) return;
@@ -83,6 +83,7 @@ export function withCharge(game, c, t, cast, then) {
   const d = cast.def;
   let time = (d.charge?.time || 0) / cast.speed;
   if (d.extra?.noChargeSun && weatherNow(game) === 'sunnyday') time = 0.12;
+  if (d.extra?.noChargeRain && weatherNow(game) === 'raindance') time = 0.12; // Electro Shot
   if (!time) return then();
   c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
   const a = cast.faceAngle;
@@ -117,6 +118,7 @@ export class Projectile {
   update(dt) {
     const pd = this.pd;
     this.t += dt;
+    this.grow?.(this);
     if (this.mover) this.mover(this, dt);
     else {
       if (pd.homing && this.target.alive) {
@@ -153,7 +155,7 @@ export class Projectile {
     // Piercing shots (Flamethrower, Psycho Cut) keep going and hit each enemy once.
     const pierce = this.def.extra?.pierce || this.multi;
     for (const tg of this.idle ? [] : this.game.enemiesOf(this.owner)) {
-      if (pierce && (this.pierced?.has(tg) || this.hitSet?.has(tg))) continue;
+      if (pierce && (this.multi ? this.hitSet?.has(tg) : this.pierced?.has(tg))) continue;
       if (Math.hypot(tg.x - this.x, tg.y - this.y) >= pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) continue;
       if (this.game.dodges(this.owner, tg)) {
         if (!this.dodged) {
@@ -203,7 +205,7 @@ export class Projectile {
     const g = this.game;
     if (victim) {
       const dmg = g.applyHit(this.owner, victim, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
-      this.onLand?.(dmg);
+      this.onLand?.(dmg, victim);
       // Tri Attack: each orb can burn / freeze / paralyse.
       if (this.status && dmg > 0 && Math.random() < 0.067 * (this.owner.ability === 'serenegrace' ? 2 : 1)) inflict(g, victim, this.status, this.owner);
       // Seed Bomb: the blast also catches foes standing nearby.
@@ -227,7 +229,22 @@ export class Projectile {
   }
 
   draw(ctx) {
+    if (this.chainFrom && !this.chainFrom.ko) drawChain(ctx, this.chainFrom, this, this.pd.chainColor);
+    if (this.pd.stack) return this.drawStack(ctx);
     this.effect.draw(ctx);
+  }
+
+  /** Twisters: the same spinning ring stacked into a funnel, wider at the top. */
+  drawStack(ctx) {
+    const e = this.effect;
+    const { y, scale, t } = e;
+    for (let i = 0; i < this.pd.stack; i++) {
+      e.y = y + 8 - i * (this.pd.stackGap || 9);
+      e.scale = scale * (0.4 + i * 0.26);
+      e.t = t + i * 0.07;
+      e.draw(ctx);
+    }
+    Object.assign(e, { y, scale, t });
   }
 }
 
@@ -244,7 +261,8 @@ function meleeTail(d) {
   if (d.style === 'rage') return 6 * (d.hitGap || 0.09);
   if (d.style === 'throw') return 0.55;
   if (d.style === 'triple') return 3 * (d.hitGap || 0.16);
-  return (d.hits || 1) * (d.hitGap || 0);
+  if (d.style === 'twin') return 2 * (d.hitGap || 0.22);
+  return (d.randomHits ? 5 : d.hits || 1) * (d.hitGap || 0);
 }
 
 const BEHAVIORS = {
@@ -387,7 +405,8 @@ const BEHAVIORS = {
 
   targetArea(game, c, t, cast) {
     const d = cast.def;
-    const radius = d.radius * (c.mods?.hitbox ?? 1); // Wide Lens
+    // Wide Lens; Expanding Force grows in Psychic Terrain.
+    const radius = d.radius * (c.mods?.hitbox ?? 1) * (d.extra?.terrainGrow && terrainNow(game) === d.extra.terrainGrow ? 1.8 : 1);
     // Thunder in rain: no warning time.
     const w = weatherNow(game);
     const instant = (d.extra?.instantRain && w === 'raindance') || (d.extra?.instantWeather && w === d.extra.instantWeather);

@@ -1,12 +1,16 @@
 // More shapes for ranged and area skills, so similar skills feel different.
 // movefx.json picks a style: { "behavior": "projectile", "style": "boomerang", ... }
 //
-// Projectile styles: boomerang (Bonemerang: out and back) · volley (Icicle Spear / Pin Missile: 2-5 shots)
+// Projectile styles: boomerang (Bonemerang: out and back) · volley (Icicle Spear / Pin Missile: 2-5 shots,
+//   Population Bomb: up to 10) · wave (Psystrike / Origin Pulse: a growing wave that passes through)
+//   expand (Electroweb: a net that widens) · hook (Anchor Shot: reels the target in on a chain)
+//   tornado (Bleakwind / Sandsear / Springtide Storm: a twister that roams over and drags foes in)
 //   converge (Tri Attack: 3 orbs curve in) · lob (Salt Cure / Armor Cannon: arcs over, splashes where it lands)
 //   ricochet (Electro Ball: bounces off the walls) · orbitals (Astral Barrage: circles the user, then flies out)
 //   Any projectile can also `wobble` (Sleep Powder, Clear Smog drift side to side).
 // Beam styles: sweep (Dynamax Cannon swings across) · pulse (Steam Eruption fires in bursts)
 // Burst styles: shockwave (Seed Flare / Diamond Storm: a ring travels outwards) · cone (Glaciate: ice rows in front)
+//   line (Precipice Blades / Thousand Waves: eruptions run along the ground to the target) · spiral (Fiery Dance)
 // Area extras: pillar (Photon Geyser: a column rises from the ground) · zone (Thunder Cage / Fire Spin: stays and
 //   traps) · pull (Hyperspace Hole: drags foes into the portal)
 // Hazards (behaviour "hazard"): Spikes, Toxic Spikes, Stealth Rock stay on the field until stepped on.
@@ -55,7 +59,9 @@ export const PROJ = {
   /** Icicle Spear / Pin Missile: 2-5 shots in a row (Skill Link: always 5). */
   volley(game, c, t, cast, a) {
     const pd = cast.def.projectile;
-    const n = FXE.ab(c, 'skilllink') ? 5 : [2, 2, 2, 3, 3, 3, 4, 5][Math.floor(Math.random() * 8)];
+    // Population Bomb: up to 10 hits, each one 90% likely to follow the last.
+    let n = FXE.ab(c, 'skilllink') ? pd.max || 5 : [2, 2, 2, 3, 3, 3, 4, 5][Math.floor(Math.random() * 8)];
+    if (pd.chain && !FXE.ab(c, 'skilllink')) for (n = 1; n < pd.max && Math.random() < pd.chain; n++);
     const hits = { n: 0 };
     for (let k = 0; k < n; k++) {
       game.after(k * (pd.gap || 0.1), () => {
@@ -71,6 +77,100 @@ export const PROJ = {
     game.after((n - 1) * (pd.gap || 0.1) + 0.6, () => {
       if (hits.n > 1) log(game, 'hitTimes', { n: hits.n });
     }, null);
+  },
+
+  /** Psystrike / Origin Pulse: a wave that grows as it travels and passes through every foe. */
+  wave(game, c, t, cast, a, p) {
+    const pd = cast.def.projectile;
+    const n = pd.count || 1;
+    for (let i = 0; i < n; i++) {
+      const proj = new Projectile(game, c, t, cast, a + (i - (n - 1) / 2) * (pd.spread || 0), p.x, p.y);
+      proj.multi = true;
+      proj.factor = 1 / Math.max(1, n * 0.6);
+      const r0 = pd.radius;
+      const s0 = proj.effect.scale;
+      proj.grow = (o) => {
+        const k = 1 + Math.min(1, o.t / (pd.life || 1)) * (pd.grow || 1);
+        o.pd = { ...pd, radius: r0 * k };
+        o.effect.scale = s0 * k;
+      };
+      game.addObject(proj);
+    }
+  },
+
+  /** Electroweb: a net that spreads wider as it flies, catching every foe it touches. */
+  expand(game, c, t, cast, a, p) {
+    PROJ.wave(game, c, t, cast, a, p);
+  },
+
+  /** Anchor Shot / Malignant Chain: a shot on a chain. Anchor Shot reels the target in and holds it. */
+  hook(game, c, t, cast, a, p) {
+    const pd = cast.def.projectile;
+    const proj = new Projectile(game, c, t, cast, a, p.x, p.y);
+    proj.chainFrom = c;
+    proj.onLand = (dmg, victim) => {
+      if (!pd.reel || !victim?.alive || !dmg) return;
+      // Reel the target in towards the user.
+      let tt = 0;
+      const from = { x: victim.x, y: victim.y };
+      const ang = c.angleTo(victim);
+      const to = { x: c.x + Math.cos(ang) * (c.radius + victim.radius + 10), y: c.y + Math.sin(ang) * (c.radius + victim.radius + 10) * 0.7 };
+      victim.stunT = Math.max(victim.stunT, 0.35);
+      const line = { layer: 'over', dead: false, update() {}, draw: (ctx) => drawChain(ctx, c, victim, pd.chainColor) };
+      game.addObject(line);
+      game.addUpdater((dt) => {
+        tt += dt;
+        const k = Math.min(1, tt / 0.3);
+        if (victim.alive) {
+          victim.x = from.x + (to.x - from.x) * k;
+          victim.y = from.y + (to.y - from.y) * k;
+          victim.clamp();
+        }
+        if (k >= 1) line.dead = true;
+        return k >= 1;
+      });
+    };
+    game.addObject(proj);
+  },
+
+  /** Bleakwind / Sandsear / Springtide Storm: a twister roams towards the target, dragging in and battering foes. */
+  tornado(game, c, t, cast, a, p) {
+    const pd = cast.def.projectile;
+    const proj = new Projectile(game, c, t, cast, a, p.x, p.y);
+    proj.multi = true;
+    proj.factor = 1 / (pd.ticks || 3);
+    const hits = new Map();
+    let reset = 0;
+    proj.mover = (o, dt) => {
+      if (o.target.alive) {
+        const want = Math.atan2(o.target.y - o.y, o.target.x - o.x);
+        o.angle += Math.max(-pd.homing * dt, Math.min(pd.homing * dt, norm(want - o.angle)));
+      }
+      o.x += Math.cos(o.angle) * o.speed * dt;
+      o.y += Math.sin(o.angle) * o.speed * dt;
+      o.x = Math.max(game.bounds.x0, Math.min(game.bounds.x1, o.x));
+      o.y = Math.max(game.bounds.y0, Math.min(game.bounds.y1, o.y));
+      // Each foe can be hit again every so often (up to `ticks` times), and is pulled in.
+      if ((reset -= dt) <= 0) {
+        reset = pd.tickGap || 0.35;
+        for (const e of [...(o.hitSet || [])]) {
+          hits.set(e, (hits.get(e) || 0) + 1);
+          if (hits.get(e) < (pd.ticks || 3)) {
+            o.hitSet.delete(e);
+            o.pierced?.delete(e);
+          }
+        }
+      }
+      for (const e of game.enemiesOf(c)) {
+        const d2 = Math.hypot(e.x - o.x, e.y - o.y);
+        if (d2 > (pd.pull || 70) || d2 < 4 || e.invuln > 0) continue;
+        e.x += ((o.x - e.x) / d2) * 70 * dt;
+        e.y += ((o.y - e.y) / d2) * 70 * dt;
+        e.clamp();
+      }
+    };
+    proj.noWall = true;
+    game.addObject(proj);
   },
 
   /** Tri Attack: fire, ice and electric orbs spread out, then curve in on the target. */
@@ -271,6 +371,60 @@ export const BEAMS = {
 
 // ---------------------------------------------------------------- bursts
 export const BURSTS = {
+  /** Precipice Blades / Thousand Waves: eruptions burst one after another along the ground towards the target. */
+  line(game, c, t, cast) {
+    const d = cast.def;
+    const a = aimOf(c, t, cast);
+    cast.faceAngle = a;
+    cast.track = false;
+    const n = d.points || 6;
+    const len = Math.min(d.range, (t.alive ? c.distTo(t) : d.range * 0.7) + 40);
+    const hit = new Set();
+    for (let i = 0; i < n; i++) {
+      const dist = 26 + ((len - 26) * i) / (n - 1);
+      const p = { x: c.x + Math.cos(a) * dist, y: c.y + Math.sin(a) * dist * 0.8 };
+      game.after(d.delay + i * (d.gap || 0.07), () => {
+        if (c.ko) return;
+        spawnFx(game, d.spike, p.x, p.y);
+        spawnFx(game, d.crack, p.x, p.y + 2, { layer: 'under' });
+        game.shake(d.shake || 3, 0.12);
+        for (const e of game.enemiesOf(c)) {
+          if (hit.has(e) || Math.hypot(e.x - p.x, (e.y - p.y) / 0.7) > (d.width || 26) + e.radius) continue;
+          hit.add(e);
+          if (game.dodges(c, e)) game.dodgedText(e);
+          else game.applyHit(c, e, cast, { angle: a, noFx: true });
+        }
+      }, null);
+    }
+    game.after(d.delay, () => game.sfx?.('boom'), null);
+  },
+
+  /** Fiery Dance: it spins while flames spiral outwards around it. */
+  spiral(game, c, t, cast) {
+    const d = cast.def;
+    const arms = d.arms || 3;
+    const steps = d.steps || 8;
+    cast.lockDir = true;
+    const hit = new Set();
+    for (let i = 0; i < steps; i++) {
+      game.after(d.delay * 0.3 + i * 0.05, () => {
+        if (c.ko) return;
+        c.dir = (c.dir + 1) % 8;
+        const r = 14 + (i / (steps - 1)) * (d.radius - 14);
+        for (let k = 0; k < arms; k++) {
+          const ang = (k / arms) * Math.PI * 2 + i * 0.55;
+          spawnFx(game, d.flame, c.x + Math.cos(ang) * r, c.y + Math.sin(ang) * r * 0.6, { layer: k % 2 ? 'under' : 'over' });
+        }
+        for (const e of game.enemiesOf(c)) {
+          if (hit.has(e) || Math.abs(c.distTo(e) - r) > 18 + e.radius) continue;
+          hit.add(e);
+          if (game.dodges(c, e)) game.dodgedText(e);
+          else game.applyHit(c, e, cast, { angle: c.angleTo(e) });
+        }
+      }, null);
+    }
+  },
+
   /** Seed Flare / Diamond Storm: a ring travels outwards; it hits when it reaches you (dodge through it!). */
   shockwave(game, c, t, cast) {
     const d = cast.def;
@@ -418,6 +572,10 @@ class Hazard {
     this.dead = true;
     spawnFx(g, this.def.burst, this.x, this.y - 4);
     const k = this.kind;
+    if (k === 'stickyweb') {
+      FXE.boost(g, e, { spe: -1 }, this.owner);
+      return log(g, 'stuckWeb', { who: g.who(e) });
+    }
     if (k === 'toxicspikes') {
       // Poison types soak the spikes up.
       if (e.types.includes('Poison')) return log(g, 'absorbedSpikes', { who: g.who(e) });
@@ -510,4 +668,18 @@ export function clearHazards(game, c) {
     spawnFx(game, MOVEFX.common.dodge, o.x, o.y, { scale: 0.7 });
   }
   if (any) log(game, 'hazardsGone', { who: game.who(c) });
+}
+
+/** A chain between the user and what it hooked (Anchor Shot, Malignant Chain). */
+export function drawChain(ctx, a, b, color = '#a8a8b8') {
+  const n = Math.max(2, Math.floor(Math.hypot(b.x - a.x, b.y - a.y) / 6));
+  ctx.save();
+  for (let i = 0; i <= n; i++) {
+    const k = i / n;
+    const x = a.x + (b.x - a.x) * k;
+    const y = a.y - 6 + (b.y - (b.lift || 0) - 6 - (a.y - 6)) * k + Math.sin(k * Math.PI) * 6;
+    ctx.fillStyle = i % 2 ? '#000' : color;
+    ctx.fillRect(Math.round(x) - 1, Math.round(y) - 1, 3, 3);
+  }
+  ctx.restore();
 }

@@ -13,10 +13,12 @@
 //   whirl (Sacred Sword: spins, hits all around) · trip (Low Sweep: knocks down) · rage (Rage Fist: more punches the more it was hit)
 //   triple (Triple Kick: 3 kicks, each stronger, a miss ends it) · throw (Seismic Toss: lifts the target over and slams it)
 //   flurry (Plasma Fists: blinks around the target, hitting from every side) · axe (Ivy Cudgel: leaps up, smashes down)
+//   twin (Double Iron Bash: two heavy blows, left then right) · hurl (Dragon Tail: flings the target away; in Trio it's dragged out)
 //   + `focus` on any melee skill: tightens focus first (Focus Punch fails if hit meanwhile)
 import { MOVEFX, spawnFx, frontOf, aimOf } from './moves.js';
 import { Telegraph } from './vfx.js';
 import { angleToDir } from './sprite.js';
+import { ab } from './effects.js';
 
 const norm = (a) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -950,7 +952,8 @@ export const MELEE = {
 
   /** Close Combat / Play Rough: a flurry of quick hits, stepping in a little each time. */
   combo(game, c, t, cast, d) {
-    const hits = d.hits || 4;
+    // Tail Slap: 2-5 hits (Skill Link: 5).
+    const hits = d.randomHits ? (ab(c, 'skilllink') ? 5 : [2, 2, 2, 3, 3, 3, 4, 5][Math.floor(Math.random() * 8)]) : d.hits || 4;
     for (let k = 0; k < hits; k++) {
       game.after(k * (d.hitGap || 0.09), () => {
         if (!t.alive || c.ko) return;
@@ -1088,6 +1091,32 @@ export const MELEE = {
     }
     spawnFx(game, d.land, c.x + Math.cos(a) * 18, c.y + Math.sin(a) * 12, { layer: 'under' });
     game.shake(any ? d.shake || 7 : 3, 0.25);
+  },
+
+  /** Double Iron Bash: two heavy blows, one from each side, each with a shockwave. */
+  twin(game, c, t, cast, d) {
+    for (let k = 0; k < 2; k++) {
+      game.after(k * (d.hitGap || 0.22), () => {
+        if (!t.alive || c.ko) return;
+        const a = c.angleTo(t);
+        const side = (k ? 1 : -1) * 10;
+        c.lift = 0;
+        if (c.distTo(t) <= c.radius + t.radius + 36) {
+          contact(game, c, t, cast, { angle: a, kbMul: k ? 1.3 : 0.2, at: { x: t.x - Math.sin(a) * side, y: t.y + Math.cos(a) * side } });
+        }
+        spawnFx(game, d.land, t.x - Math.sin(a) * side, t.y + 2, { layer: 'under' });
+        game.shake(d.shake || 6, 0.2);
+        c.ghost(d.ghostTint);
+      }, null);
+    }
+  },
+
+  /** Dragon Tail: a heavy swing that flings the target far away; in Trio a random teammate is dragged in. */
+  hurl(game, c, t, cast, d) {
+    if (!t.alive || c.distTo(t) > c.radius + t.radius + 36) return MELEE.basic(game, c, t, cast, { hits: 1 });
+    if (!contact(game, c, t, cast, { angle: c.angleTo(t), kbMul: d.fling || 3.5 })) return;
+    launch(game, t, 26, 0.4);
+    game.after(0.4, () => game.dragOut?.(t), null);
   },
 
   /** Crunch / Fangs: bites and holds the target in place, then bites again. */

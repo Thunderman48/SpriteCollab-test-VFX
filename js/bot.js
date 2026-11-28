@@ -52,7 +52,7 @@ export class Bot {
     }
 
     // Moves only fire while standing still: stop when one is ready (or while attacking).
-    const ready = (me.lock ? [me.lock.id] : me.moves).find((id) => me.cd[id] <= 0 && wantsMove(g, me, id, foe));
+    const ready = (me.lock ? [me.lock.id] : me.moves).find((id) => me.cd[id] <= 0 && wantsMove(g, me, id, foe)) || me.wantsStruggle(foe);
     if (me.cast || ready || me.stunned) {
       x = 0;
       y = 0;

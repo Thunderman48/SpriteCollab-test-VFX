@@ -84,7 +84,12 @@
       "bulldoze",
       "stealthrock",
       "vcreate",
-      "gyroball"
+      "gyroball",
+      "tailwind",
+      "scaleshot",
+      "whirlpool",
+      "dragontail",
+      "dragonascent"
     ],
     "hurtRadius": 22,
     "flying": true,
@@ -179,7 +184,8 @@
       "poisonjab",
       "bulldoze",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -259,7 +265,10 @@
       "bulldoze",
       "spikes",
       "stealthrock",
-      "dig"
+      "dig",
+      "scaleshot",
+      "whirlpool",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -338,7 +347,15 @@
       "zapcannon",
       "toxicspikes",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "destinybond",
+      "trickroom",
+      "haze",
+      "taunt",
+      "encore",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -440,7 +457,17 @@
       "electroball",
       "zapcannon",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "psystrike",
+      "storedpower",
+      "expandingforce",
+      "foulplay"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -530,7 +557,12 @@
       "firespin",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "tailwind",
+      "reflect",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -614,7 +646,14 @@
       "rollout",
       "wavecrash",
       "icespinner",
-      "gyroball"
+      "gyroball",
+      "counter",
+      "mirrorcoat",
+      "reflect",
+      "haze",
+      "whirlpool",
+      "dragontail",
+      "flipturn"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -682,7 +721,9 @@
       "bulldoze",
       "sleeppowder",
       "leechseed",
-      "powerwhip"
+      "powerwhip",
+      "reflect",
+      "lightscreen"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -753,7 +794,12 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "encore",
+      "electroweb"
     ],
     "hurtRadius": 12,
     "flying": false,
@@ -836,7 +882,10 @@
       "bodypress",
       "powergem",
       "bulldoze",
-      "stealthrock"
+      "stealthrock",
+      "trickroom",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -922,7 +971,11 @@
       "powergem",
       "icywind",
       "bulldoze",
-      "focuspunch"
+      "focuspunch",
+      "trickroom",
+      "scaleshot",
+      "whirlpool",
+      "dragontail"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -1003,7 +1056,11 @@
       "steelwing",
       "icywind",
       "hex",
-      "bulldoze"
+      "bulldoze",
+      "destinybond",
+      "tailwind",
+      "dragontail",
+      "phantomforce"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -1089,7 +1146,8 @@
       "firespin",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -1164,7 +1222,17 @@
       "icywind",
       "mysticalfire",
       "psyshock",
-      "dazzlinggleam"
+      "dazzlinggleam",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "mistyterrain",
+      "taunt",
+      "encore",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -1246,7 +1314,10 @@
       "stealthrock",
       "focuspunch",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "expandingforce"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -1343,7 +1414,14 @@
       "stealthrock",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "rockblast",
+      "whirlpool",
+      "dragontail",
+      "foulplay",
+      "highhorsepower"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -1400,7 +1478,9 @@
       "sunnyday",
       "hypervoice",
       "trailblaze",
-      "dig"
+      "dig",
+      "reflect",
+      "storedpower"
     ],
     "hurtRadius": 12,
     "flying": false,
@@ -1492,7 +1572,13 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "reflect",
+      "encore",
+      "whirlpool",
+      "highhorsepower",
+      "supercellslam"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -1588,7 +1674,15 @@
       "zapcannon",
       "firespin",
       "focuspunch",
-      "icespinner"
+      "icespinner",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "haze",
+      "encore",
+      "scaleshot",
+      "whirlpool",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -1655,7 +1749,12 @@
       "hypervoice",
       "trailblaze",
       "zapcannon",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "storedpower",
+      "foulplay"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -1734,7 +1833,12 @@
       "icywind",
       "bulldoze",
       "zapcannon",
-      "powerwhip"
+      "powerwhip",
+      "reflect",
+      "taunt",
+      "scaleshot",
+      "whirlpool",
+      "dragontail"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -1808,7 +1912,17 @@
       "zapcannon",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "encore",
+      "storedpower",
+      "expandingforce",
+      "foulplay"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -1883,7 +1997,12 @@
       "bulldoze",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "lightscreen",
+      "encore",
+      "rockblast",
+      "highhorsepower"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -1965,7 +2084,11 @@
       "bulldoze",
       "iciclespear",
       "zapcannon",
-      "drillrun"
+      "drillrun",
+      "reflect",
+      "haze",
+      "whirlpool",
+      "smartstrike"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -2041,7 +2164,11 @@
       "steelwing",
       "crosspoison",
       "acrobatics",
-      "trailblaze"
+      "trailblaze",
+      "counter",
+      "tailwind",
+      "lightscreen",
+      "lunge"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -2120,7 +2247,8 @@
       "focuspunch",
       "dig",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "counter"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -2201,7 +2329,10 @@
       "leechseed",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -2283,7 +2414,12 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "mirrorcoat",
+      "whirlpool",
+      "highhorsepower",
+      "flipturn"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -2373,7 +2509,10 @@
       "stealthrock",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "taunt",
+      "encore"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -2456,7 +2595,9 @@
       "psychicfangs",
       "bulldoze",
       "firespin",
-      "rollout"
+      "rollout",
+      "tailwind",
+      "dragontail"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -2543,7 +2684,10 @@
       "aerialace",
       "blizzard",
       "icywind",
-      "hex"
+      "hex",
+      "counter",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -2626,7 +2770,14 @@
       "seismictoss",
       "focuspunch",
       "rollout",
-      "softboiled"
+      "softboiled",
+      "counter",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "encore",
+      "storedpower",
+      "smartstrike"
     ],
     "hurtRadius": 15,
     "flying": true,
@@ -2801,7 +2952,33 @@
       "icespinner",
       "gyroball",
       "drillrun",
-      "softboiled"
+      "softboiled",
+      "counter",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "mistyterrain",
+      "haze",
+      "taunt",
+      "encore",
+      "electroweb",
+      "rockblast",
+      "scaleshot",
+      "storedpower",
+      "pollenpuff",
+      "whirlpool",
+      "expandingforce",
+      "dragontail",
+      "foulplay",
+      "tailslap",
+      "highhorsepower",
+      "lunge",
+      "smartstrike",
+      "supercellslam",
+      "flipturn",
+      "phantomforce"
     ],
     "hurtRadius": 12,
     "flying": true,
@@ -2879,7 +3056,13 @@
       "icywind",
       "psyshock",
       "dazzlinggleam",
-      "stealthrock"
+      "stealthrock",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "encore",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 12,
     "flying": true,
@@ -2957,7 +3140,11 @@
       "icywind",
       "hex",
       "psyshock",
-      "focuspunch"
+      "focuspunch",
+      "haze",
+      "taunt",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -3036,7 +3223,11 @@
       "sludgewave",
       "spikes",
       "toxicspikes",
-      "dig"
+      "dig",
+      "counter",
+      "haze",
+      "taunt",
+      "watershuriken"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -3112,7 +3303,8 @@
       "psychicfangs",
       "bulldoze",
       "firespin",
-      "dig"
+      "dig",
+      "reflect"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -3184,7 +3376,12 @@
       "extrasensory",
       "psyshock",
       "firespin",
-      "dig"
+      "dig",
+      "reflect",
+      "encore",
+      "storedpower",
+      "foulplay",
+      "tailslap"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -3251,7 +3448,12 @@
       "trailblaze",
       "liquidation",
       "icywind",
-      "dig"
+      "dig",
+      "reflect",
+      "haze",
+      "storedpower",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -3319,7 +3521,11 @@
       "pinmissile",
       "electroball",
       "zapcannon",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "electroweb",
+      "storedpower"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -3389,7 +3595,9 @@
       "mysticalfire",
       "zapcannon",
       "firespin",
-      "dig"
+      "dig",
+      "reflect",
+      "storedpower"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -3457,7 +3665,13 @@
       "psyshock",
       "dazzlinggleam",
       "zapcannon",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -3521,7 +3735,11 @@
       "mysticalfire",
       "psyshock",
       "dazzlinggleam",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "storedpower"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -3616,7 +3834,17 @@
       "psyshock",
       "dazzlinggleam",
       "bulldoze",
-      "focuspunch"
+      "focuspunch",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "mistyterrain",
+      "taunt",
+      "encore",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -3687,7 +3915,11 @@
       "lowsweep",
       "hex",
       "extrasensory",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "encore",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -3756,7 +3988,13 @@
       "drainingkiss",
       "leechlife",
       "hex",
-      "dazzlinggleam"
+      "dazzlinggleam",
+      "destinybond",
+      "lightscreen",
+      "trickroom",
+      "mistyterrain",
+      "taunt",
+      "phantomforce"
     ],
     "hurtRadius": 12,
     "flying": false,
@@ -3842,7 +4080,12 @@
       "bulldoze",
       "triattack",
       "firespin",
-      "stealthrock"
+      "stealthrock",
+      "tailwind",
+      "reflect",
+      "taunt",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 20,
     "flying": true,
@@ -3915,7 +4158,11 @@
       "poisonjab",
       "leechlife",
       "mysticalfire",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "lightscreen",
+      "fierydance",
+      "lunge"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -3987,7 +4234,12 @@
       "spikes",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "rockblast",
+      "highhorsepower",
+      "lunge",
+      "smartstrike"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -4053,7 +4305,14 @@
       "blizzard",
       "drainingkiss",
       "icywind",
-      "bulldoze"
+      "bulldoze",
+      "mirrorcoat",
+      "lightscreen",
+      "haze",
+      "scaleshot",
+      "whirlpool",
+      "dragontail",
+      "flipturn"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -4142,7 +4401,13 @@
       "extrasensory",
       "psyshock",
       "bulldoze",
-      "zapcannon"
+      "zapcannon",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "whirlpool",
+      "dragontail"
     ],
     "hurtRadius": 22,
     "flying": true,
@@ -4225,7 +4490,10 @@
       "extrasensory",
       "bulldoze",
       "zapcannon",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "reflect",
+      "lightscreen"
     ],
     "hurtRadius": 22,
     "flying": true,
@@ -4291,7 +4559,9 @@
       "heavyslam",
       "liquidation",
       "icywind",
-      "bulldoze"
+      "bulldoze",
+      "originpulse",
+      "whirlpool"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -4377,7 +4647,12 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "rockblast",
+      "precipiceblades",
+      "dragontail",
+      "highhorsepower"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -4450,7 +4725,13 @@
       "seedbomb",
       "dazzlinggleam",
       "leechseed",
-      "stealthrock"
+      "stealthrock",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "pollenpuff",
+      "expandingforce"
     ],
     "hurtRadius": 12,
     "flying": true,
@@ -4517,7 +4798,10 @@
       "hex",
       "mysticalfire",
       "clearsmog",
-      "firespin"
+      "firespin",
+      "trickroom",
+      "haze",
+      "taunt"
     ],
     "hurtRadius": 15,
     "flying": true,
@@ -4585,7 +4869,10 @@
       "bulldoze",
       "stealthrock",
       "dig",
-      "drillrun"
+      "drillrun",
+      "rockblast",
+      "highhorsepower",
+      "smartstrike"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -4669,7 +4956,12 @@
       "iciclespear",
       "focuspunch",
       "dig",
-      "icespinner"
+      "icespinner",
+      "counter",
+      "reflect",
+      "taunt",
+      "whirlpool",
+      "foulplay"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -4747,7 +5039,11 @@
       "acrobatics",
       "psychicfangs",
       "hex",
-      "triattack"
+      "triattack",
+      "reflect",
+      "lightscreen",
+      "dragontail",
+      "phantomforce"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -4825,7 +5121,9 @@
       "sludgewave",
       "bulldoze",
       "focuspunch",
-      "powerwhip"
+      "powerwhip",
+      "counter",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -4894,7 +5192,11 @@
       "steelwing",
       "crosspoison",
       "acrobatics",
-      "trailblaze"
+      "trailblaze",
+      "counter",
+      "tailwind",
+      "lightscreen",
+      "lunge"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -4969,7 +5271,13 @@
       "triattack",
       "zapcannon",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "whirlpool",
+      "expandingforce",
+      "flipturn"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -5049,7 +5357,11 @@
       "hurricane",
       "psychicfangs",
       "bulldoze",
-      "stealthrock"
+      "stealthrock",
+      "tailwind",
+      "reflect",
+      "taunt",
+      "rockblast"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -5139,7 +5451,13 @@
       "focuspunch",
       "dig",
       "rollout",
-      "softboiled"
+      "softboiled",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "encore",
+      "storedpower"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -5228,7 +5546,16 @@
       "zapcannon",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "storedpower",
+      "whirlpool",
+      "expandingforce",
+      "foulplay"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -5297,7 +5624,11 @@
       "voltswitch",
       "extrasensory",
       "electroball",
-      "zapcannon"
+      "zapcannon",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "supercellslam"
     ],
     "hurtRadius": 20,
     "flying": true,
@@ -5367,7 +5698,9 @@
       "acrobatics",
       "mysticalfire",
       "extrasensory",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "reflect"
     ],
     "hurtRadius": 20,
     "flying": true,
@@ -5435,7 +5768,12 @@
       "icywind",
       "extrasensory",
       "iciclespear",
-      "icespinner"
+      "icespinner",
+      "mirrorcoat",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "haze"
     ],
     "hurtRadius": 20,
     "flying": true,
@@ -5517,7 +5855,12 @@
       "bulldoze",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "scaleshot",
+      "whirlpool",
+      "dragontail",
+      "flipturn"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -5591,7 +5934,11 @@
       "flamecharge",
       "trailblaze",
       "psychicfangs",
-      "firespin"
+      "firespin",
+      "counter",
+      "destinybond",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -5662,7 +6009,10 @@
       "liquidation",
       "icywind",
       "clearsmog",
-      "wavecrash"
+      "wavecrash",
+      "scaleshot",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -5736,7 +6086,10 @@
       "icywind",
       "spikes",
       "stealthrock",
-      "drillrun"
+      "drillrun",
+      "counter",
+      "tailwind",
+      "taunt"
     ],
     "hurtRadius": 17,
     "flying": true,
@@ -5809,7 +6162,11 @@
       "icywind",
       "extrasensory",
       "bulldoze",
-      "dig"
+      "dig",
+      "mirrorcoat",
+      "tailwind",
+      "reflect",
+      "whirlpool"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -5884,7 +6241,10 @@
       "hurricane",
       "acrobatics",
       "leechlife",
-      "hex"
+      "hex",
+      "tailwind",
+      "haze",
+      "taunt"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -5966,7 +6326,8 @@
       "leechseed",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -6063,7 +6424,14 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "taunt",
+      "rockblast",
+      "whirlpool",
+      "dragontail",
+      "highhorsepower",
+      "smartstrike"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -6147,7 +6515,10 @@
       "firespin",
       "stealthrock",
       "dig",
-      "firstimpression"
+      "firstimpression",
+      "tailwind",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -6230,7 +6601,14 @@
       "mysticalfire",
       "psyshock",
       "bulldoze",
-      "triattack"
+      "triattack",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "storedpower",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -6308,7 +6686,10 @@
       "stealthrock",
       "dig",
       "wavecrash",
-      "icespinner"
+      "icespinner",
+      "haze",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -6379,7 +6760,10 @@
       "trailblaze",
       "psychicfangs",
       "voltswitch",
-      "electroball"
+      "electroball",
+      "lightscreen",
+      "electroweb",
+      "supercellslam"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -6527,7 +6911,12 @@
       "bulldoze",
       "iciclespear",
       "stealthrock",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "haze",
+      "rockblast",
+      "highhorsepower"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -6606,7 +6995,10 @@
       "bulldoze",
       "firespin",
       "stealthrock",
-      "dig"
+      "dig",
+      "taunt",
+      "rockblast",
+      "lunge"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -6671,7 +7063,13 @@
       "bulletseed",
       "trailblaze",
       "seedbomb",
-      "leechseed"
+      "leechseed",
+      "mirrorcoat",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -6751,7 +7149,11 @@
       "poisonjab",
       "bulldoze",
       "dig",
-      "firstimpression"
+      "firstimpression",
+      "counter",
+      "taunt",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -6831,7 +7233,13 @@
       "bulldoze",
       "stealthrock",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "scaleshot",
+      "dragontail",
+      "foulplay",
+      "highhorsepower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -6901,7 +7309,11 @@
       "poisonjab",
       "bulldoze",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "rockblast",
+      "highhorsepower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -6980,7 +7392,12 @@
       "bodypress",
       "mysticalfire",
       "extrasensory",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 22,
     "flying": true,
@@ -7059,7 +7476,14 @@
       "voltswitch",
       "electroball",
       "stealthrock",
-      "focuspunch"
+      "focuspunch",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "haze",
+      "scaleshot",
+      "dragontail",
+      "supercellslam"
     ],
     "hurtRadius": 22,
     "flying": true,
@@ -7127,7 +7551,9 @@
       "hurricane",
       "flamecharge",
       "acrobatics",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "taunt"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -7208,7 +7634,11 @@
       "poisonjab",
       "bodypress",
       "focuspunch",
-      "dig"
+      "dig",
+      "tailwind",
+      "taunt",
+      "encore",
+      "lunge"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -7286,7 +7716,11 @@
       "trailblaze",
       "lowsweep",
       "seedbomb",
-      "hex"
+      "hex",
+      "tailwind",
+      "lightscreen",
+      "haze",
+      "phantomforce"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -7371,7 +7805,8 @@
       "leechlife",
       "bulldoze",
       "firespin",
-      "focuspunch"
+      "focuspunch",
+      "taunt"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -7444,7 +7879,15 @@
       "drainingkiss",
       "icywind",
       "dazzlinggleam",
-      "icespinner"
+      "icespinner",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "haze",
+      "encore",
+      "storedpower",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -7519,7 +7962,10 @@
       "bulldoze",
       "stealthrock",
       "dig",
-      "drillrun"
+      "drillrun",
+      "taunt",
+      "rockblast",
+      "tailslap"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -7592,7 +8038,9 @@
       "lowsweep",
       "gunkshot",
       "electroball",
-      "firespin"
+      "firespin",
+      "counter",
+      "taunt"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -7669,7 +8117,9 @@
       "boomburst",
       "bulldoze",
       "leechseed",
-      "focuspunch"
+      "focuspunch",
+      "taunt",
+      "highhorsepower"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -7738,7 +8188,14 @@
       "liquidation",
       "icywind",
       "iciclespear",
-      "fellstinger"
+      "fellstinger",
+      "reflect",
+      "lightscreen",
+      "haze",
+      "taunt",
+      "scaleshot",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -7812,7 +8269,11 @@
       "seedbomb",
       "leechseed",
       "spikes",
-      "toxicspikes"
+      "toxicspikes",
+      "trickroom",
+      "taunt",
+      "pollenpuff",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -7880,7 +8341,13 @@
       "poisonjab",
       "hex",
       "clearsmog",
-      "firespin"
+      "firespin",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "storedpower",
+      "phantomforce"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -7954,7 +8421,12 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "encore",
+      "electroweb"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -8045,7 +8517,15 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "drillrun"
+      "drillrun",
+      "counter",
+      "reflect",
+      "taunt",
+      "rockblast",
+      "whirlpool",
+      "dragontail",
+      "highhorsepower",
+      "smartstrike"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -8119,7 +8599,10 @@
       "focuspunch",
       "dig",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "counter",
+      "rockblast",
+      "highhorsepower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -8191,7 +8674,10 @@
       "fakeout",
       "bulldoze",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "taunt",
+      "lunge"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -8267,7 +8753,10 @@
       "fakeout",
       "bulldoze",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "taunt",
+      "encore"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -8336,7 +8825,8 @@
       "stealthrock",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "highhorsepower"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -8414,7 +8904,10 @@
       "icywind",
       "bulldoze",
       "zapcannon",
-      "dig"
+      "dig",
+      "whirlpool",
+      "highhorsepower",
+      "smartstrike"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -8486,7 +8979,13 @@
       "zapcannon",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "electroweb",
+      "dragontail",
+      "supercellslam"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -8564,7 +9063,11 @@
       "focuspunch",
       "dig",
       "rollout",
-      "icespinner"
+      "icespinner",
+      "lightscreen",
+      "mistyterrain",
+      "encore",
+      "whirlpool"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -8642,7 +9145,11 @@
       "dig",
       "rollout",
       "gyroball",
-      "drillrun"
+      "drillrun",
+      "taunt",
+      "rockblast",
+      "dragontail",
+      "highhorsepower"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -8726,7 +9233,10 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "rollout"
+      "rollout",
+      "counter",
+      "taunt",
+      "highhorsepower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -8805,7 +9315,11 @@
       "dig",
       "rollout",
       "icespinner",
-      "gyroball"
+      "gyroball",
+      "counter",
+      "encore",
+      "highhorsepower",
+      "smartstrike"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -8878,7 +9392,11 @@
       "bulldoze",
       "electroball",
       "zapcannon",
-      "dig"
+      "dig",
+      "reflect",
+      "lightscreen",
+      "electroweb",
+      "supercellslam"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -8952,7 +9470,8 @@
       "extrasensory",
       "bulldoze",
       "firespin",
-      "dig"
+      "dig",
+      "reflect"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -9028,7 +9547,15 @@
       "fakeout",
       "psyshock",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -9100,7 +9627,12 @@
       "psychicfangs",
       "liquidation",
       "icywind",
-      "bulldoze"
+      "bulldoze",
+      "destinybond",
+      "taunt",
+      "scaleshot",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -9178,7 +9710,9 @@
       "trailblaze",
       "dazzlinggleam",
       "bulldoze",
-      "firespin"
+      "firespin",
+      "tailwind",
+      "haze"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -9263,7 +9797,13 @@
       "mysticalfire",
       "psyshock",
       "bulldoze",
-      "triattack"
+      "triattack",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "storedpower",
+      "whirlpool"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -9342,7 +9882,11 @@
       "bulldoze",
       "leechseed",
       "stealthrock",
-      "headlongrush"
+      "headlongrush",
+      "reflect",
+      "lightscreen",
+      "rockblast",
+      "highhorsepower"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -9403,7 +9947,8 @@
       "steelwing",
       "heatwave",
       "hurricane",
-      "acrobatics"
+      "acrobatics",
+      "tailwind"
     ],
     "hurtRadius": 15,
     "flying": true,
@@ -9486,7 +10031,11 @@
       "sludgewave",
       "bulldoze",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "encore",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -9562,7 +10111,13 @@
       "zapcannon",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "electroweb",
+      "supercellslam"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -9640,7 +10195,9 @@
       "clearsmog",
       "firespin",
       "seismictoss",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "taunt"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -9729,7 +10286,13 @@
       "toxicspikes",
       "stealthrock",
       "crabhammer",
-      "dig"
+      "dig",
+      "counter",
+      "tailwind",
+      "taunt",
+      "scaleshot",
+      "highhorsepower",
+      "lunge"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -9803,7 +10366,12 @@
       "iciclespear",
       "spikes",
       "rollout",
-      "icespinner"
+      "icespinner",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "haze",
+      "taunt"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -9887,7 +10455,9 @@
       "focuspunch",
       "dig",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "taunt",
+      "highhorsepower"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -9961,7 +10531,13 @@
       "icywind",
       "bulldoze",
       "dig",
-      "drillrun"
+      "drillrun",
+      "taunt",
+      "encore",
+      "whirlpool",
+      "dragontail",
+      "smartstrike",
+      "flipturn"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -10028,7 +10604,11 @@
       "leechlife",
       "voltswitch",
       "pinmissile",
-      "electroball"
+      "electroball",
+      "lightscreen",
+      "stickyweb",
+      "electroweb",
+      "lunge"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -10102,7 +10682,9 @@
       "fakeout",
       "focuspunch",
       "dig",
-      "icespinner"
+      "icespinner",
+      "reflect",
+      "taunt"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -10174,7 +10756,9 @@
       "lowsweep",
       "poisonjab",
       "stealthrock",
-      "dig"
+      "dig",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -10269,7 +10853,10 @@
       "focuspunch",
       "dig",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "taunt",
+      "highhorsepower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -10342,7 +10929,15 @@
       "mysticalfire",
       "psyshock",
       "dazzlinggleam",
-      "firespin"
+      "firespin",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "encore",
+      "storedpower",
+      "expandingforce",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -10404,7 +10999,9 @@
       "headsmash",
       "sacredsword",
       "kingsshield",
-      "gyroball"
+      "gyroball",
+      "destinybond",
+      "reflect"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -10471,7 +11068,11 @@
       "psyshock",
       "dazzlinggleam",
       "geomancy",
-      "hornleech"
+      "hornleech",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "smartstrike"
     ],
     "hurtRadius": 21,
     "flying": false,
@@ -10540,7 +11141,11 @@
       "heatwave",
       "hurricane",
       "acrobatics",
-      "oblivionwing"
+      "oblivionwing",
+      "tailwind",
+      "taunt",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 21,
     "flying": true,
@@ -10630,7 +11235,11 @@
       "bulldoze",
       "bellydrum",
       "stealthrock",
-      "focuspunch"
+      "focuspunch",
+      "counter",
+      "taunt",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -10698,7 +11307,12 @@
       "acrobatics",
       "voltswitch",
       "dazzlinggleam",
-      "electroball"
+      "electroball",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "electroweb",
+      "storedpower"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -10780,7 +11394,11 @@
       "psyshock",
       "bulldoze",
       "firespin",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "expandingforce"
     ],
     "hurtRadius": 21,
     "flying": false,
@@ -10853,7 +11471,13 @@
       "hex",
       "psyshock",
       "moongeistbeam",
-      "dazzlinggleam"
+      "dazzlinggleam",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "expandingforce",
+      "phantomforce"
     ],
     "hurtRadius": 21,
     "flying": true,
@@ -10922,7 +11546,11 @@
       "steelwing",
       "hurricane",
       "heavyslam",
-      "bodypress"
+      "bodypress",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "taunt"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -10995,7 +11623,12 @@
       "boomburst",
       "sludgewave",
       "electroball",
-      "toxicspikes"
+      "toxicspikes",
+      "shiftgear",
+      "taunt",
+      "encore",
+      "electroweb",
+      "storedpower"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -11070,7 +11703,12 @@
       "leechlife",
       "dazzlinggleam",
       "focuspunch",
-      "powerwhip"
+      "powerwhip",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -11142,7 +11780,9 @@
       "poisonjab",
       "psychicfangs",
       "dazzlinggleam",
-      "dig"
+      "dig",
+      "mistyterrain",
+      "tailslap"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -11213,7 +11853,8 @@
       "hex",
       "torchsong",
       "firespin",
-      "dig"
+      "dig",
+      "encore"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -11284,7 +11925,13 @@
       "liquidation",
       "icywind",
       "wavecrash",
-      "icespinner"
+      "icespinner",
+      "counter",
+      "mistyterrain",
+      "taunt",
+      "encore",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -11342,7 +11989,12 @@
       "fakeout",
       "drainingkiss",
       "bulldoze",
-      "stealthrock"
+      "stealthrock",
+      "reflect",
+      "lightscreen",
+      "encore",
+      "icehammer",
+      "foulplay"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -11426,7 +12078,11 @@
       "stealthrock",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "encore",
+      "phantomforce"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -11500,7 +12156,9 @@
       "lowsweep",
       "poisonjab",
       "stealthrock",
-      "dig"
+      "dig",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -11564,7 +12222,9 @@
       "dazzlinggleam",
       "makeitrain",
       "electroball",
-      "focuspunch"
+      "focuspunch",
+      "reflect",
+      "lightscreen"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -11643,7 +12303,11 @@
       "bulldoze",
       "firespin",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 21,
     "flying": false,
@@ -11721,7 +12385,8 @@
       "stealthrock",
       "seismictoss",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -11795,7 +12460,12 @@
       "spikes",
       "toxicspikes",
       "icespinner",
-      "drillrun"
+      "drillrun",
+      "reflect",
+      "lightscreen",
+      "rockblast",
+      "whirlpool",
+      "smartstrike"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -11862,7 +12532,10 @@
       "pinmissile",
       "toxicspikes",
       "fellstinger",
-      "drillrun"
+      "drillrun",
+      "tailwind",
+      "reflect",
+      "electroweb"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -11927,7 +12600,11 @@
       "hurricane",
       "acrobatics",
       "drainingkiss",
-      "sleeppowder"
+      "sleeppowder",
+      "tailwind",
+      "reflect",
+      "electroweb",
+      "pollenpuff"
     ],
     "hurtRadius": 14,
     "flying": true,
@@ -11994,7 +12671,10 @@
       "zapcannon",
       "toxicspikes",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "destinybond",
+      "haze",
+      "taunt"
     ],
     "hurtRadius": 16,
     "flying": true,
@@ -12062,7 +12742,10 @@
       "bulldoze",
       "triattack",
       "stealthrock",
-      "dig"
+      "dig",
+      "rockblast",
+      "foulplay",
+      "highhorsepower"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -12132,7 +12815,11 @@
       "icywind",
       "psyshock",
       "triattack",
-      "zapcannon"
+      "zapcannon",
+      "reflect",
+      "trickroom",
+      "electroweb",
+      "foulplay"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -12207,7 +12894,8 @@
       "rollout",
       "icespinner",
       "gyroball",
-      "drillrun"
+      "drillrun",
+      "counter"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -12288,7 +12976,10 @@
       "focuspunch",
       "rollout",
       "gyroball",
-      "milkdrink"
+      "milkdrink",
+      "counter",
+      "whirlpool",
+      "highhorsepower"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -12375,7 +13066,11 @@
       "seismictoss",
       "focuspunch",
       "rollout",
-      "softboiled"
+      "softboiled",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "storedpower"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -12456,7 +13151,10 @@
       "icywind",
       "sludgewave",
       "crabhammer",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "whirlpool"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -12556,7 +13254,14 @@
       "focuspunch",
       "dig",
       "rollout",
-      "drillrun"
+      "drillrun",
+      "counter",
+      "rockblast",
+      "whirlpool",
+      "dragontail",
+      "highhorsepower",
+      "smartstrike",
+      "supercellslam"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -12625,7 +13330,12 @@
       "electroball",
       "zapcannon",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "mirrorcoat",
+      "reflect",
+      "lightscreen",
+      "electroweb",
+      "supercellslam"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -12696,7 +13406,13 @@
       "mysticalfire",
       "psyshock",
       "dazzlinggleam",
-      "zapcannon"
+      "zapcannon",
+      "destinybond",
+      "trickroom",
+      "taunt",
+      "storedpower",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 14,
     "flying": true,
@@ -12774,7 +13490,8 @@
       "iciclespear",
       "leechseed",
       "focuspunch",
-      "icespinner"
+      "icespinner",
+      "lightscreen"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -12895,7 +13612,20 @@
       "bulldoze",
       "judgment",
       "stealthrock",
-      "seismictoss"
+      "seismictoss",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "mistyterrain",
+      "taunt",
+      "storedpower",
+      "whirlpool",
+      "dragontail",
+      "foulplay",
+      "supercellslam",
+      "phantomforce"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -12957,7 +13687,8 @@
       "seedbomb",
       "dazzlinggleam",
       "leechseed",
-      "seedflare"
+      "seedflare",
+      "tailwind"
     ],
     "hurtRadius": 12,
     "flying": false,
@@ -13037,7 +13768,10 @@
       "focuspunch",
       "dig",
       "rollout",
-      "gyroball"
+      "gyroball",
+      "taunt",
+      "encore",
+      "expandingforce"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -13119,7 +13853,12 @@
       "poisonjab",
       "fakeout",
       "focuspunch",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "encore",
+      "dragontail",
+      "foulplay"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -13271,7 +14010,11 @@
       "bodypress",
       "icywind",
       "iciclespear",
-      "glaciate"
+      "glaciate",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "dragontail"
     ],
     "hurtRadius": 21,
     "flying": false,
@@ -13340,7 +14083,11 @@
       "poisonjab",
       "liquidation",
       "icywind",
-      "secretsword"
+      "secretsword",
+      "reflect",
+      "taunt",
+      "smartstrike",
+      "flipturn"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -13415,7 +14162,13 @@
       "dazzlinggleam",
       "glaciate",
       "firespin",
-      "vcreate"
+      "vcreate",
+      "lightscreen",
+      "trickroom",
+      "taunt",
+      "encore",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 12,
     "flying": false,
@@ -13490,7 +14243,11 @@
       "triattack",
       "zapcannon",
       "technoblast",
-      "fellstinger"
+      "fellstinger",
+      "reflect",
+      "lightscreen",
+      "shiftgear",
+      "electroweb"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -13558,7 +14315,8 @@
       "liquidation",
       "icywind",
       "sludgewave",
-      "crabhammer"
+      "crabhammer",
+      "flipturn"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -13640,7 +14398,10 @@
       "hurricane",
       "acrobatics",
       "leechlife",
-      "boomburst"
+      "boomburst",
+      "tailwind",
+      "taunt",
+      "dragontail"
     ],
     "hurtRadius": 18,
     "flying": true,
@@ -13717,7 +14478,13 @@
       "bulldoze",
       "leechseed",
       "hornleech",
-      "dig"
+      "dig",
+      "destinybond",
+      "reflect",
+      "trickroom",
+      "haze",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -13787,7 +14554,12 @@
       "diamondstorm",
       "spikes",
       "stealthrock",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "encore",
+      "storedpower"
     ],
     "hurtRadius": 14,
     "flying": false,
@@ -13854,7 +14626,16 @@
       "gunkshot",
       "psyshock",
       "hyperspacehole",
-      "focuspunch"
+      "focuspunch",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "expandingforce",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -13932,7 +14713,10 @@
       "steameruption",
       "firespin",
       "dig",
-      "gyroball"
+      "gyroball",
+      "mistyterrain",
+      "haze",
+      "taunt"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -14013,7 +14797,10 @@
       "seismictoss",
       "focuspunch",
       "dig",
-      "headlongrush"
+      "headlongrush",
+      "counter",
+      "taunt",
+      "whirlpool"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -14093,7 +14880,8 @@
       "spikes",
       "rollout",
       "firstimpression",
-      "drillrun"
+      "drillrun",
+      "taunt"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -14163,7 +14951,10 @@
       "seedbomb",
       "dazzlinggleam",
       "tropkick",
-      "powerwhip"
+      "powerwhip",
+      "reflect",
+      "lightscreen",
+      "taunt"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -14242,7 +15033,14 @@
       "bulldoze",
       "photongeyser",
       "stealthrock",
-      "gyroball"
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "rockblast",
+      "storedpower",
+      "expandingforce",
+      "smartstrike"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -14316,7 +15114,10 @@
       "poisonjab",
       "hex",
       "focuspunch",
-      "spectralthief"
+      "spectralthief",
+      "counter",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 13,
     "flying": false,
@@ -14388,7 +15189,9 @@
       "voltswitch",
       "electroball",
       "plasmafists",
-      "focuspunch"
+      "focuspunch",
+      "taunt",
+      "electroweb"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -14451,7 +15254,14 @@
       "mysticalfire",
       "psyshock",
       "mindblown",
-      "firespin"
+      "firespin",
+      "lightscreen",
+      "taunt",
+      "encore",
+      "rockblast",
+      "storedpower",
+      "expandingforce",
+      "foulplay"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -14526,7 +15336,10 @@
       "psychicfangs",
       "dazzlinggleam",
       "dig",
-      "behemothbash"
+      "behemothbash",
+      "reflect",
+      "lightscreen",
+      "tailslap"
     ],
     "hurtRadius": 20,
     "flying": false,
@@ -14594,7 +15407,10 @@
       "sludgewave",
       "dynamaxcannon",
       "firespin",
-      "toxicspikes"
+      "toxicspikes",
+      "reflect",
+      "lightscreen",
+      "dragontail"
     ],
     "hurtRadius": 22,
     "flying": false,
@@ -14669,7 +15485,10 @@
       "bodypress",
       "focuspunch",
       "wickedblow",
-      "dig"
+      "dig",
+      "counter",
+      "taunt",
+      "foulplay"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -14727,7 +15546,11 @@
       "drainingkiss",
       "hex",
       "bulldoze",
-      "astralbarrage"
+      "astralbarrage",
+      "haze",
+      "taunt",
+      "foulplay",
+      "phantomforce"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -14784,7 +15607,11 @@
       "voltswitch",
       "electroball",
       "zapcannon",
-      "thundercage"
+      "thundercage",
+      "reflect",
+      "lightscreen",
+      "electroweb",
+      "supercellslam"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -14858,7 +15685,12 @@
       "acrobatics",
       "trailblaze",
       "stealthrock",
-      "stoneaxe"
+      "stoneaxe",
+      "counter",
+      "tailwind",
+      "lightscreen",
+      "rockblast",
+      "lunge"
     ],
     "hurtRadius": 17,
     "flying": false,
@@ -14929,7 +15761,8 @@
       "saltcure",
       "stealthrock",
       "focuspunch",
-      "dig"
+      "dig",
+      "rockblast"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -14997,7 +15830,15 @@
       "psyshock",
       "armorcannon",
       "clearsmog",
-      "firespin"
+      "firespin",
+      "destinybond",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "storedpower",
+      "expandingforce"
     ],
     "hurtRadius": 16,
     "flying": false,
@@ -15069,7 +15910,13 @@
       "boomburst",
       "focuspunch",
       "wavecrash",
-      "jetpunch"
+      "jetpunch",
+      "counter",
+      "haze",
+      "taunt",
+      "encore",
+      "whirlpool",
+      "flipturn"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -15144,7 +15991,10 @@
       "bulldoze",
       "iciclespear",
       "dig",
-      "glaiverush"
+      "glaiverush",
+      "scaleshot",
+      "dragontail",
+      "highhorsepower"
     ],
     "hurtRadius": 19,
     "flying": false,
@@ -15215,7 +16065,11 @@
       "dig",
       "rollout",
       "headlongrush",
-      "icespinner"
+      "icespinner",
+      "taunt",
+      "highhorsepower",
+      "smartstrike",
+      "supercellslam"
     ],
     "hurtRadius": 18,
     "flying": false,
@@ -15282,7 +16136,10 @@
       "spikes",
       "ivycudgel",
       "hornleech",
-      "powerwhip"
+      "powerwhip",
+      "counter",
+      "taunt",
+      "encore"
     ],
     "hurtRadius": 15,
     "flying": false,
@@ -15358,10 +16215,3635 @@
       "voltswitch",
       "sludgewave",
       "electroball",
-      "wildboltstorm"
+      "wildboltstorm",
+      "taunt",
+      "electroweb",
+      "foulplay",
+      "smartstrike",
+      "supercellslam"
     ],
     "hurtRadius": 17,
     "flying": true,
     "legendary": true
+  },
+  "wobbuffet": {
+    "key": "wobbuffet",
+    "name": "Wobbuffet",
+    "dex": 202,
+    "spriteId": "0202",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 190,
+      "atk": 33,
+      "def": 58,
+      "spa": 33,
+      "spd": 58,
+      "spe": 33
+    },
+    "bst": 405,
+    "abilities": [
+      "shadowtag",
+      "telepathy"
+    ],
+    "abilityNames": {
+      "shadowtag": "Shadow Tag",
+      "telepathy": "Telepathy"
+    },
+    "weightkg": 28.5,
+    "gen": 2,
+    "moves": [
+      "counter",
+      "mirrorcoat",
+      "destinybond",
+      "encore"
+    ],
+    "learnable": [
+      "counter",
+      "mirrorcoat",
+      "destinybond",
+      "encore"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "bronzong": {
+    "key": "bronzong",
+    "name": "Bronzong",
+    "dex": 437,
+    "spriteId": "0437",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 67,
+      "atk": 89,
+      "def": 116,
+      "spa": 79,
+      "spd": 116,
+      "spe": 33
+    },
+    "bst": 500,
+    "abilities": [
+      "levitate",
+      "heatproof",
+      "heavymetal"
+    ],
+    "abilityNames": {
+      "levitate": "Levitate",
+      "heatproof": "Heatproof",
+      "heavymetal": "Heavy Metal"
+    },
+    "weightkg": 187,
+    "gen": 4,
+    "moves": [
+      "gyroball",
+      "trickroom",
+      "earthquake",
+      "lightscreen"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "shadowball",
+      "psychic",
+      "solarbeam",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "feintattack",
+      "payback",
+      "psybeam",
+      "ironhead",
+      "ancientpower",
+      "calmmind",
+      "irondefense",
+      "toxic",
+      "confuseray",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "heavyslam",
+      "bodypress",
+      "powergem",
+      "hex",
+      "extrasensory",
+      "psyshock",
+      "bulldoze",
+      "stealthrock",
+      "rollout",
+      "icespinner",
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "rockblast",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 17,
+    "flying": true,
+    "legendary": false
+  },
+  "reuniclus": {
+    "key": "reuniclus",
+    "name": "Reuniclus",
+    "dex": 579,
+    "spriteId": "0579",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 110,
+      "atk": 65,
+      "def": 75,
+      "spa": 125,
+      "spd": 85,
+      "spe": 30
+    },
+    "bst": 490,
+    "abilities": [
+      "overcoat",
+      "magicguard",
+      "regenerator"
+    ],
+    "abilityNames": {
+      "overcoat": "Overcoat",
+      "magicguard": "Magic Guard",
+      "regenerator": "Regenerator"
+    },
+    "weightkg": 20.1,
+    "gen": 5,
+    "moves": [
+      "psychic",
+      "focusblast",
+      "trickroom",
+      "recover"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "shadowball",
+      "psychic",
+      "thunder",
+      "focusblast",
+      "zenheadbutt",
+      "rockslide",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "psybeam",
+      "energyball",
+      "calmmind",
+      "irondefense",
+      "thunderwave",
+      "toxic",
+      "confuseray",
+      "recover",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "knockoff",
+      "drainpunch",
+      "superpower",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "hammerarm",
+      "psyshock",
+      "focuspunch",
+      "rollout",
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "encore",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "hatterene": {
+    "key": "hatterene",
+    "name": "Hatterene",
+    "dex": 858,
+    "spriteId": "0858",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 57,
+      "atk": 90,
+      "def": 95,
+      "spa": 136,
+      "spd": 103,
+      "spe": 29
+    },
+    "bst": 510,
+    "abilities": [
+      "healer",
+      "anticipation",
+      "magicbounce"
+    ],
+    "abilityNames": {
+      "healer": "Healer",
+      "anticipation": "Anticipation",
+      "magicbounce": "Magic Bounce"
+    },
+    "weightkg": 5.1,
+    "gen": 8,
+    "moves": [
+      "psychic",
+      "dazzlinggleam",
+      "mysticalfire",
+      "trickroom"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "darkpulse",
+      "psychocut",
+      "psychic",
+      "swift",
+      "gigaimpact",
+      "psybeam",
+      "swordsdance",
+      "calmmind",
+      "agility",
+      "thunderwave",
+      "rest",
+      "protect",
+      "gigadrain",
+      "playrough",
+      "shadowclaw",
+      "nuzzle",
+      "drainingkiss",
+      "mysticalfire",
+      "psyshock",
+      "dazzlinggleam",
+      "powerwhip",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "mistyterrain",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 16,
+    "flying": false,
+    "legendary": false
+  },
+  "cresselia": {
+    "key": "cresselia",
+    "name": "Cresselia",
+    "dex": 488,
+    "spriteId": "0488",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 120,
+      "atk": 70,
+      "def": 110,
+      "spa": 75,
+      "spd": 120,
+      "spe": 85
+    },
+    "bst": 580,
+    "abilities": [
+      "levitate"
+    ],
+    "abilityNames": {
+      "levitate": "Levitate"
+    },
+    "weightkg": 85.6,
+    "gen": 4,
+    "moves": [
+      "moonblast",
+      "psychic",
+      "moonlight",
+      "lightscreen"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "psychocut",
+      "psychic",
+      "solarbeam",
+      "thunderbolt",
+      "thunder",
+      "moonblast",
+      "zenheadbutt",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "psybeam",
+      "icebeam",
+      "energyball",
+      "calmmind",
+      "thunderwave",
+      "toxic",
+      "confuseray",
+      "moonlight",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "powergem",
+      "icywind",
+      "psyshock",
+      "dazzlinggleam",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 18,
+    "flying": true,
+    "legendary": true
+  },
+  "tornadus": {
+    "key": "tornadus",
+    "name": "Tornadus",
+    "dex": 641,
+    "spriteId": "0641",
+    "types": [
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 79,
+      "atk": 115,
+      "def": 70,
+      "spa": 125,
+      "spd": 80,
+      "spe": 111
+    },
+    "bst": 580,
+    "abilities": [
+      "prankster",
+      "defiant"
+    ],
+    "abilityNames": {
+      "prankster": "Prankster",
+      "defiant": "Defiant"
+    },
+    "weightkg": 63,
+    "gen": 5,
+    "moves": [
+      "bleakwindstorm",
+      "tailwind",
+      "hurricane",
+      "taunt"
+    ],
+    "learnable": [
+      "airslash",
+      "hyperbeam",
+      "crunch",
+      "darkpulse",
+      "sludgebomb",
+      "psychic",
+      "irontail",
+      "focusblast",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "nastyplot",
+      "bulkup",
+      "agility",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "uturn",
+      "knockoff",
+      "superpower",
+      "aerialace",
+      "hammerarm",
+      "heatwave",
+      "hurricane",
+      "snowscape",
+      "acrobatics",
+      "icywind",
+      "extrasensory",
+      "sludgewave",
+      "tailwind",
+      "taunt",
+      "bleakwindstorm",
+      "foulplay"
+    ],
+    "hurtRadius": 18,
+    "flying": true,
+    "legendary": true
+  },
+  "landorus": {
+    "key": "landorus",
+    "name": "Landorus",
+    "dex": 645,
+    "spriteId": "0645",
+    "types": [
+      "Ground",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 89,
+      "atk": 125,
+      "def": 90,
+      "spa": 115,
+      "spd": 80,
+      "spe": 101
+    },
+    "bst": 600,
+    "abilities": [
+      "sandforce",
+      "sheerforce"
+    ],
+    "abilityNames": {
+      "sandforce": "Sand Force",
+      "sheerforce": "Sheer Force"
+    },
+    "weightkg": 68,
+    "gen": 5,
+    "moves": [
+      "sandsearstorm",
+      "earthpower",
+      "rockslide",
+      "stealthrock"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "crunch",
+      "earthpower",
+      "stoneedge",
+      "sludgebomb",
+      "psychic",
+      "irontail",
+      "focusblast",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "payback",
+      "swordsdance",
+      "nastyplot",
+      "calmmind",
+      "bulkup",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "uturn",
+      "knockoff",
+      "superpower",
+      "hammerarm",
+      "extrasensory",
+      "sludgewave",
+      "bulldoze",
+      "stealthrock",
+      "dig",
+      "taunt",
+      "sandsearstorm"
+    ],
+    "hurtRadius": 18,
+    "flying": true,
+    "legendary": true
+  },
+  "enamorus": {
+    "key": "enamorus",
+    "name": "Enamorus",
+    "dex": 905,
+    "spriteId": "0905",
+    "types": [
+      "Fairy",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 74,
+      "atk": 115,
+      "def": 70,
+      "spa": 135,
+      "spd": 80,
+      "spe": 106
+    },
+    "bst": 580,
+    "abilities": [
+      "cutecharm",
+      "contrary"
+    ],
+    "abilityNames": {
+      "cutecharm": "Cute Charm",
+      "contrary": "Contrary"
+    },
+    "weightkg": 48,
+    "gen": 8,
+    "moves": [
+      "springtidestorm",
+      "moonblast",
+      "mysticalfire",
+      "calmmind"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "earthpower",
+      "sludgebomb",
+      "psychic",
+      "moonblast",
+      "focusblast",
+      "zenheadbutt",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "ironhead",
+      "calmmind",
+      "irondefense",
+      "agility",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "superpower",
+      "playrough",
+      "drainingkiss",
+      "mysticalfire",
+      "extrasensory",
+      "dazzlinggleam",
+      "tailwind",
+      "mistyterrain",
+      "taunt",
+      "springtidestorm"
+    ],
+    "hurtRadius": 18,
+    "flying": true,
+    "legendary": true
+  },
+  "tapulele": {
+    "key": "tapulele",
+    "name": "Tapu Lele",
+    "dex": 786,
+    "spriteId": "0786",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 85,
+      "def": 75,
+      "spa": 130,
+      "spd": 115,
+      "spe": 95
+    },
+    "bst": 570,
+    "abilities": [
+      "psychicsurge",
+      "telepathy"
+    ],
+    "abilityNames": {
+      "psychicsurge": "Psychic Surge",
+      "telepathy": "Telepathy"
+    },
+    "weightkg": 18.6,
+    "gen": 7,
+    "moves": [
+      "expandingforce",
+      "moonblast",
+      "psyshock",
+      "calmmind"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "psychocut",
+      "psychic",
+      "thunderbolt",
+      "thunder",
+      "moonblast",
+      "focusblast",
+      "gigaimpact",
+      "psybeam",
+      "energyball",
+      "calmmind",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "sunnyday",
+      "playrough",
+      "drainingkiss",
+      "extrasensory",
+      "psyshock",
+      "dazzlinggleam",
+      "reflect",
+      "lightscreen",
+      "psychicterrain",
+      "taunt",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": true
+  },
+  "tapufini": {
+    "key": "tapufini",
+    "name": "Tapu Fini",
+    "dex": 788,
+    "spriteId": "0788",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 75,
+      "def": 115,
+      "spa": 95,
+      "spd": 130,
+      "spe": 85
+    },
+    "bst": 570,
+    "abilities": [
+      "mistysurge",
+      "telepathy"
+    ],
+    "abilityNames": {
+      "mistysurge": "Misty Surge",
+      "telepathy": "Telepathy"
+    },
+    "weightkg": 21.2,
+    "gen": 7,
+    "moves": [
+      "whirlpool",
+      "moonblast",
+      "scald",
+      "calmmind"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "waterpulse",
+      "hydropump",
+      "moonblast",
+      "gigaimpact",
+      "waterfall",
+      "icebeam",
+      "surf",
+      "calmmind",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "knockoff",
+      "scald",
+      "icepunch",
+      "playrough",
+      "blizzard",
+      "drainingkiss",
+      "icywind",
+      "dazzlinggleam",
+      "reflect",
+      "lightscreen",
+      "mistyterrain",
+      "haze",
+      "taunt",
+      "storedpower",
+      "whirlpool",
+      "smartstrike"
+    ],
+    "hurtRadius": 16,
+    "flying": false,
+    "legendary": true
+  },
+  "tapubulu": {
+    "key": "tapubulu",
+    "name": "Tapu Bulu",
+    "dex": 787,
+    "spriteId": "0787",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 130,
+      "def": 115,
+      "spa": 85,
+      "spd": 95,
+      "spe": 75
+    },
+    "bst": 570,
+    "abilities": [
+      "grassysurge",
+      "telepathy"
+    ],
+    "abilityNames": {
+      "grassysurge": "Grassy Surge",
+      "telepathy": "Telepathy"
+    },
+    "weightkg": 45.5,
+    "gen": 7,
+    "moves": [
+      "woodhammer",
+      "hornleech",
+      "stoneedge",
+      "swordsdance"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "stoneedge",
+      "solarbeam",
+      "focusblast",
+      "zenheadbutt",
+      "rockslide",
+      "gigaimpact",
+      "payback",
+      "energyball",
+      "megahorn",
+      "swordsdance",
+      "calmmind",
+      "bulkup",
+      "irondefense",
+      "toxic",
+      "synthesis",
+      "rest",
+      "protect",
+      "sunnyday",
+      "gigadrain",
+      "superpower",
+      "darkestlariat",
+      "woodhammer",
+      "bulletseed",
+      "seedbomb",
+      "dazzlinggleam",
+      "leechseed",
+      "focuspunch",
+      "hornleech",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "storedpower",
+      "highhorsepower",
+      "smartstrike"
+    ],
+    "hurtRadius": 17,
+    "flying": false,
+    "legendary": true
+  },
+  "zygarde": {
+    "key": "zygarde",
+    "name": "Zygarde",
+    "dex": 718,
+    "spriteId": "0718",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "baseStats": {
+      "hp": 108,
+      "atk": 100,
+      "def": 121,
+      "spa": 81,
+      "spd": 95,
+      "spe": 95
+    },
+    "bst": 600,
+    "abilities": [
+      "aurabreak",
+      "powerconstruct"
+    ],
+    "abilityNames": {
+      "aurabreak": "Aura Break",
+      "powerconstruct": "Power Construct"
+    },
+    "weightkg": 305,
+    "gen": 6,
+    "moves": [
+      "thousandarrows",
+      "thousandwaves",
+      "dragontail",
+      "dragondance"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "crunch",
+      "earthpower",
+      "stoneedge",
+      "irontail",
+      "focusblast",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "swift",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "payback",
+      "dragondance",
+      "toxic",
+      "rest",
+      "protect",
+      "sunnyday",
+      "sandstorm",
+      "extremespeed",
+      "superpower",
+      "hypervoice",
+      "sludgewave",
+      "bulldoze",
+      "dig",
+      "haze",
+      "scaleshot",
+      "thousandwaves",
+      "thousandarrows",
+      "dragontail",
+      "highhorsepower"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": true
+  },
+  "dhelmise": {
+    "key": "dhelmise",
+    "name": "Dhelmise",
+    "dex": 781,
+    "spriteId": "0781",
+    "types": [
+      "Ghost",
+      "Grass"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 131,
+      "def": 100,
+      "spa": 86,
+      "spd": 90,
+      "spe": 40
+    },
+    "bst": 517,
+    "abilities": [
+      "steelworker"
+    ],
+    "abilityNames": {
+      "steelworker": "Steelworker"
+    },
+    "weightkg": 210,
+    "gen": 7,
+    "moves": [
+      "anchorshot",
+      "powerwhip",
+      "heavyslam",
+      "earthquake"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "shadowball",
+      "hydropump",
+      "solarbeam",
+      "earthquake",
+      "rockslide",
+      "gigaimpact",
+      "payback",
+      "surf",
+      "ironhead",
+      "energyball",
+      "swordsdance",
+      "irondefense",
+      "toxic",
+      "synthesis",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "knockoff",
+      "gigadrain",
+      "shadowclaw",
+      "aerialace",
+      "heavyslam",
+      "rapidspin",
+      "bodypress",
+      "liquidation",
+      "hex",
+      "sludgewave",
+      "bulldoze",
+      "powerwhip",
+      "gyroball",
+      "anchorshot",
+      "whirlpool",
+      "phantomforce"
+    ],
+    "hurtRadius": 18,
+    "flying": true,
+    "legendary": false
+  },
+  "turtonator": {
+    "key": "turtonator",
+    "name": "Turtonator",
+    "dex": 776,
+    "spriteId": "0776",
+    "types": [
+      "Fire",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 60,
+      "atk": 78,
+      "def": 135,
+      "spa": 91,
+      "spd": 85,
+      "spe": 36
+    },
+    "bst": 485,
+    "abilities": [
+      "shellarmor"
+    ],
+    "abilityNames": {
+      "shellarmor": "Shell Armor"
+    },
+    "weightkg": 212,
+    "gen": 7,
+    "moves": [
+      "shelltrap",
+      "dragonpulse",
+      "flamethrower",
+      "shellsmash"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "flashcannon",
+      "stoneedge",
+      "flamethrower",
+      "dragonclaw",
+      "fireblast",
+      "solarbeam",
+      "irontail",
+      "focusblast",
+      "earthquake",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "payback",
+      "ironhead",
+      "bulkup",
+      "irondefense",
+      "shellsmash",
+      "willowisp",
+      "toxic",
+      "rest",
+      "protect",
+      "sunnyday",
+      "hypervoice",
+      "headsmash",
+      "heatwave",
+      "heavyslam",
+      "rapidspin",
+      "flamecharge",
+      "bodypress",
+      "bulldoze",
+      "firespin",
+      "shelltrap",
+      "taunt",
+      "scaleshot",
+      "dragontail"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "togedemaru": {
+    "key": "togedemaru",
+    "name": "Togedemaru",
+    "dex": 777,
+    "spriteId": "0777",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "baseStats": {
+      "hp": 65,
+      "atk": 98,
+      "def": 63,
+      "spa": 40,
+      "spd": 73,
+      "spe": 96
+    },
+    "bst": 435,
+    "abilities": [
+      "ironbarbs",
+      "lightningrod",
+      "sturdy"
+    ],
+    "abilityNames": {
+      "ironbarbs": "Iron Barbs",
+      "lightningrod": "Lightning Rod",
+      "sturdy": "Sturdy"
+    },
+    "weightkg": 3.3,
+    "gen": 7,
+    "moves": [
+      "zingzap",
+      "nuzzle",
+      "uturn",
+      "spikyshield"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "thunderbolt",
+      "irontail",
+      "thunder",
+      "zenheadbutt",
+      "swift",
+      "gigaimpact",
+      "payback",
+      "ironhead",
+      "agility",
+      "thunderwave",
+      "toxic",
+      "rest",
+      "protect",
+      "uturn",
+      "wildcharge",
+      "discharge",
+      "poisonjab",
+      "fakeout",
+      "nuzzle",
+      "voltswitch",
+      "spikyshield",
+      "pinmissile",
+      "electroball",
+      "fellstinger",
+      "rollout",
+      "gyroball",
+      "reflect",
+      "encore",
+      "electroweb",
+      "zingzap"
+    ],
+    "hurtRadius": 12,
+    "flying": false,
+    "legendary": false
+  },
+  "melmetal": {
+    "key": "melmetal",
+    "name": "Melmetal",
+    "dex": 809,
+    "spriteId": "0809",
+    "types": [
+      "Steel"
+    ],
+    "baseStats": {
+      "hp": 135,
+      "atk": 143,
+      "def": 143,
+      "spa": 80,
+      "spd": 65,
+      "spe": 34
+    },
+    "bst": 600,
+    "abilities": [
+      "ironfist"
+    ],
+    "abilityNames": {
+      "ironfist": "Iron Fist"
+    },
+    "weightkg": 800,
+    "gen": 7,
+    "moves": [
+      "doubleironbash",
+      "earthquake",
+      "thunderpunch",
+      "icepunch"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "solarbeam",
+      "thunderbolt",
+      "thunder",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "icebeam",
+      "ironhead",
+      "irondefense",
+      "thunderwave",
+      "toxic",
+      "rest",
+      "protect",
+      "superpower",
+      "icepunch",
+      "thunderpunch",
+      "darkestlariat",
+      "discharge",
+      "heavyslam",
+      "bodypress",
+      "gyroball",
+      "doubleironbash",
+      "highhorsepower"
+    ],
+    "hurtRadius": 21,
+    "flying": false,
+    "legendary": true
+  },
+  "magearna": {
+    "key": "magearna",
+    "name": "Magearna",
+    "dex": 801,
+    "spriteId": "0801",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 95,
+      "def": 115,
+      "spa": 130,
+      "spd": 115,
+      "spe": 65
+    },
+    "bst": 600,
+    "abilities": [
+      "soulheart"
+    ],
+    "abilityNames": {
+      "soulheart": "Soul-Heart"
+    },
+    "weightkg": 80.5,
+    "gen": 7,
+    "moves": [
+      "fleurcannon",
+      "flashcannon",
+      "aurasphere",
+      "calmmind"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "aurasphere",
+      "flashcannon",
+      "shadowball",
+      "psychic",
+      "solarbeam",
+      "thunderbolt",
+      "focusblast",
+      "zenheadbutt",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "psybeam",
+      "icebeam",
+      "ironhead",
+      "energyball",
+      "calmmind",
+      "irondefense",
+      "agility",
+      "thunderwave",
+      "confuseray",
+      "rest",
+      "protect",
+      "sunnyday",
+      "playrough",
+      "snowscape",
+      "heavyslam",
+      "drainingkiss",
+      "voltswitch",
+      "psyshock",
+      "dazzlinggleam",
+      "triattack",
+      "electroball",
+      "zapcannon",
+      "spikes",
+      "rollout",
+      "icespinner",
+      "gyroball",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "mistyterrain",
+      "shiftgear",
+      "encore",
+      "electroweb",
+      "storedpower",
+      "fleurcannon"
+    ],
+    "hurtRadius": 14,
+    "flying": false,
+    "legendary": true
+  },
+  "dracozolt": {
+    "key": "dracozolt",
+    "name": "Dracozolt",
+    "dex": 880,
+    "spriteId": "0880",
+    "types": [
+      "Electric",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 100,
+      "def": 90,
+      "spa": 80,
+      "spd": 70,
+      "spe": 75
+    },
+    "bst": 505,
+    "abilities": [
+      "voltabsorb",
+      "hustle",
+      "sandrush"
+    ],
+    "abilityNames": {
+      "voltabsorb": "Volt Absorb",
+      "hustle": "Hustle",
+      "sandrush": "Sand Rush"
+    },
+    "weightkg": 190,
+    "gen": 8,
+    "moves": [
+      "boltbeak",
+      "dragonclaw",
+      "earthquake",
+      "firefang"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "dragonrush",
+      "earthpower",
+      "stoneedge",
+      "flamethrower",
+      "dragonclaw",
+      "fireblast",
+      "thunderbolt",
+      "irontail",
+      "thunder",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "ancientpower",
+      "thunderwave",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "firefang",
+      "thunderfang",
+      "thunderpunch",
+      "aerialace",
+      "wildcharge",
+      "discharge",
+      "bulldoze",
+      "electroball",
+      "firespin",
+      "taunt",
+      "rockblast",
+      "dragontail",
+      "highhorsepower",
+      "boltbeak"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "dracovish": {
+    "key": "dracovish",
+    "name": "Dracovish",
+    "dex": 882,
+    "spriteId": "0882",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 90,
+      "def": 100,
+      "spa": 70,
+      "spd": 80,
+      "spe": 75
+    },
+    "bst": 505,
+    "abilities": [
+      "waterabsorb",
+      "strongjaw",
+      "sandrush"
+    ],
+    "abilityNames": {
+      "waterabsorb": "Water Absorb",
+      "strongjaw": "Strong Jaw",
+      "sandrush": "Sand Rush"
+    },
+    "weightkg": 215,
+    "gen": 8,
+    "moves": [
+      "fishiousrend",
+      "psychicfangs",
+      "crunch",
+      "dragonrush"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "crunch",
+      "dragonrush",
+      "earthpower",
+      "stoneedge",
+      "hydropump",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "waterfall",
+      "surf",
+      "ironhead",
+      "ancientpower",
+      "rest",
+      "protect",
+      "raindance",
+      "icefang",
+      "scald",
+      "psychicfangs",
+      "liquidation",
+      "leechlife",
+      "bulldoze",
+      "rockblast",
+      "whirlpool",
+      "fishiousrend"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "regidrago": {
+    "key": "regidrago",
+    "name": "Regidrago",
+    "dex": 895,
+    "spriteId": "0895",
+    "types": [
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 200,
+      "atk": 100,
+      "def": 50,
+      "spa": 100,
+      "spd": 50,
+      "spe": 80
+    },
+    "bst": 580,
+    "abilities": [
+      "dragonsmaw"
+    ],
+    "abilityNames": {
+      "dragonsmaw": "Dragon's Maw"
+    },
+    "weightkg": 200,
+    "gen": 8,
+    "moves": [
+      "dragonenergy",
+      "dragonclaw",
+      "firefang",
+      "dragondance"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "crunch",
+      "earthpower",
+      "dragonclaw",
+      "earthquake",
+      "swift",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "ancientpower",
+      "dragondance",
+      "focusenergy",
+      "rest",
+      "protect",
+      "firefang",
+      "icefang",
+      "thunderfang",
+      "hammerarm",
+      "reflect",
+      "lightscreen",
+      "scaleshot",
+      "dragonenergy"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": true
+  },
+  "glastrier": {
+    "key": "glastrier",
+    "name": "Glastrier",
+    "dex": 896,
+    "spriteId": "0896",
+    "types": [
+      "Ice"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 145,
+      "def": 130,
+      "spa": 65,
+      "spd": 110,
+      "spe": 30
+    },
+    "bst": 580,
+    "abilities": [
+      "chillingneigh"
+    ],
+    "abilityNames": {
+      "chillingneigh": "Chilling Neigh"
+    },
+    "weightkg": 800,
+    "gen": 8,
+    "moves": [
+      "glaciallance",
+      "closecombat",
+      "highhorsepower",
+      "swordsdance"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "crunch",
+      "zenheadbutt",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "payback",
+      "icebeam",
+      "megahorn",
+      "swordsdance",
+      "irondefense",
+      "rest",
+      "protect",
+      "superpower",
+      "blizzard",
+      "iciclecrash",
+      "snowscape",
+      "heavyslam",
+      "trailblaze",
+      "bodypress",
+      "icywind",
+      "bulldoze",
+      "iciclespear",
+      "taunt",
+      "glaciallance",
+      "highhorsepower",
+      "smartstrike"
+    ],
+    "hurtRadius": 19,
+    "flying": false,
+    "legendary": true
+  },
+  "archaludon": {
+    "key": "archaludon",
+    "name": "Archaludon",
+    "dex": 1018,
+    "spriteId": "1018",
+    "types": [
+      "Steel",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 105,
+      "def": 130,
+      "spa": 125,
+      "spd": 65,
+      "spe": 85
+    },
+    "bst": 600,
+    "abilities": [
+      "stamina",
+      "sturdy",
+      "stalwart"
+    ],
+    "abilityNames": {
+      "stamina": "Stamina",
+      "sturdy": "Sturdy",
+      "stalwart": "Stalwart"
+    },
+    "weightkg": 60,
+    "gen": 9,
+    "moves": [
+      "electroshot",
+      "flashcannon",
+      "dracometeor",
+      "bodypress"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "aurasphere",
+      "flashcannon",
+      "stoneedge",
+      "darkpulse",
+      "dragonclaw",
+      "solarbeam",
+      "thunderbolt",
+      "thunder",
+      "metalclaw",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "ironhead",
+      "nightslash",
+      "swordsdance",
+      "irondefense",
+      "focusenergy",
+      "thunderwave",
+      "rest",
+      "protect",
+      "heavyslam",
+      "bodypress",
+      "stealthrock",
+      "gyroball",
+      "mirrorcoat",
+      "reflect",
+      "lightscreen",
+      "electroshot",
+      "dragontail",
+      "foulplay"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": false
+  },
+  "hydrapple": {
+    "key": "hydrapple",
+    "name": "Hydrapple",
+    "dex": 1019,
+    "spriteId": "1019",
+    "types": [
+      "Grass",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 106,
+      "atk": 80,
+      "def": 110,
+      "spa": 120,
+      "spd": 80,
+      "spe": 44
+    },
+    "bst": 540,
+    "abilities": [
+      "supersweetsyrup",
+      "regenerator",
+      "stickyhold"
+    ],
+    "abilityNames": {
+      "supersweetsyrup": "Supersweet Syrup",
+      "regenerator": "Regenerator",
+      "stickyhold": "Sticky Hold"
+    },
+    "weightkg": 93,
+    "gen": 9,
+    "moves": [
+      "ficklebeam",
+      "dracometeor",
+      "gigadrain",
+      "earthpower"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "earthpower",
+      "hydropump",
+      "solarbeam",
+      "earthquake",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "energyball",
+      "leafstorm",
+      "suckerpunch",
+      "nastyplot",
+      "recover",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "gigadrain",
+      "bulletseed",
+      "heavyslam",
+      "bodypress",
+      "seedbomb",
+      "powerwhip",
+      "rollout",
+      "gyroball",
+      "reflect",
+      "pollenpuff",
+      "ficklebeam",
+      "dragontail"
+    ],
+    "hurtRadius": 19,
+    "flying": false,
+    "legendary": false
+  },
+  "maushold": {
+    "key": "maushold",
+    "name": "Maushold",
+    "dex": 925,
+    "spriteId": "0925",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": {
+      "hp": 74,
+      "atk": 75,
+      "def": 70,
+      "spa": 65,
+      "spd": 75,
+      "spe": 111
+    },
+    "bst": 470,
+    "abilities": [
+      "friendguard",
+      "cheekpouch",
+      "technician"
+    ],
+    "abilityNames": {
+      "friendguard": "Friend Guard",
+      "cheekpouch": "Cheek Pouch",
+      "technician": "Technician"
+    },
+    "weightkg": 2.3,
+    "gen": 9,
+    "moves": [
+      "populationbomb",
+      "crunch",
+      "uturn",
+      "tidyup"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "crunch",
+      "waterpulse",
+      "swift",
+      "bite",
+      "gigaimpact",
+      "agility",
+      "thunderwave",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "uturn",
+      "hypervoice",
+      "playrough",
+      "shadowclaw",
+      "aerialace",
+      "bulletseed",
+      "trailblaze",
+      "lowsweep",
+      "seedbomb",
+      "dig",
+      "tidyup",
+      "taunt",
+      "encore",
+      "populationbomb"
+    ],
+    "hurtRadius": 14,
+    "flying": false,
+    "legendary": false
+  },
+  "meloetta": {
+    "key": "meloetta",
+    "name": "Meloetta",
+    "dex": 648,
+    "spriteId": "0648",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 77,
+      "def": 77,
+      "spa": 128,
+      "spd": 128,
+      "spe": 90
+    },
+    "bst": 600,
+    "abilities": [
+      "serenegrace"
+    ],
+    "abilityNames": {
+      "serenegrace": "Serene Grace"
+    },
+    "weightkg": 6.5,
+    "gen": 5,
+    "moves": [
+      "relicsong",
+      "psychic",
+      "closecombat",
+      "calmmind"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "stoneedge",
+      "shadowball",
+      "psychic",
+      "quickattack",
+      "thunderbolt",
+      "thunder",
+      "focusblast",
+      "zenheadbutt",
+      "swift",
+      "gigaimpact",
+      "payback",
+      "psybeam",
+      "energyball",
+      "swordsdance",
+      "calmmind",
+      "thunderwave",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "uturn",
+      "knockoff",
+      "drainpunch",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "hypervoice",
+      "playrough",
+      "shadowclaw",
+      "acrobatics",
+      "lowsweep",
+      "psyshock",
+      "dazzlinggleam",
+      "focuspunch",
+      "lightscreen",
+      "trickroom",
+      "relicsong"
+    ],
+    "hurtRadius": 13,
+    "flying": true,
+    "legendary": true
+  },
+  "pelipper": {
+    "key": "pelipper",
+    "name": "Pelipper",
+    "dex": 279,
+    "spriteId": "0279",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 60,
+      "atk": 50,
+      "def": 100,
+      "spa": 95,
+      "spd": 70,
+      "spe": 65
+    },
+    "bst": 440,
+    "abilities": [
+      "keeneye",
+      "drizzle",
+      "raindish"
+    ],
+    "abilityNames": {
+      "keeneye": "Keen Eye",
+      "drizzle": "Drizzle",
+      "raindish": "Rain Dish"
+    },
+    "weightkg": 28,
+    "gen": 3,
+    "moves": [
+      "hurricane",
+      "scald",
+      "tailwind",
+      "uturn"
+    ],
+    "learnable": [
+      "airslash",
+      "hyperbeam",
+      "waterpulse",
+      "hydropump",
+      "quickattack",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "wingattack",
+      "payback",
+      "waterfall",
+      "icebeam",
+      "surf",
+      "agility",
+      "toxic",
+      "roost",
+      "rest",
+      "protect",
+      "raindance",
+      "uturn",
+      "knockoff",
+      "scald",
+      "bravebird",
+      "aerialace",
+      "steelwing",
+      "hurricane",
+      "blizzard",
+      "snowscape",
+      "acrobatics",
+      "liquidation",
+      "seedbomb",
+      "icywind",
+      "gunkshot",
+      "tailwind",
+      "whirlpool"
+    ],
+    "hurtRadius": 16,
+    "flying": true,
+    "legendary": false
+  },
+  "ribombee": {
+    "key": "ribombee",
+    "name": "Ribombee",
+    "dex": 743,
+    "spriteId": "0743",
+    "types": [
+      "Bug",
+      "Fairy"
+    ],
+    "baseStats": {
+      "hp": 60,
+      "atk": 55,
+      "def": 60,
+      "spa": 95,
+      "spd": 70,
+      "spe": 124
+    },
+    "bst": 464,
+    "abilities": [
+      "honeygather",
+      "shielddust",
+      "sweetveil"
+    ],
+    "abilityNames": {
+      "honeygather": "Honey Gather",
+      "shielddust": "Shield Dust",
+      "sweetveil": "Sweet Veil"
+    },
+    "weightkg": 0.5,
+    "gen": 7,
+    "moves": [
+      "pollenpuff",
+      "moonblast",
+      "stickyweb",
+      "quiverdance"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "psychic",
+      "solarbeam",
+      "moonblast",
+      "swift",
+      "gigaimpact",
+      "energyball",
+      "calmmind",
+      "agility",
+      "toxic",
+      "roost",
+      "rest",
+      "protect",
+      "sunnyday",
+      "uturn",
+      "playrough",
+      "bugbuzz",
+      "quiverdance",
+      "aerialace",
+      "acrobatics",
+      "trailblaze",
+      "drainingkiss",
+      "leechlife",
+      "dazzlinggleam",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "stickyweb",
+      "storedpower",
+      "pollenpuff",
+      "lunge"
+    ],
+    "hurtRadius": 12,
+    "flying": true,
+    "legendary": false
+  },
+  "araquanid": {
+    "key": "araquanid",
+    "name": "Araquanid",
+    "dex": 752,
+    "spriteId": "0752",
+    "types": [
+      "Water",
+      "Bug"
+    ],
+    "baseStats": {
+      "hp": 68,
+      "atk": 70,
+      "def": 92,
+      "spa": 50,
+      "spd": 132,
+      "spe": 42
+    },
+    "bst": 454,
+    "abilities": [
+      "waterbubble",
+      "waterabsorb"
+    ],
+    "abilityNames": {
+      "waterbubble": "Water Bubble",
+      "waterabsorb": "Water Absorb"
+    },
+    "weightkg": 82,
+    "gen": 7,
+    "moves": [
+      "liquidation",
+      "leechlife",
+      "stickyweb",
+      "mirrorcoat"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "crunch",
+      "waterpulse",
+      "hydropump",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "waterfall",
+      "icebeam",
+      "surf",
+      "xscissor",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "gigadrain",
+      "scald",
+      "bugbuzz",
+      "blizzard",
+      "trailblaze",
+      "poisonjab",
+      "liquidation",
+      "leechlife",
+      "icywind",
+      "mirrorcoat",
+      "reflect",
+      "stickyweb",
+      "lunge"
+    ],
+    "hurtRadius": 16,
+    "flying": false,
+    "legendary": false
+  },
+  "vikavolt": {
+    "key": "vikavolt",
+    "name": "Vikavolt",
+    "dex": 738,
+    "spriteId": "0738",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "baseStats": {
+      "hp": 77,
+      "atk": 70,
+      "def": 90,
+      "spa": 145,
+      "spd": 75,
+      "spe": 43
+    },
+    "bst": 500,
+    "abilities": [
+      "levitate"
+    ],
+    "abilityNames": {
+      "levitate": "Levitate"
+    },
+    "weightkg": 45,
+    "gen": 7,
+    "moves": [
+      "electroweb",
+      "bugbuzz",
+      "thunderbolt",
+      "voltswitch"
+    ],
+    "learnable": [
+      "airslash",
+      "hyperbeam",
+      "flashcannon",
+      "crunch",
+      "solarbeam",
+      "thunderbolt",
+      "thunder",
+      "swift",
+      "bite",
+      "gigaimpact",
+      "xscissor",
+      "energyball",
+      "irondefense",
+      "agility",
+      "thunderwave",
+      "toxic",
+      "roost",
+      "rest",
+      "protect",
+      "raindance",
+      "bugbuzz",
+      "wildcharge",
+      "discharge",
+      "acrobatics",
+      "poisonjab",
+      "voltswitch",
+      "bulldoze",
+      "electroball",
+      "zapcannon",
+      "dig",
+      "lightscreen",
+      "stickyweb",
+      "electroweb",
+      "lunge",
+      "supercellslam"
+    ],
+    "hurtRadius": 16,
+    "flying": true,
+    "legendary": false
+  },
+  "toxapex": {
+    "key": "toxapex",
+    "name": "Toxapex",
+    "dex": 748,
+    "spriteId": "0748",
+    "types": [
+      "Poison",
+      "Water"
+    ],
+    "baseStats": {
+      "hp": 50,
+      "atk": 63,
+      "def": 152,
+      "spa": 53,
+      "spd": 142,
+      "spe": 35
+    },
+    "bst": 495,
+    "abilities": [
+      "merciless",
+      "limber",
+      "regenerator"
+    ],
+    "abilityNames": {
+      "merciless": "Merciless",
+      "limber": "Limber",
+      "regenerator": "Regenerator"
+    },
+    "weightkg": 14.5,
+    "gen": 7,
+    "moves": [
+      "scald",
+      "toxic",
+      "haze",
+      "recover"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "sludgebomb",
+      "waterpulse",
+      "hydropump",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "icebeam",
+      "surf",
+      "irondefense",
+      "toxic",
+      "recover",
+      "rest",
+      "protect",
+      "raindance",
+      "knockoff",
+      "scald",
+      "crosspoison",
+      "blizzard",
+      "poisonjab",
+      "liquidation",
+      "icywind",
+      "hex",
+      "gunkshot",
+      "sludgewave",
+      "pinmissile",
+      "toxicspikes",
+      "icespinner",
+      "lightscreen",
+      "haze",
+      "lunge"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "mudsdale": {
+    "key": "mudsdale",
+    "name": "Mudsdale",
+    "dex": 750,
+    "spriteId": "0750",
+    "types": [
+      "Ground"
+    ],
+    "baseStats": {
+      "hp": 100,
+      "atk": 125,
+      "def": 100,
+      "spa": 55,
+      "spd": 85,
+      "spe": 35
+    },
+    "bst": 500,
+    "abilities": [
+      "owntempo",
+      "stamina",
+      "innerfocus"
+    ],
+    "abilityNames": {
+      "owntempo": "Own Tempo",
+      "stamina": "Stamina",
+      "innerfocus": "Inner Focus"
+    },
+    "weightkg": 920,
+    "gen": 7,
+    "moves": [
+      "highhorsepower",
+      "heavyslam",
+      "earthquake",
+      "bodypress"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "earthpower",
+      "stoneedge",
+      "focusblast",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "ironhead",
+      "mudbomb",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "sunnyday",
+      "sandstorm",
+      "superpower",
+      "heavyslam",
+      "lowsweep",
+      "bodypress",
+      "bulldoze",
+      "stealthrock",
+      "counter",
+      "highhorsepower"
+    ],
+    "hurtRadius": 19,
+    "flying": false,
+    "legendary": false
+  },
+  "bewear": {
+    "key": "bewear",
+    "name": "Bewear",
+    "dex": 760,
+    "spriteId": "0760",
+    "types": [
+      "Normal",
+      "Fighting"
+    ],
+    "baseStats": {
+      "hp": 120,
+      "atk": 125,
+      "def": 80,
+      "spa": 55,
+      "spd": 60,
+      "spe": 60
+    },
+    "bst": 500,
+    "abilities": [
+      "fluffy",
+      "klutz",
+      "unnerve"
+    ],
+    "abilityNames": {
+      "fluffy": "Fluffy",
+      "klutz": "Klutz",
+      "unnerve": "Unnerve"
+    },
+    "weightkg": 135,
+    "gen": 7,
+    "moves": [
+      "hammerarm",
+      "drainpunch",
+      "superpower",
+      "swordsdance"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "dragonclaw",
+      "focusblast",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "ironhead",
+      "swordsdance",
+      "bulkup",
+      "toxic",
+      "rest",
+      "protect",
+      "drainpunch",
+      "superpower",
+      "icepunch",
+      "thunderpunch",
+      "shadowclaw",
+      "aerialace",
+      "darkestlariat",
+      "hammerarm",
+      "lowsweep",
+      "bodypress",
+      "bulldoze",
+      "focuspunch",
+      "rollout",
+      "taunt",
+      "highhorsepower"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "salazzle": {
+    "key": "salazzle",
+    "name": "Salazzle",
+    "dex": 758,
+    "spriteId": "0758",
+    "types": [
+      "Poison",
+      "Fire"
+    ],
+    "baseStats": {
+      "hp": 68,
+      "atk": 64,
+      "def": 60,
+      "spa": 111,
+      "spd": 60,
+      "spe": 117
+    },
+    "bst": 480,
+    "abilities": [
+      "corrosion",
+      "oblivious"
+    ],
+    "abilityNames": {
+      "corrosion": "Corrosion",
+      "oblivious": "Oblivious"
+    },
+    "weightkg": 22.2,
+    "gen": 7,
+    "moves": [
+      "flamethrower",
+      "sludgewave",
+      "nastyplot",
+      "toxic"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "sludgebomb",
+      "flamethrower",
+      "dragonclaw",
+      "fireblast",
+      "irontail",
+      "flareblitz",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "dragondance",
+      "nastyplot",
+      "agility",
+      "willowisp",
+      "thunderwave",
+      "toxic",
+      "rest",
+      "protect",
+      "sunnyday",
+      "firefang",
+      "knockoff",
+      "hypervoice",
+      "shadowclaw",
+      "crosspoison",
+      "heatwave",
+      "flamecharge",
+      "acrobatics",
+      "trailblaze",
+      "poisonjab",
+      "fakeout",
+      "leechlife",
+      "gunkshot",
+      "sludgewave",
+      "toxicspikes",
+      "taunt",
+      "encore",
+      "scaleshot",
+      "dragontail",
+      "foulplay"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "kartana": {
+    "key": "kartana",
+    "name": "Kartana",
+    "dex": 798,
+    "spriteId": "0798",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "baseStats": {
+      "hp": 59,
+      "atk": 181,
+      "def": 131,
+      "spa": 59,
+      "spd": 31,
+      "spe": 109
+    },
+    "bst": 570,
+    "abilities": [
+      "beastboost"
+    ],
+    "abilityNames": {
+      "beastboost": "Beast Boost"
+    },
+    "weightkg": 0.1,
+    "gen": 7,
+    "moves": [
+      "smartstrike",
+      "leafblade",
+      "sacredsword",
+      "swordsdance"
+    ],
+    "learnable": [
+      "airslash",
+      "psychocut",
+      "razorleaf",
+      "gigaimpact",
+      "xscissor",
+      "nightslash",
+      "leafblade",
+      "swordsdance",
+      "calmmind",
+      "irondefense",
+      "toxic",
+      "synthesis",
+      "rest",
+      "protect",
+      "knockoff",
+      "gigadrain",
+      "aerialace",
+      "sacredsword",
+      "tailwind",
+      "smartstrike"
+    ],
+    "hurtRadius": 13,
+    "flying": true,
+    "legendary": false
+  },
+  "buzzwole": {
+    "key": "buzzwole",
+    "name": "Buzzwole",
+    "dex": 794,
+    "spriteId": "0794",
+    "types": [
+      "Bug",
+      "Fighting"
+    ],
+    "baseStats": {
+      "hp": 107,
+      "atk": 139,
+      "def": 139,
+      "spa": 53,
+      "spd": 53,
+      "spe": 79
+    },
+    "bst": 570,
+    "abilities": [
+      "beastboost"
+    ],
+    "abilityNames": {
+      "beastboost": "Beast Boost"
+    },
+    "weightkg": 333.6,
+    "gen": 7,
+    "moves": [
+      "lunge",
+      "drainpunch",
+      "icepunch",
+      "bulkup"
+    ],
+    "learnable": [
+      "closecombat",
+      "stoneedge",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "payback",
+      "ironhead",
+      "bulkup",
+      "focusenergy",
+      "toxic",
+      "roost",
+      "rest",
+      "protect",
+      "drainpunch",
+      "superpower",
+      "icepunch",
+      "thunderpunch",
+      "darkestlariat",
+      "hammerarm",
+      "lowsweep",
+      "poisonjab",
+      "leechlife",
+      "bulldoze",
+      "focuspunch",
+      "fellstinger",
+      "gyroball",
+      "counter",
+      "taunt",
+      "highhorsepower",
+      "lunge"
+    ],
+    "hurtRadius": 19,
+    "flying": false,
+    "legendary": false
+  },
+  "cinccino": {
+    "key": "cinccino",
+    "name": "Cinccino",
+    "dex": 573,
+    "spriteId": "0573",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": {
+      "hp": 75,
+      "atk": 95,
+      "def": 60,
+      "spa": 65,
+      "spd": 60,
+      "spe": 115
+    },
+    "bst": 470,
+    "abilities": [
+      "cutecharm",
+      "technician",
+      "skilllink"
+    ],
+    "abilityNames": {
+      "cutecharm": "Cute Charm",
+      "technician": "Technician",
+      "skilllink": "Skill Link"
+    },
+    "weightkg": 7.5,
+    "gen": 5,
+    "moves": [
+      "tailslap",
+      "rockblast",
+      "bulletseed",
+      "uturn"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "aquatail",
+      "thunderbolt",
+      "irontail",
+      "thunder",
+      "focusblast",
+      "swift",
+      "gigaimpact",
+      "calmmind",
+      "thunderwave",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "uturn",
+      "knockoff",
+      "hypervoice",
+      "playrough",
+      "bulletseed",
+      "trailblaze",
+      "seedbomb",
+      "gunkshot",
+      "dazzlinggleam",
+      "dig",
+      "icespinner",
+      "lightscreen",
+      "tidyup",
+      "encore",
+      "rockblast",
+      "tailslap"
+    ],
+    "hurtRadius": 13,
+    "flying": false,
+    "legendary": false
+  },
+  "thievul": {
+    "key": "thievul",
+    "name": "Thievul",
+    "dex": 828,
+    "spriteId": "0828",
+    "types": [
+      "Dark"
+    ],
+    "baseStats": {
+      "hp": 70,
+      "atk": 58,
+      "def": 58,
+      "spa": 87,
+      "spd": 92,
+      "spe": 90
+    },
+    "bst": 455,
+    "abilities": [
+      "runaway",
+      "unburden",
+      "stakeout"
+    ],
+    "abilityNames": {
+      "runaway": "Run Away",
+      "unburden": "Unburden",
+      "stakeout": "Stakeout"
+    },
+    "weightkg": 19.9,
+    "gen": 8,
+    "moves": [
+      "foulplay",
+      "suckerpunch",
+      "nastyplot",
+      "taunt"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "crunch",
+      "shadowball",
+      "darkpulse",
+      "psychic",
+      "quickattack",
+      "swift",
+      "gigaimpact",
+      "nightslash",
+      "suckerpunch",
+      "nastyplot",
+      "agility",
+      "rest",
+      "protect",
+      "firefang",
+      "icefang",
+      "thunderfang",
+      "uturn",
+      "knockoff",
+      "playrough",
+      "shadowclaw",
+      "acrobatics",
+      "dig",
+      "taunt",
+      "foulplay",
+      "tailslap"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": false
+  },
+  "sableye": {
+    "key": "sableye",
+    "name": "Sableye",
+    "dex": 302,
+    "spriteId": "0302",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "baseStats": {
+      "hp": 50,
+      "atk": 75,
+      "def": 75,
+      "spa": 65,
+      "spd": 65,
+      "spe": 50
+    },
+    "bst": 380,
+    "abilities": [
+      "keeneye",
+      "stall",
+      "prankster"
+    ],
+    "abilityNames": {
+      "keeneye": "Keen Eye",
+      "stall": "Stall",
+      "prankster": "Prankster"
+    },
+    "weightkg": 11,
+    "gen": 3,
+    "moves": [
+      "foulplay",
+      "willowisp",
+      "recover",
+      "taunt"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "darkpulse",
+      "psychic",
+      "waterpulse",
+      "metalclaw",
+      "zenheadbutt",
+      "bodyslam",
+      "gigaimpact",
+      "feintattack",
+      "payback",
+      "psybeam",
+      "xscissor",
+      "energyball",
+      "suckerpunch",
+      "nastyplot",
+      "calmmind",
+      "bulkup",
+      "willowisp",
+      "thunderwave",
+      "toxic",
+      "confuseray",
+      "recover",
+      "moonlight",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "shadowsneak",
+      "knockoff",
+      "gigadrain",
+      "drainpunch",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "shadowclaw",
+      "aerialace",
+      "lowsweep",
+      "poisonjab",
+      "fakeout",
+      "powergem",
+      "icywind",
+      "hex",
+      "dazzlinggleam",
+      "seismictoss",
+      "focuspunch",
+      "dig",
+      "gyroball",
+      "counter",
+      "reflect",
+      "lightscreen",
+      "taunt",
+      "encore",
+      "foulplay",
+      "phantomforce"
+    ],
+    "hurtRadius": 13,
+    "flying": false,
+    "legendary": false
+  },
+  "banette": {
+    "key": "banette",
+    "name": "Banette",
+    "dex": 354,
+    "spriteId": "0354",
+    "types": [
+      "Ghost"
+    ],
+    "baseStats": {
+      "hp": 64,
+      "atk": 115,
+      "def": 65,
+      "spa": 83,
+      "spd": 63,
+      "spe": 65
+    },
+    "bst": 455,
+    "abilities": [
+      "insomnia",
+      "frisk",
+      "cursedbody"
+    ],
+    "abilityNames": {
+      "insomnia": "Insomnia",
+      "frisk": "Frisk",
+      "cursedbody": "Cursed Body"
+    },
+    "weightkg": 12.5,
+    "gen": 3,
+    "moves": [
+      "phantomforce",
+      "shadowclaw",
+      "destinybond",
+      "willowisp"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "shadowball",
+      "darkpulse",
+      "psychic",
+      "thunderbolt",
+      "thunder",
+      "bodyslam",
+      "gigaimpact",
+      "feintattack",
+      "payback",
+      "psybeam",
+      "suckerpunch",
+      "swordsdance",
+      "nastyplot",
+      "calmmind",
+      "willowisp",
+      "thunderwave",
+      "toxic",
+      "confuseray",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "shadowsneak",
+      "knockoff",
+      "shadowclaw",
+      "trailblaze",
+      "icywind",
+      "hex",
+      "gunkshot",
+      "dazzlinggleam",
+      "destinybond",
+      "trickroom",
+      "taunt",
+      "encore",
+      "foulplay",
+      "phantomforce"
+    ],
+    "hurtRadius": 14,
+    "flying": true,
+    "legendary": false
+  },
+  "houndstone": {
+    "key": "houndstone",
+    "name": "Houndstone",
+    "dex": 972,
+    "spriteId": "0972",
+    "types": [
+      "Ghost"
+    ],
+    "baseStats": {
+      "hp": 72,
+      "atk": 101,
+      "def": 100,
+      "spa": 50,
+      "spd": 97,
+      "spe": 68
+    },
+    "bst": 488,
+    "abilities": [
+      "sandrush",
+      "fluffy"
+    ],
+    "abilityNames": {
+      "sandrush": "Sand Rush",
+      "fluffy": "Fluffy"
+    },
+    "weightkg": 15,
+    "gen": 9,
+    "moves": [
+      "lastrespects",
+      "bodypress",
+      "playrough",
+      "crunch"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "crunch",
+      "lick",
+      "shadowball",
+      "bite",
+      "gigaimpact",
+      "willowisp",
+      "confuseray",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "firefang",
+      "icefang",
+      "thunderfang",
+      "shadowsneak",
+      "playrough",
+      "bodypress",
+      "psychicfangs",
+      "hex",
+      "bulldoze",
+      "dig",
+      "destinybond",
+      "lastrespects",
+      "phantomforce"
+    ],
+    "hurtRadius": 17,
+    "flying": false,
+    "legendary": false
+  },
+  "glimmora": {
+    "key": "glimmora",
+    "name": "Glimmora",
+    "dex": 970,
+    "spriteId": "0970",
+    "types": [
+      "Rock",
+      "Poison"
+    ],
+    "baseStats": {
+      "hp": 83,
+      "atk": 55,
+      "def": 90,
+      "spa": 130,
+      "spd": 81,
+      "spe": 86
+    },
+    "bst": 525,
+    "abilities": [
+      "toxicdebris",
+      "corrosion"
+    ],
+    "abilityNames": {
+      "toxicdebris": "Toxic Debris",
+      "corrosion": "Corrosion"
+    },
+    "weightkg": 45,
+    "gen": 9,
+    "moves": [
+      "mortalspin",
+      "powergem",
+      "sludgewave",
+      "stealthrock"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "earthpower",
+      "stoneedge",
+      "sludgebomb",
+      "solarbeam",
+      "rockslide",
+      "gigaimpact",
+      "energyball",
+      "ancientpower",
+      "irondefense",
+      "toxic",
+      "confuseray",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "powergem",
+      "gunkshot",
+      "dazzlinggleam",
+      "sludgewave",
+      "spikyshield",
+      "spikes",
+      "toxicspikes",
+      "stealthrock",
+      "reflect",
+      "lightscreen",
+      "rockblast",
+      "mortalspin"
+    ],
+    "hurtRadius": 17,
+    "flying": false,
+    "legendary": false
+  },
+  "revavroom": {
+    "key": "revavroom",
+    "name": "Revavroom",
+    "dex": 966,
+    "spriteId": "0966",
+    "types": [
+      "Steel",
+      "Poison"
+    ],
+    "baseStats": {
+      "hp": 80,
+      "atk": 119,
+      "def": 90,
+      "spa": 54,
+      "spd": 67,
+      "spe": 90
+    },
+    "bst": 500,
+    "abilities": [
+      "overcoat",
+      "filter"
+    ],
+    "abilityNames": {
+      "overcoat": "Overcoat",
+      "filter": "Filter"
+    },
+    "weightkg": 120,
+    "gen": 9,
+    "moves": [
+      "spinout",
+      "gunkshot",
+      "highhorsepower",
+      "shiftgear"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "lick",
+      "sludgebomb",
+      "zenheadbutt",
+      "bodyslam",
+      "gigaimpact",
+      "ironhead",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "sandstorm",
+      "heavyslam",
+      "poisonjab",
+      "gunkshot",
+      "sludgewave",
+      "bulldoze",
+      "toxicspikes",
+      "gyroball",
+      "haze",
+      "shiftgear",
+      "taunt",
+      "highhorsepower",
+      "spinout"
+    ],
+    "hurtRadius": 17,
+    "flying": false,
+    "legendary": false
+  },
+  "walkingwake": {
+    "key": "walkingwake",
+    "name": "Walking Wake",
+    "dex": 1009,
+    "spriteId": "1009",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "baseStats": {
+      "hp": 99,
+      "atk": 83,
+      "def": 91,
+      "spa": 125,
+      "spd": 83,
+      "spe": 109
+    },
+    "bst": 590,
+    "abilities": [
+      "protosynthesis"
+    ],
+    "abilityNames": {
+      "protosynthesis": "Protosynthesis"
+    },
+    "weightkg": 280,
+    "gen": 9,
+    "moves": [
+      "hydrosteam",
+      "dracometeor",
+      "flamethrower",
+      "sunnyday"
+    ],
+    "learnable": [
+      "dragonpulse",
+      "hyperbeam",
+      "dracometeor",
+      "crunch",
+      "dragonrush",
+      "flamethrower",
+      "dragonclaw",
+      "waterpulse",
+      "hydropump",
+      "swift",
+      "bite",
+      "bodyslam",
+      "gigaimpact",
+      "outrage",
+      "waterfall",
+      "surf",
+      "dragondance",
+      "agility",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "firefang",
+      "knockoff",
+      "scald",
+      "hurricane",
+      "aquajet",
+      "liquidation",
+      "hydrosteam",
+      "whirlpool",
+      "dragontail",
+      "flipturn"
+    ],
+    "hurtRadius": 19,
+    "flying": false,
+    "legendary": false
+  },
+  "ironleaves": {
+    "key": "ironleaves",
+    "name": "Iron Leaves",
+    "dex": 1010,
+    "spriteId": "1010",
+    "types": [
+      "Grass",
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 90,
+      "atk": 130,
+      "def": 88,
+      "spa": 70,
+      "spd": 108,
+      "spe": 104
+    },
+    "bst": 590,
+    "abilities": [
+      "quarkdrive"
+    ],
+    "abilityNames": {
+      "quarkdrive": "Quark Drive"
+    },
+    "weightkg": 125,
+    "gen": 9,
+    "moves": [
+      "psyblade",
+      "leafblade",
+      "closecombat",
+      "swordsdance"
+    ],
+    "learnable": [
+      "airslash",
+      "hyperbeam",
+      "closecombat",
+      "solarbeam",
+      "quickattack",
+      "focusblast",
+      "swift",
+      "gigaimpact",
+      "xscissor",
+      "nightslash",
+      "leafblade",
+      "energyball",
+      "leafstorm",
+      "megahorn",
+      "swordsdance",
+      "calmmind",
+      "irondefense",
+      "agility",
+      "rest",
+      "protect",
+      "gigadrain",
+      "aerialace",
+      "wildcharge",
+      "trailblaze",
+      "sacredsword",
+      "psychicterrain",
+      "taunt",
+      "psyblade",
+      "smartstrike"
+    ],
+    "hurtRadius": 17,
+    "flying": false,
+    "legendary": false
+  },
+  "pecharunt": {
+    "key": "pecharunt",
+    "name": "Pecharunt",
+    "dex": 1025,
+    "spriteId": "1025",
+    "types": [
+      "Poison",
+      "Ghost"
+    ],
+    "baseStats": {
+      "hp": 88,
+      "atk": 88,
+      "def": 160,
+      "spa": 88,
+      "spd": 88,
+      "spe": 88
+    },
+    "bst": 600,
+    "abilities": [
+      "poisonpuppeteer"
+    ],
+    "abilityNames": {
+      "poisonpuppeteer": "Poison Puppeteer"
+    },
+    "weightkg": 0.3,
+    "gen": 9,
+    "moves": [
+      "malignantchain",
+      "shadowball",
+      "recover",
+      "nastyplot"
+    ],
+    "learnable": [
+      "shadowball",
+      "sludgebomb",
+      "nastyplot",
+      "toxic",
+      "recover",
+      "rest",
+      "protect",
+      "hex",
+      "gunkshot",
+      "sludgewave",
+      "rollout",
+      "destinybond",
+      "malignantchain",
+      "foulplay",
+      "phantomforce"
+    ],
+    "hurtRadius": 13,
+    "flying": false,
+    "legendary": true
+  },
+  "deoxys": {
+    "key": "deoxys",
+    "name": "Deoxys",
+    "dex": 386,
+    "spriteId": "0386",
+    "types": [
+      "Psychic"
+    ],
+    "baseStats": {
+      "hp": 50,
+      "atk": 150,
+      "def": 50,
+      "spa": 150,
+      "spd": 50,
+      "spe": 150
+    },
+    "bst": 600,
+    "abilities": [
+      "pressure"
+    ],
+    "abilityNames": {
+      "pressure": "Pressure"
+    },
+    "weightkg": 60.8,
+    "gen": 3,
+    "moves": [
+      "psychoboost",
+      "superpower",
+      "extremespeed",
+      "knockoff"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "flashcannon",
+      "shadowball",
+      "darkpulse",
+      "psychic",
+      "psychoboost",
+      "waterpulse",
+      "solarbeam",
+      "thunderbolt",
+      "thunder",
+      "focusblast",
+      "zenheadbutt",
+      "meteormash",
+      "rockslide",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "psybeam",
+      "icebeam",
+      "energyball",
+      "nastyplot",
+      "calmmind",
+      "irondefense",
+      "agility",
+      "thunderwave",
+      "toxic",
+      "recover",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "extremespeed",
+      "knockoff",
+      "drainpunch",
+      "superpower",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "aerialace",
+      "lowsweep",
+      "poisonjab",
+      "icywind",
+      "psyshock",
+      "zapcannon",
+      "spikes",
+      "stealthrock",
+      "seismictoss",
+      "focuspunch",
+      "counter",
+      "mirrorcoat",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "psychicterrain",
+      "taunt",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 15,
+    "flying": false,
+    "legendary": true
+  },
+  "regigigas": {
+    "key": "regigigas",
+    "name": "Regigigas",
+    "dex": 486,
+    "spriteId": "0486",
+    "types": [
+      "Normal"
+    ],
+    "baseStats": {
+      "hp": 110,
+      "atk": 160,
+      "def": 110,
+      "spa": 80,
+      "spd": 110,
+      "spe": 100
+    },
+    "bst": 670,
+    "abilities": [
+      "slowstart"
+    ],
+    "abilityNames": {
+      "slowstart": "Slow Start"
+    },
+    "weightkg": 420,
+    "gen": 4,
+    "moves": [
+      "crushgrip",
+      "bodyslam",
+      "drainpunch",
+      "knockoff"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "earthpower",
+      "stoneedge",
+      "thunderbolt",
+      "thunder",
+      "focusblast",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "ironhead",
+      "ancientpower",
+      "thunderwave",
+      "toxic",
+      "confuseray",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "knockoff",
+      "drainpunch",
+      "superpower",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "aerialace",
+      "darkestlariat",
+      "hammerarm",
+      "heavyslam",
+      "bodypress",
+      "icywind",
+      "bulldoze",
+      "focuspunch",
+      "crushgrip",
+      "highhorsepower"
+    ],
+    "hurtRadius": 21,
+    "flying": false,
+    "legendary": true
+  },
+  "crabominable": {
+    "key": "crabominable",
+    "name": "Crabominable",
+    "dex": 740,
+    "spriteId": "0740",
+    "types": [
+      "Fighting",
+      "Ice"
+    ],
+    "baseStats": {
+      "hp": 97,
+      "atk": 132,
+      "def": 77,
+      "spa": 62,
+      "spd": 67,
+      "spe": 43
+    },
+    "bst": 478,
+    "abilities": [
+      "hypercutter",
+      "ironfist",
+      "angerpoint"
+    ],
+    "abilityNames": {
+      "hypercutter": "Hyper Cutter",
+      "ironfist": "Iron Fist",
+      "angerpoint": "Anger Point"
+    },
+    "weightkg": 180,
+    "gen": 7,
+    "moves": [
+      "icehammer",
+      "closecombat",
+      "drainpunch",
+      "earthquake"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "stoneedge",
+      "focusblast",
+      "zenheadbutt",
+      "earthquake",
+      "rockslide",
+      "swift",
+      "bodyslam",
+      "gigaimpact",
+      "payback",
+      "icebeam",
+      "ironhead",
+      "bulkup",
+      "irondefense",
+      "toxic",
+      "rest",
+      "protect",
+      "raindance",
+      "sunnyday",
+      "knockoff",
+      "drainpunch",
+      "superpower",
+      "scald",
+      "icepunch",
+      "thunderpunch",
+      "blizzard",
+      "snowscape",
+      "bodypress",
+      "liquidation",
+      "icywind",
+      "gunkshot",
+      "bulldoze",
+      "focuspunch",
+      "crabhammer",
+      "dig",
+      "icespinner",
+      "icehammer"
+    ],
+    "hurtRadius": 18,
+    "flying": false,
+    "legendary": false
+  },
+  "ironhands": {
+    "key": "ironhands",
+    "name": "Iron Hands",
+    "dex": 992,
+    "spriteId": "0992",
+    "types": [
+      "Fighting",
+      "Electric"
+    ],
+    "baseStats": {
+      "hp": 154,
+      "atk": 140,
+      "def": 108,
+      "spa": 50,
+      "spd": 68,
+      "spe": 50
+    },
+    "bst": 570,
+    "abilities": [
+      "quarkdrive"
+    ],
+    "abilityNames": {
+      "quarkdrive": "Quark Drive"
+    },
+    "weightkg": 380.7,
+    "gen": 9,
+    "moves": [
+      "supercellslam",
+      "drainpunch",
+      "fakeout",
+      "thunderpunch"
+    ],
+    "learnable": [
+      "hyperbeam",
+      "closecombat",
+      "thunderbolt",
+      "thunder",
+      "focusblast",
+      "earthquake",
+      "rockslide",
+      "bodyslam",
+      "gigaimpact",
+      "ironhead",
+      "swordsdance",
+      "irondefense",
+      "focusenergy",
+      "rest",
+      "protect",
+      "drainpunch",
+      "firepunch",
+      "icepunch",
+      "thunderpunch",
+      "playrough",
+      "wildcharge",
+      "heavyslam",
+      "lowsweep",
+      "fakeout",
+      "bodypress",
+      "voltswitch",
+      "bulldoze",
+      "bellydrum",
+      "seismictoss",
+      "focuspunch",
+      "supercellslam"
+    ],
+    "hurtRadius": 20,
+    "flying": false,
+    "legendary": false
+  },
+  "sigilyph": {
+    "key": "sigilyph",
+    "name": "Sigilyph",
+    "dex": 561,
+    "spriteId": "0561",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "baseStats": {
+      "hp": 72,
+      "atk": 58,
+      "def": 80,
+      "spa": 103,
+      "spd": 80,
+      "spe": 97
+    },
+    "bst": 490,
+    "abilities": [
+      "wonderskin",
+      "magicguard",
+      "tintedlens"
+    ],
+    "abilityNames": {
+      "wonderskin": "Wonder Skin",
+      "magicguard": "Magic Guard",
+      "tintedlens": "Tinted Lens"
+    },
+    "weightkg": 14,
+    "gen": 5,
+    "moves": [
+      "storedpower",
+      "airslash",
+      "psychic",
+      "calmmind"
+    ],
+    "learnable": [
+      "airslash",
+      "hyperbeam",
+      "flashcannon",
+      "shadowball",
+      "darkpulse",
+      "psychocut",
+      "psychic",
+      "solarbeam",
+      "zenheadbutt",
+      "swift",
+      "gigaimpact",
+      "psybeam",
+      "icebeam",
+      "energyball",
+      "ancientpower",
+      "calmmind",
+      "thunderwave",
+      "toxic",
+      "roost",
+      "rest",
+      "protect",
+      "raindance",
+      "aerialace",
+      "steelwing",
+      "heatwave",
+      "icywind",
+      "psyshock",
+      "dazzlinggleam",
+      "tailwind",
+      "reflect",
+      "lightscreen",
+      "trickroom",
+      "storedpower",
+      "expandingforce"
+    ],
+    "hurtRadius": 15,
+    "flying": true,
+    "legendary": false
   }
 }

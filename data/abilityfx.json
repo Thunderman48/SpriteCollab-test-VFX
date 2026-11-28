@@ -834,5 +834,170 @@
     "ko": "고대활성",
     "desc": "In sun its highest stat goes up (×1.3; Speed ×1.5).",
     "descKo": "쾌청일 때 가장 높은 능력이 오른다 (1.3배, 스피드는 1.5배)."
+  },
+  "shadowtag": {
+    "ko": "그림자밟기",
+    "desc": "Foes can't switch out while it's on the field (Trio).",
+    "descKo": "나와 있는 동안 상대가 교체할 수 없다 (트리오)."
+  },
+  "heatproof": {
+    "ko": "내열",
+    "desc": "Fire moves against it ×0.5.",
+    "descKo": "받는 불꽃 기술 0.5배."
+  },
+  "psychicsurge": {
+    "ko": "사이코메이커",
+    "desc": "When it enters, Psychic Terrain for 20 s.",
+    "descKo": "등장하면 20초 동안 사이코필드."
+  },
+  "mistysurge": {
+    "ko": "미스트메이커",
+    "desc": "When it enters, Misty Terrain for 20 s.",
+    "descKo": "등장하면 20초 동안 미스트필드."
+  },
+  "aurabreak": {
+    "ko": "오라브레이크",
+    "desc": "Reverses Fairy Aura and Dark Aura: those moves become ×0.75.",
+    "descKo": "페어리오라·다크오라를 반대로: 그 기술이 0.75배가 된다."
+  },
+  "powerconstruct": {
+    "ko": "스웜체인지",
+    "desc": "Once, below half HP: turns into Complete Forme and recovers 40% HP.",
+    "descKo": "한 번, HP가 절반 아래가 되면 퍼펙트폼이 되어 HP 40% 회복."
+  },
+  "steelworker": {
+    "ko": "강철술사",
+    "desc": "Steel moves ×1.5.",
+    "descKo": "강철 기술 1.5배."
+  },
+  "soulheart": {
+    "ko": "소울하트",
+    "desc": "Whenever any Pokémon faints: Sp. Atk +1.",
+    "descKo": "포켓몬이 쓰러질 때마다 특수공격 +1."
+  },
+  "strongjaw": {
+    "ko": "옹골찬턱",
+    "desc": "Biting moves ×1.5.",
+    "descKo": "무는 기술 1.5배."
+  },
+  "dragonsmaw": {
+    "ko": "용의턱",
+    "desc": "Dragon moves ×1.5.",
+    "descKo": "드래곤 기술 1.5배."
+  },
+  "chillingneigh": {
+    "ko": "백의울음",
+    "desc": "When it knocks a foe out: Attack +1.",
+    "descKo": "상대를 쓰러뜨리면 공격 +1."
+  },
+  "stamina": {
+    "ko": "지구력",
+    "desc": "Every time it's hit: Defense +1.",
+    "descKo": "공격받을 때마다 방어 +1."
+  },
+  "stalwart": {
+    "ko": "굳건한신념",
+    "desc": "It isn't knocked back by hits.",
+    "descKo": "공격을 받아도 밀려나지 않는다."
+  },
+  "supersweetsyrup": {
+    "ko": "감미로운꿀",
+    "desc": "When it first enters: foes' dodge recharges 30% slower for 10 s.",
+    "descKo": "처음 등장하면 10초 동안 상대의 회피 충전이 30% 느려진다."
+  },
+  "stickyhold": {
+    "ko": "점착",
+    "desc": "Its held item can't be knocked away.",
+    "descKo": "가진 도구를 빼앗기지 않는다."
+  },
+  "friendguard": {
+    "ko": "프렌드가드",
+    "desc": "In 2vs2, its partner takes ×0.75 damage.",
+    "descKo": "2vs2에서 동료가 받는 데미지 0.75배."
+  },
+  "cheekpouch": {
+    "ko": "볼주머니",
+    "desc": "Eating a berry also restores 33% HP.",
+    "descKo": "나무열매를 먹으면 HP도 33% 회복."
+  },
+  "honeygather": {
+    "ko": "꿀모으기",
+    "desc": "Every 8 s it finds honey and recovers 4% HP.",
+    "descKo": "8초마다 꿀을 찾아 HP 4% 회복."
+  },
+  "shielddust": {
+    "ko": "인분",
+    "desc": "Foes' moves can't give it their secondary effects.",
+    "descKo": "상대 기술의 추가 효과를 받지 않는다."
+  },
+  "waterbubble": {
+    "ko": "수포",
+    "desc": "Its Water moves ×2; Fire moves against it ×0.5; can't be burned.",
+    "descKo": "자신의 물 기술 2배, 받는 불꽃 기술 0.5배, 화상에 걸리지 않는다."
+  },
+  "merciless": {
+    "ko": "무도한행위",
+    "desc": "Its attacks always crit a poisoned target.",
+    "descKo": "독 상태인 상대에게는 반드시 급소에 맞는다."
+  },
+  "fluffy": {
+    "ko": "복슬복슬",
+    "desc": "Contact moves against it ×0.5, but Fire moves ×2.",
+    "descKo": "받는 접촉 기술 0.5배, 하지만 불꽃 기술은 2배."
+  },
+  "klutz": {
+    "ko": "서투름",
+    "desc": "It can't use its held item.",
+    "descKo": "가진 도구를 쓸 수 없다."
+  },
+  "corrosion": {
+    "ko": "부식",
+    "desc": "It can poison even Poison and Steel types.",
+    "descKo": "독·강철 타입도 독에 걸리게 할 수 있다."
+  },
+  "stakeout": {
+    "ko": "잠복",
+    "desc": "×2 damage to a foe that entered in the last 3 s.",
+    "descKo": "등장한 지 3초 안 된 상대에게 데미지 2배."
+  },
+  "stall": {
+    "ko": "시간벌기",
+    "desc": "Its attacks wind up a little slower.",
+    "descKo": "공격 준비가 조금 느리다."
+  },
+  "insomnia": {
+    "ko": "불면",
+    "desc": "Can't fall asleep.",
+    "descKo": "잠들지 않는다."
+  },
+  "toxicdebris": {
+    "ko": "독치장",
+    "desc": "Hit by a physical move: scatters poison spikes at the attacker's feet.",
+    "descKo": "물리 기술을 받으면 상대 발밑에 독압정을 뿌린다."
+  },
+  "filter": {
+    "ko": "필터",
+    "desc": "Super-effective hits deal ×0.75.",
+    "descKo": "효과가 굉장한 기술의 데미지 0.75배."
+  },
+  "quarkdrive": {
+    "ko": "쿼크차지",
+    "desc": "In Electric Terrain its highest stat goes up (×1.3; Speed ×1.5).",
+    "descKo": "일렉트릭필드에서 가장 높은 능력이 오른다 (1.3배, 스피드는 1.5배)."
+  },
+  "poisonpuppeteer": {
+    "ko": "독조종",
+    "desc": "Foes it poisons also become confused.",
+    "descKo": "독에 걸린 상대는 혼란에도 빠진다."
+  },
+  "slowstart": {
+    "ko": "슬로스타트",
+    "desc": "For its first 5 s on the field, Attack and Speed are halved.",
+    "descKo": "등장 후 5초 동안 공격과 스피드가 절반."
+  },
+  "wonderskin": {
+    "ko": "미라클스킨",
+    "desc": "Foes' status skills fail half the time against it.",
+    "descKo": "상대의 변화 기술이 절반의 확률로 실패한다."
   }
 }

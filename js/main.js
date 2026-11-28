@@ -116,7 +116,10 @@ class Game {
   }
   canSwitch(slot) {
     const p = this.parties[slot];
-    return !!p && this.mode.party > 1 && this.state === 'fight' && p.switchCd <= 0 && this.benchOf(slot).length > 0;
+    const cur = p && p.members[p.active];
+    // Shadow Tag / Anchor Shot / Thousand Waves: can't switch out.
+    const held = cur && (cur.trapT > 0 || this.enemiesOf(cur).some((e) => FXE.ab(e, 'shadowtag') && !FXE.ab(cur, 'shadowtag')));
+    return !!p && this.mode.party > 1 && this.state === 'fight' && p.switchCd <= 0 && this.benchOf(slot).length > 0 && !held;
   }
 
   /** Put a party member on the field in place of the current one (switch or send-out). */
@@ -201,7 +204,7 @@ class Game {
     s.hits++;
     if (eff > 1) s.supers++;
     this.moveLog[move.id] = (this.moveLog[move.id] || 0) + 1;
-    def.takeHit(dmg, angle, kbMul ?? fxd.extra?.kbMul ?? 1);
+    def.takeHit(dmg, angle, x.noKnock ? 0 : kbMul ?? fxd.extra?.kbMul ?? 1);
     if (att.mods.drain && dmg > 0 && att.alive) att.heal(Math.max(1, Math.round(dmg * att.mods.drain))); // Shell Bell
     const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
     this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
@@ -212,7 +215,7 @@ class Game {
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
     if (eff > 0) FXE.afterHit(this, att, def, cast, dmg, { angle, crit });
-    if (def.ko) FXE.onKnockOut(this, att, move);
+    if (def.ko) FXE.onKnockOut(this, att, move, def);
     return dmg;
   }
 
@@ -252,6 +255,33 @@ class Game {
   }
   placeHazard(c, kind, x, y) {
     placeHazard(this, c, kind, x, y);
+  }
+  /** Tidy Up: every hazard on the field is cleared. */
+  clearAllHazards() {
+    for (const o of this.objects) if (o.hazard) o.dead = true;
+  }
+  /** Dragon Tail / Circle Throw: in Trio the target is dragged out and a random teammate comes in. */
+  dragOut(f) {
+    const p = this.parties[f.slot];
+    const bench = this.benchOf(f.slot);
+    if (!f.alive || this.mode.party < 2 || !bench.length || this.activeOf(f.slot) !== f || this.state !== 'fight') return;
+    const next = bench[Math.floor(Math.random() * bench.length)];
+    if (f.cast) cancelCast(this, f);
+    FXE.onSwitchOut(this, f);
+    p.switchCd = Math.max(p.switchCd, 1);
+    this.ui.log(t('draggedOut', { who: this.who(next) }));
+    this.sendOut(f.slot, next, { x: f.x, y: f.y });
+  }
+  /** Shell Trap: the trap goes off, blasting everyone around. */
+  stanceBurst(c, st) {
+    const d = MOVEFX.moves[st.id];
+    this.addEffect(new Effect(d.hit, c.x, c.y - 6, { scale: 1.6 }));
+    if (d.hit2) this.addEffect(new Effect(d.hit2, c.x, c.y, { layer: 'under' }));
+    this.shake(9, 0.35);
+    this.sfx('boom');
+    this.ui.log(t('shellTrapLog', { who: this.who(c) }));
+    const cast = { id: st.id, def: d, move: DB.moves[st.id] };
+    for (const e of this.enemiesOf(c)) if (c.distTo(e) < (d.stance.radius || 90) + e.radius) this.applyHit(c, e, cast, { angle: c.angleTo(e), noFx: true });
   }
 
   /** High Jump Kick missed: the user crashes and loses part of its HP. */
@@ -368,6 +398,8 @@ class Game {
     this.slowmo = 1; // never inherit the KO slow motion of a battle that was left early
     this.weather = null;
     this.terrain = null;
+    this.room = null;
+    this.sides = [{}, {}];
   }
 
   /** Quick 1v1 helper (used by tests and URL shortcuts). */
@@ -388,6 +420,8 @@ class Game {
   leaveBattle() {
     this.weather = null;
     this.terrain = null;
+    this.room = null;
+    this.sides = [{}, {}];
     this.fighters = [];
     this.parties = [];
     this.objects = [];

@@ -45,7 +45,9 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
   const stage = (am.crit > 1 / 24 ? 1 : 0) + (x.critStage || 0);
   const crit = !x.noCrit && Math.random() < CRIT_CHANCE[Math.max(0, Math.min(3, stage))];
   // Stat stages count, except that crits ignore the attacker's drops and the defender's raises.
-  const A = attacker.statVal ? attacker.statVal(x.offStat || (physical ? 'atk' : 'spa'), crit ? 'atk' : null, x.ignoreAtkStages) : physical ? attacker.stats.atk : attacker.stats.spa;
+  // Foul Play: the target's own Attack is used against it.
+  const src = x.offFrom === 'def' && defender.statVal ? defender : attacker;
+  const A = src.statVal ? src.statVal(x.offStat || (physical ? 'atk' : 'spa'), crit ? 'atk' : null, x.ignoreAtkStages) : physical ? attacker.stats.atk : attacker.stats.spa;
   const D = defender.statVal ? defender.statVal(x.defStat || (physical ? 'def' : 'spd'), crit ? 'def' : null, x.ignoreDefStages) : physical ? defender.stats.def : defender.stats.spd;
   const power = x.power ?? move.power;
   const base = Math.floor(Math.floor((Math.floor((2 * LEVEL) / 5 + 2) * power * A) / D) / 50) + 2;
