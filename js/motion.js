@@ -226,6 +226,15 @@ export const DASH = {
   /** Brave Bird / High Jump Kick: leaps off the screen, then dives onto a marked spot. */
   dive(game, c, t, cast) {
     const d = cast.def;
+    // Sky Attack: glows for a moment before taking off.
+    if (d.windup && !cast.wound) {
+      cast.wound = true;
+      c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
+      const fx = spawnFx(game, d.charge, c.x, c.y - 4, { follow: c, oy: -4, loop: true, life: d.windup, layer: 'over' });
+      if (fx) fx.owner = cast;
+      game.sfx?.('charge');
+      return void game.after(d.windup / cast.speed, () => DASH.dive(game, c, t, cast), cast);
+    }
     begin(game, c, t, cast, d, { anim: d.riseAnim || 'Hop', speed: 1 });
     cast.lockDir = true;
     const up = d.upTime || 0.3;

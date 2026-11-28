@@ -110,7 +110,7 @@ export function boost(game, f, boosts, source = null, bounced = false) {
     if (ab(f, 'contrary')) raw = -raw; // Contrary: reversed
     // Flower Veil: Grass-type Pokémon on its team keep their stats.
     const veiled = f.types.includes('Grass') && f.game?.fighters?.some((o) => o.alive && o.team === f.team && ab(o, 'flowerveil'));
-    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter')) || veiled;
+    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter')) || (k === 'def' && ab(f, 'bigpecks')) || veiled;
     if (raw < 0 && enemy && guarded) {
       ability(game, f);
       continue;
@@ -182,6 +182,7 @@ export function statusBlock(game, f, id, source) {
   if (id === 'slp' && [f, ...allies(game, f)].some((o) => ab(o, 'sweetveil'))) return 'type';
   if (id === 'brn' && (ab(f, 'thermalexchange') || ab(f, 'waterbubble'))) return 'type';
   if (id === 'slp' && ab(f, 'insomnia')) return 'type';
+  if (id === 'frz' && ab(f, 'magmaarmor')) return 'type';
   if (terrainNow(game) === 'misty' && grounded(f)) return 'type'; // Misty Terrain: no status on the ground
   if (sideOn(game, f.team, 'safeguard') && source && source.team !== f.team) return 'type'; // Safeguard
   if (ab(f, 'comatose')) return 'type'; // Komala is always half asleep
@@ -343,7 +344,17 @@ export function tickFighter(game, f, dt) {
   f.syrupT = Math.max(0, (f.syrupT || 0) - dt);
   if (f.slowT > 0 && (f.slowT -= dt) <= 0) say(game, 'slowStartEnd', { who: game.who(f) });
   if (f.encore && (f.encore.t -= dt) <= 0) f.encore = null;
-  if (f.stance && (f.stance.t -= dt) <= 0) f.stance = null;
+  if (f.stance && (f.stance.t -= dt) <= 0) {
+    // Bide: the stored-up energy is unleashed when the wait is over.
+    if (f.stance.bide) game.bideRelease?.(f, f.stance);
+    f.stance = null;
+  }
+  f.inkT = Math.max(0, (f.inkT || 0) - dt);
+  f.endureT = Math.max(0, (f.endureT || 0) - dt);
+  if (f.inkT > 0 && f.fxT <= 0) {
+    f.fxT = 0.5;
+    fxAt(game, MOVEFX.status.ink, f, { dy: -14 });
+  }
   // Power Construct: once, below half HP, Zygarde becomes Complete Forme and recovers.
   if (ab(f, 'powerconstruct') && !f.complete && f.alive && f.hp < f.maxHp / 2) {
     f.complete = true;
@@ -616,6 +627,11 @@ export function onSwitchOut(game, f) {
 
 /** Final damage tweaks: Disguise blocks the first hit. */
 export function adjustDamage(game, att, def, dmg) {
+  if (def.endureT > 0 && dmg >= def.hp) {
+    // Endure: hangs on with 1 HP.
+    game.ui?.log(t('enduredHit', { who: game.who(def) }));
+    return Math.max(0, def.hp - 1);
+  }
   if (dmg >= def.hp && def.hp >= def.maxHp && defAb(att, def, 'sturdy')) {
     ability(game, def);
     game.ui?.log(t('enduredHit', { who: game.who(def) }));
@@ -676,10 +692,18 @@ export function wantsMove(game, f, id, foe) {
   const w = weatherNow(game);
   if (fx.behavior === 'hazard') return !!foe?.alive && (game.hazardCount?.(f, id) ?? 0) < (fx.max || 6) - 1;
   if (f.tauntT > 0 && m.category === 'Status') return false; // Taunt
-  if (fx.stance) return threatenedBy(game, f, fx.stance.cat);
+  if (fx.stance && !fx.stance.bide) return threatenedBy(game, f, fx.stance.cat);
   if (fx.behavior === 'self') {
     if (id === 'auroraveil') return w === 'snowscape' && !sideOn(game, f.team, id);
     if (SIDE_TIME[id]) return !sideOn(game, f.team, id);
+    if (id === 'stockpile') return (f.stock || 0) < 3;
+    if (id === 'swallow') return (f.stock || 0) > 0 && f.hp < f.maxHp * 0.6;
+    if (id === 'batonpass') return Object.values(f.boosts).reduce((n, b) => n + b.n, 0) >= 2 && (game.benchOf?.(f.slot) || []).length > 0;
+    if (id === 'mirrormove' || id === 'copycat') return !!foe?.lastMove && (game.fightTime || 0) - (foe.lastMoveAt || 0) < 2 && !!MOVEFX.moves[foe.lastMove] && !['mirrormove', 'copycat', 'transform', 'sketch'].includes(foe.lastMove) && f.distTo(foe) < (MOVEFX.moves[foe.lastMove].range || 200);
+    if (id === 'conversion') return !f.colorType;
+    if (id === 'endure') return f.hp < f.maxHp * 0.3 && threatened(game, f);
+    if (id === 'healpulse') return allies(game, f).some((o) => o.hp < o.maxHp * 0.6);
+    if (id === 'bide') return threatened(game, f) && f.hp > f.maxHp * 0.4;
     if (id === 'coaching') return allies(game, f).length > 0 && allies(game, f).some((o) => stageOf(o, 'atk') < 3);
     if (id === 'lifedew' || id === 'junglehealing') return [f, ...allies(game, f)].some((o) => o.hp < o.maxHp * 0.7 || (id === 'junglehealing' && o.status));
     if (id === 'transform') return !!foe && !f.transformed && foe.data.key !== 'ditto';
@@ -726,6 +750,8 @@ export function wantsMove(game, f, id, foe) {
     if (id === 'psychup') return Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
     if (id === 'skillswap') return !UNSUPPRESSED.includes(foe.ability) && Math.random() < 0.3;
     if (id === 'partingshot') return true;
+    if (id === 'spite') return !!foe.lastMove && (foe.cd[foe.lastMove] || 0) < 1;
+    if (id === 'swagger' || id === 'flatter') return foe.confusedT <= 0;
     if (id === 'sketch') return !!foe.lastMove && !f.moves.includes(foe.lastMove) && !!MOVEFX.moves[foe.lastMove];
     if (m.volatile === 'taunt') return !(foe.tauntT > 0) && foe.moves.some((x) => DB.moves[x]?.category === 'Status');
     if (m.volatile === 'encore') return !!foe.lastMove && !foe.encore && (game.fightTime || 0) - (foe.lastMoveAt || 0) < 3;
@@ -746,6 +772,8 @@ export function wantsMove(game, f, id, foe) {
   if (id === 'explosion') return !game.fighters.some((o) => o.alive && ab(o, 'damp')) && (f.hp < f.maxHp * 0.25 || ((game.benchOf?.(f.slot) || []).length > 0 && f.hp < f.maxHp * 0.5)) && f.distTo(foe) < 90;
   if (id === 'poltergeist') return !!foe.item && !foe.itemSpent;
   if (id === 'fling') return !!f.item && !f.itemSpent;
+  if (id === 'dreameater') return foe.status?.id === 'slp' || ab(foe, 'comatose');
+  if (id === 'spitup') return (f.stock || 0) > 0;
   if (id === 'burnup') return f.types.includes('Fire');
   if (id === 'steelroller') return !!game.terrain;
   if (id === 'comeuppance') return (game.fightTime || 0) - (f.lastHurtAt ?? -99) < 3 && (f.lastHurtDmg || 0) > 0;
@@ -802,6 +830,10 @@ export function threatenedBy(game, f, cat) {
 export function stanceAnswer(game, def, att, m, dmg) {
   const st = def.stance;
   if (!st || !def.alive || !att.alive || att === def || m.category === 'Status') return;
+  if (st.bide) {
+    st.stored += dmg; // Bide: soaks it up for now
+    return;
+  }
   if (st.cat !== 'any' && m.category !== st.cat) return;
   def.stance = null;
   const fx = MOVEFX.moves[st.id];
@@ -823,7 +855,7 @@ export function stanceAnswer(game, def, att, m, dmg) {
 // Abilities that make a Pokémon immune to a type (and what they do when hit by it).
 const IMMUNE = {
   waterabsorb: 'Water', flashfire: 'Fire', lightningrod: 'Electric', voltabsorb: 'Electric', sapsipper: 'Grass', levitate: 'Ground',
-  motordrive: 'Electric', dryskin: 'Water',
+  motordrive: 'Electric', dryskin: 'Water', stormdrain: 'Water',
 };
 const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
 
@@ -879,6 +911,10 @@ export function preHit(game, att, def, cast) {
       say(game, 'presentHeal', { who: game.who(def) });
       return true;
     }
+    if (m.id === 'dreameater' && def.status?.id !== 'slp' && !ab(def, 'comatose')) {
+      float(game, def, t('failed'), '#c8c8c8');
+      return true;
+    }
     if (m.id === 'poltergeist' && (!def.item || def.itemSpent)) {
       float(game, def, t('failed'), '#c8c8c8');
       return true;
@@ -898,7 +934,7 @@ export function preHit(game, att, def, cast) {
     ability(game, def);
     if (ab(def, 'waterabsorb') || ab(def, 'voltabsorb')) def.heal(def.maxHp * 0.25);
     if (ab(def, 'flashfire') && !def.flashFire) def.flashFire = true;
-    if (ab(def, 'lightningrod')) boost(game, def, { spa: 1 }, def);
+    if (ab(def, 'lightningrod') || ab(def, 'stormdrain')) boost(game, def, { spa: 1 }, def);
     if (ab(def, 'sapsipper')) boost(game, def, { atk: 1 }, def);
     if (ab(def, 'motordrive')) boost(game, def, { spe: 1 }, def);
     if (ab(def, 'dryskin')) def.heal(def.maxHp * 0.25);
@@ -910,6 +946,7 @@ export function preHit(game, att, def, cast) {
   if (m.category !== 'Status' && !noGuard(att, def) && !sharpEyed) {
     if (defAb(att, def, 'snowcloak') && weatherNow(game) === 'snowscape' && Math.random() < 0.2) return miss(game, att, def);
     if (defAb(att, def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
+    if (defAb(att, def, 'tangledfeet') && def.confusedT > 0 && Math.random() < 0.3) return miss(game, att, def);
     if (defAb(att, def, 'sandveil') && weatherNow(game) === 'sandstorm' && Math.random() < 0.2) return miss(game, att, def);
   }
   // Spectral Thief: steals the target's stat boosts before it strikes.
@@ -999,6 +1036,13 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'crushgrip') power = Math.max(1, Math.floor((120 * def.hp) / def.maxHp));
   if (m.id === 'weatherball' && weatherNow(game)) power *= 2;
   if (m.id === 'facade' && att.status) power *= 2;
+  if (m.id === 'furycutter') power = Math.min(160, 40 * 2 ** ((att.streak?.id === 'furycutter' ? att.streak.n : 1) - 1));
+  if (m.id === 'echoedvoice') power = Math.min(200, 40 * (att.streak?.id === 'echoedvoice' ? att.streak.n : 1));
+  if (m.id === 'spitup') power = 100 * (att.spitStock || 1);
+  if (m.id === 'reversal') {
+    const r = att.hp / att.maxHp;
+    power = r <= 0.04 ? 200 : r <= 0.1 ? 150 : r <= 0.2 ? 100 : r <= 0.35 ? 80 : r <= 0.69 ? 40 : 20;
+  }
   if (m.id === 'lashout' && Object.values(att.boosts).some((b) => b.n < 0)) power *= 2;
   if (m.id === 'beatup') power = 50;
   if (m.id === 'fling') power = 80;
@@ -1063,7 +1107,7 @@ export function damageMods(game, att, def, cast) {
     eff: scrappy || typeless ? eff : undefined,
     offFrom: m.id === 'foulplay' ? 'def' : null, // Foul Play uses the target's Attack
     // Seismic Toss: damage equal to the user's level. Ruination: 1/8 of the target's current HP.
-    fixed: m.id === 'seismictoss' ? LEVEL : m.id === 'ruination' ? Math.max(1, Math.floor(def.hp / 8)) : m.id === 'comeuppance' ? Math.max(1, Math.round((att.lastHurtDmg || 0) * 1.5)) : 0,
+    fixed: m.id === 'seismictoss' || m.id === 'nightshade' ? LEVEL : m.id === 'ruination' || m.id === 'superfang' ? Math.max(1, Math.floor(def.hp / 8)) : m.id === 'comeuppance' ? Math.max(1, Math.round((att.lastHurtDmg || 0) * 1.5)) : 0,
     noCrit: defAb(att, def, 'shellarmor') || defAb(att, def, 'battlearmor'),
     critMul: ab(att, 'sniper') ? 2.25 : 1.5,
     noKnock: ab(def, 'stalwart'),
@@ -1083,7 +1127,10 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
 
   if (dmg > 0 && def.stance) stanceAnswer(game, def, att, m, dmg);
   if (dmg > 0) {
-    if (m.drain && att.alive) {
+    if (m.drain && att.alive && ab(def, 'liquidooze')) {
+      ability(game, def);
+      game.recoil(att, Math.max(1, Math.round(dmg * m.drain)), 'ooze', false);
+    } else if (m.drain && att.alive) {
       const h = att.heal(Math.max(1, Math.round(dmg * m.drain)));
       if (h > 0) game.addEffect(new FloatText(`+${Math.round(h)}`, att.x, att.y - 24, '#78f878'));
     }
@@ -1149,6 +1196,14 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
     if (m.flags?.includes('contact') && ab(def, 'wanderingspirit') && att.alive && def.alive && !UNSUPPRESSED.includes(att.ability)) {
       ability(game, def);
       [att.ability, def.ability] = [def.ability, att.ability];
+    }
+    if (ab(def, 'rattled') && ['Bug', 'Ghost', 'Dark'].includes(moveType(att, m)) && def.alive) {
+      ability(game, def);
+      boost(game, def, { spe: 1 }, def);
+    }
+    if (m.id === 'octazooka' && def.alive) {
+      def.inkT = 4;
+      say(game, 'inked', { who: game.who(def) });
     }
     if (ab(def, 'stamina') && dmg > 0 && def.alive) {
       ability(game, def);
@@ -1265,7 +1320,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       if (m.status === 'par' && effectiveness('Electric', def.types) === 0) ok = false;
       else if (m.flags?.includes('powder') && def.types.includes('Grass')) ok = false; // Spore: Grass types are immune
       else ok = inflict(game, def, m.status, att);
-    } else if (m.volatile === 'confusion') ok = confuse(game, def);
+    } else if (m.volatile === 'confusion' && m.id !== 'swagger' && m.id !== 'flatter') ok = confuse(game, def);
     else if (m.volatile === 'leechseed') ok = seed(game, def, att);
     else if (m.volatile === 'taunt') {
       ok = !(def.tauntT > 0) && !ab(def, 'oblivious');
@@ -1328,6 +1383,16 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
         [att.ability, def.ability] = [def.ability, att.ability];
         say(game, 'skillSwapped', { who: game.who(att) });
       }
+    } else if (m.id === 'spite') {
+      ok = !!def.lastMove && def.cd[def.lastMove] !== undefined;
+      if (ok) {
+        def.cd[def.lastMove] = DB.moves[def.lastMove].cooldown * 1.5;
+        say(game, 'spited', { who: game.who(def), move: DB.moves[def.lastMove].name });
+      }
+    } else if (m.id === 'swagger' || m.id === 'flatter') {
+      ok = true;
+      boost(game, def, m.id === 'swagger' ? { atk: 2 } : { spa: 1 }, att);
+      confuse(game, def);
     } else if (m.id === 'sketch') {
       // Sketch: copies the foe's last skill for good.
       const id2 = def.lastMove;
@@ -1367,6 +1432,19 @@ export function onMoveUsed(game, c, id) {
   if (id === 'mortalspin') game.clearHazards?.(c);
   if (id === 'aurawheel' && ab(c, 'hungerswitch')) c.hangry = !c.hangry; // Hunger Switch
   if (id === 'doubleshock') c.lostElectric = true;
+  // Fury Cutter / Echoed Voice: using it again within 3 s builds a streak.
+  if (id === 'furycutter' || id === 'echoedvoice') {
+    const now = game.fightTime || 0;
+    c.streak = c.streak?.id === id && now - c.streak.at < 3 ? { id, n: c.streak.n + 1, at: now } : { id, n: 1, at: now };
+  }
+  if (id === 'spitup' || id === 'swallow') {
+    // The stockpile is used up (its defenses go back down).
+    c.spitStock = c.stock || 0;
+    game.after(0.6, () => {
+      if (c.stock) boost(game, c, { def: -c.stock, spd: -c.stock }, c);
+      c.stock = 0;
+    }, null);
+  }
   if (id === 'burnup') c.lostFire = true;
   if (id === 'steelroller' && game.terrain) {
     say(game, terrainEndKey(game.terrain.id));
@@ -1492,6 +1570,45 @@ export function selfMove(game, c, cast) {
     }
     return boost(game, c, { spe: -1, atk: 1, def: 1 }, c);
   }
+  if (m.id === 'stockpile') {
+    if ((c.stock || 0) >= 3) return float(game, c, t('failed'), '#c8c8c8');
+    c.stock = (c.stock || 0) + 1;
+    say(game, 'stockpiled', { who: game.who(c), n: c.stock });
+    return boost(game, c, { def: 1, spd: 1 }, c);
+  }
+  if (m.id === 'swallow') {
+    const k = [0, 0.25, 0.5, 1][c.spitStock || 0];
+    return healText(game, c, c.heal(c.maxHp * k));
+  }
+  if (m.id === 'batonpass') {
+    c.passBoosts = JSON.parse(JSON.stringify(c.boosts));
+    return say(game, 'batonPass', { who: game.who(c) });
+  }
+  if (m.id === 'mirrormove' || m.id === 'copycat') {
+    // Copies the skill the foe just used.
+    const id2 = foe?.lastMove;
+    if (!id2 || !MOVEFX.moves[id2] || ['mirrormove', 'copycat', 'transform', 'sketch'].includes(id2)) return float(game, c, t('failed'), '#c8c8c8');
+    game.after(0.18, () => c.alive && !c.cast && foe.alive && game.forceCast?.(c, foe, id2), null);
+    return;
+  }
+  if (m.id === 'conversion') {
+    c.colorType = DB.moves[c.moves[0]].type;
+    return say(game, 'converted', { who: game.who(c), type: c.colorType });
+  }
+  if (m.id === 'endure') {
+    c.endureT = 0.8;
+    return say(game, 'protectLog', { who: game.who(c) });
+  }
+  if (m.id === 'healpulse') {
+    const mate = allies(game, c).sort((a, b) => a.hp / a.maxHp - b.hp / b.maxHp)[0];
+    if (!mate) return float(game, c, t('failed'), '#c8c8c8');
+    return healText(game, mate, mate.heal(mate.maxHp * 0.5));
+  }
+  const stb = MOVEFX.moves[m.id]?.stance;
+  if (stb?.bide) {
+    c.stance = { id: m.id, cat: 'any', t: stb.time || 1.6, cast, bide: true, stored: 0 };
+    return say(game, 'bideLog', { who: game.who(c) });
+  }
   if (m.id === 'coaching') {
     const mates = allies(game, c);
     if (!mates.length) return float(game, c, t('failed'), '#c8c8c8');
@@ -1597,7 +1714,7 @@ export function selfMove(game, c, cast) {
   }
   // Counter / Mirror Coat / Shell Trap: a stance that answers the next hit.
   const st = MOVEFX.moves[m.id]?.stance;
-  if (st) {
+  if (st && !st.bide) {
     c.stance = { id: m.id, cat: st.cat, t: st.time || 1, cast };
     if (st.fx) game.addEffect(new Effect(st.fx, c.x, c.y - 6, { follow: c, oy: -6, loop: true, life: st.time || 1, layer: 'over', alpha: 0.75 }));
     return say(game, 'stanceLog', { who: game.who(c) });

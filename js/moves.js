@@ -63,7 +63,9 @@ export function startCast(game, c, t, id) {
 
 /** Every move auto-targets the opponent (falls back to the last direction if it fainted). */
 export function aimOf(c, t, cast) {
-  return t.alive ? c.angleTo(t) : cast.faceAngle;
+  // Octazooka's ink throws its aim off.
+  const ink = c.inkT > 0 ? (Math.random() - 0.5) * 0.9 : 0;
+  return (t.alive ? c.angleTo(t) : cast.faceAngle) + ink;
 }
 
 export function cancelCast(game, c) {
@@ -157,7 +159,7 @@ export class Projectile {
     for (const tg of this.idle ? [] : this.game.enemiesOf(this.owner)) {
       if (pierce && (this.multi ? this.hitSet?.has(tg) : this.pierced?.has(tg))) continue;
       if (Math.hypot(tg.x - this.x, tg.y - this.y) >= pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) continue;
-      if (this.game.dodges(this.owner, tg)) {
+      if (this.game.dodges(this.owner, tg) && !(this.def.extra?.unblockable && !tg.hidden)) {
         if (!this.dodged) {
           this.dodged = true;
           this.game.dodgedText(tg);

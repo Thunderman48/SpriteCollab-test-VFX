@@ -11010,6 +11010,949 @@
         "desc": "Hurls a giant chunk of a glacier down on the target. 30% flinch.",
         "descKo": "거대한 빙산 조각을 상대에게 내던진다. 30% 풀죽음."
       }
+    },
+    "hypnosis": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Wave_Circle_Purple.Dir5",
+        "fps": 20,
+        "scale": 0.9,
+        "loop": true,
+        "speed": 170,
+        "radius": 14,
+        "life": 1.3,
+        "wobble": 12,
+        "homing": 1.4
+      },
+      "hit": {
+        "fx": "Sleep_Z.None",
+        "fps": 16,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Hypnotic waves drift at the target: sure sleep.",
+        "descKo": "최면 전파를 보낸다: 반드시 잠든다."
+      }
+    },
+    "stunspore": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Spores_RSE_Yellow.None",
+        "fps": 20,
+        "scale": 1.6,
+        "loop": true,
+        "speed": 160,
+        "radius": 14,
+        "life": 1.3,
+        "wobble": 12,
+        "homing": 1.4
+      },
+      "hit": {
+        "fx": "Spores_RSE_Yellow.None",
+        "fps": 16,
+        "scale": 2.0
+      },
+      "extra": {
+        "desc": "A cloud of numbing spores: sure paralysis. Grass types are immune.",
+        "descKo": "저리게 하는 포자: 반드시 마비. 풀 타입에게는 통하지 않는다."
+      }
+    },
+    "spite": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Spite.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.3
+      },
+      "hit": {
+        "fx": "Spite.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Spite: the skill the target just used goes back on a long cooldown.",
+        "descKo": "원한: 상대가 방금 쓴 기술의 재사용 시간이 길어진다."
+      }
+    },
+    "swagger": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Swagger.Flip",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.3
+      },
+      "hit": {
+        "fx": "Taunt_Veins.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Riles up the target: Attack +2, but it becomes confused.",
+        "descKo": "상대를 우쭐하게 한다: 공격 +2, 대신 혼란에 빠진다."
+      }
+    },
+    "charm": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Charm_Heart.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.3
+      },
+      "hit": {
+        "fx": "Charm.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "A charming look: the target's Attack −2.",
+        "descKo": "애교: 상대의 공격 −2."
+      }
+    },
+    "screech": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Growl.Dir8",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 360,
+        "radius": 16,
+        "life": 1.0,
+        "dirRows": true
+      },
+      "hit": {
+        "fx": "Metal_Sound_Wave.Dir5",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Sound: an ear-splitting screech, the target's Defense −2.",
+        "descKo": "소리 기술: 귀를 찢는 소리로 상대의 방어 −2."
+      }
+    },
+    "scaryface": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Scary_Face.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 360,
+        "radius": 14,
+        "life": 1.3
+      },
+      "hit": {
+        "fx": "Scary_Face.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "A scary face: the target's Speed −2.",
+        "descKo": "무서운 얼굴: 상대의 스피드 −2."
+      }
+    },
+    "featherdance": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Feather.Flip",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 200,
+        "radius": 14,
+        "life": 1.3,
+        "wobble": 10
+      },
+      "hit": {
+        "fx": "Feather.Flip",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Showers the target in feathers: Attack −2.",
+        "descKo": "깃털을 뿌린다: 상대의 공격 −2."
+      }
+    },
+    "stockpile": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Swallow_Balls.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Stockpiles power (up to 3): Defense and Sp. Def +1 each time. Spit Up and Swallow use it.",
+        "descKo": "힘을 비축한다 (최대 3번): 방어·특수방어 +1. 토해내기·꿀꺽이 이것을 쓴다."
+      }
+    },
+    "swallow": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Swallow_Blue.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Swallows the stockpile: heals 25% / 50% / 100% HP for 1 / 2 / 3 stocks.",
+        "descKo": "비축한 힘을 삼킨다: 1/2/3번이면 HP 25%/50%/100% 회복."
+      }
+    },
+    "batonpass": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.3,
+      "over": {
+        "fx": "Materialize.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "In Trio: switches out and passes its stat changes to the Pokémon coming in.",
+        "descKo": "트리오: 교체하면서 능력 변화를 다음 포켓몬에게 넘겨준다."
+      }
+    },
+    "mirrormove": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.25,
+      "over": {
+        "fx": "Copycat_Front.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Copies the skill the foe just used and uses it right back.",
+        "descKo": "상대가 방금 쓴 기술을 그대로 따라 한다."
+      }
+    },
+    "copycat": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.25,
+      "over": {
+        "fx": "Copycat_Front.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Copycat_Back.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Copies the skill the foe just used and uses it right back.",
+        "descKo": "상대가 방금 쓴 기술을 그대로 따라 한다."
+      }
+    },
+    "conversion": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Skill_Swap_RSE.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Changes its type to the type of its first skill.",
+        "descKo": "자신의 타입을 첫 번째 기술의 타입으로 바꾼다."
+      }
+    },
+    "endure": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.15,
+      "over": {
+        "fx": "Protect_Yellow.None",
+        "fps": 24,
+        "scale": 1.25,
+        "alpha": 0.4
+      },
+      "extra": {
+        "desc": "For 0.8 s nothing can knock it out: it hangs on with 1 HP.",
+        "descKo": "0.8초 동안 어떤 공격에도 HP 1로 버틴다."
+      }
+    },
+    "healpulse": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Healing_Wish_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "In 2vs2: a healing pulse restores 50% of its partner's HP.",
+        "descKo": "2vs2: 치유의 파동으로 동료의 HP 50% 회복."
+      }
+    },
+    "morningsun": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.5,
+      "over": {
+        "fx": "Sun.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "under": {
+        "fx": "Synthesis_Sparkle.None",
+        "fps": 20,
+        "scale": 1.4
+      }
+    },
+    "bide": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.1,
+      "over": {
+        "fx": "Rage.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "stance": {
+        "bide": true,
+        "time": 1.6,
+        "radius": 100
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "Bides its time for 1.6 s, soaking up hits, then unleashes double the damage it took on everyone around.",
+        "descKo": "1.6초 동안 참으며 공격을 받아낸 뒤, 받은 데미지의 2배를 주위에 터뜨린다."
+      }
+    },
+    "nightshade": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 300,
+      "projectile": {
+        "fx": "Shadow_Ball.None",
+        "fps": 20,
+        "scale": 0.9,
+        "loop": true,
+        "speed": 260,
+        "radius": 13,
+        "life": 1.4,
+        "homing": 2,
+        "trail": {
+          "fx": "Smoke_Black.None",
+          "fps": 24,
+          "scale": 0.6,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Shadow_Force_Hit_Dark.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "A shadowy mirage: always 50 damage (its level).",
+        "descKo": "그림자 환영: 항상 50 데미지 (레벨)."
+      }
+    },
+    "superfang": {
+      "behavior": "melee",
+      "style": "clamp",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 50,
+      "hold": 0.35,
+      "hit": {
+        "fx": "Bite.Dir8",
+        "fps": 20,
+        "scale": 1.4,
+        "dirRows": true
+      },
+      "hit2": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "Sharp fangs: takes 1/8 of the target's current HP, whatever its stats.",
+        "descKo": "날카로운 앞니: 상대의 능력과 상관없이 현재 HP의 1/8을 빼앗는다."
+      }
+    },
+    "dreameater": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 300,
+      "projectile": {
+        "fx": "Light_Ball_Purple.None",
+        "fps": 24,
+        "scale": 1.0,
+        "loop": true,
+        "speed": 240,
+        "radius": 14,
+        "life": 1.5,
+        "frames": 5,
+        "homing": 2.4,
+        "trail": {
+          "fx": "Sleep_Z.None",
+          "fps": 16,
+          "scale": 0.6,
+          "every": 0.08
+        }
+      },
+      "hit": {
+        "fx": "Absorb.None",
+        "fps": 24,
+        "scale": 1.8
+      },
+      "extra": {
+        "desc": "Eats the dreams of a sleeping target and heals half the damage. Only works on a sleeping target.",
+        "descKo": "잠든 상대의 꿈을 먹고 데미지의 절반만큼 회복한다. 잠든 상대에게만 통한다."
+      }
+    },
+    "octazooka": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Octazooka.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 300,
+        "radius": 14,
+        "life": 1.2,
+        "trail": {
+          "fx": "Smoke_Black.None",
+          "fps": 24,
+          "scale": 0.5,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Mud_Bomb_Hit.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "Sprays ink in the target's face: for 4 s its attacks aim badly.",
+        "descKo": "얼굴에 먹물을 뿌린다: 4초 동안 상대의 조준이 흐트러진다."
+      }
+    },
+    "payday": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Pay_Day.Dir1",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 330,
+        "radius": 11,
+        "life": 1.0,
+        "count": 3,
+        "spread": 0.2,
+        "spin": 14
+      },
+      "hit": {
+        "fx": "Flash_Cannon_Sparkle.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Flings a fan of coins at the target.",
+        "descKo": "동전을 부채꼴로 던진다."
+      }
+    },
+    "bubblebeam": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 240,
+      "projectile": {
+        "fx": "Bubbles_Blue.None",
+        "fps": 24,
+        "scale": 1.2,
+        "loop": true,
+        "speed": 300,
+        "radius": 12,
+        "life": 0.8,
+        "stream": 6,
+        "streamGap": 0.06,
+        "spread": 0.18
+      },
+      "hit": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "extra": {
+        "desc": "A stream of bubbles. 10% Speed −1.",
+        "descKo": "거품을 연속으로 쏜다. 10% 스피드 −1."
+      }
+    },
+    "mudshot": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Mud_Shot_Ball.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 300,
+        "radius": 13,
+        "life": 1.2,
+        "trail": {
+          "fx": "Mud_Shot_Ball_Small.None",
+          "fps": 20,
+          "scale": 0.8,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Mud_Bomb_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "A ball of mud: Speed −1.",
+        "descKo": "진흙 덩어리: 스피드 −1."
+      }
+    },
+    "magicalleaf": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 280,
+      "projectile": {
+        "fx": "Magical_Leaf.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 280,
+        "radius": 12,
+        "life": 1.6,
+        "count": 3,
+        "spread": 0.35,
+        "homing": 4
+      },
+      "hit": {
+        "fx": "Leaf_Storm_Hit.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "unblockable": true,
+        "desc": "Three magical leaves that home in — they can't be dodged.",
+        "descKo": "따라가는 마법 잎 3장 — 회피할 수 없다."
+      }
+    },
+    "eggbomb": {
+      "behavior": "projectile",
+      "style": "lob",
+      "anim": "Shoot",
+      "range": 290,
+      "projectile": {
+        "fx": "Egg_Bomb_Egg.None",
+        "fps": 20,
+        "scale": 1.5,
+        "loop": true,
+        "speed": 300,
+        "radius": 13,
+        "life": 1.6,
+        "blast": 36,
+        "height": 90
+      },
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Egg_Sea_Hatch.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 5,
+      "extra": {
+        "desc": "Lobs a big egg that explodes where it lands.",
+        "descKo": "큰 알을 던져 떨어진 곳에서 폭발시킨다."
+      }
+    },
+    "spitup": {
+      "behavior": "beam",
+      "anim": "SpAttack",
+      "range": 300,
+      "beam": {
+        "set": "Beam/Beam",
+        "length": 300,
+        "width": 1.3,
+        "time": 0.45,
+        "fps": 20,
+        "growTime": 0.06
+      },
+      "hit": {
+        "fx": "Swallow_Red.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "shake": 5,
+      "extra": {
+        "desc": "Spits up its stockpile: 100 power per stock.",
+        "descKo": "비축한 힘을 토해낸다: 비축 1번마다 위력 100."
+      }
+    },
+    "petalblizzard": {
+      "behavior": "burst",
+      "anim": "SpAttack",
+      "range": 115,
+      "radius": 120,
+      "delay": 0.35,
+      "under": {
+        "fx": "Petal_Dance_Back.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "ring": {
+        "fx": "Petal_Dance_Flower_Pink.None",
+        "fps": 20,
+        "scale": 1.6,
+        "n": 12,
+        "r": 85
+      },
+      "over": {
+        "fx": "Petal_Dance_Front.None",
+        "fps": 20,
+        "scale": 1.8
+      },
+      "hit": {
+        "fx": "Leaf_Storm_Hit.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "shake": 2,
+      "extra": {
+        "desc": "A violent blizzard of petals all around.",
+        "descKo": "주위에 꽃잎의 눈보라를 일으킨다."
+      }
+    },
+    "echoedvoice": {
+      "behavior": "burst",
+      "anim": "SpAttack",
+      "range": 110,
+      "radius": 115,
+      "delay": 0.3,
+      "under": {
+        "fx": "Circle_Uproar_Yellow_Out.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "ring": {
+        "fx": "Music_Notes.None",
+        "fps": 16,
+        "scale": 1.2,
+        "n": 8,
+        "r": 75
+      },
+      "hit": {
+        "fx": "Chatter_Waves.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "shake": 2,
+      "extra": {
+        "desc": "Sound: an echoing voice that grows +40 power each time it's used again within 3 s (up to 200).",
+        "descKo": "소리 기술: 3초 안에 다시 쓰면 위력이 40씩 커진다 (최대 200)."
+      }
+    },
+    "furyswipes": {
+      "behavior": "melee",
+      "style": "combo",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 44,
+      "randomHits": true,
+      "hitGap": 0.08,
+      "hit": {
+        "fx": "Fury_Swipes.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Scratches 2-5 times in a row (Skill Link: always 5).",
+        "descKo": "2~5번 연속으로 할퀸다 (스킬링크: 항상 5번)."
+      }
+    },
+    "furycutter": {
+      "behavior": "melee",
+      "style": "sweep",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 50,
+      "reach": 48,
+      "arc": 1.2,
+      "arcFx": {
+        "fx": "Fury_Cutter.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Slash_RSE.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "extra": {
+        "desc": "Its power doubles each time it's used again within 3 s (40 → 80 → 160).",
+        "descKo": "3초 안에 다시 쓰면 위력이 2배씩 커진다 (40 → 80 → 160)."
+      }
+    },
+    "dynamicpunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 80,
+      "lunge": 56,
+      "hit": {
+        "fx": "Explosion.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "hit2": {
+        "fx": "Print_Fist.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "shake": 7,
+      "extra": {
+        "kbMul": 1.8,
+        "desc": "An explosive punch: the target is always confused.",
+        "descKo": "폭발하는 주먹: 반드시 혼란에 빠뜨린다."
+      }
+    },
+    "shadowpunch": {
+      "behavior": "melee",
+      "anim": "Attack",
+      "range": 96,
+      "lunge": 30,
+      "hit": {
+        "fx": "Shadow_Claw_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Print_Fist.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "extra": {
+        "unblockable": true,
+        "desc": "A punch from the shadows that reaches far and can't be dodged.",
+        "descKo": "그림자에서 뻗어 나오는 주먹. 멀리 닿고 회피할 수 없다."
+      }
+    },
+    "poisonfang": {
+      "behavior": "melee",
+      "style": "clamp",
+      "anim": "Attack",
+      "range": 72,
+      "lunge": 48,
+      "hold": 0.4,
+      "hit": {
+        "fx": "Fangs_Purple.Dir5",
+        "fps": 24,
+        "scale": 1.4,
+        "dirRows": true
+      },
+      "hit2": {
+        "fx": "Cross_Poison_Bubbles.None",
+        "fps": 20,
+        "scale": 1.0
+      }
+    },
+    "reversal": {
+      "behavior": "melee",
+      "style": "combo",
+      "anim": "Attack",
+      "range": 76,
+      "lunge": 50,
+      "hits": 3,
+      "hitGap": 0.09,
+      "hit": {
+        "fx": "Revenge.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "extra": {
+        "desc": "The lower its HP, the stronger it hits (up to 200 power).",
+        "descKo": "HP가 적을수록 강하다 (최대 위력 200)."
+      }
+    },
+    "flamewheel": {
+      "behavior": "dash",
+      "style": "roll",
+      "anim": "Walk",
+      "range": 220,
+      "dashSpeed": 400,
+      "dashTime": 0.6,
+      "rolls": 2,
+      "over": {
+        "fx": "Flame_Wheel.None",
+        "fps": 24,
+        "scale": 1.2,
+        "follow": true
+      },
+      "trail": {
+        "fx": "Ember.None",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "impact": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "ghostTint": "#f89040",
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Rolls in wrapped in fire, twice. 10% burn; thaws the user.",
+        "descKo": "불꽃을 두르고 두 번 굴러 부딪친다. 10% 화상."
+      }
+    },
+    "iceball": {
+      "behavior": "dash",
+      "style": "roll",
+      "anim": "Walk",
+      "range": 230,
+      "dashSpeed": 360,
+      "dashTime": 0.7,
+      "rolls": 4,
+      "trail": {
+        "fx": "Ice_Shard_Hit_Sparkle.None",
+        "fps": 30,
+        "scale": 0.9
+      },
+      "impact": {
+        "fx": "Ice_Shard_Hit.None",
+        "fps": 24,
+        "scale": 1.6
+      },
+      "ghostTint": "#c0e8f8",
+      "hit": {
+        "fx": "Hit_Neutral.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Curls into a ball of ice and rolls in up to 4 times, doubling each hit. A miss stops it.",
+        "descKo": "얼음 공이 되어 최대 4번 굴러 부딪친다. 부딪칠 때마다 위력 2배."
+      }
+    },
+    "skyattack": {
+      "behavior": "dash",
+      "style": "dive",
+      "anim": "Walk",
+      "range": 260,
+      "riseAnim": "Hop",
+      "windup": 0.6,
+      "charge": {
+        "fx": "Sky_Attack_Charge.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "upTime": 0.25,
+      "hang": 0.3,
+      "downTime": 0.13,
+      "radius": 40,
+      "over": {
+        "fx": "Sky_Attack.Dir2",
+        "fps": 20,
+        "scale": 1.4,
+        "follow": true
+      },
+      "land": {
+        "fx": "Brave_Bird_Hit.None",
+        "fps": 24,
+        "scale": 2.0
+      },
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "ghostTint": "#f8f0a0",
+      "shake": 8,
+      "extra": {
+        "desc": "Glows with power for 0.6 s, then soars and dives onto the marked spot. 30% flinch.",
+        "descKo": "0.6초 동안 빛을 모은 뒤 날아올라 표시된 곳으로 내리꽂힌다. 30% 풀죽음."
+      }
+    },
+    "flatter": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Flatter_Confetti.None",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.3
+      },
+      "hit": {
+        "fx": "Flatter_Spotlight.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Flatters the target: Sp. Atk +1, but it becomes confused.",
+        "descKo": "상대를 부추긴다: 특수공격 +1, 대신 혼란에 빠진다."
+      }
     }
   },
   "status": {
@@ -11182,6 +12125,11 @@
       "fx": "Ingrain.None",
       "fps": 20,
       "scale": 1.2
+    },
+    "ink": {
+      "fx": "Smoke_Black.None",
+      "fps": 24,
+      "scale": 0.6
     }
   }
 }

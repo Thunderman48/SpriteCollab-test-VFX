@@ -1159,5 +1159,35 @@
     "ko": "독폭주",
     "desc": "While poisoned, Attack ×1.5.",
     "descKo": "독 상태일 때 공격 1.5배."
+  },
+  "liquidooze": {
+    "ko": "해감액",
+    "desc": "Draining moves against it hurt the attacker instead of healing it.",
+    "descKo": "흡수 기술로 공격한 상대는 회복 대신 데미지를 받는다."
+  },
+  "tangledfeet": {
+    "ko": "갈지자걸음",
+    "desc": "While confused, 30% of hits miss it.",
+    "descKo": "혼란 상태일 때 공격의 30%를 피한다."
+  },
+  "bigpecks": {
+    "ko": "부풀린가슴",
+    "desc": "Its Defense can't be lowered by foes.",
+    "descKo": "상대가 방어를 떨어뜨릴 수 없다."
+  },
+  "rattled": {
+    "ko": "주눅",
+    "desc": "Hit by a Bug, Ghost or Dark move: Speed +1.",
+    "descKo": "벌레·고스트·악 기술을 받으면 스피드 +1."
+  },
+  "magmaarmor": {
+    "ko": "마그마의무장",
+    "desc": "Can't be frozen.",
+    "descKo": "얼음 상태가 되지 않는다."
+  },
+  "stormdrain": {
+    "ko": "마중물",
+    "desc": "Water moves don't hurt it: Sp. Atk +1 instead.",
+    "descKo": "물 기술을 받으면 데미지 대신 특수공격 +1."
   }
 }

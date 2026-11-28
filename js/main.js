@@ -130,6 +130,11 @@ class Game {
   sendOut(slot, next, at) {
     const p = this.parties[slot];
     const prev = p.members[p.active];
+    // Baton Pass: the stat changes go to the one coming in.
+    if (prev?.passBoosts && prev !== next) {
+      next.boosts = prev.passBoosts;
+      prev.passBoosts = null;
+    }
     p.active = p.members.indexOf(next);
     next.x = at.x;
     next.y = at.y;
@@ -331,6 +336,21 @@ class Game {
     p.switchCd = Math.max(p.switchCd, 1);
     this.ui.log(t('draggedOut', { who: this.who(next) }));
     this.sendOut(f.slot, next, { x: f.x, y: f.y });
+  }
+  /** Bide: releases double the damage it stored, all around it. */
+  bideRelease(c, st) {
+    const d = MOVEFX.moves[st.id];
+    this.ui.log(t('bideUnleashed', { who: this.who(c) }));
+    this.addEffect(new Effect(d.hit, c.x, c.y - 6, { scale: 1.6 }));
+    this.shake(8, 0.3);
+    this.sfx('boom');
+    if (!st.stored) return;
+    for (const e of this.enemiesOf(c)) {
+      if (c.distTo(e) > (d.stance.radius || 100) + e.radius) continue;
+      const dmg = Math.round(st.stored * 2);
+      e.takeHit(dmg, c.angleTo(e), 1.6);
+      this.addEffect(new FloatText(String(dmg), e.x, e.y - 20, '#f8f800', true));
+    }
   }
   /** Shell Trap: the trap goes off, blasting everyone around. */
   stanceBurst(c, st) {

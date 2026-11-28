@@ -7319,5 +7319,698 @@
         "volatile": "flinch"
       }
     ]
+  },
+  "hypnosis": {
+    "id": "hypnosis",
+    "name": "Hypnosis",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 60,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 7.5,
+    "shortDesc": "Causes the target to fall asleep.",
+    "status": "slp"
+  },
+  "stunspore": {
+    "id": "stunspore",
+    "name": "Stun Spore",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 75,
+    "alwaysHits": false,
+    "pp": 30,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 5,
+    "shortDesc": "Paralyzes the target.",
+    "status": "par",
+    "flags": [
+      "powder"
+    ]
+  },
+  "spite": {
+    "id": "spite",
+    "name": "Spite",
+    "type": "Ghost",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "Lowers the PP of the target's last move by 4."
+  },
+  "swagger": {
+    "id": "swagger",
+    "name": "Swagger",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Raises the target's Attack by 2 and confuses it.",
+    "boosts": {
+      "atk": 2
+    },
+    "volatile": "confusion"
+  },
+  "charm": {
+    "id": "charm",
+    "name": "Charm",
+    "type": "Fairy",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 7.5,
+    "shortDesc": "Lowers the target's Attack by 2.",
+    "boosts": {
+      "atk": -2
+    }
+  },
+  "screech": {
+    "id": "screech",
+    "name": "Screech",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 40,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3.75,
+    "shortDesc": "Lowers the target's Defense by 2.",
+    "boosts": {
+      "def": -2
+    },
+    "flags": [
+      "sound"
+    ]
+  },
+  "scaryface": {
+    "id": "scaryface",
+    "name": "Scary Face",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "Lowers the target's Speed by 2.",
+    "boosts": {
+      "spe": -2
+    }
+  },
+  "featherdance": {
+    "id": "featherdance",
+    "name": "Feather Dance",
+    "type": "Flying",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Lowers the target's Attack by 2.",
+    "boosts": {
+      "atk": -2
+    }
+  },
+  "stockpile": {
+    "id": "stockpile",
+    "name": "Stockpile",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises user's Defense, Sp. Def by 1. Max 3 uses.",
+    "volatile": "stockpile"
+  },
+  "swallow": {
+    "id": "swallow",
+    "name": "Swallow",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Heals the user based on uses of Stockpile."
+  },
+  "batonpass": {
+    "id": "batonpass",
+    "name": "Baton Pass",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 40,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 3.75,
+    "shortDesc": "User switches, passing stat changes and more.",
+    "selfSwitch": true
+  },
+  "mirrormove": {
+    "id": "mirrormove",
+    "name": "Mirror Move",
+    "type": "Flying",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 7.5,
+    "shortDesc": "User uses the target's last used move against it."
+  },
+  "copycat": {
+    "id": "copycat",
+    "name": "Copycat",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Uses the last move used in the battle."
+  },
+  "conversion": {
+    "id": "conversion",
+    "name": "Conversion",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 30,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 5,
+    "shortDesc": "Changes user's type to match its first move."
+  },
+  "endure": {
+    "id": "endure",
+    "name": "Endure",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 4,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "User survives attacks this turn with at least 1 HP.",
+    "volatile": "endure"
+  },
+  "healpulse": {
+    "id": "healpulse",
+    "name": "Heal Pulse",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 15,
+    "shortDesc": "Heals the target by 50% of its max HP.",
+    "flags": [
+      "pulse"
+    ]
+  },
+  "morningsun": {
+    "id": "morningsun",
+    "name": "Morning Sun",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by a weather-dependent amount."
+  },
+  "bide": {
+    "id": "bide",
+    "name": "Bide",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 1,
+    "target": "self",
+    "cooldown": 4.5,
+    "shortDesc": "Waits 2 turns; deals double the damage taken.",
+    "volatile": "bide",
+    "flags": [
+      "contact"
+    ]
+  },
+  "nightshade": {
+    "id": "nightshade",
+    "name": "Night Shade",
+    "type": "Ghost",
+    "category": "Special",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Does damage equal to the user's level."
+  },
+  "superfang": {
+    "id": "superfang",
+    "name": "Super Fang",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Does damage equal to 1/2 target's current HP.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "dreameater": {
+    "id": "dreameater",
+    "name": "Dream Eater",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "User gains 1/2 HP inflicted. Sleeping target only.",
+    "drain": 0.5
+  },
+  "octazooka": {
+    "id": "octazooka",
+    "name": "Octazooka",
+    "type": "Water",
+    "category": "Special",
+    "power": 65,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "50% chance to lower the target's accuracy by 1.",
+    "secondary": [
+      {
+        "chance": 50,
+        "boosts": {
+          "accuracy": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "payday": {
+    "id": "payday",
+    "name": "Pay Day",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Scatters coins."
+  },
+  "bubblebeam": {
+    "id": "bubblebeam",
+    "name": "Bubble Beam",
+    "type": "Water",
+    "category": "Special",
+    "power": 65,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "10% chance to lower the target's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "mudshot": {
+    "id": "mudshot",
+    "name": "Mud Shot",
+    "type": "Ground",
+    "category": "Special",
+    "power": 55,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "100% chance to lower the target's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "magicalleaf": {
+    "id": "magicalleaf",
+    "name": "Magical Leaf",
+    "type": "Grass",
+    "category": "Special",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "This move does not check accuracy."
+  },
+  "eggbomb": {
+    "id": "eggbomb",
+    "name": "Egg Bomb",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 75,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "bullet"
+    ]
+  },
+  "spitup": {
+    "id": "spitup",
+    "name": "Spit Up",
+    "type": "Normal",
+    "category": "Special",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "More power with more uses of Stockpile."
+  },
+  "petalblizzard": {
+    "id": "petalblizzard",
+    "name": "Petal Blizzard",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 3,
+    "shortDesc": "No additional effect. Hits adjacent Pokemon."
+  },
+  "echoedvoice": {
+    "id": "echoedvoice",
+    "name": "Echoed Voice",
+    "type": "Normal",
+    "category": "Special",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Power increases when used on consecutive turns.",
+    "flags": [
+      "sound"
+    ]
+  },
+  "furyswipes": {
+    "id": "furyswipes",
+    "name": "Fury Swipes",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 18,
+    "accuracy": 80,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Hits 2-5 times in one turn.",
+    "multihit": [
+      2,
+      5
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "furycutter": {
+    "id": "furycutter",
+    "name": "Fury Cutter",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Power doubles with each hit, up to 160.",
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "dynamicpunch": {
+    "id": "dynamicpunch",
+    "name": "Dynamic Punch",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 50,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "100% chance to confuse the target.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "confusion"
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "shadowpunch": {
+    "id": "shadowpunch",
+    "name": "Shadow Punch",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "This move does not check accuracy.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "poisonfang": {
+    "id": "poisonfang",
+    "name": "Poison Fang",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "50% chance to badly poison the target.",
+    "secondary": [
+      {
+        "chance": 50,
+        "status": "tox"
+      }
+    ],
+    "flags": [
+      "contact",
+      "bite"
+    ]
+  },
+  "reversal": {
+    "id": "reversal",
+    "name": "Reversal",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "More power the less HP the user has left.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "flamewheel": {
+    "id": "flamewheel",
+    "name": "Flame Wheel",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 25,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.8,
+    "shortDesc": "10% chance to burn the target. Thaws user.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "iceball": {
+    "id": "iceball",
+    "name": "Ice Ball",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 30,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Power doubles with each hit. Repeats for 5 turns.",
+    "flags": [
+      "contact",
+      "bullet"
+    ]
+  },
+  "skyattack": {
+    "id": "skyattack",
+    "name": "Sky Attack",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 140,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 9,
+    "shortDesc": "Charges, then hits turn 2. 30% flinch. High crit.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ],
+    "critRatio": 2
+  },
+  "flatter": {
+    "id": "flatter",
+    "name": "Flatter",
+    "type": "Dark",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Raises the target's Sp. Atk by 1 and confuses it.",
+    "boosts": {
+      "spa": 1
+    },
+    "volatile": "confusion"
   }
 }
