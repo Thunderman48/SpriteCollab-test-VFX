@@ -52,10 +52,13 @@ function effectsOf(m) {
   if (m.critRatio > 1) e.critRatio = m.critRatio;
   if (m.willCrit) e.willCrit = true;
   if (m.ignoreDefensive) e.ignoreStages = true;
+  if (m.ignoreAbility) e.ignoreAbility = true; // Sunsteel Strike, Moongeist Beam
+  if (m.overrideOffensiveStat) e.offStat = m.overrideOffensiveStat; // Body Press uses Defense
+  if (m.overrideDefensiveStat) e.defStat = m.overrideDefensiveStat; // Psyshock hits Defense
   if (m.weather) e.weather = toId(m.weather);
   if (m.selfSwitch) e.selfSwitch = true;
   if (m.multihit) e.multihit = m.multihit;
-  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet', 'powder'].filter((f) => m.flags?.[f]);
+  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet', 'powder', 'cantusetwice'].filter((f) => m.flags?.[f]);
   if (flags.length) e.flags = flags;
   return e;
 }

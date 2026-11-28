@@ -16,7 +16,13 @@ export const STAT_KEYS = ['atk', 'def', 'spa', 'spd', 'spe', 'crit'];
 
 export const ab = (f, id) => !!f && f.ability === id;
 /** Mold Breaker / Turboblaze: the attacker ignores the target's ability. */
-const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze') || ab(att, 'teravolt');
+// The move landing the current hit (Sunsteel Strike / Moongeist Beam ignore the target's ability).
+let hitMove = null;
+export const setHitMove = (m) => {
+  hitMove = m;
+};
+const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze') || ab(att, 'teravolt') || !!hitMove?.ignoreAbility;
+const PROTECTS = ['protect', 'spikyshield', 'kingsshield'];
 /** The defender's ability, unless the attacker ignores it. */
 const defAb = (att, def, id) => !breaks(att) && ab(def, id);
 /** A move's type for this user (Pixilate turns Normal moves into Fairy moves). */
@@ -27,11 +33,16 @@ export function moveType(f, m) {
 }
 
 /** Priority (faster wind-up): the move's own priority, or Gale Wings on Flying moves at full HP. */
-export const hasPriority = (f, m) => m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp);
+export const hasPriority = (f, m) =>
+  m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp) || (ab(f, 'prankster') && m.category === 'Status');
 /** Grounded (not flying / Levitate): affected by terrain. */
 const grounded = (f) => !f.data.flying && !ab(f, 'levitate');
 /** Terrain (Grassy Surge): 'grassy' or null. */
 export const terrainNow = (game) => game.terrain?.id || null;
+function setTerrain(game, id) {
+  game.terrain = { id, t: WEATHER_TIME };
+  say(game, id === 'electric' ? 'terrainElectric' : 'terrainGrassy');
+}
 export const stageMul = (n) => (n >= 0 ? (2 + n) / 2 : 2 / (2 - n));
 const chance = (pct) => Math.random() * 100 < pct;
 const say = (game, key, vars) => game.ui?.log(t(key, vars));
@@ -42,7 +53,7 @@ const fxAt = (game, def, f, opts = {}) => def && game.addEffect(new Effect(def, 
 /** Active weather id ('raindance' | 'sunnyday' | 'sandstorm') or null (Air Lock cancels it). */
 export function weatherNow(game) {
   if (!game.weather) return null;
-  if (game.fighters.some((f) => f.alive && ab(f, 'airlock'))) return null;
+  if (game.fighters.some((f) => f.alive && (ab(f, 'airlock') || ab(f, 'cloudnine')))) return null;
   return game.weather.id;
 }
 
@@ -60,7 +71,7 @@ export const stageOf = (f, k) => f.boosts?.[k]?.n || 0;
  * Change stat stages: boosts = { atk: 2, spe: 1 }. source = the Pokémon causing it
  * (an enemy source is blocked by Clear Body).
  */
-export function boost(game, f, boosts, source = null) {
+export function boost(game, f, boosts, source = null, bounced = false) {
   if (!f.alive) return;
   const enemy = source && source.team !== f.team;
   let up = false;
@@ -68,8 +79,15 @@ export function boost(game, f, boosts, source = null) {
   for (let [k, raw] of Object.entries(boosts)) {
     if (!raw || !STAT_KEYS.includes(k)) continue;
     if (ab(f, 'contrary')) raw = -raw; // Contrary: reversed
-    if (raw < 0 && enemy && ab(f, 'clearbody')) {
+    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter'));
+    if (raw < 0 && enemy && guarded) {
       ability(game, f);
+      continue;
+    }
+    // Mirror Armor: the drop bounces back to the one who caused it.
+    if (raw < 0 && enemy && ab(f, 'mirrorarmor') && !bounced) {
+      ability(game, f);
+      boost(game, source, { [k]: raw }, f, true);
       continue;
     }
     const cur = f.boosts[k] || { n: 0, t: 0 };
@@ -89,6 +107,10 @@ export function boost(game, f, boosts, source = null) {
   if (down && enemy && ab(f, 'competitive')) {
     ability(game, f);
     boost(game, f, { spa: 2 }, f);
+  }
+  if (down && enemy && ab(f, 'defiant')) {
+    ability(game, f);
+    boost(game, f, { atk: 2 }, f);
   }
 }
 
@@ -123,6 +145,7 @@ export function statusBlock(game, f, id, source) {
   if ((id === 'psn' || id === 'tox') && (types.includes('Poison') || types.includes('Steel') || ab(f, 'immunity'))) return 'type';
   if (id === 'frz' && (types.includes('Ice') || weatherNow(game) === 'sunnyday')) return 'type';
   if (f.protectT > 0 && source && source !== f) return 'protect';
+  if (id === 'slp' && (ab(f, 'vitalspirit') || (terrainNow(game) === 'electric' && grounded(f)))) return 'type';
   return null;
 }
 
@@ -186,7 +209,7 @@ function hurt(game, f, frac, color = '#c878f8') {
 // ---------- per-frame ----------
 export function tickGame(game, dt) {
   if (game.terrain && (game.terrain.t -= dt) <= 0) {
-    say(game, 'terrainEnd');
+    say(game, game.terrain.id === 'electric' ? 'terrainEndElectric' : 'terrainEnd');
     game.terrain = null;
   }
   if (game.weather && (game.weather.t -= dt) <= 0) {
@@ -214,6 +237,7 @@ export function tickGame(game, dt) {
 export function weatherTint(game) {
   const w = weatherNow(game);
   if (!w && terrainNow(game) === 'grassy') return 'rgba(60,200,60,0.1)';
+  if (!w && terrainNow(game) === 'electric') return 'rgba(250,230,80,0.1)';
   return { raindance: 'rgba(40,70,140,0.18)', sunnyday: 'rgba(255,190,60,0.13)', sandstorm: 'rgba(170,130,60,0.2)', snowscape: 'rgba(220,235,255,0.2)' }[w] || null;
 }
 
@@ -227,6 +251,7 @@ export function tickFighter(game, f, dt) {
   f.rechargeT = Math.max(0, f.rechargeT - dt);
   f.stunT = Math.max(0, (f.stunT || 0) - dt);
   f.anticipateT = Math.max(0, (f.anticipateT || 0) - dt);
+  if (f.bladeT > 0 && (f.bladeT -= dt) <= 0) formChange(game, f, false); // Stance Change: back to Shield Forme
   if (f.confusedT > 0) f.confusedT = Math.max(0, f.confusedT - dt);
   f.fxT = (f.fxT || 0) - dt;
   const w = weatherNow(game);
@@ -262,7 +287,9 @@ export function tickFighter(game, f, dt) {
   }
 
   if (perSecond && f.alive) {
-    const sandProof = ['sandveil', 'sandrush', 'sandforce'].some((a) => ab(f, a));
+    const sandProof = ['sandveil', 'sandrush', 'sandforce', 'overcoat'].some((a) => ab(f, a));
+    if (ab(f, 'dryskin') && w === 'raindance') f.heal(f.maxHp * 0.01);
+    if (ab(f, 'dryskin') && w === 'sunnyday') hurt(game, f, 0.01, '#f8d858');
     if (w === 'sandstorm' && !f.types.some((x) => ['Rock', 'Ground', 'Steel'].includes(x)) && !sandProof) hurt(game, f, 0.01, '#d8b878');
     if (ab(f, 'regenerator') && game.mode?.party === 1 && f.still && !f.cast) f.heal(f.maxHp * 0.005);
     if (terrainNow(game) === 'grassy' && grounded(f)) f.heal(f.maxHp * 0.01);
@@ -290,6 +317,7 @@ export function tickFighter(game, f, dt) {
 // ---------- entering the field ----------
 export function onEntry(game, f) {
   const foes = game.enemiesOf(f);
+  f.enteredAt = game.fightTime || 0; // Fake Out works only right after entering
   if (ab(f, 'trace')) {
     const near = game.nearestEnemy(f);
     const copy = near && near.ability !== 'trace' ? near.ability : null;
@@ -309,9 +337,19 @@ export function onEntry(game, f) {
   if (ab(f, 'sandstream')) setWeather(game, 'sandstorm', f);
   if (ab(f, 'drought')) setWeather(game, 'sunnyday', f);
   if (ab(f, 'drizzle')) setWeather(game, 'raindance', f);
-  if (ab(f, 'grassysurge')) {
-    game.terrain = { id: 'grassy', t: WEATHER_TIME };
-    say(game, 'terrainGrassy');
+  if (ab(f, 'grassysurge')) setTerrain(game, 'grassy');
+  if (ab(f, 'electricsurge')) setTerrain(game, 'electric');
+  if (ab(f, 'orichalcumpulse')) {
+    ability(game, f);
+    setWeather(game, 'sunnyday', f);
+  }
+  if (ab(f, 'intrepidsword') && !f.intrepidDone) {
+    f.intrepidDone = true;
+    ability(game, f);
+    boost(game, f, { atk: 1 }, f);
+  }
+  if (ab(f, 'frisk')) {
+    for (const e of foes) if (e.item && !e.itemSpent) game.ui?.log(t('frisked', { who: game.who(f), foe: game.who(e), item: e.itemLabel() }));
   }
   // Illusion: looks like the nearest foe until it's hit.
   if (ab(f, 'illusion') && !f.illusionBroken) {
@@ -391,7 +429,8 @@ export function wantsMove(game, f, id, foe) {
   const w = weatherNow(game);
   if (fx.behavior === 'self') {
     if (m.weather) return game.weather?.id !== m.weather;
-    if (id === 'protect') return threatened(game, f);
+    if (PROTECTS.includes(id)) return threatened(game, f);
+    if (id === 'bellydrum') return f.hp > f.maxHp * 0.6 && stageOf(f, 'atk') < 4;
     if (isHeal(m) || id === 'rest') return f.hp < f.maxHp * (id === 'rest' ? 0.5 : 0.6) && !(id === 'rest' && f.status);
     if (id === 'focusenergy') return stageOf(f, 'crit') < 2;
     if (SELF_BUFF(m)) return Object.entries(m.boosts).some(([k, v]) => v > 0 && stageOf(f, k) < 4);
@@ -399,6 +438,7 @@ export function wantsMove(game, f, id, foe) {
   }
   if (!foe || !foe.alive) return false;
   if (f.distTo(foe) > fx.range + foe.radius) return false;
+  if (!breaks(f) && wontAffect(f, foe, m)) return false;
   if (m.category === 'Status') {
     if (ab(foe, 'magicbounce')) return false;
     if (m.flags?.includes('powder') && foe.types.includes('Grass')) return false;
@@ -411,7 +451,17 @@ export function wantsMove(game, f, id, foe) {
   if (effectiveness(type, foe.types) === 0) return false;
   if (!breaks(f) && immuneAbility(foe, type)) return false;
   if (id === 'solarbeam' && w === 'raindance') return Math.random() < 0.02;
+  if (id === 'fakeout') return (game.fightTime || 0) - (f.enteredAt || 0) < 4;
   return true;
+}
+
+/** Abilities that make a move do nothing (Bulletproof, Soundproof, Overcoat, Good as Gold, Prankster vs Dark). */
+function wontAffect(f, foe, m) {
+  if (ab(foe, 'bulletproof') && m.flags?.includes('bullet')) return true;
+  if (ab(foe, 'soundproof') && m.flags?.includes('sound')) return true;
+  if (ab(foe, 'overcoat') && m.flags?.includes('powder')) return true;
+  if (m.category === 'Status' && (ab(foe, 'goodasgold') || (ab(f, 'prankster') && foe.types.includes('Dark')))) return true;
+  return false;
 }
 
 /** Is something about to hit f? (for Protect) */
@@ -433,6 +483,7 @@ export function threatened(game, f) {
 // Abilities that make a Pokémon immune to a type (and what they do when hit by it).
 const IMMUNE = {
   waterabsorb: 'Water', flashfire: 'Fire', lightningrod: 'Electric', voltabsorb: 'Electric', sapsipper: 'Grass', levitate: 'Ground',
+  motordrive: 'Electric', dryskin: 'Water',
 };
 const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
 
@@ -443,10 +494,37 @@ const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
  */
 export function preHit(game, att, def, cast) {
   const m = cast.move;
+  const x = MOVEFX.moves[m.id]?.extra || {};
   if (def.protectT > 0 && !ab(att, 'infiltrator')) {
-    float(game, def, t('protected'), '#88f8f8');
-    fxAt(game, MOVEFX.status.protect, def, { follow: def });
+    if (x.breakProtect) {
+      // Raging Bull smashes through.
+      def.protectT = 0;
+      float(game, def, t('shieldBroken'), '#f8a048', true);
+      say(game, 'brokeProtect', { who: game.who(def) });
+    } else {
+      float(game, def, t('protected'), '#88f8f8');
+      fxAt(game, MOVEFX.status[def.protectKind] || MOVEFX.status.protect, def, { follow: def });
+      if (m.flags?.includes('contact') && att.alive && att !== def && !ab(att, 'longreach')) {
+        if (def.protectKind === 'spikyshield') hurt(game, att, 0.125, '#78c850');
+        if (def.protectKind === 'kingsshield') boost(game, att, { atk: -1 }, def);
+      }
+      return true;
+    }
+  }
+  const nope = () => {
+    ability(game, def);
+    game.ui?.log(t('noEffect', { who: game.who(def) }));
     return true;
+  };
+  if (att.team !== def.team) {
+    if (defAb(att, def, 'bulletproof') && m.flags?.includes('bullet')) return nope();
+    if (defAb(att, def, 'soundproof') && m.flags?.includes('sound')) return nope();
+    if (defAb(att, def, 'overcoat') && m.flags?.includes('powder')) return nope();
+    if (defAb(att, def, 'goodasgold') && m.category === 'Status') return nope();
+    if (m.category === 'Status' && ab(att, 'prankster') && def.types.includes('Dark')) {
+      game.ui?.log(t('noEffect', { who: game.who(def) }));
+      return true;
+    }
   }
   if (m.category !== 'Status' && !breaks(att) && immuneAbility(def, moveType(att, m))) {
     ability(game, def);
@@ -454,11 +532,13 @@ export function preHit(game, att, def, cast) {
     if (ab(def, 'flashfire') && !def.flashFire) def.flashFire = true;
     if (ab(def, 'lightningrod')) boost(game, def, { spa: 1 }, def);
     if (ab(def, 'sapsipper')) boost(game, def, { atk: 1 }, def);
+    if (ab(def, 'motordrive')) boost(game, def, { spe: 1 }, def);
+    if (ab(def, 'dryskin')) def.heal(def.maxHp * 0.25);
     game.ui?.log(t('noEffect', { who: game.who(def) }));
     return true;
   }
   if (m.category === 'Physical' && ab(att, 'hustle') && Math.random() < 0.2) return miss(game, att, def);
-  const sharpEyed = ab(att, 'keeneye') || ab(att, 'illuminate');
+  const sharpEyed = ab(att, 'keeneye') || ab(att, 'illuminate') || ab(att, 'compoundeyes');
   if (m.category !== 'Status' && !noGuard(att, def) && !sharpEyed) {
     if (defAb(att, def, 'snowcloak') && weatherNow(game) === 'snowscape' && Math.random() < 0.2) return miss(game, att, def);
     if (defAb(att, def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
@@ -492,7 +572,18 @@ export function damageMods(game, att, def, cast) {
     if (type === 'Grass' && grounded(att)) mul *= 1.3;
     if (m.id === 'earthquake' && grounded(def)) mul *= 0.5;
   }
+  if (terrainNow(game) === 'electric' && type === 'Electric' && grounded(att)) mul *= 1.3;
   if (x.superOn && def.types.includes(x.superOn)) mul *= 4; // Freeze-Dry hits Water super effectively
+  if (ab(att, 'reckless') && (m.recoil || MOVEFX.moves[m.id]?.crash)) mul *= 1.2;
+  const aura = { Fairy: 'fairyaura', Dark: 'darkaura' }[type];
+  if (aura && game.fighters.some((f) => f.alive && ab(f, aura))) mul *= 4 / 3;
+  if (m.flags?.includes('sound')) {
+    if (ab(att, 'punkrock')) mul *= 1.3;
+    if (defAb(att, def, 'punkrock')) mul *= 0.5;
+  }
+  if (defAb(att, def, 'dryskin') && type === 'Fire') mul *= 1.25;
+  if (ab(def, 'shadowshield') && def.hp >= def.maxHp) mul *= 0.5; // can't be broken
+  if (m.id === 'collisioncourse' && effectiveness(type, def.types) > 1) mul *= 4 / 3;
   if (ab(att, 'technician') && power <= 60) mul *= 1.5;
   if (ab(att, 'ironfist') && m.flags?.includes('punch')) mul *= 1.2;
   if (att.flashFire && type === 'Fire') mul *= 1.5;
@@ -506,11 +597,20 @@ export function damageMods(game, att, def, cast) {
   if (w === 'sandstorm' && ab(att, 'sandforce') && ['Rock', 'Ground', 'Steel'].includes(type)) mul *= 1.3;
   if (x.hpPower) power = Math.max(1, Math.floor((power * att.hp) / att.maxHp)); // Eruption
   if (m.id === 'knockoff' && def.item && !def.itemSpent) power *= 1.5;
+  if (m.id === 'heavyslam') {
+    const r = (att.data.weightkg || 1) / (def.data.weightkg || 1);
+    power = r >= 5 ? 120 : r >= 4 ? 100 : r >= 3 ? 80 : r >= 2 ? 60 : 40;
+  }
+  if (m.id === 'acrobatics' && (!att.item || att.itemSpent)) power *= 2;
+  if (m.id === 'hex' && def.status) power *= 2;
+  if (m.id === 'ragefist') power = Math.min(350, 50 + 50 * (att.timesHit || 0));
   if (x.punish && def.cast) mul *= x.punish; // Sucker Punch
   const stab = ab(att, 'protean') || ab(att, 'libero') || att.types.includes(type) ? (ab(att, 'adaptability') ? 2 : 1.5) : 1;
   const critStage = m.willCrit ? 3 : (m.critRatio ? m.critRatio - 1 : 0) + stageOf(att, 'crit') + (ab(att, 'superluck') ? 1 : 0);
   return {
     mul, power, stab, critStage, type,
+    offStat: m.offStat, // Body Press attacks with Defense
+    defStat: m.defStat, // Psyshock hits Defense
     noCrit: defAb(att, def, 'shellarmor'),
     critMul: ab(att, 'sniper') ? 2.25 : 1.5,
     ignoreAtkStages: defAb(att, def, 'unaware'), // the defender ignores the attacker's boosts
@@ -525,7 +625,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
   const once = (cast.effected ||= new Set());
   const first = !once.has(def);
   once.add(def);
-  const sg = ab(att, 'serenegrace') ? 2 : 1;
+  const sg = (ab(att, 'serenegrace') ? 2 : 1) * (ab(att, 'compoundeyes') ? 1.3 : 1);
 
   if (dmg > 0) {
     if (m.drain && att.alive) {
@@ -561,7 +661,16 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       ability(game, def);
       boost(game, def, { def: -1, spe: 2 }, def);
     }
+    if (dmg > 0 && ab(att, 'magician') && !att.item && def.item && !def.itemSpent && def.alive) {
+      ability(game, att);
+      say(game, 'knockedOff', { who: game.who(def), item: def.itemLabel() });
+      def.loseItem();
+    }
     if (m.flags?.includes('contact') && att.alive && !ab(att, 'longreach')) {
+      if (ab(att, 'poisontouch') && chance(30) && !statusBlock(game, def, 'psn', att)) {
+        ability(game, att);
+        inflict(game, def, 'psn', att);
+      }
       if (ab(def, 'poisonpoint') && chance(30)) {
         ability(game, def);
         inflict(game, att, 'psn', def);
@@ -639,6 +748,11 @@ export function onMoveUsed(game, c, id) {
     if (c.lock) c.cd[id] = 0.9;
   }
   if (m.selfSwitch) game.after(0.45, () => game.uturn?.(c), null);
+  // Stance Change: attacking turns Aegislash into Blade Forme.
+  if (ab(c, 'stancechange') && m.category !== 'Status') {
+    if (!(c.bladeT > 0)) formChange(game, c, true);
+    c.bladeT = 5;
+  }
 }
 
 /** Skills with the `self` behaviour: buffs, heals, Protect, weather, Rest. */
@@ -646,11 +760,21 @@ export function selfMove(game, c, cast) {
   const m = cast.move;
   const w = weatherNow(game);
   if (m.weather) return setWeather(game, m.weather, c);
-  if (m.id === 'protect') {
+  if (PROTECTS.includes(m.id)) {
     c.protectT = 0.8;
+    c.protectKind = m.id;
+    if (m.id === 'kingsshield' && c.bladeT > 0) formChange(game, c, false);
     say(game, 'protectLog', { who: game.who(c) });
-    game.addEffect(new Effect(MOVEFX.status.protect, c.x, c.y - 6, { follow: c, life: 0.8, loop: true }));
+    game.addEffect(new Effect(MOVEFX.status[m.id] || MOVEFX.status.protect, c.x, c.y - 6, { follow: c, life: 0.8, loop: true }));
     return;
+  }
+  if (m.id === 'bellydrum') {
+    if (c.hp <= c.maxHp / 2 || stageOf(c, 'atk') >= 6) return float(game, c, t('failed'), '#c8c8c8');
+    const cost = Math.floor(c.maxHp / 2);
+    c.hp -= cost;
+    game.addEffect(new FloatText(String(cost), c.x + 6, c.y - 18, '#f8a858'));
+    say(game, 'bellyDrum', { who: game.who(c) });
+    return boost(game, c, { atk: 12 }, c);
   }
   if (m.id === 'rest') {
     const h = c.heal(c.maxHp);
@@ -675,6 +799,15 @@ function healText(game, c, h) {
   game.addEffect(new FloatText(`+${Math.round(h)}`, c.x, c.y - 26, '#78f878', true));
   game.addEffect(new Effect(MOVEFX.status.heal, c.x, c.y - 10, { follow: c, oy: -10 }));
   say(game, 'healLog', { who: game.who(c) });
+}
+
+/** Stance Change (Aegislash): Blade Forme swaps its attack and defense stats. */
+function formChange(game, f, blade) {
+  f.bladeT = blade ? 5 : 0;
+  if (!f.alive) return;
+  ability(game, f);
+  say(game, blade ? 'bladeForme' : 'shieldForme', { who: game.who(f) });
+  fxAt(game, MOVEFX.status[blade ? 'statUpRing' : 'statDownRing'], f, { dy: 6, layer: 'under' });
 }
 
 /** A Pokémon was knocked out by an attack from `killer`. */

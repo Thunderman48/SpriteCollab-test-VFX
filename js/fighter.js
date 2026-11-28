@@ -50,6 +50,9 @@ export class Fighter {
     this.chillT = 0;
     this.roostT = 0;
     this.protectT = 0;
+    this.protectKind = null;
+    this.timesHit = 0; // Rage Fist
+    this.bladeT = 0; // Stance Change
     this.rechargeT = 0;
     this.pendingRecharge = 0;
     this.lock = null; // Outrage
@@ -136,8 +139,17 @@ export class Fighter {
   statVal(k, critSide = null, ignoreStages = false) {
     let n = ignoreStages ? 0 : stageOf(this, k);
     if ((critSide === 'atk' && n < 0) || (critSide === 'def' && n > 0)) n = 0;
-    let v = this.stats[k] * stageMul(n);
+    // Stance Change: Blade Forme swaps attack and defense stats.
+    const key = this.bladeT > 0 && ab(this, 'stancechange') ? { atk: 'def', def: 'atk', spa: 'spd', spd: 'spa' }[k] || k : k;
+    let v = this.stats[key] * stageMul(n);
     const w = weatherNow(this.game);
+    if (k === 'atk' && (ab(this, 'hugepower') || ab(this, 'purepower'))) v *= 2;
+    if (k === 'atk' && ab(this, 'orichalcumpulse') && w === 'sunnyday') v *= 4 / 3;
+    if (k === 'spa' && ab(this, 'plus') && this.game.fighters?.some((o) => o !== this && o.alive && o.team === this.team)) v *= 1.5;
+    if ((k === 'atk' || k === 'spa') && ab(this, 'supremeoverlord')) {
+      const fallen = this.game.parties?.[this.slot]?.members.filter((o) => o !== this && o.ko).length || 0;
+      v *= 1 + 0.1 * fallen;
+    }
     if (k === 'atk' && ab(this, 'guts') && this.status) v *= 1.5;
     if (k === 'atk' && ab(this, 'hustle')) v *= 1.5;
     if (k === 'spa' && ab(this, 'solarpower') && w === 'sunnyday') v *= 1.5;
@@ -206,6 +218,7 @@ export class Fighter {
 
   takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
+    if (dmg > 0) this.timesHit++;
     if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
     this.metroStacks = 0; // Metronome streak breaks when you're hit

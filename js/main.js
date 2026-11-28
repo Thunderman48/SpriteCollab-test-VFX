@@ -163,7 +163,16 @@ class Game {
     this.addEffect(new FloatText(t('dodged'), f.x, f.y - 26, '#00f8f8'));
   }
 
-  applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false, kbMul = null } = {}) {
+  applyHit(att, def, cast, opts = {}) {
+    FXE.setHitMove(cast.move);
+    try {
+      return this.landHit(att, def, cast, opts);
+    } finally {
+      FXE.setHitMove(null);
+    }
+  }
+
+  landHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false, kbMul = null } = {}) {
     if (!def.alive || this.state === 'result') return;
     const move = cast.move;
     const fxd = cast.def;

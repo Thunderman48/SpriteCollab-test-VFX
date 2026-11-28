@@ -167,6 +167,13 @@ class Projectile {
     const g = this.game;
     if (victim) {
       g.applyHit(this.owner, victim, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
+      // Seed Bomb: the blast also catches foes standing nearby.
+      if (this.pd.blast) {
+        for (const tg of g.enemiesOf(this.owner)) {
+          if (tg === victim || g.dodges(this.owner, tg) || Math.hypot(tg.x - this.x, tg.y - this.y) > this.pd.blast + tg.radius) continue;
+          g.applyHit(this.owner, tg, this.cast, { angle: Math.atan2(tg.y - this.y, tg.x - this.x), factor: 0.5 });
+        }
+      }
     } else if (this.pd.splash) {
       spawnFx(g, this.def.hit, this.x, this.y);
       spawnFx(g, this.def.hit2, this.x, this.y, { layer: 'under' });
@@ -305,7 +312,7 @@ const BEHAVIORS = {
       (MELEE[d.style] || MELEE.basic)(game, c, t, cast, d);
       game.sfx?.('melee');
     };
-    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after(d.style === 'clamp' ? d.hold || 0.45 : (d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
+    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after(d.style === 'clamp' ? d.hold || 0.45 : d.style === 'rage' ? 6 * (d.hitGap || 0.09) : (d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
   },
 
   /** Dashes: each skill picks a style of movement (js/motion.js). */

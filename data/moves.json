@@ -2870,5 +2870,966 @@
     "cooldown": 30,
     "shortDesc": "Heals the user by 50% of its max HP.",
     "heal": 0.5
+  },
+  "behemothblade": {
+    "id": "behemothblade",
+    "name": "Behemoth Blade",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "sunsteelstrike": {
+    "id": "sunsteelstrike",
+    "name": "Sunsteel Strike",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Ignores the Abilities of other Pokemon.",
+    "ignoreAbility": true,
+    "flags": [
+      "contact"
+    ]
+  },
+  "collisioncourse": {
+    "id": "collisioncourse",
+    "name": "Collision Course",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Deals 1.3333× damage with supereffective hits.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "ragingbull": {
+    "id": "ragingbull",
+    "name": "Raging Bull",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Destroys screens. Type depends on user's form.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "aquastep": {
+    "id": "aquastep",
+    "name": "Aqua Step",
+    "type": "Water",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to raise the user's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spe": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "aquajet": {
+    "id": "aquajet",
+    "name": "Aqua Jet",
+    "type": "Water",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 1,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "heavyslam": {
+    "id": "heavyslam",
+    "name": "Heavy Slam",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "More power the heavier the user than the target.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "rapidspin": {
+    "id": "rapidspin",
+    "name": "Rapid Spin",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 40,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.13,
+    "shortDesc": "Free user from hazards/bind/Leech Seed; +1 Spe.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spe": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "flamecharge": {
+    "id": "flamecharge",
+    "name": "Flame Charge",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to raise the user's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spe": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "acrobatics": {
+    "id": "acrobatics",
+    "name": "Acrobatics",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 55,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 3,
+    "shortDesc": "Power doubles if the user has no held item.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "trailblaze": {
+    "id": "trailblaze",
+    "name": "Trailblaze",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to raise the user's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spe": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "sacredsword": {
+    "id": "sacredsword",
+    "name": "Sacred Sword",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Ignores the target's stat stage changes.",
+    "ignoreStages": true,
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "kowtowcleave": {
+    "id": "kowtowcleave",
+    "name": "Kowtow Cleave",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "This move does not check accuracy.",
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "gigatonhammer": {
+    "id": "gigatonhammer",
+    "name": "Gigaton Hammer",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 160,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Cannot be selected the turn after it's used.",
+    "flags": [
+      "cantusetwice"
+    ]
+  },
+  "ragefist": {
+    "id": "ragefist",
+    "name": "Rage Fist",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "+50 power for each time user was hit. Max 6 hits.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "razorshell": {
+    "id": "razorshell",
+    "name": "Razor Shell",
+    "type": "Water",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "50% chance to lower the target's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 50,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "lowsweep": {
+    "id": "lowsweep",
+    "name": "Low Sweep",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to lower the target's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "poisonjab": {
+    "id": "poisonjab",
+    "name": "Poison Jab",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "30% chance to poison the target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "fakeout": {
+    "id": "fakeout",
+    "name": "Fake Out",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 3,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits first. First turn out only. 100% flinch chance.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "flinch"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "bodypress": {
+    "id": "bodypress",
+    "name": "Body Press",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Uses user's Def stat as Atk in damage calculation.",
+    "offStat": "def",
+    "flags": [
+      "contact"
+    ]
+  },
+  "psychicfangs": {
+    "id": "psychicfangs",
+    "name": "Psychic Fangs",
+    "type": "Psychic",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Destroys screens, unless the target is immune.",
+    "flags": [
+      "contact",
+      "bite"
+    ]
+  },
+  "spiritbreak": {
+    "id": "spiritbreak",
+    "name": "Spirit Break",
+    "type": "Fairy",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "100% chance to lower the target's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spa": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "liquidation": {
+    "id": "liquidation",
+    "name": "Liquidation",
+    "type": "Water",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "20% chance to lower the target's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 20,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "nuzzle": {
+    "id": "nuzzle",
+    "name": "Nuzzle",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 20,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 100,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "drainingkiss": {
+    "id": "drainingkiss",
+    "name": "Draining Kiss",
+    "type": "Fairy",
+    "category": "Special",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 75% of the damage dealt.",
+    "drain": 0.75,
+    "flags": [
+      "contact"
+    ]
+  },
+  "leechlife": {
+    "id": "leechlife",
+    "name": "Leech Life",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 50% of the damage dealt.",
+    "drain": 0.5,
+    "flags": [
+      "contact"
+    ]
+  },
+  "mistball": {
+    "id": "mistball",
+    "name": "Mist Ball",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 95,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "50% chance to lower the target's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 50,
+        "boosts": {
+          "spa": -1
+        }
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "powergem": {
+    "id": "powergem",
+    "name": "Power Gem",
+    "type": "Rock",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "No additional effect."
+  },
+  "voltswitch": {
+    "id": "voltswitch",
+    "name": "Volt Switch",
+    "type": "Electric",
+    "category": "Special",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "User switches out after damaging the target.",
+    "selfSwitch": true
+  },
+  "seedbomb": {
+    "id": "seedbomb",
+    "name": "Seed Bomb",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "bullet"
+    ]
+  },
+  "icywind": {
+    "id": "icywind",
+    "name": "Icy Wind",
+    "type": "Ice",
+    "category": "Special",
+    "power": 55,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 3,
+    "shortDesc": "100% chance to lower the foe(s) Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "hex": {
+    "id": "hex",
+    "name": "Hex",
+    "type": "Ghost",
+    "category": "Special",
+    "power": 65,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Power doubles if the target has a status ailment."
+  },
+  "gunkshot": {
+    "id": "gunkshot",
+    "name": "Gunk Shot",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 80,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "30% chance to poison the target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "psn"
+      }
+    ]
+  },
+  "mysticalfire": {
+    "id": "mysticalfire",
+    "name": "Mystical Fire",
+    "type": "Fire",
+    "category": "Special",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to lower the target's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spa": -1
+        }
+      }
+    ]
+  },
+  "extrasensory": {
+    "id": "extrasensory",
+    "name": "Extrasensory",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "10% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 10,
+        "volatile": "flinch"
+      }
+    ]
+  },
+  "psyshock": {
+    "id": "psyshock",
+    "name": "Psyshock",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Damages target based on Defense, not Sp. Def.",
+    "defStat": "def"
+  },
+  "torchsong": {
+    "id": "torchsong",
+    "name": "Torch Song",
+    "type": "Fire",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to raise the user's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spa": 1
+        }
+      }
+    ],
+    "flags": [
+      "sound"
+    ]
+  },
+  "moongeistbeam": {
+    "id": "moongeistbeam",
+    "name": "Moongeist Beam",
+    "type": "Ghost",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Ignores the Abilities of other Pokemon.",
+    "ignoreAbility": true
+  },
+  "oblivionwing": {
+    "id": "oblivionwing",
+    "name": "Oblivion Wing",
+    "type": "Flying",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 75% of the damage dealt.",
+    "drain": 0.75
+  },
+  "dazzlinggleam": {
+    "id": "dazzlinggleam",
+    "name": "Dazzling Gleam",
+    "type": "Fairy",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect. Hits adjacent foes."
+  },
+  "clangingscales": {
+    "id": "clangingscales",
+    "name": "Clanging Scales",
+    "type": "Dragon",
+    "category": "Special",
+    "power": 110,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Defense by 1.",
+    "flags": [
+      "sound"
+    ]
+  },
+  "overdrive": {
+    "id": "overdrive",
+    "name": "Overdrive",
+    "type": "Electric",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect. Hits foe(s).",
+    "flags": [
+      "sound"
+    ]
+  },
+  "boomburst": {
+    "id": "boomburst",
+    "name": "Boomburst",
+    "type": "Normal",
+    "category": "Special",
+    "power": 140,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect. Hits adjacent Pokemon.",
+    "flags": [
+      "sound"
+    ]
+  },
+  "sludgewave": {
+    "id": "sludgewave",
+    "name": "Sludge Wave",
+    "type": "Poison",
+    "category": "Special",
+    "power": 95,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 4.5,
+    "shortDesc": "10% chance to poison adjacent Pokemon.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "psn"
+      }
+    ]
+  },
+  "bulldoze": {
+    "id": "bulldoze",
+    "name": "Bulldoze",
+    "type": "Ground",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance lower adjacent Pkmn Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "makeitrain": {
+    "id": "makeitrain",
+    "name": "Make It Rain",
+    "type": "Steel",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Sp. Atk by 1. Hits foe(s).",
+    "selfBoosts": {
+      "spa": -1
+    }
+  },
+  "bellydrum": {
+    "id": "bellydrum",
+    "name": "Belly Drum",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "User loses 50% max HP. Maximizes Attack."
+  },
+  "geomancy": {
+    "id": "geomancy",
+    "name": "Geomancy",
+    "type": "Fairy",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Charges, then raises SpA, SpD, Spe by 2 turn 2.",
+    "boosts": {
+      "spa": 2,
+      "spd": 2,
+      "spe": 2
+    }
+  },
+  "spikyshield": {
+    "id": "spikyshield",
+    "name": "Spiky Shield",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 4,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Protects from moves. Contact: loses 1/8 max HP.",
+    "volatile": "spikyshield"
+  },
+  "kingsshield": {
+    "id": "kingsshield",
+    "name": "King's Shield",
+    "type": "Steel",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 4,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Protects from damaging attacks. Contact: -1 Atk.",
+    "volatile": "kingsshield"
   }
 }

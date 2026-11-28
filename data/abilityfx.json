@@ -514,5 +514,155 @@
     "ko": "깨어진갑옷",
     "desc": "Hit by a physical move: Defense −1, Speed +2.",
     "descKo": "물리 기술에 맞으면 방어 −1, 스피드 +2."
+  },
+  "reckless": {
+    "ko": "이판사판",
+    "desc": "Moves with recoil or crash damage deal ×1.2.",
+    "descKo": "반동이 있는 기술의 위력이 1.2배."
+  },
+  "hypercutter": {
+    "ko": "괴력집게",
+    "desc": "Its Attack can't be lowered by foes.",
+    "descKo": "상대가 공격을 떨어뜨릴 수 없다."
+  },
+  "plus": {
+    "ko": "플러스",
+    "desc": "In 2vs2, Sp. Atk ×1.5 while its ally is fighting.",
+    "descKo": "2vs2에서 동료가 싸우는 동안 특수공격 1.5배."
+  },
+  "hugepower": {
+    "ko": "천하장사",
+    "desc": "Attack ×2.",
+    "descKo": "공격이 2배."
+  },
+  "purepower": {
+    "ko": "순수한힘",
+    "desc": "Attack ×2.",
+    "descKo": "공격이 2배."
+  },
+  "cloudnine": {
+    "ko": "날씨부정",
+    "desc": "No weather effects while it's out.",
+    "descKo": "나와 있는 동안 날씨의 영향이 없어진다."
+  },
+  "dryskin": {
+    "ko": "건조피부",
+    "desc": "Water moves heal it 25% instead. Rain heals 1% HP/s; sun and Fire moves hurt more.",
+    "descKo": "물 기술을 받으면 HP 25% 회복. 비가 오면 매초 1% 회복, 쾌청과 불꽃 기술에 약하다."
+  },
+  "poisontouch": {
+    "ko": "독수",
+    "desc": "Its contact moves: 30% poison.",
+    "descKo": "접촉 기술로 공격하면 30% 확률로 독."
+  },
+  "motordrive": {
+    "ko": "전기엔진",
+    "desc": "Electric moves don't hurt it: Speed +1 instead.",
+    "descKo": "전기 기술을 받으면 데미지 대신 스피드 +1."
+  },
+  "vitalspirit": {
+    "ko": "의기양양",
+    "desc": "Can't fall asleep.",
+    "descKo": "잠들지 않는다."
+  },
+  "compoundeyes": {
+    "ko": "복안",
+    "desc": "Its attacks ignore evasion; effect chances ×1.3.",
+    "descKo": "공격이 상대의 회피를 무시한다. 추가 효과 확률 1.3배."
+  },
+  "defiant": {
+    "ko": "오기",
+    "desc": "When a foe lowers its stats: Attack +2.",
+    "descKo": "상대가 능력을 떨어뜨리면 공격 +2."
+  },
+  "bulletproof": {
+    "ko": "방탄",
+    "desc": "Immune to ball and bomb moves (Shadow Ball, Seed Bomb, Focus Blast...).",
+    "descKo": "구슬·폭탄 기술(섀도볼·씨폭탄·기합구슬 등)이 통하지 않는다."
+  },
+  "magician": {
+    "ko": "매지션",
+    "desc": "When it hits a foe while holding no item, the foe's item is knocked away.",
+    "descKo": "도구가 없을 때 상대를 공격하면 상대의 도구를 날려 버린다."
+  },
+  "stancechange": {
+    "ko": "배틀스위치",
+    "desc": "Attacking turns it into Blade Forme (attack stats ↔ defense stats) for 5 s; King's Shield returns it to Shield Forme.",
+    "descKo": "공격하면 5초 동안 블레이드폼(공격 능력과 방어 능력이 바뀐다). 킹실드를 쓰면 실드폼으로 돌아온다."
+  },
+  "fairyaura": {
+    "ko": "페어리오라",
+    "desc": "While it's out, everyone's Fairy moves ×1.33.",
+    "descKo": "나와 있는 동안 모두의 페어리 기술 1.33배."
+  },
+  "darkaura": {
+    "ko": "다크오라",
+    "desc": "While it's out, everyone's Dark moves ×1.33.",
+    "descKo": "나와 있는 동안 모두의 악 기술 1.33배."
+  },
+  "soundproof": {
+    "ko": "방음",
+    "desc": "Immune to sound moves.",
+    "descKo": "소리 기술이 통하지 않는다."
+  },
+  "overcoat": {
+    "ko": "방진",
+    "desc": "Immune to powder moves and weather damage.",
+    "descKo": "가루 기술과 날씨 데미지를 받지 않는다."
+  },
+  "electricsurge": {
+    "ko": "일렉트릭메이커",
+    "desc": "When it enters, Electric Terrain for 20 s: grounded Pokémon's Electric moves ×1.3 and they can't fall asleep.",
+    "descKo": "등장하면 20초 동안 일렉트릭필드: 땅에 있는 포켓몬의 전기 기술 1.3배, 잠들지 않는다."
+  },
+  "fullmetalbody": {
+    "ko": "메탈프로텍트",
+    "desc": "Its stats can't be lowered by foes (even with Mold Breaker).",
+    "descKo": "상대가 능력을 떨어뜨릴 수 없다 (틀깨기도 무시)."
+  },
+  "shadowshield": {
+    "ko": "스펙터가드",
+    "desc": "Half damage at full HP (even against Mold Breaker).",
+    "descKo": "HP가 꽉 찼을 때 데미지 절반 (틀깨기도 무시)."
+  },
+  "mirrorarmor": {
+    "ko": "미러아머",
+    "desc": "Stat drops from foes bounce back to them.",
+    "descKo": "상대가 떨어뜨린 능력 변화를 되돌려 준다."
+  },
+  "punkrock": {
+    "ko": "펑크록",
+    "desc": "Its sound moves ×1.3; sound moves against it ×0.5.",
+    "descKo": "자신의 소리 기술 1.3배, 받는 소리 기술 0.5배."
+  },
+  "prankster": {
+    "ko": "짓궂은마음",
+    "desc": "Status skills have priority (faster). Dark types are immune to them.",
+    "descKo": "변화 기술이 선제공격이 된다. 악 타입에게는 통하지 않는다."
+  },
+  "frisk": {
+    "ko": "통찰",
+    "desc": "When it enters, reveals the foes' held items.",
+    "descKo": "등장하면 상대가 가진 도구를 알아낸다."
+  },
+  "intrepidsword": {
+    "ko": "불요의검",
+    "desc": "When it first enters the battle: Attack +1.",
+    "descKo": "처음 등장할 때 공격 +1."
+  },
+  "supremeoverlord": {
+    "ko": "총대장",
+    "desc": "Attack and Sp. Atk ×1.1 for each fainted teammate.",
+    "descKo": "쓰러진 동료 한 마리마다 공격과 특수공격 1.1배."
+  },
+  "goodasgold": {
+    "ko": "황금몸",
+    "desc": "Immune to foes' status skills.",
+    "descKo": "상대의 변화 기술이 통하지 않는다."
+  },
+  "orichalcumpulse": {
+    "ko": "진홍빛고동",
+    "desc": "When it enters, the sun comes out. In sun, Attack ×1.33.",
+    "descKo": "등장하면 쾌청이 된다. 쾌청일 때 공격 1.33배."
   }
 }

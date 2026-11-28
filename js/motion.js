@@ -5,8 +5,10 @@
 //   dive (Brave Bird, High Jump Kick) · shadow (Shadow Sneak) · bounce (U-turn) · blink (Sucker Punch)
 //   charge (Flare Blitz, Wild Charge, Head Smash) · ram (Dragon Rush, Bolt Strike)
 //   spin (Drill Peck, Darkest Lariat) · rise (Waterfall) · leap (Wood Hammer, Giga Impact)
+//   orbit (Aqua Step) · arc (Acrobatics) · hops (Heavy Slam); straight + accel (Aqua Jet)
 // Melee styles: basic · sweep (slashes and tails hit everything in an arc) · uppercut (launches)
 //   slam (hop onto the target, small shockwave) · combo (rapid flurry) · clamp (bites hold the target)
+//   whirl (Sacred Sword: spins, hits all around) · trip (Low Sweep: knocks down) · rage (Rage Fist: more punches the more it was hit)
 import { MOVEFX, spawnFx, frontOf, aimOf } from './moves.js';
 import { Telegraph } from './vfx.js';
 import { angleToDir } from './sprite.js';
@@ -108,12 +110,14 @@ export const DASH = {
     cast.drive = (dt) => {
       time += dt;
       if (time >= d.dashTime) return end(game, c, cast);
-      c.x += Math.cos(a) * d.dashSpeed * dt;
-      c.y += Math.sin(a) * d.dashSpeed * dt;
+      // Aqua Jet: starts slow and keeps speeding up.
+      const v = d.dashSpeed * (d.accel ? 0.35 + 1.3 * (time / d.dashTime) : 1);
+      c.x += Math.cos(a) * v * dt;
+      c.y += Math.sin(a) * v * dt;
       c.clamp();
       trail(game, c, d, cast, dt);
       const e = game.enemiesOf(c).find((o) => c.distTo(o) <= c.radius + o.radius + 6);
-      if (e && contact(game, c, e, cast, { angle: a })) {
+      if (e && contact(game, c, e, cast, { angle: a, kbMul: d.accel ? 1 + time / d.dashTime : 1 })) {
         game.shake(d.shake || 0, 0.25);
         end(game, c, cast);
       }
@@ -527,6 +531,147 @@ export const DASH = {
     };
     game.sfx?.('charge');
   },
+
+  /** Aqua Step: dances half a circle around the target, then strikes from the side. */
+  orbit(game, c, t, cast) {
+    const d = cast.def;
+    begin(game, c, t, cast, d, { speed: 2 });
+    followFx(game, c, d, d.dashTime);
+    const a0 = Math.atan2((c.y - t.y) / 0.7, c.x - t.x);
+    const r0 = Math.max(50, Math.min(110, c.distTo(t)));
+    const turn = (Math.random() < 0.5 ? 1 : -1) * Math.PI * 0.9;
+    let time = 0;
+    let spinT = 0;
+    cast.lockDir = true;
+    cast.drive = (dt) => {
+      time += dt;
+      if (!t.alive) return end(game, c, cast);
+      const k = Math.min(1, time / d.dashTime);
+      const ang = a0 + turn * k;
+      const rad = r0 * (1 - k) + (c.radius + t.radius + 2) * k;
+      c.x = t.x + Math.cos(ang) * rad;
+      c.y = t.y + Math.sin(ang) * rad * 0.7;
+      c.clamp();
+      if ((spinT += dt) >= 0.06) {
+        spinT = 0;
+        c.dir = (c.dir + (turn > 0 ? 1 : 7)) % 8; // twirls while dancing
+      }
+      trail(game, c, d, cast, dt);
+      if (k >= 1) {
+        const a = c.angleTo(t);
+        cast.faceAngle = a;
+        c.dir = angleToDir(a);
+        contact(game, c, t, cast, { angle: a });
+        game.shake(d.shake || 3, 0.2);
+        end(game, c, cast);
+      }
+    };
+    game.sfx?.('dash');
+  },
+
+  /** Acrobatics: flips along a curved path into the target, then springs back off it. */
+  arc(game, c, t, cast) {
+    const d = cast.def;
+    begin(game, c, t, cast, d, { anim: d.riseAnim || 'Hop', speed: 1.5 });
+    const from = { x: c.x, y: c.y };
+    const side = Math.random() < 0.5 ? 1 : -1;
+    let time = 0;
+    let hit = false;
+    let spinT = 0;
+    cast.lockDir = true;
+    cast.drive = (dt) => {
+      time += dt;
+      const k = Math.min(1, time / d.dashTime);
+      if (!hit) {
+        const to = t.alive ? { x: t.x, y: t.y } : from;
+        const mx = (from.x + to.x) / 2;
+        const my = (from.y + to.y) / 2;
+        const a = Math.atan2(to.y - from.y, to.x - from.x);
+        const bend = Math.hypot(to.x - from.x, to.y - from.y) * 0.55 * side;
+        const cx = mx - Math.sin(a) * bend;
+        const cy = my + Math.cos(a) * bend * 0.7;
+        // Quadratic curve from -> (cx, cy) -> target.
+        const u = 1 - k;
+        c.x = u * u * from.x + 2 * u * k * cx + k * k * to.x;
+        c.y = u * u * from.y + 2 * u * k * cy + k * k * to.y;
+        c.lift = Math.sin(k * Math.PI) * (d.height || 30);
+        if ((spinT += dt) >= 0.05) {
+          spinT = 0;
+          c.dir = (c.dir + 1) % 8; // flipping
+        }
+        trail(game, c, d, cast, dt);
+        if (t.alive && (k >= 1 || c.distTo(t) <= c.radius + t.radius + 4)) {
+          hit = true;
+          time = 0;
+          c.lift = 0;
+          cast.faceAngle = c.angleTo(t);
+          c.dir = angleToDir(cast.faceAngle);
+          contact(game, c, t, cast, { angle: cast.faceAngle });
+          game.shake(d.shake || 3, 0.2);
+        } else if (k >= 1) return end(game, c, cast);
+      } else {
+        // Spring back off the target.
+        const back = cast.faceAngle + Math.PI;
+        c.x += Math.cos(back) * 260 * dt;
+        c.y += Math.sin(back) * 260 * dt;
+        c.clamp();
+        c.lift = Math.sin(Math.min(1, time / 0.2) * Math.PI) * 16;
+        if (time >= 0.2) return end(game, c, cast);
+      }
+    };
+    game.sfx?.('dash');
+  },
+
+  /** Heavy Slam: bounds over in heavy hops (each one shakes the ground), the last lands on the target. */
+  hops(game, c, t, cast) {
+    const d = cast.def;
+    begin(game, c, t, cast, d, { anim: d.riseAnim || 'Hop', speed: 1 });
+    const n = d.hops || 3;
+    const hopTime = d.hopTime || 0.22;
+    let hop = 0;
+    let tt = 0;
+    let from = { x: c.x, y: c.y };
+    let to = null;
+    let mark = null;
+    const next = () => {
+      const goal = t.alive ? { x: t.x, y: t.y } : from;
+      const left = n - hop;
+      to = { x: from.x + (goal.x - from.x) / left, y: from.y + (goal.y - from.y) / left };
+      if (hop === n - 1) mark = game.addEffect(new Telegraph(to.x, to.y + 4, d.radius || 40, hopTime));
+    };
+    next();
+    cast.drive = (dt) => {
+      tt += dt;
+      const k = Math.min(1, tt / hopTime);
+      c.x = from.x + (to.x - from.x) * k;
+      c.y = from.y + (to.y - from.y) * k;
+      const last = hop === n - 1;
+      c.lift = Math.sin(k * Math.PI) * (d.height || 24) * (last ? 1.8 : 1);
+      if (k < 1) return;
+      c.lift = 0;
+      if (!last) {
+        spawnFx(game, d.step, c.x, c.y, { layer: 'under' });
+        game.shake(2 + hop, 0.12);
+        game.sfx?.('tick');
+        hop++;
+        tt = 0;
+        from = { x: c.x, y: c.y };
+        return next();
+      }
+      if (mark) mark.dead = true;
+      c.sprite.play(d.anim, { loop: false, restart: true });
+      for (const e of game.enemiesOf(c)) {
+        if (Math.hypot(e.x - c.x, (e.y - c.y) / 0.7) > (d.radius || 40) + e.radius) continue;
+        contact(game, c, e, cast, { angle: c.angleTo(e), kbMul: 1.5 });
+      }
+      spawnFx(game, d.land, c.x, c.y - 2, { layer: 'under' });
+      spawnFx(game, d.impact, c.x, c.y - 6);
+      game.shake(d.shake || 9, 0.35);
+      game.sfx?.('boom');
+      end(game, c, cast, 0.25);
+    };
+    game.sfx?.('charge');
+  },
 };
 
 // ---------------------------------------------------------------- melee strikes
@@ -594,6 +739,39 @@ export const MELEE = {
         }
       }, null);
     }
+  },
+
+  /** Sacred Sword: one spin of the blade that hits every foe all around. */
+  whirl(game, c, t, cast, d) {
+    const reach = (d.reach || 48) + c.radius;
+    for (const e of game.enemiesOf(c)) {
+      if (c.distTo(e) > reach + e.radius) continue;
+      contact(game, c, e, cast, { angle: c.angleTo(e) });
+    }
+    for (let i = 0; i < 4; i++) {
+      game.after(i * 0.06, () => {
+        c.dir = (c.dir + 2) % 8;
+        const a = (i / 4) * Math.PI * 2;
+        spawnFx(game, d.arcFx, c.x + Math.cos(a) * 22, c.y - 4 + Math.sin(a) * 14, { angle: a });
+      }, null);
+    }
+    game.shake(d.shake || 3, 0.2);
+  },
+
+  /** Low Sweep: kicks the legs out; the target trips and falls for a moment. */
+  trip(game, c, t, cast, d) {
+    if (!t.alive || c.distTo(t) > c.radius + t.radius + 34) return MELEE.basic(game, c, t, cast, { hits: 1 });
+    if (!contact(game, c, t, cast, { angle: c.angleTo(t), kbMul: 0.2 })) return;
+    launch(game, t, 10, 0.25);
+    t.stunT = Math.max(t.stunT, 0.5);
+    game.after(0.25, () => spawnFx(game, d.land, t.x, t.y, { layer: 'under' }), null);
+  },
+
+  /** Rage Fist: one more punch for every two hits the user has taken (2 to 6 punches). */
+  rage(game, c, t, cast, d) {
+    const hits = Math.max(2, Math.min(6, 2 + Math.floor((c.timesHit || 0) / 2)));
+    MELEE.combo(game, c, t, cast, { ...d, hits });
+    if ((c.timesHit || 0) >= 4) spawnFx(game, d.hit2, c.x, c.y - 10, { follow: c });
   },
 
   /** Crunch / Fangs: bites and holds the target in place, then bites again. */
