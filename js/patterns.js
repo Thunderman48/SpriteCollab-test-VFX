@@ -18,7 +18,7 @@ import { MOVEFX, spawnFx, frontOf, aimOf, distToSegment, Projectile } from './mo
 import { Beam, Telegraph, Effect, FloatText } from './vfx.js';
 import { effectiveness } from './combat.js';
 import * as FXE from './effects.js';
-import { t } from './i18n.js';
+import { t, t as t2 } from './i18n.js';
 import { angleToDir } from './sprite.js';
 
 const norm = (a) => Math.atan2(Math.sin(a), Math.cos(a));
@@ -77,6 +77,20 @@ export const PROJ = {
     game.after((n - 1) * (pd.gap || 0.1) + 0.6, () => {
       if (hits.n > 1) log(game, 'hitTimes', { n: hits.n });
     }, null);
+  },
+
+  /** Fling: throws its held item at the target (the item is gone afterwards). */
+  fling(game, c, t, cast, a, p) {
+    const it = c.item;
+    const proj = new Projectile(game, c, t, cast, a, p.x, p.y);
+    if (it) {
+      const img = new Image();
+      img.src = `assets/items/${it.sprite}.png`;
+      proj.itemImg = img;
+      game.ui?.log(t2('flung', { who: game.who(c), item: c.itemLabel() }));
+      c.loseItem();
+    }
+    game.addObject(proj);
   },
 
   /** Psystrike / Origin Pulse: a wave that grows as it travels and passes through every foe. */

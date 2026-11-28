@@ -106,6 +106,11 @@ export class Fighter {
     }
     if (this.colorType) return [this.colorType]; // Color Change
     if (this.transformed) return this.transformed.types;
+    if (this.lostFire) {
+      // Burn Up: no longer Fire type.
+      const rest = this.data.types.filter((x) => x !== 'Fire');
+      if (!this.lostElectric) return rest.length ? rest : ['Normal'];
+    }
     if (this.lostElectric) {
       // Double Shock: no longer Electric type.
       const rest = this.data.types.filter((x) => x !== 'Electric');
@@ -191,6 +196,8 @@ export class Fighter {
       v *= 1 + 0.1 * fallen;
     }
     if (k === 'atk' && ab(this, 'guts') && this.status) v *= 1.5;
+    if (k === 'atk' && ab(this, 'toxicboost') && (this.status?.id === 'psn' || this.status?.id === 'tox')) v *= 1.5;
+    if (k === 'spa' && ab(this, 'flareboost') && this.status?.id === 'brn') v *= 1.5;
     if (k === 'atk' && ab(this, 'hustle')) v *= 1.5;
     if (k === 'spa' && ab(this, 'solarpower') && w === 'sunnyday') v *= 1.5;
     if (k === 'spd' && w === 'sandstorm' && this.types.includes('Rock')) v *= 1.5;
@@ -262,7 +269,10 @@ export class Fighter {
   takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
     if (dmg > 0) this.timesHit++;
-    if (dmg > 0) this.lastHurtAt = this.game.fightTime || 0; // Avalanche
+    if (dmg > 0) {
+      this.lastHurtAt = this.game.fightTime || 0; // Avalanche
+      this.lastHurtDmg = dmg; // Comeuppance
+    }
     if (dmg > 0 && this.cast?.focusing) loseFocus(this.game, this); // Focus Punch
     if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
@@ -365,6 +375,7 @@ export class Fighter {
     this.invuln = Math.max(0, this.invuln - dt);
     this.dodgeCd = Math.max(0, this.dodgeCd - dt);
     this.castGap = Math.max(0, this.castGap - dt);
+    this.loafT = Math.max(0, (this.loafT || 0) - dt); // Truant
     this.hurtT = Math.max(0, this.hurtT - dt);
     if (input.dodgePressed && this.game.state === 'fight') this.startDodge(input);
 
@@ -429,7 +440,7 @@ export class Fighter {
    * (in range, not immune, not a wasted buff/heal...). Outrage keeps raging.
    */
   tryAutoCast(opp) {
-    if (this.cast || this.castGap > 0 || !this.still || this.stunned) return;
+    if (this.cast || this.castGap > 0 || !this.still || this.stunned || this.loafT > 0) return;
     // Outrage keeps raging; Encore repeats the last skill.
     const list = this.lock ? [this.lock.id] : this.encore ? [this.encore.id] : this.moves;
     // Struggle: a Pokémon with no way to deal damage (Wobbuffet) struggles after 5 s without attacking.

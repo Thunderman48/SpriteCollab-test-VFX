@@ -6652,5 +6652,672 @@
       "contact",
       "bite"
     ]
+  },
+  "sketch": {
+    "id": "sketch",
+    "name": "Sketch",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 1,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 150,
+    "shortDesc": "Permanently copies the last move target used."
+  },
+  "lovelykiss": {
+    "id": "lovelykiss",
+    "name": "Lovely Kiss",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 75,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "Causes the target to fall asleep.",
+    "status": "slp"
+  },
+  "tailglow": {
+    "id": "tailglow",
+    "name": "Tail Glow",
+    "type": "Bug",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Sp. Atk by 3.",
+    "boosts": {
+      "spa": 3
+    }
+  },
+  "rockpolish": {
+    "id": "rockpolish",
+    "name": "Rock Polish",
+    "type": "Rock",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Speed by 2.",
+    "boosts": {
+      "spe": 2
+    }
+  },
+  "coil": {
+    "id": "coil",
+    "name": "Coil",
+    "type": "Poison",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises user's Attack, Defense, accuracy by 1.",
+    "boosts": {
+      "atk": 1,
+      "def": 1,
+      "accuracy": 1
+    }
+  },
+  "growth": {
+    "id": "growth",
+    "name": "Growth",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises user's Attack and Sp. Atk by 1; 2 in Sun.",
+    "boosts": {
+      "atk": 1,
+      "spa": 1
+    }
+  },
+  "workup": {
+    "id": "workup",
+    "name": "Work Up",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 30,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 5,
+    "shortDesc": "Raises the user's Attack and Sp. Atk by 1.",
+    "boosts": {
+      "atk": 1,
+      "spa": 1
+    }
+  },
+  "victorydance": {
+    "id": "victorydance",
+    "name": "Victory Dance",
+    "type": "Fighting",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Raises the user's Attack, Defense, Speed by 1.",
+    "boosts": {
+      "atk": 1,
+      "def": 1,
+      "spe": 1
+    }
+  },
+  "cottonguard": {
+    "id": "cottonguard",
+    "name": "Cotton Guard",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Raises the user's Defense by 3.",
+    "boosts": {
+      "def": 3
+    }
+  },
+  "amnesia": {
+    "id": "amnesia",
+    "name": "Amnesia",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Sp. Def by 2.",
+    "boosts": {
+      "spd": 2
+    }
+  },
+  "coaching": {
+    "id": "coaching",
+    "name": "Coaching",
+    "type": "Fighting",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "adjacentAlly",
+    "cooldown": 15,
+    "shortDesc": "Raises an ally's Attack and Defense by 1.",
+    "boosts": {
+      "atk": 1,
+      "def": 1
+    }
+  },
+  "lifedew": {
+    "id": "lifedew",
+    "name": "Life Dew",
+    "type": "Water",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "allies",
+    "cooldown": 15,
+    "shortDesc": "Heals the user and its allies by 1/4 their max HP.",
+    "heal": 0.25
+  },
+  "junglehealing": {
+    "id": "junglehealing",
+    "name": "Jungle Healing",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "allies",
+    "cooldown": 15,
+    "shortDesc": "User and allies: healed 1/4 max HP, status cured."
+  },
+  "facade": {
+    "id": "facade",
+    "name": "Facade",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Power doubles if user is burn/poison/paralyzed.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "doublehit": {
+    "id": "doublehit",
+    "name": "Double Hit",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 35,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 2 times in one turn.",
+    "multihit": 2,
+    "flags": [
+      "contact"
+    ]
+  },
+  "poweruppunch": {
+    "id": "poweruppunch",
+    "name": "Power-Up Punch",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to raise the user's Attack by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "atk": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "thief": {
+    "id": "thief",
+    "name": "Thief",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 25,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.8,
+    "shortDesc": "If the user has no item, it steals the target's.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "lashout": {
+    "id": "lashout",
+    "name": "Lash Out",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "2× power if the user had a stat lowered this turn.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "ragingfury": {
+    "id": "ragingfury",
+    "name": "Raging Fury",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "randomNormal",
+    "cooldown": 4.5,
+    "shortDesc": "Lasts 2-3 turns. Confuses the user afterwards.",
+    "locked": true
+  },
+  "tripleaxel": {
+    "id": "tripleaxel",
+    "name": "Triple Axel",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 20,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 3 times. Each hit can miss, but power rises.",
+    "multihit": 3,
+    "flags": [
+      "contact"
+    ]
+  },
+  "beatup": {
+    "id": "beatup",
+    "name": "Beat Up",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "All healthy allies aid in damaging the target."
+  },
+  "fly": {
+    "id": "fly",
+    "name": "Fly",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 3,
+    "shortDesc": "Flies up on first turn, then strikes the next turn.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "bounce": {
+    "id": "bounce",
+    "name": "Bounce",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 9,
+    "shortDesc": "Bounces turn 1. Hits turn 2. 30% paralyze.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "dualwingbeat": {
+    "id": "dualwingbeat",
+    "name": "Dual Wingbeat",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 2 times in one turn.",
+    "multihit": 2,
+    "flags": [
+      "contact"
+    ]
+  },
+  "esperwing": {
+    "id": "esperwing",
+    "name": "Esper Wing",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to raise user Speed by 1. High crit.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "spe": 1
+        }
+      }
+    ],
+    "critRatio": 2
+  },
+  "dive": {
+    "id": "dive",
+    "name": "Dive",
+    "type": "Water",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Dives underwater turn 1, strikes turn 2.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "hyperdrill": {
+    "id": "hyperdrill",
+    "name": "Hyper Drill",
+    "type": "Normal",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Bypasses protection without breaking it.",
+    "noProtect": true,
+    "flags": [
+      "contact"
+    ]
+  },
+  "comeuppance": {
+    "id": "comeuppance",
+    "name": "Comeuppance",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "scripted",
+    "cooldown": 4.5,
+    "shortDesc": "If hit by an attack, returns 1.5× damage.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "steelroller": {
+    "id": "steelroller",
+    "name": "Steel Roller",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 130,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Fails if there is no terrain active. Ends the terrain.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "grassyglide": {
+    "id": "grassyglide",
+    "name": "Grassy Glide",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 55,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "User on Grassy Terrain: +1 priority.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "skittersmack": {
+    "id": "skittersmack",
+    "name": "Skitter Smack",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to lower target's Sp. Atk by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spa": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "fling": {
+    "id": "fling",
+    "name": "Fling",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Flings the user's item at the target. Power varies."
+  },
+  "scorchingsands": {
+    "id": "scorchingsands",
+    "name": "Scorching Sands",
+    "type": "Ground",
+    "category": "Special",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "30% chance to burn the target. Thaws target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ]
+  },
+  "burnup": {
+    "id": "burnup",
+    "name": "Burn Up",
+    "type": "Fire",
+    "category": "Special",
+    "power": 130,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "User's Fire type becomes typeless; must be Fire."
+  },
+  "chloroblast": {
+    "id": "chloroblast",
+    "name": "Chloroblast",
+    "type": "Grass",
+    "category": "Special",
+    "power": 150,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "User loses 50% max HP."
+  },
+  "burningjealousy": {
+    "id": "burningjealousy",
+    "name": "Burning Jealousy",
+    "type": "Fire",
+    "category": "Special",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "100% burns a target that had a stat rise this turn.",
+    "secondary": [
+      {
+        "chance": 100
+      }
+    ]
+  },
+  "mistyexplosion": {
+    "id": "mistyexplosion",
+    "name": "Misty Explosion",
+    "type": "Fairy",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 9,
+    "shortDesc": "User faints. User on Misty Terrain: 1.5× power."
+  },
+  "mountaingale": {
+    "id": "mountaingale",
+    "name": "Mountain Gale",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "30% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ]
   }
 }

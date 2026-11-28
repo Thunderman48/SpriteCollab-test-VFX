@@ -8,15 +8,18 @@
 //   orbit (Aqua Step) · arc (Acrobatics) · hops (Heavy Slam); straight + accel (Aqua Jet, Jet Punch)
 //   burrow (Dig: tunnels over, bursts up under the target) · roll (Rollout: rolls again and again, harder each time)
 //   vee (V-create: a V of fire) · pounce (First Impression: crouch, then pin the target) · surf (Wave Crash: a wide wave)
+//   swoop (Fly / Bounce / Dual Wingbeat: flies up out of reach, then swoops down through the target)
 // Melee styles: basic · sweep (slashes and tails hit everything in an arc) · uppercut (launches)
 //   slam (hop onto the target, small shockwave) · combo (rapid flurry) · clamp (bites hold the target)
 //   whirl (Sacred Sword: spins, hits all around) · trip (Low Sweep: knocks down) · rage (Rage Fist: more punches the more it was hit)
 //   triple (Triple Kick: 3 kicks, each stronger, a miss ends it) · throw (Seismic Toss: lifts the target over and slams it)
 //   flurry (Plasma Fists: blinks around the target, hitting from every side) · axe (Ivy Cudgel: leaps up, smashes down)
 //   twin (Double Iron Bash: two heavy blows, left then right) · hurl (Dragon Tail: flings the target away; in Trio it's dragged out)
+//   gang (Beat Up: every healthy teammate shows up and joins in)
 //   + `focus` on any melee skill: tightens focus first (Focus Punch fails if hit meanwhile)
 import { MOVEFX, spawnFx, frontOf, aimOf } from './moves.js';
-import { Telegraph } from './vfx.js';
+import { Telegraph, Effect } from './vfx.js';
+import { SpriteAnimator } from './sprite.js';
 import { angleToDir } from './sprite.js';
 import { ab } from './effects.js';
 
@@ -856,6 +859,92 @@ export const DASH = {
     }, cast);
   },
 
+  /** Fly / Bounce / Dual Wingbeat: flies up out of reach, circles to the side, then swoops down through the target. */
+  swoop(game, c, t, cast) {
+    const d = cast.def;
+    begin(game, c, t, cast, d, { anim: d.riseAnim || 'Hop', speed: 1 });
+    cast.lockDir = true;
+    const H = d.height || 90;
+    const passes = d.passes || 1;
+    const up = d.upTime || 0.25;
+    const glide = d.glide || 0.3;
+    const swoop = d.swoopTime || 0.32;
+    let phase = 0;
+    let tt = 0;
+    let pass = 0;
+    let from = null;
+    let to = null;
+    let start = { x: c.x, y: c.y };
+    let hit = new Set();
+    c.invuln = Math.max(c.invuln, up + glide + 0.05);
+    spawnFx(game, MOVEFX.common.dodge, c.x, c.y + 4, { layer: 'under', scale: 1.1 });
+    const plan = () => {
+      // Line up beside the target, then swoop through it to the far side.
+      const tx = t.alive ? t.x : c.x;
+      const ty = t.alive ? t.y : c.y;
+      const side = (pass % 2 ? -1 : 1) * (c.x < tx ? -1 : 1);
+      from = { x: tx + side * (d.reach || 110), y: ty - 18 };
+      to = { x: tx - side * (d.reach || 110), y: ty + 14 };
+    };
+    plan();
+    cast.drive = (dt) => {
+      tt += dt;
+      if (phase === 0) {
+        c.lift = Math.min(1, tt / up) * H;
+        if (tt >= up) {
+          phase = 1;
+          tt = 0;
+          start = { x: c.x, y: c.y };
+        }
+      } else if (phase === 1) {
+        // Gliding high above to the start of the swoop.
+        const k = Math.min(1, tt / glide);
+        c.x = start.x + (from.x - start.x) * k;
+        c.y = start.y + (from.y - start.y) * k;
+        c.clamp();
+        c.dir = angleToDir(Math.atan2(to.y - from.y, to.x - from.x));
+        if (k >= 1) {
+          phase = 2;
+          tt = 0;
+          hit = new Set();
+          c.sprite.play(d.anim, { loop: true, restart: true });
+        }
+      } else {
+        const k = Math.min(1, tt / swoop);
+        c.x = from.x + (to.x - from.x) * k;
+        c.y = from.y + (to.y - from.y) * k;
+        c.clamp();
+        c.lift = H * Math.abs(1 - 2 * k) * 0.9; // down to the ground in the middle, back up after
+        if (tt % 0.03 < dt) c.ghost(d.ghostTint);
+        if (d.trail && tt % 0.04 < dt) spawnFx(game, d.trail, c.x, c.y - c.lift, { layer: 'over' });
+        for (const e of game.enemiesOf(c)) {
+          if (hit.has(e) || c.lift > 24 || c.distTo(e) > c.radius + e.radius + 12) continue;
+          hit.add(e);
+          if (contact(game, c, e, cast, { angle: Math.atan2(to.y - from.y, to.x - from.x), factor: d.perHit ? 1 : 1 / passes })) {
+            spawnFx(game, d.impact, e.x, e.y - 6);
+            game.shake(d.shake || 4, 0.2);
+          }
+        }
+        if (k >= 1) {
+          pass++;
+          if (pass < passes && t.alive) {
+            plan();
+            tt = 0;
+            phase = 1;
+            start = { x: c.x, y: c.y };
+            c.invuln = Math.max(c.invuln, glide);
+            return;
+          }
+          // Land.
+          c.lift = 0;
+          spawnFx(game, MOVEFX.common.dodge, c.x, c.y + 4, { layer: 'under' });
+          return end(game, c, cast, 0.15);
+        }
+      }
+    };
+    game.sfx?.('dash');
+  },
+
   /** Wave Crash: rides a wide wave forward, sweeping up every foe in its path. */
   surf(game, c, t, cast) {
     const d = cast.def;
@@ -954,6 +1043,7 @@ export const MELEE = {
   combo(game, c, t, cast, d) {
     // Tail Slap: 2-5 hits (Skill Link: 5).
     const hits = d.randomHits ? (ab(c, 'skilllink') ? 5 : [2, 2, 2, 3, 3, 3, 4, 5][Math.floor(Math.random() * 8)]) : d.hits || 4;
+    const per = d.perHit || d.randomHits ? 1 : 1 / hits; // Double Hit / Tail Slap: power is per hit
     for (let k = 0; k < hits; k++) {
       game.after(k * (d.hitGap || 0.09), () => {
         if (!t.alive || c.ko) return;
@@ -967,7 +1057,7 @@ export const MELEE = {
         const last = k === hits - 1;
         if (c.distTo(t) <= c.radius + t.radius + 34) {
           const side = (k % 2 ? 1 : -1) * 8;
-          contact(game, c, t, cast, { angle: a, factor: 1 / hits, kbMul: last ? 1.4 : 0.15, at: { x: t.x - Math.sin(a) * side, y: t.y + Math.cos(a) * side } });
+          contact(game, c, t, cast, { angle: a, factor: per, kbMul: last ? 1.4 : 0.15, at: { x: t.x - Math.sin(a) * side, y: t.y + Math.cos(a) * side } });
         }
       }, null);
     }
@@ -1112,6 +1202,25 @@ export const MELEE = {
     }
   },
 
+  /** Beat Up: each healthy teammate (and the user) appears around the target and strikes in turn. */
+  gang(game, c, t, cast, d) {
+    const party = game.parties?.[c.slot]?.members || [c];
+    const crew = party.filter((m) => !m.ko);
+    const tints = ['#f8f8f8', '#f8c070', '#88c8f8', '#c8f888', '#f8a0c8', '#c0a0f8'];
+    crew.forEach((m, k) => {
+      game.after(k * (d.hitGap || 0.16), () => {
+        if (!t.alive || c.ko) return;
+        const ang = (k / crew.length) * Math.PI * 2 + Math.PI;
+        const art = m.art || c.art;
+        game.addEffect(new Effect(d.hit2, t.x + Math.cos(ang) * 26, t.y + Math.sin(ang) * 18, { scale: 0.8 }));
+        // A fleeting image of the teammate lunging in.
+        const pose = { x: t.x + Math.cos(ang) * 22, y: t.y + Math.sin(ang) * 15, art, tint: tints[k % tints.length], life: 0.3 };
+        game.addObject(new Ghostly(pose, Math.atan2(t.y - pose.y, t.x - pose.x)));
+        if (c.distTo(t) <= c.radius + t.radius + 60 || k > 0) contact(game, c, t, cast, { angle: ang + Math.PI, kbMul: k === crew.length - 1 ? 1.2 : 0.15 });
+      }, null);
+    });
+  },
+
   /** Dragon Tail: a heavy swing that flings the target far away; in Trio a random teammate is dragged in. */
   hurl(game, c, t, cast, d) {
     if (!t.alive || c.distTo(t) > c.radius + t.radius + 36) return MELEE.basic(game, c, t, cast, { hits: 1 });
@@ -1140,3 +1249,20 @@ export const MELEE = {
     }, null);
   },
 };
+
+/** A brief tinted image of a Pokémon (Beat Up's teammates). */
+class Ghostly {
+  constructor(p, angle) {
+    Object.assign(this, p, { t: 0, layer: 'over', dead: false, dir: angleToDir(angle) });
+    this.sprite = new SpriteAnimator(p.art);
+    this.sprite.play('Attack', { loop: false, restart: true });
+  }
+  update(dt) {
+    this.t += dt;
+    this.sprite.update(dt);
+    if (this.t >= this.life) this.dead = true;
+  }
+  draw(ctx) {
+    this.sprite.draw(ctx, this.x, this.y, this.dir, { alpha: 0.75 * (1 - this.t / this.life), tint: this.tint, tintAmt: 0.45 });
+  }
+}

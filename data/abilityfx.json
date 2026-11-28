@@ -1124,5 +1124,40 @@
     "ko": "재앙의구슬",
     "desc": "While it's out, everyone else's Sp. Def is lowered (special hits ×1.33).",
     "descKo": "나와 있는 동안 다른 모든 포켓몬의 특수방어가 떨어진다 (특수 공격 1.33배)."
+  },
+  "windpower": {
+    "ko": "풍력발전",
+    "desc": "Hit by a wind move (or under its team's Tailwind): its next Electric move is doubled.",
+    "descKo": "바람 기술을 받거나 순풍이 불면 다음 전기 기술의 위력 2배."
+  },
+  "perishbody": {
+    "ko": "멸망의바디",
+    "desc": "A foe that touches it gets a 6 s countdown to fainting — and so does it (switching out clears it).",
+    "descKo": "접촉한 상대와 자신이 6초 뒤 쓰러진다 (교체하면 사라진다)."
+  },
+  "toxicchain": {
+    "ko": "독사슬",
+    "desc": "Its attacks: 30% chance of bad poison.",
+    "descKo": "공격하면 30% 확률로 맹독."
+  },
+  "flareboost": {
+    "ko": "열폭주",
+    "desc": "While burned, Sp. Atk ×1.5.",
+    "descKo": "화상 상태일 때 특수공격 1.5배."
+  },
+  "moody": {
+    "ko": "변덕쟁이",
+    "desc": "Every 8 s one stat sharply rises and another falls.",
+    "descKo": "8초마다 능력 하나가 크게 오르고 다른 하나가 떨어진다."
+  },
+  "truant": {
+    "ko": "게으름",
+    "desc": "After every attack it loafs around for 1.4 s.",
+    "descKo": "공격할 때마다 1.4초 동안 게으름을 피운다."
+  },
+  "toxicboost": {
+    "ko": "독폭주",
+    "desc": "While poisoned, Attack ×1.5.",
+    "descKo": "독 상태일 때 공격 1.5배."
   }
 }

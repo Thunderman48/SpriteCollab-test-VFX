@@ -294,6 +294,15 @@ class Game {
     equip(f, id);
     this.ui.log(t('pickedUp', { who: this.who(f), item: f.itemLabel() }));
   }
+  /** Thief: takes the target's held item. */
+  stealItem(att, def) {
+    const id = def.item?.id;
+    if (!id) return;
+    def.loseItem();
+    att.stats = { ...att.rawStats };
+    equip(att, id);
+    this.ui.log(t('stoleItem', { who: this.who(att), foe: this.who(def), item: att.itemLabel() }));
+  }
   /** Symbiosis: gives its own item to a partner. */
   passItem(from, to) {
     const id = from.item?.id;

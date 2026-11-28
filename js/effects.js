@@ -42,7 +42,8 @@ export function moveType(f, m) {
 
 /** Priority (faster wind-up): the move's own priority, or Gale Wings on Flying moves at full HP. */
 export const hasPriority = (f, m) =>
-  m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp) || (ab(f, 'prankster') && m.category === 'Status');
+  m.priority > 0 ||
+  (m.id === 'grassyglide' && f.game?.terrain?.id === 'grassy') || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp) || (ab(f, 'prankster') && m.category === 'Status');
 /** Grounded (not flying / Levitate): affected by terrain. */
 const grounded = (f) => f.smackT > 0 || f.game?.gravity?.t > 0 || (!(f.magnetT > 0) && !f.data.flying && !ab(f, 'levitate'));
 export const isGrounded = grounded;
@@ -322,6 +323,18 @@ export function tickFighter(game, f, dt) {
   f.gastroT = Math.max(0, (f.gastroT || 0) - dt);
   f.magnetT = Math.max(0, (f.magnetT || 0) - dt);
   f.followT = Math.max(0, (f.followT || 0) - dt);
+  // Perish Body: a countdown to fainting (switching out clears it).
+  if (f.perishT > 0) {
+    const before = Math.ceil(f.perishT);
+    f.perishT -= dt;
+    if (Math.ceil(f.perishT) !== before && f.perishT > 0) float(game, f, String(Math.ceil(f.perishT)), '#c878f8', true);
+    if (f.perishT <= 0 && f.alive) {
+      say(game, 'perished', { who: game.who(f) });
+      f.hp = 0;
+      f.faint();
+      return;
+    }
+  }
   // Yawn: drowsy now, asleep in a moment.
   if (f.yawnT > 0 && (f.yawnT -= dt) <= 0) inflict(game, f, 'slp', f.yawnBy);
   f.bondT = Math.max(0, (f.bondT || 0) - dt);
@@ -430,6 +443,13 @@ export function tickFighter(game, f, dt) {
         mate.itemPassed = true;
         game.passItem?.(f, mate);
       }
+    }
+    // Moody: every 8 s one stat sharply rises and another falls.
+    if (ab(f, 'moody') && (f.moodyT = (f.moodyT ?? 8) - 1) <= 0) {
+      f.moodyT = 8;
+      const ks = ['atk', 'def', 'spa', 'spd', 'spe'].sort(() => Math.random() - 0.5);
+      ability(game, f);
+      boost(game, f, { [ks[0]]: 2, [ks[1]]: -1 }, f);
     }
     // Honey Gather: now and then it finds honey and eats it.
     if (ab(f, 'honeygather') && (f.honeyT = (f.honeyT ?? 8) - 1) <= 0) {
@@ -590,6 +610,7 @@ export function onSwitchOut(game, f) {
   }
   if (ab(f, 'zerotohero') && f.alive) f.hero = true; // comes back in as Hero Palafin
   f.seed = null; // switching out shakes off Leech Seed
+  f.perishT = 0;
   f.glaiveT = 0;
 }
 
@@ -659,6 +680,8 @@ export function wantsMove(game, f, id, foe) {
   if (fx.behavior === 'self') {
     if (id === 'auroraveil') return w === 'snowscape' && !sideOn(game, f.team, id);
     if (SIDE_TIME[id]) return !sideOn(game, f.team, id);
+    if (id === 'coaching') return allies(game, f).length > 0 && allies(game, f).some((o) => stageOf(o, 'atk') < 3);
+    if (id === 'lifedew' || id === 'junglehealing') return [f, ...allies(game, f)].some((o) => o.hp < o.maxHp * 0.7 || (id === 'junglehealing' && o.status));
     if (id === 'transform') return !!foe && !f.transformed && foe.data.key !== 'ditto';
     if (id === 'metronome') return !!foe && f.distTo(foe) < 260;
     if (id === 'curse') return f.types.includes('Ghost') ? !!foe && !foe.cursed && f.hp > f.maxHp * 0.5 : stageOf(f, 'atk') < 4;
@@ -703,6 +726,7 @@ export function wantsMove(game, f, id, foe) {
     if (id === 'psychup') return Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
     if (id === 'skillswap') return !UNSUPPRESSED.includes(foe.ability) && Math.random() < 0.3;
     if (id === 'partingshot') return true;
+    if (id === 'sketch') return !!foe.lastMove && !f.moves.includes(foe.lastMove) && !!MOVEFX.moves[foe.lastMove];
     if (m.volatile === 'taunt') return !(foe.tauntT > 0) && foe.moves.some((x) => DB.moves[x]?.category === 'Status');
     if (m.volatile === 'encore') return !!foe.lastMove && !foe.encore && (game.fightTime || 0) - (foe.lastMoveAt || 0) < 3;
     if (id === 'strengthsap') return f.hp < f.maxHp * 0.7;
@@ -721,6 +745,12 @@ export function wantsMove(game, f, id, foe) {
   if (id === 'saltcure' && foe.salt) return Math.random() < 0.3;
   if (id === 'explosion') return !game.fighters.some((o) => o.alive && ab(o, 'damp')) && (f.hp < f.maxHp * 0.25 || ((game.benchOf?.(f.slot) || []).length > 0 && f.hp < f.maxHp * 0.5)) && f.distTo(foe) < 90;
   if (id === 'poltergeist') return !!foe.item && !foe.itemSpent;
+  if (id === 'fling') return !!f.item && !f.itemSpent;
+  if (id === 'burnup') return f.types.includes('Fire');
+  if (id === 'steelroller') return !!game.terrain;
+  if (id === 'comeuppance') return (game.fightTime || 0) - (f.lastHurtAt ?? -99) < 3 && (f.lastHurtDmg || 0) > 0;
+  if (id === 'mistyexplosion') return (f.hp < f.maxHp * 0.25 || ((game.benchOf?.(f.slot) || []).length > 0 && f.hp < f.maxHp * 0.5)) && f.distTo(foe) < 90;
+  if (id === 'chloroblast') return f.hp > f.maxHp * 0.6 || foe.hp < foe.maxHp * 0.25;
   if (id === 'doubleshock') return f.types.includes('Electric');
   if (m.category !== 'Status' && foe.magnetT > 0 && type === 'Ground') return false;
   if (m.category !== 'Status' && ab(foe, 'wonderguard') && !breaks(f) && effectiveness(type, foe.types) <= 1) return false;
@@ -940,7 +970,7 @@ export function damageMods(game, att, def, cast) {
   if (defAb(att, def, 'multiscale') && def.hp >= def.maxHp) mul *= 0.5;
   if (defAb(att, def, 'thickfat') && (type === 'Fire' || type === 'Ice')) mul *= 0.5;
   if (defAb(att, def, 'damp') && MOVEFX.moves[m.id]?.behavior === 'burst') mul *= 0.75;
-  if (m.category === 'Physical' && att.status?.id === 'brn' && !ab(att, 'guts')) mul *= 0.5;
+  if (m.category === 'Physical' && att.status?.id === 'brn' && !ab(att, 'guts') && m.id !== 'facade') mul *= 0.5;
   const w = weatherNow(game);
   if (w === 'raindance') mul *= type === 'Water' ? 1.5 : type === 'Fire' ? 0.5 : 1;
   if (w === 'sunnyday') mul *= type === 'Fire' || m.id === 'hydrosteam' ? 1.5 : type === 'Water' ? 0.5 : 1;
@@ -968,6 +998,16 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'storedpower') power = 20 + 20 * Object.values(att.boosts).reduce((n, b) => n + Math.max(0, b.n), 0);
   if (m.id === 'crushgrip') power = Math.max(1, Math.floor((120 * def.hp) / def.maxHp));
   if (m.id === 'weatherball' && weatherNow(game)) power *= 2;
+  if (m.id === 'facade' && att.status) power *= 2;
+  if (m.id === 'lashout' && Object.values(att.boosts).some((b) => b.n < 0)) power *= 2;
+  if (m.id === 'beatup') power = 50;
+  if (m.id === 'fling') power = 80;
+  if (m.id === 'mistyexplosion' && terrainNow(game) === 'misty') power *= 1.5;
+  // Wind Power: charged by wind, its next Electric move is doubled.
+  if (att.charged && type === 'Electric') {
+    power *= 2;
+    att.charged = false;
+  }
   if (m.id === 'avalanche' && (game.fightTime || 0) - (att.lastHurtAt ?? -99) < 2) power *= 2; // hit back harder
   if (m.id === 'risingvoltage' && terrainNow(game) === 'electric' && grounded(def)) power *= 2;
   if (m.id === 'heatcrash') {
@@ -1023,7 +1063,7 @@ export function damageMods(game, att, def, cast) {
     eff: scrappy || typeless ? eff : undefined,
     offFrom: m.id === 'foulplay' ? 'def' : null, // Foul Play uses the target's Attack
     // Seismic Toss: damage equal to the user's level. Ruination: 1/8 of the target's current HP.
-    fixed: m.id === 'seismictoss' ? LEVEL : m.id === 'ruination' ? Math.max(1, Math.floor(def.hp / 8)) : 0,
+    fixed: m.id === 'seismictoss' ? LEVEL : m.id === 'ruination' ? Math.max(1, Math.floor(def.hp / 8)) : m.id === 'comeuppance' ? Math.max(1, Math.round((att.lastHurtDmg || 0) * 1.5)) : 0,
     noCrit: defAb(att, def, 'shellarmor') || defAb(att, def, 'battlearmor'),
     critMul: ab(att, 'sniper') ? 2.25 : 1.5,
     noKnock: ab(def, 'stalwart'),
@@ -1068,6 +1108,22 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       def.trapT = x.trap;
       def.chillT = Math.max(def.chillT, x.trap);
       say(game, 'trappedLog', { who: game.who(def) });
+    }
+    if (m.id === 'thief' && dmg > 0 && (!att.item || att.itemSpent) && def.item && !def.itemSpent && !ab(def, 'stickyhold')) game.stealItem?.(att, def);
+    if (m.id === 'burningjealousy' && Object.values(def.boosts).some((b) => b.n > 0)) inflict(game, def, 'brn', att);
+    if (ab(att, 'toxicchain') && dmg > 0 && chance(30)) {
+      ability(game, att);
+      inflict(game, def, 'tox', att);
+    }
+    if (m.flags?.includes('contact') && ab(def, 'perishbody') && att.alive && !(att.perishT > 0)) {
+      ability(game, def);
+      att.perishT = 6;
+      if (!(def.perishT > 0)) def.perishT = 6.1; // the one that touched it goes down first
+      say(game, 'perishBody');
+    }
+    if (m.flags?.includes('wind') && ab(def, 'windpower') && def.alive && !def.charged) {
+      ability(game, def);
+      def.charged = true;
     }
     if (x.jawlock && def.alive) {
       def.trapT = Math.max(def.trapT || 0, 6);
@@ -1272,6 +1328,16 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
         [att.ability, def.ability] = [def.ability, att.ability];
         say(game, 'skillSwapped', { who: game.who(att) });
       }
+    } else if (m.id === 'sketch') {
+      // Sketch: copies the foe's last skill for good.
+      const id2 = def.lastMove;
+      ok = !!id2 && id2 !== 'sketch' && !att.moves.includes(id2) && !!MOVEFX.moves[id2];
+      if (ok) {
+        att.moves = att.moves.map((x2) => (x2 === 'sketch' ? id2 : x2));
+        att.cd[id2] = 0.5;
+        att._cantHurt = undefined;
+        say(game, 'sketched', { who: game.who(att), move: DB.moves[id2].name });
+      }
     } else if (m.id === 'partingshot') {
       ok = true;
       boost(game, def, { atk: -1, spa: -1 }, att);
@@ -1301,6 +1367,26 @@ export function onMoveUsed(game, c, id) {
   if (id === 'mortalspin') game.clearHazards?.(c);
   if (id === 'aurawheel' && ab(c, 'hungerswitch')) c.hangry = !c.hangry; // Hunger Switch
   if (id === 'doubleshock') c.lostElectric = true;
+  if (id === 'burnup') c.lostFire = true;
+  if (id === 'steelroller' && game.terrain) {
+    say(game, terrainEndKey(game.terrain.id));
+    game.terrain = null;
+  }
+  if (id === 'chloroblast' && !ab(c, 'magicguard')) game.after(0.5, () => game.recoil(c, Math.ceil(c.maxHp / 2)), null);
+  if (id === 'mistyexplosion') {
+    const d2 = MOVEFX.moves[id];
+    game.after((d2.delay || 0.5) + 0.05, () => {
+      if (!c.alive) return;
+      c.hp = 0;
+      c.faint();
+    }, null);
+  }
+  // Truant: after attacking it loafs around for a moment.
+  if (ab(c, 'truant') && m.category !== 'Status') {
+    c.loafT = 1.4;
+    game.after(0.5, () => c.alive && say(game, 'loafing', { who: game.who(c) }), null);
+  }
+  if (id === 'tailwind') for (const f of game.fighters) if (f.alive && f.team === c.team && ab(f, 'windpower')) f.charged = true;
   if ((id === 'surf' || id === 'dive') && ab(c, 'gulpmissile')) c.gulp = true;
   if (id === 'present') {
     const r = Math.random();
@@ -1406,6 +1492,20 @@ export function selfMove(game, c, cast) {
     }
     return boost(game, c, { spe: -1, atk: 1, def: 1 }, c);
   }
+  if (m.id === 'coaching') {
+    const mates = allies(game, c);
+    if (!mates.length) return float(game, c, t('failed'), '#c8c8c8');
+    for (const f of mates) boost(game, f, { atk: 1, def: 1 }, c);
+    return;
+  }
+  if (m.id === 'lifedew' || m.id === 'junglehealing') {
+    for (const f of [c, ...allies(game, c)]) {
+      healText(game, f, f.heal(f.maxHp * 0.25));
+      if (m.id === 'junglehealing' && f.status) cureStatus(game, f);
+    }
+    return;
+  }
+  if (m.id === 'growth') return boost(game, c, w === 'sunnyday' ? { atk: 2, spa: 2 } : { atk: 1, spa: 1 }, c);
   if (m.id === 'wish') {
     say(game, 'wishMade', { who: game.who(c) });
     const slot = c.slot;

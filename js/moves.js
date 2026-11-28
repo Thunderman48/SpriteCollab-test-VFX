@@ -231,6 +231,15 @@ export class Projectile {
   draw(ctx) {
     if (this.chainFrom && !this.chainFrom.ko) drawChain(ctx, this.chainFrom, this, this.pd.chainColor);
     if (this.pd.stack) return this.drawStack(ctx);
+    if (this.itemImg?.complete && this.itemImg.naturalWidth) {
+      // Fling: the held item itself spins through the air.
+      ctx.save();
+      ctx.translate(Math.round(this.x), Math.round(this.y));
+      ctx.rotate(this.t * 14);
+      ctx.drawImage(this.itemImg, -12, -12, 24, 24);
+      ctx.restore();
+      return;
+    }
     this.effect.draw(ctx);
   }
 
