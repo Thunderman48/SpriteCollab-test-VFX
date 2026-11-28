@@ -16,11 +16,22 @@ export const STAT_KEYS = ['atk', 'def', 'spa', 'spd', 'spe', 'crit'];
 
 export const ab = (f, id) => !!f && f.ability === id;
 /** Mold Breaker / Turboblaze: the attacker ignores the target's ability. */
-const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze');
+const breaks = (att) => ab(att, 'moldbreaker') || ab(att, 'turboblaze') || ab(att, 'teravolt');
 /** The defender's ability, unless the attacker ignores it. */
 const defAb = (att, def, id) => !breaks(att) && ab(def, id);
 /** A move's type for this user (Pixilate turns Normal moves into Fairy moves). */
-export const moveType = (f, m) => (m.type === 'Normal' && ab(f, 'pixilate') ? 'Fairy' : m.type);
+export function moveType(f, m) {
+  if (m.type === 'Normal' && ab(f, 'pixilate')) return 'Fairy';
+  if (m.flags?.includes('sound') && ab(f, 'liquidvoice')) return 'Water';
+  return m.type;
+}
+
+/** Priority (faster wind-up): the move's own priority, or Gale Wings on Flying moves at full HP. */
+export const hasPriority = (f, m) => m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp);
+/** Grounded (not flying / Levitate): affected by terrain. */
+const grounded = (f) => !f.data.flying && !ab(f, 'levitate');
+/** Terrain (Grassy Surge): 'grassy' or null. */
+export const terrainNow = (game) => game.terrain?.id || null;
 export const stageMul = (n) => (n >= 0 ? (2 + n) / 2 : 2 / (2 - n));
 const chance = (pct) => Math.random() * 100 < pct;
 const say = (game, key, vars) => game.ui?.log(t(key, vars));
@@ -54,8 +65,9 @@ export function boost(game, f, boosts, source = null) {
   const enemy = source && source.team !== f.team;
   let up = false;
   let down = false;
-  for (const [k, raw] of Object.entries(boosts)) {
+  for (let [k, raw] of Object.entries(boosts)) {
     if (!raw || !STAT_KEYS.includes(k)) continue;
+    if (ab(f, 'contrary')) raw = -raw; // Contrary: reversed
     if (raw < 0 && enemy && ab(f, 'clearbody')) {
       ability(game, f);
       continue;
@@ -102,12 +114,12 @@ function ability(game, f) {
 /** Why a status can't be given (null = it can). */
 export function statusBlock(game, f, id, source) {
   if (!f.alive) return 'ko';
-  if (id === 'confusion') return f.confusedT > 0 ? 'has' : null;
+  if (id === 'confusion') return f.confusedT > 0 ? 'has' : ab(f, 'owntempo') ? 'type' : null;
   if (f.status) return 'has';
   if (f.statusImmune > 0) return 'immune';
   const types = f.types;
   if (id === 'brn' && types.includes('Fire')) return 'type';
-  if (id === 'par' && types.includes('Electric')) return 'type';
+  if (id === 'par' && (types.includes('Electric') || ab(f, 'limber'))) return 'type';
   if ((id === 'psn' || id === 'tox') && (types.includes('Poison') || types.includes('Steel') || ab(f, 'immunity'))) return 'type';
   if (id === 'frz' && (types.includes('Ice') || weatherNow(game) === 'sunnyday')) return 'type';
   if (f.protectT > 0 && source && source !== f) return 'protect';
@@ -117,7 +129,7 @@ export function statusBlock(game, f, id, source) {
 export function inflict(game, f, id, source = null, { force = false } = {}) {
   if (id === 'confusion') return confuse(game, f);
   if (!force && statusBlock(game, f, id, source)) return false;
-  f.status = { id, t: STATUS_TIME[id], tick: 0, n: 0 };
+  f.status = { id, t: STATUS_TIME[id] * (id === 'slp' && ab(f, 'earlybird') ? 0.5 : 1), tick: 0, n: 0 };
   if (f.cast && (id === 'slp' || id === 'frz')) game.cancelCast(f);
   say(game, 'st_' + id, { who: game.who(f) });
   float(game, f, t('stn_' + id), '#f8b8f8');
@@ -132,7 +144,7 @@ export function inflict(game, f, id, source = null, { force = false } = {}) {
 }
 
 function confuse(game, f) {
-  if (!f.alive || f.confusedT > 0) return false;
+  if (!f.alive || f.confusedT > 0 || ab(f, 'owntempo')) return false;
   f.confusedT = CONFUSE_TIME;
   say(game, 'st_confusion', { who: game.who(f) });
   float(game, f, t('stn_confusion'), '#f8b8f8');
@@ -173,6 +185,10 @@ function hurt(game, f, frac, color = '#c878f8') {
 
 // ---------- per-frame ----------
 export function tickGame(game, dt) {
+  if (game.terrain && (game.terrain.t -= dt) <= 0) {
+    say(game, 'terrainEnd');
+    game.terrain = null;
+  }
   if (game.weather && (game.weather.t -= dt) <= 0) {
     say(game, 'w_end_' + game.weather.id);
     game.weather = null;
@@ -183,7 +199,7 @@ export function tickGame(game, dt) {
   game.weatherFxT = (game.weatherFxT || 0) - dt;
   if (game.weatherFxT <= 0) {
     const b = game.bounds;
-    const def = MOVEFX.status[w === 'raindance' ? 'rain' : w === 'sunnyday' ? 'sun' : 'sand'];
+    const def = MOVEFX.status[{ raindance: 'rain', sunnyday: 'sun', sandstorm: 'sand', snowscape: 'snow' }[w]];
     const n = w === 'sunnyday' ? 1 : 3;
     for (let i = 0; i < n; i++) {
       const x = b.x0 + Math.random() * (b.x1 - b.x0);
@@ -197,7 +213,8 @@ export function tickGame(game, dt) {
 /** Screen colour for the current weather (drawn over the arena floor). */
 export function weatherTint(game) {
   const w = weatherNow(game);
-  return w === 'raindance' ? 'rgba(40,70,140,0.18)' : w === 'sunnyday' ? 'rgba(255,190,60,0.13)' : w === 'sandstorm' ? 'rgba(170,130,60,0.2)' : null;
+  if (!w && terrainNow(game) === 'grassy') return 'rgba(60,200,60,0.1)';
+  return { raindance: 'rgba(40,70,140,0.18)', sunnyday: 'rgba(255,190,60,0.13)', sandstorm: 'rgba(170,130,60,0.2)', snowscape: 'rgba(220,235,255,0.2)' }[w] || null;
 }
 
 export function tickFighter(game, f, dt) {
@@ -208,6 +225,7 @@ export function tickFighter(game, f, dt) {
   f.roostT = Math.max(0, f.roostT - dt);
   f.protectT = Math.max(0, f.protectT - dt);
   f.rechargeT = Math.max(0, f.rechargeT - dt);
+  f.stunT = Math.max(0, (f.stunT || 0) - dt);
   f.anticipateT = Math.max(0, (f.anticipateT || 0) - dt);
   if (f.confusedT > 0) f.confusedT = Math.max(0, f.confusedT - dt);
   f.fxT = (f.fxT || 0) - dt;
@@ -222,8 +240,10 @@ export function tickFighter(game, f, dt) {
     if (perSecond) {
       s.n++;
       if (s.id === 'brn') hurt(game, f, 0.02, '#f89858');
-      if (s.id === 'psn') hurt(game, f, 0.025);
-      if (s.id === 'tox') hurt(game, f, Math.min(0.06, 0.012 * s.n));
+      const poisoned = s.id === 'psn' || s.id === 'tox';
+      if (poisoned && ab(f, 'poisonheal')) f.heal(f.maxHp * 0.025);
+      else if (s.id === 'psn') hurt(game, f, 0.025);
+      else if (s.id === 'tox') hurt(game, f, Math.min(0.06, 0.012 * s.n));
     }
     if (f.fxT <= 0 && f.alive) {
       f.fxT = s.id === 'slp' ? 0.8 : s.id === 'frz' ? 0.35 : 0.7;
@@ -244,7 +264,8 @@ export function tickFighter(game, f, dt) {
   if (perSecond && f.alive) {
     const sandProof = ['sandveil', 'sandrush', 'sandforce'].some((a) => ab(f, a));
     if (w === 'sandstorm' && !f.types.some((x) => ['Rock', 'Ground', 'Steel'].includes(x)) && !sandProof) hurt(game, f, 0.01, '#d8b878');
-    if (ab(f, 'regenerator') && game.mode?.party === 1 && f.still && !f.cast) f.heal(f.maxHp * 0.01);
+    if (ab(f, 'regenerator') && game.mode?.party === 1 && f.still && !f.cast) f.heal(f.maxHp * 0.005);
+    if (terrainNow(game) === 'grassy' && grounded(f)) f.heal(f.maxHp * 0.01);
     if (w === 'raindance' && ab(f, 'raindish')) f.heal(f.maxHp * 0.01);
     if (w === 'sunnyday' && ab(f, 'solarpower')) hurt(game, f, 0.01, '#f8d858');
     // Bad Dreams: sleeping foes lose HP.
@@ -281,13 +302,17 @@ export function onEntry(game, f) {
   if (ab(f, 'intimidate')) {
     ability(game, f);
     for (const e of foes) {
-      if (ab(e, 'innerfocus') || ab(e, 'clearbody')) continue;
+      if (['innerfocus', 'clearbody', 'oblivious', 'owntempo'].some((a) => ab(e, a))) continue;
       boost(game, e, { atk: -1 }, f);
     }
   }
   if (ab(f, 'sandstream')) setWeather(game, 'sandstorm', f);
   if (ab(f, 'drought')) setWeather(game, 'sunnyday', f);
   if (ab(f, 'drizzle')) setWeather(game, 'raindance', f);
+  if (ab(f, 'grassysurge')) {
+    game.terrain = { id: 'grassy', t: WEATHER_TIME };
+    say(game, 'terrainGrassy');
+  }
   // Illusion: looks like the nearest foe until it's hit.
   if (ab(f, 'illusion') && !f.illusionBroken) {
     const near = game.nearestEnemy(f);
@@ -306,6 +331,11 @@ export function onSwitchOut(game, f) {
 
 /** Final damage tweaks: Disguise blocks the first hit. */
 export function adjustDamage(game, att, def, dmg) {
+  if (dmg >= def.hp && def.hp >= def.maxHp && defAb(att, def, 'sturdy')) {
+    ability(game, def);
+    game.ui?.log(t('enduredHit', { who: game.who(def) }));
+    return def.hp - 1;
+  }
   if (dmg > 0 && defAb(att, def, 'disguise') && !def.disguiseBroken) {
     def.disguiseBroken = true;
     ability(game, def);
@@ -371,6 +401,7 @@ export function wantsMove(game, f, id, foe) {
   if (f.distTo(foe) > fx.range + foe.radius) return false;
   if (m.category === 'Status') {
     if (ab(foe, 'magicbounce')) return false;
+    if (m.flags?.includes('powder') && foe.types.includes('Grass')) return false;
     if (m.status) return !statusBlock(game, foe, m.status, f) && !(m.status === 'par' && effectiveness('Electric', foe.types) === 0);
     if (m.volatile === 'confusion') return foe.confusedT <= 0;
     return true;
@@ -427,7 +458,9 @@ export function preHit(game, att, def, cast) {
     return true;
   }
   if (m.category === 'Physical' && ab(att, 'hustle') && Math.random() < 0.2) return miss(game, att, def);
-  if (m.category !== 'Status' && !noGuard(att, def)) {
+  const sharpEyed = ab(att, 'keeneye') || ab(att, 'illuminate');
+  if (m.category !== 'Status' && !noGuard(att, def) && !sharpEyed) {
+    if (defAb(att, def, 'snowcloak') && weatherNow(game) === 'snowscape' && Math.random() < 0.2) return miss(game, att, def);
     if (defAb(att, def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
     if (defAb(att, def, 'sandveil') && weatherNow(game) === 'sandstorm' && Math.random() < 0.2) return miss(game, att, def);
   }
@@ -452,6 +485,14 @@ export function damageMods(game, att, def, cast) {
   if (pinch && PINCH[att.ability] === type) mul *= 1.5;
   if (type !== m.type) mul *= 1.2; // Pixilate
   if (ab(att, 'sharpness') && m.flags?.includes('slicing')) mul *= 1.5;
+  if (ab(att, 'analytic') && (def.cast || def.castGap > 0)) mul *= 1.3;
+  if (ab(att, 'rivalry') && def.types.some((ty) => att.types.includes(ty))) mul *= 1.25;
+  if (ab(att, 'sheerforce') && m.secondary) mul *= 1.3;
+  if (terrainNow(game) === 'grassy') {
+    if (type === 'Grass' && grounded(att)) mul *= 1.3;
+    if (m.id === 'earthquake' && grounded(def)) mul *= 0.5;
+  }
+  if (x.superOn && def.types.includes(x.superOn)) mul *= 4; // Freeze-Dry hits Water super effectively
   if (ab(att, 'technician') && power <= 60) mul *= 1.5;
   if (ab(att, 'ironfist') && m.flags?.includes('punch')) mul *= 1.2;
   if (att.flashFire && type === 'Fire') mul *= 1.5;
@@ -467,12 +508,18 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'knockoff' && def.item && !def.itemSpent) power *= 1.5;
   if (x.punish && def.cast) mul *= x.punish; // Sucker Punch
   const stab = ab(att, 'protean') || ab(att, 'libero') || att.types.includes(type) ? (ab(att, 'adaptability') ? 2 : 1.5) : 1;
-  const critStage = (m.critRatio ? m.critRatio - 1 : 0) + stageOf(att, 'crit') + (ab(att, 'superluck') ? 1 : 0);
-  return { mul, power, stab, critStage, noCrit: defAb(att, def, 'shellarmor'), type };
+  const critStage = m.willCrit ? 3 : (m.critRatio ? m.critRatio - 1 : 0) + stageOf(att, 'crit') + (ab(att, 'superluck') ? 1 : 0);
+  return {
+    mul, power, stab, critStage, type,
+    noCrit: defAb(att, def, 'shellarmor'),
+    critMul: ab(att, 'sniper') ? 2.25 : 1.5,
+    ignoreAtkStages: defAb(att, def, 'unaware'), // the defender ignores the attacker's boosts
+    ignoreDefStages: ab(att, 'unaware') || !!m.ignoreStages || !!x.ignoreStages,
+  };
 }
 
 /** After a hit landed: original secondary effects + this game's extra properties + contact abilities. */
-export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
+export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } = {}) {
   const m = cast.move;
   const x = MOVEFX.moves[m.id]?.extra || {};
   const once = (cast.effected ||= new Set());
@@ -485,11 +532,11 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
       const h = att.heal(Math.max(1, Math.round(dmg * m.drain)));
       if (h > 0) game.addEffect(new FloatText(`+${Math.round(h)}`, att.x, att.y - 24, '#78f878'));
     }
-    if (m.recoil) game.recoil(att, Math.floor(dmg * m.recoil));
+    if (m.recoil && !ab(att, 'rockhead')) game.recoil(att, Math.floor(dmg * m.recoil));
     if (def.status?.id === 'frz' && m.type === 'Fire') cureStatus(game, def);
   }
   if (first && def.alive) {
-    for (const s of m.secondary || []) {
+    for (const s of ab(att, 'sheerforce') ? [] : m.secondary || []) {
       if (!chance(s.chance * sg)) continue;
       if (s.status) inflict(game, def, s.status, att);
       if (s.volatile === 'flinch') flinch(game, def, att);
@@ -506,7 +553,23 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
       def.loseItem();
     }
     // Contact abilities of the one that got hit.
-    if (m.flags?.includes('contact') && att.alive) {
+    if (crit && ab(def, 'angerpoint') && def.alive) {
+      ability(game, def);
+      boost(game, def, { atk: 12 }, def);
+    }
+    if (m.category === 'Physical' && ab(def, 'weakarmor') && def.alive) {
+      ability(game, def);
+      boost(game, def, { def: -1, spe: 2 }, def);
+    }
+    if (m.flags?.includes('contact') && att.alive && !ab(att, 'longreach')) {
+      if (ab(def, 'poisonpoint') && chance(30)) {
+        ability(game, def);
+        inflict(game, att, 'psn', def);
+      }
+      if (ab(def, 'effectspore') && chance(30) && !att.types.includes('Grass')) {
+        ability(game, def);
+        inflict(game, att, ['psn', 'par', 'slp'][Math.floor(Math.random() * 3)], def);
+      }
       if (ab(def, 'static') && chance(30)) {
         ability(game, def);
         inflict(game, att, 'par', def);
@@ -519,7 +582,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
         ability(game, def);
         inflict(game, att, 'brn', def);
       }
-      if (ab(def, 'cutecharm') && chance(30)) {
+      if (ab(def, 'cutecharm') && chance(30) && !ab(att, 'oblivious')) {
         ability(game, def);
         confuse(game, att);
       }
@@ -554,6 +617,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0 } = {}) {
     }
     if (m.status) {
       if (m.status === 'par' && effectiveness('Electric', def.types) === 0) ok = false;
+      else if (m.flags?.includes('powder') && def.types.includes('Grass')) ok = false; // Spore: Grass types are immune
       else ok = inflict(game, def, m.status, att);
     } else if (m.volatile === 'confusion') ok = confuse(game, def);
     if (!ok) float(game, def, t('failed'), '#c8c8c8');

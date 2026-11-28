@@ -916,11 +916,15 @@ export class UI {
     if (!this.hudEls) return;
     const g = this.game;
     const w = weatherNow(g);
-    const wsig = w ? `${w}${Math.ceil(g.weather.t)}` : '';
+    const tr = g.terrain;
+    const parts = [];
+    if (w) parts.push(`${t('wn_' + w)} <span class="dim">${Math.ceil(g.weather.t)}</span>`);
+    if (tr) parts.push(`<span class="green">${t('wn_' + tr.id)}</span> <span class="dim">${Math.ceil(tr.t)}</span>`);
+    const wsig = parts.join(' · ');
     if (wsig !== this.weatherSig && this.weatherEl) {
       this.weatherSig = wsig;
-      this.weatherEl.innerHTML = w ? `${t('wn_' + w)} <span class="dim">${Math.ceil(g.weather.t)}</span>` : '';
-      this.weatherEl.classList.toggle('on', !!w);
+      this.weatherEl.innerHTML = wsig;
+      this.weatherEl.classList.toggle('on', !!wsig);
     }
     for (const h of this.hudEls) {
       const f = h.f;

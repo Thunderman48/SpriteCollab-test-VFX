@@ -45,8 +45,8 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
   const stage = (am.crit > 1 / 24 ? 1 : 0) + (x.critStage || 0);
   const crit = !x.noCrit && Math.random() < CRIT_CHANCE[Math.max(0, Math.min(3, stage))];
   // Stat stages count, except that crits ignore the attacker's drops and the defender's raises.
-  const A = attacker.statVal ? attacker.statVal(physical ? 'atk' : 'spa', crit ? 'atk' : null) : physical ? attacker.stats.atk : attacker.stats.spa;
-  const D = defender.statVal ? defender.statVal(physical ? 'def' : 'spd', crit ? 'def' : null) : physical ? defender.stats.def : defender.stats.spd;
+  const A = attacker.statVal ? attacker.statVal(physical ? 'atk' : 'spa', crit ? 'atk' : null, x.ignoreAtkStages) : physical ? attacker.stats.atk : attacker.stats.spa;
+  const D = defender.statVal ? defender.statVal(physical ? 'def' : 'spd', crit ? 'def' : null, x.ignoreDefStages) : physical ? defender.stats.def : defender.stats.spd;
   const power = x.power ?? move.power;
   const base = Math.floor(Math.floor((Math.floor((2 * LEVEL) / 5 + 2) * power * A) / D) / 50) + 2;
   const type = x.type || move.type; // Pixilate can change it
@@ -61,7 +61,7 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
     (eff > 1 ? am.superMul ?? 1 : 1) *
     (1 + Math.min(0.5, (attacker.metroStacks || 0) * (am.metronome || 0))) *
     (dm.takenMul ?? 1);
-  const dmg = eff === 0 ? 0 : Math.max(1, Math.floor(base * stab * eff * (crit ? 1.5 : 1) * rand * factor * items * (x.mul ?? 1)));
+  const dmg = eff === 0 ? 0 : Math.max(1, Math.floor(base * stab * eff * (crit ? x.critMul || 1.5 : 1) * rand * factor * items * (x.mul ?? 1)));
   return { dmg, eff, crit };
 }
 

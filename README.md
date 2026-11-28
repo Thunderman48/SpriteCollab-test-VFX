@@ -4,7 +4,7 @@ A real-time Pokémon arena brawler for the browser, built on the [PMDCollab Spri
 sprites, with move effects from PMD: Origins' [RawAsset](https://github.com/PMDCollab/RawAsset) sheets. The interface uses PMD: Origins'
 own window borders, portrait frames, cursor, fonts and type icons, so it looks like Mystery Dungeon.
 
-**Roster (60):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon, Gyarados, Alakazam, Machamp, Lapras, Scizor, Typhlosion, Sceptile, Swampert, Infernape, Salamence, Absol, Togekiss, Mew, Jirachi, Darkrai, Greninja, Arcanine, Ninetales, Vaporeon, Jolteon, Flareon, Espeon, Sylveon, Gallade, Zoroark, Mimikyu, Hydreigon, Volcarona, Heracross, Milotic, Lugia, Ho-Oh, Kyogre, Groudon, Celebi, Chandelure, Excadrill, Weavile, Dragapult, Goodra. Each Pokémon picks 4 skills from the moves it can learn in the main games (118 skills in the game), and every skill has its own VFX.
+**Roster (100):** Rayquaza, Lucario, Garchomp, Gengar, Mewtwo, Charizard, Blastoise, Venusaur, Pikachu, Dialga, Palkia, Giratina, Blaziken, Gardevoir, Metagross, Tyranitar, Eevee, Snorlax, Dragonite, Umbreon, Gyarados, Alakazam, Machamp, Lapras, Scizor, Typhlosion, Sceptile, Swampert, Infernape, Salamence, Absol, Togekiss, Mew, Jirachi, Darkrai, Greninja, Arcanine, Ninetales, Vaporeon, Jolteon, Flareon, Espeon, Sylveon, Gallade, Zoroark, Mimikyu, Hydreigon, Volcarona, Heracross, Milotic, Lugia, Ho-Oh, Kyogre, Groudon, Celebi, Chandelure, Excadrill, Weavile, Dragapult, Goodra, Scyther, Starmie, Aerodactyl, Clefable, Slowbro, Zapdos, Moltres, Articuno, Feraligatr, Houndoom, Kingdra, Skarmory, Suicune, Crobat, Breloom, Aggron, Flygon, Latios, Empoleon, Luxray, Roserade, Mamoswine, Heatran, Serperior, Haxorus, Krookodile, Conkeldurr, Reshiram, Zekrom, Talonflame, Hawlucha, Decidueye, Incineroar, Primarina, Lycanroc, Cinderace, Rillaboom, Inteleon, Meowscarada, Ceruledge. Each Pokémon picks 4 skills from the moves it can learn in the main games (151 skills in the game), and every skill has its own VFX.
 
 **Held items:** like in Mystery Dungeon, each Pokémon holds one item. There are 38 items with their real PMD names and sprites (Power Band, Choice Specs, Life Orb, Scope Lens, Shell Bell, Sitrus Berry, Reviver Seed, Warp Scarf, Charcoal and the other type boosters...). Effects that only make sense in a dungeon were adapted to real time; the in-game description says what each item does here.
 
@@ -15,7 +15,7 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
   Korean uses the official Korean Pokémon, move, type and item names, and the Galmuri pixel font for Hangul.
 - **Team setup:** a versus screen. Pick the battle mode from the **Mode** dropdown (top right). Each player panel shows the Pokémon on a stage,
   a **Player / CPU** switch, a **Random** button and (in Trio) the party of three. Click or tap a Pokémon to open the **editor**:
-  all 60 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** and **Personality** (see *Customizing a Pokémon* below).
+  all 100 Pokémon in one grid, plus tabs for **Stats**, **Skills**, **Equipment** and **Personality** (see *Customizing a Pokémon* below).
   Builds and the team are saved in the browser: picking a Pokémon again brings back its last build, and **Reset to default** clears it.
 - Everything works with the mouse, touch, the keyboard (arrows / WASD move the cursor, Enter / Space choose, Esc goes back, Tab changes editor tab) or any gamepad.
 
@@ -33,10 +33,24 @@ own window borders, portrait frames, cursor, fonts and type icons, so it looks l
 **Original skill effects, adapted to real time:**
 - **Stat changes are timed buffs.** Swords Dance, Dragon Dance, Nasty Plot, Calm Mind, Bulk Up, Iron Defense, Agility, Shell Smash and Focus Energy raise stats; Close Combat, Draco Meteor, Superpower and others lower your own; Intimidate and many secondary effects lower the foe's. Each change lasts **20 s**; casting again stacks it (up to ±6, ×4 at +6 as in the games) and refreshes the timer. The HUD lists them under each Pokémon.
 - **Status conditions are timed:** burn (8 s, HP loss, physical damage halved), poison and bad poison (8 s, HP loss), paralysis (8 s, slower, 20% of attacks fail), sleep (2.5 s), freeze (1.5 s, Fire thaws it), confusion (4 s, wobbly steering, 25% of attacks hit itself), flinch (interrupts a wind-up). After a status ends there's 3 s of immunity, so nobody gets stun-locked. Type immunities follow the games.
-- **Weather** (Rain Dance, Sunny Day, Sandstorm, Sand Stream) lasts 20 s: Water/Fire ×1.5 or ×0.5, sandstorm chip damage, Thunder strikes instantly in rain, Solar Beam needs no charge in sun.
+- **Weather** (Rain Dance, Sunny Day, Sandstorm, Snowscape, and Drizzle / Drought / Sand Stream) lasts 20 s: Water/Fire ×1.5 or ×0.5, sandstorm chip damage, Ice types' Defense ×1.5 in snow, Thunder and Hurricane strike instantly in rain, Blizzard strikes instantly in snow, Solar Beam needs no charge in sun. **Grassy Terrain** (Grassy Surge) boosts Grass moves and slowly heals grounded Pokémon.
 - Drain, recoil, high critical-hit ratio, **priority** (faster wind-up), Hyper Beam's recharge, Outrage's rampage + confusion, U-turn (switches out in Trio), Knock Off (removes the held item), Protect, Recover / Roost / Moonlight / Synthesis / Rest all work.
+- **Every dash and melee skill moves in its own way** (`js/motion.js`):
+  - Quick Attack and Accelerock zig-zag with afterimages.
+  - Extreme Speed rushes through the target and back.
+  - Aerial Ace and Feint Attack slip past the target and can't be dodged.
+  - Brave Bird and High Jump Kick fly off-screen and dive onto a marked spot. High Jump Kick crashes if it misses.
+  - Shadow Sneak travels as a shadow and pops up under the target.
+  - U-turn hits and flies back.
+  - Sucker Punch blinks behind the target.
+  - Flare Blitz, Wild Charge and Head Smash wind up, then charge. Flare Blitz leaves burning ground and Wild Charge leaves sparks that can paralyze.
+  - Dragon Rush and Bolt Strike catch the target and carry it.
+  - Drill Peck and Darkest Lariat spin through, hitting several times.
+  - Waterfall launches the target into the air.
+  - Wood Hammer and Giga Impact leap and land with a shockwave.
+  - Melee skills: slashes and tail swings hit everything in an arc, Sky Uppercut launches, Body Slam and Hammer Arm hop on the target, Close Combat and Play Rough are rapid combos, and bites (Crunch, Fangs) hold the target in place.
 - **Extra properties** make similar skills different, e.g. Flamethrower pierces through everyone in a line, Fire Blast leaves burning ground, Ice Beam chills (slows), Hydro Pump knocks far back, Sucker Punch hits harder mid-attack, Dragon Claw recharges faster, Mach Punch lunges from farther away.
-- **All 74 abilities** of the roster work in real time (Intimidate, Multiscale, Rough Skin, Static, Sand Stream, Drought, Drizzle, Speed Boost, Moxie, Technician, Water / Volt Absorb, Levitate, Mold Breaker, Magic Bounce, Disguise, Illusion, Pixilate, Regenerator, No Guard...). The Personality tab describes each one.
+- **All 103 abilities** of the roster work in real time (Intimidate, Multiscale, Rough Skin, Static, Sand Stream, Drought, Drizzle, Speed Boost, Moxie, Technician, Water / Volt Absorb, Levitate, Mold Breaker, Magic Bounce, Disguise, Illusion, Pixilate, Regenerator, No Guard...). The Personality tab describes each one.
 
 ## Battle modes
 
@@ -82,7 +96,7 @@ Picked under **Rules** in the Mode dropdown, on top of any game mode:
 - Every skill has its own cooldown based on its PP: `cooldown = 45 / PP` seconds (status skills: `150 / PP`), plus a short pause after each attack. High-PP moves fire often (Bullet Punch, 30 PP: every 1.5 s); low-PP moves fire rarely but hit hard (Hyper Beam, 5 PP: every 9 s).
 - **Dodging** gives a short dash with invulnerability. Use it to slip through projectiles, beams and the red warning circles that area attacks show. Dodging during a wind-up cancels it, and the move stays ready.
 - **Auto-attacks never waste a move the target is immune to** (e.g. Earth Power vs Rayquaza, or a Water move into Water Absorb); the HUD greys such moves out.
-- **Sudden death:** after a while (90 s in Showdown, 100 s in 2vs2, 200 s in Trio) all damage is doubled, so no match can stall forever.
+- **Sudden death:** after a while (90 s in Showdown, 100 s in 2vs2, 200 s in Trio) all damage is doubled and keeps rising by +50% every 30 s, and healing is halved, so no match can stall forever.
 
 URL shortcuts for testing: `?mode=trio&cpu=all&autostart` starts an all-CPU Trio battle; `?p1=rayquaza&p2=mewtwo&cpu=all` starts a CPU 1v1.
 
@@ -105,6 +119,7 @@ js/main.js                 game loop, arena, hit handling, screens
 js/sprite.js               SpriteCollab AnimData player (8 directions, frame durations, Hit/Rush/Return frames)
 js/vfx.js                  RawAsset particle player, beams (Head/Body/Tail), warning circles, damage text
 js/moves.js                move behaviours: projectile, beam, melee, dash, targetArea, burst, vanish, self
+js/motion.js               how dash / melee skills move (zig-zag, dive, shadow, ram, spin, combos...)
 js/effects.js              stat stages (timed buffs), status conditions, weather, move side effects, abilities
 js/builds.js               builds (nature, ability, Stat Points, skills), saving, Random Battle builds
 js/movetext.js             skill effect descriptions generated from the move data

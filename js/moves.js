@@ -2,7 +2,8 @@
 // sprite anim / RawAsset VFX it uses. Damage numbers come from data/moves.json.
 import { DB } from './combat.js';
 import { Effect, Beam, Telegraph } from './vfx.js';
-import { selfMove, burnGround, weatherNow } from './effects.js';
+import { selfMove, burnGround, weatherNow, hasPriority } from './effects.js';
+import { DASH, MELEE } from './motion.js';
 
 export const MOVEFX = { common: {}, moves: {} };
 /** Pause after every attack before the next one can start. */
@@ -10,11 +11,11 @@ export const CAST_GAP = 0.5;
 
 const MOUTH_Y = -4;
 
-function frontOf(c, angle, extra = 4) {
+export function frontOf(c, angle, extra = 4) {
   return { x: c.x + Math.cos(angle) * (c.radius + extra), y: c.y + MOUTH_Y + Math.sin(angle) * (c.radius * 0.6 + extra) };
 }
 
-function spawnFx(game, def, x, y, opts = {}) {
+export function spawnFx(game, def, x, y, opts = {}) {
   if (!def) return null;
   const e = new Effect(def, x, y, opts);
   game.addEffect(e);
@@ -35,7 +36,7 @@ export function startCast(game, c, t, id) {
     drive: null,
     faceAngle: c.angleTo(t),
     // Priority moves (Quick Attack, Bullet Punch...) wind up faster and skip most of the gap.
-    speed: move.priority > 0 ? 1.6 : 1,
+    speed: hasPriority(c, move) ? 1.6 : 1,
   };
   cast.release = () => {
     if (cast.released) return;
@@ -48,7 +49,7 @@ export function startCast(game, c, t, id) {
     cast.done = true;
     if (c.cast === cast) {
       c.cast = null;
-      c.castGap = move.priority > 0 ? 0.15 : CAST_GAP;
+      c.castGap = cast.speed > 1 ? 0.15 : CAST_GAP;
     }
   };
   c.cast = cast;
@@ -59,7 +60,7 @@ export function startCast(game, c, t, id) {
 }
 
 /** Every move auto-targets the opponent (falls back to the last direction if it fainted). */
-function aimOf(c, t, cast) {
+export function aimOf(c, t, cast) {
   return t.alive ? c.angleTo(t) : cast.faceAngle;
 }
 
@@ -68,6 +69,8 @@ export function cancelCast(game, c) {
   if (!cast) return;
   game.cancelOwner(cast);
   c.hidden = false;
+  c.sneaking = false;
+  c.lift = 0;
   cast.done = true;
   c.cast = null;
   c.castGap = 0.1;
@@ -182,7 +185,7 @@ class Projectile {
   }
 }
 
-function distToSegment(px, py, x0, y0, angle, len) {
+export function distToSegment(px, py, x0, y0, angle, len) {
   const dx = Math.cos(angle);
   const dy = Math.sin(angle);
   const t = Math.max(0, Math.min(len, (px - x0) * dx + (py - y0) * dy));
@@ -276,6 +279,7 @@ const BEHAVIORS = {
     const lungeSpeed = (d.lunge || 0) / hitTime;
     cast.drive = (dt) => {
       elapsed += dt;
+      if (d.style === 'slam') c.lift = Math.sin(Math.min(1, elapsed / hitTime) * Math.PI) * (d.hop || 22); // hop onto the target
       if (travelled >= (d.lunge || 0) || !t.alive) return;
       if (c.distTo(t) <= c.radius + t.radius + 4) return;
       const a = c.angleTo(t);
@@ -297,66 +301,25 @@ const BEHAVIORS = {
       cast.release();
       cast.drive = null;
       cast.track = false;
-      const hits = d.hits || 1;
-      for (let k = 0; k < hits; k++) {
-        game.after(k * (d.hitGap || 0.12), () => {
-          if (!t.alive || c.ko) return;
-          const a = c.angleTo(t);
-          if (c.distTo(t) <= c.radius + t.radius + 34) {
-            if (game.dodges(c, t)) return game.dodgedText(t);
-            game.applyHit(c, t, cast, { angle: a, factor: 1 / hits });
-          } else {
-            spawnFx(game, MOVEFX.common.dodge, c.x + Math.cos(a) * 26, c.y + Math.sin(a) * 26, { scale: 0.7 });
-          }
-        }, null);
-      }
+      c.lift = 0;
+      (MELEE[d.style] || MELEE.basic)(game, c, t, cast, d);
       game.sfx?.('melee');
     };
-    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after((d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
+    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after(d.style === 'clamp' ? d.hold || 0.45 : (d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
   },
 
+  /** Dashes: each skill picks a style of movement (js/motion.js). */
   dash(game, c, t, cast) {
-    const d = cast.def;
-    cast.release();
-    cast.track = false;
-    const a = aimOf(c, t, cast);
-    cast.faceAngle = a;
-    c.sprite.play(d.anim, { loop: true, restart: true, speed: 1.5 });
-    const flip = Math.cos(a) < 0;
-    spawnFx(game, d.under, c.x, c.y, { follow: c, layer: 'under', flipX: flip, life: d.dashTime + 0.3 });
-    spawnFx(game, d.over, c.x, c.y, { follow: c, layer: 'over', flipX: flip, life: d.dashTime + 0.3 });
-    let time = 0;
-    let hit = false;
-    cast.drive = (dt) => {
-      time += dt;
-      if (time >= d.dashTime || hit) {
-        cast.drive = null;
-        game.after(0.12, cast.finish, null);
-        return;
-      }
-      c.x += Math.cos(a) * d.dashSpeed * dt;
-      c.y += Math.sin(a) * d.dashSpeed * dt;
-      c.clamp();
-      const e = game.enemiesOf(c).find((o) => c.distTo(o) <= c.radius + o.radius + 6);
-      if (e) {
-        if (game.dodges(c, e)) {
-          if (!cast.dodgeShown) game.dodgedText(e);
-          cast.dodgeShown = true;
-        } else {
-          hit = true;
-          game.applyHit(c, e, cast, { angle: a });
-          game.shake(d.shake || 0, 0.25);
-        }
-      }
-    };
-    game.sfx?.('dash');
+    (DASH[cast.def.style] || DASH.straight)(game, c, t, cast);
   },
 
   targetArea(game, c, t, cast) {
     const d = cast.def;
     const radius = d.radius * (c.mods?.hitbox ?? 1); // Wide Lens
     // Thunder in rain: no warning time.
-    const warnTime = d.extra?.instantRain && weatherNow(game) === 'raindance' ? 0.12 : d.warn;
+    const w = weatherNow(game);
+    const instant = (d.extra?.instantRain && w === 'raindance') || (d.extra?.instantWeather && w === d.extra.instantWeather);
+    const warnTime = instant ? 0.12 : d.warn;
     const go = () => {
       if (cast.released) return;
       cast.release();

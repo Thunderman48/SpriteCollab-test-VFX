@@ -163,7 +163,7 @@ class Game {
     this.addEffect(new FloatText(t('dodged'), f.x, f.y - 26, '#00f8f8'));
   }
 
-  applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false } = {}) {
+  applyHit(att, def, cast, { angle = 0, factor = 1, at = null, noFx = false, kbMul = null } = {}) {
     if (!def.alive || this.state === 'result') return;
     const move = cast.move;
     const fxd = cast.def;
@@ -191,7 +191,7 @@ class Game {
     s.hits++;
     if (eff > 1) s.supers++;
     this.moveLog[move.id] = (this.moveLog[move.id] || 0) + 1;
-    def.takeHit(dmg, angle, fxd.extra?.kbMul ?? 1);
+    def.takeHit(dmg, angle, kbMul ?? fxd.extra?.kbMul ?? 1);
     if (att.mods.drain && dmg > 0 && att.alive) att.heal(Math.max(1, Math.round(dmg * att.mods.drain))); // Shell Bell
     const color = eff === 0 ? '#a0a0a0' : eff > 1 ? '#f8f800' : eff < 1 ? '#c8c8c8' : '#f8f8f8';
     this.addEffect(new FloatText(String(dmg), def.x + (Math.random() - 0.5) * 10, def.y - 20, color, eff > 1 || crit));
@@ -201,7 +201,7 @@ class Game {
     if (crit) this.ui.log(t('crit'));
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
-    if (eff > 0) FXE.afterHit(this, att, def, cast, dmg, { angle });
+    if (eff > 0) FXE.afterHit(this, att, def, cast, dmg, { angle, crit });
     if (def.ko) FXE.onKnockOut(this, att);
     return dmg;
   }
@@ -221,6 +221,23 @@ class Game {
     p.switchCd = 0;
     if (c.cast) cancelCast(this, c);
     this.trySwitch(c.slot);
+  }
+
+  /** A foe stepped on a hazard trail (Flare Blitz fire, Wild Charge sparks): small damage + status chance. */
+  hazardHit(owner, e, h) {
+    if (!e.alive || FXE.ab(e, 'magicguard')) return;
+    const dmg = Math.max(1, Math.round(e.maxHp * (h.dmg || 0.01)));
+    e.hp = Math.max(0, e.hp - dmg);
+    this.addEffect(new FloatText(String(dmg), e.x + 6, e.y - 18, '#f89858'));
+    if (h.status && Math.random() * 100 < (h.chance || 10)) FXE.inflict(this, e, h.status, owner);
+    if (e.hp <= 0) e.faint();
+  }
+
+  /** High Jump Kick missed: the user crashes and loses part of its HP. */
+  crash(f, frac) {
+    if (!f.alive || FXE.ab(f, 'magicguard')) return;
+    this.ui.log(t('crashed', { who: this.who(f) }));
+    this.recoil(f, Math.round(f.maxHp * frac), 'crash', false);
   }
 
   /** Self-damage from moves like Flare Blitz (and Life Orb). Magic Guard is immune. */
@@ -327,7 +344,9 @@ class Game {
       for (const f of this.fighters) FXE.onEntry(this, f); // Intimidate, Sand Stream, Trace
     });
     this.damageMul = 1;
+    this.slowmo = 1; // never inherit the KO slow motion of a battle that was left early
     this.weather = null;
+    this.terrain = null;
   }
 
   /** Quick 1v1 helper (used by tests and URL shortcuts). */
@@ -347,6 +366,7 @@ class Game {
 
   leaveBattle() {
     this.weather = null;
+    this.terrain = null;
     this.fighters = [];
     this.parties = [];
     this.objects = [];
@@ -430,6 +450,8 @@ class Game {
         this.ui.log(`<span class="yellow">${t('sudden')}</span>`);
         this.sfx('go');
       }
+      // Sudden death keeps escalating (+50% damage every 30 s) so even two healers can't stall forever.
+      if (this.damageMul > 1) this.damageMul = 2 + Math.floor((this.fightTime - this.mode.suddenDeath) / 30) * 0.5;
     }
     this.dodgeTextT = this.dodgeTextT.map((t) => Math.max(0, t - dt));
 

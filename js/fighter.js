@@ -54,6 +54,11 @@ export class Fighter {
     this.pendingRecharge = 0;
     this.lock = null; // Outrage
     this.flashFire = false;
+    // Motion of dash / melee skills (js/motion.js): height, afterimages, shadow travel, short stun.
+    this.lift = 0;
+    this.ghosts = [];
+    this.sneaking = false;
+    this.stunT = 0;
     // Skill order: skill 1 is ready first, then 2, 3, 4; afterwards the top ready skill wins.
     this.cd = {};
     this.moves.forEach((id, i) => (this.cd[id] = 0.3 + 0.8 * i));
@@ -115,15 +120,21 @@ export class Fighter {
   }
 
   get stunned() {
-    return this.status?.id === 'slp' || this.status?.id === 'frz' || this.rechargeT > 0;
+    return this.status?.id === 'slp' || this.status?.id === 'frz' || this.rechargeT > 0 || this.stunT > 0;
+  }
+
+  /** Leave an afterimage of the current frame (speed moves). */
+  ghost(tint = null) {
+    this.ghosts.push({ x: this.x, y: this.y - this.lift, dir: this.dir, anim: this.sprite.anim, frame: this.sprite.frame, t: 0, tint });
+    if (this.ghosts.length > 10) this.ghosts.shift();
   }
 
   /**
    * A stat with its timed stage and ability/weather modifiers.
    * critSide 'atk' ignores the attacker's drops, 'def' ignores the defender's raises.
    */
-  statVal(k, critSide = null) {
-    let n = stageOf(this, k);
+  statVal(k, critSide = null, ignoreStages = false) {
+    let n = ignoreStages ? 0 : stageOf(this, k);
     if ((critSide === 'atk' && n < 0) || (critSide === 'def' && n > 0)) n = 0;
     let v = this.stats[k] * stageMul(n);
     const w = weatherNow(this.game);
@@ -135,6 +146,8 @@ export class Fighter {
     if (k === 'spe' && ab(this, 'unburden') && this.itemGone) v *= 1.5;
     if (k === 'spe' && ab(this, 'quickfeet') && this.status) v *= 1.5;
     if (k === 'spe' && ab(this, 'sandrush') && w === 'sandstorm') v *= 1.5;
+    if (k === 'spe' && ab(this, 'swiftswim') && w === 'raindance') v *= 1.5;
+    if (k === 'def' && w === 'snowscape' && this.types.includes('Ice')) v *= 1.5;
     if (k === 'def' && ab(this, 'marvelscale') && this.status) v *= 1.5;
     return v;
   }
@@ -145,6 +158,7 @@ export class Fighter {
     const ratio = Math.sqrt(spe / this.stats.spe); // stages help, but walking speed can't explode
     let move = (64 + this.stats.spe * 0.22 * ratio) * (this.mods?.speedMul ?? 1);
     if (ab(this, 'lightmetal')) move *= 1.1;
+    if (ab(this, 'heavymetal')) move *= 0.9;
     if (this.status?.id === 'par' && !ab(this, 'quickfeet')) move *= 0.5;
     if (this.chillT > 0) move *= 0.6;
     this.moveSpeed = move;
@@ -165,6 +179,7 @@ export class Fighter {
   }
 
   heal(amount) {
+    if (this.game.damageMul > 1) amount /= 2; // sudden death: healing is halved
     const before = this.hp;
     this.hp = Math.min(this.maxHp, this.hp + amount);
     return this.hp - before;
@@ -194,7 +209,7 @@ export class Fighter {
     if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
     this.metroStacks = 0; // Metronome streak breaks when you're hit
-    const kb = this.mods.noKnockback ? 0 : (dmg > 0 ? 160 : 40) * kbMul;
+    const kb = this.mods.noKnockback ? 0 : (dmg > 0 ? 160 : 40) * kbMul * (ab(this, 'heavymetal') ? 0.4 : 1);
     this.kbx = Math.cos(angle) * kb;
     this.kby = Math.sin(angle) * kb;
     this.setEmotion('Pain');
@@ -326,8 +341,10 @@ export class Fighter {
 
     if (this.cast) {
       if (this.cast.track && opp) this.cast.faceAngle = this.angleTo(opp);
-      this.dir = angleToDir(this.cast.faceAngle);
+      if (!this.cast.lockDir) this.dir = angleToDir(this.cast.faceAngle);
     }
+    for (const g of this.ghosts) g.t += dt;
+    this.ghosts = this.ghosts.filter((g) => g.t < 0.3);
 
     if (this.status?.id === 'slp' && !this.cast) this.sprite.play('Sleep');
     else if (!this.cast && this.dodgeT <= 0 && this.hurtT <= 0) {
@@ -359,6 +376,7 @@ export class Fighter {
   }
 
   draw(ctx) {
+    if (this.sneaking) return this.drawSneak(ctx);
     if (this.hidden) return; // vanished (Shadow Force)
     const frozen = this.status?.id === 'frz';
     let alpha = 1;
@@ -370,11 +388,11 @@ export class Fighter {
     ctx.globalAlpha = 0.35 * alpha;
     ctx.fillStyle = '#000';
     ctx.beginPath();
-    const sw = Math.max(8, this.radius * (this.data.flying ? 1.1 : 0.9));
+    const sw = Math.max(8, this.radius * (this.data.flying ? 1.1 : 0.9)) * (1 - Math.min(0.6, this.lift / 200));
     ctx.ellipse(Math.round(this.x), Math.round(this.y + 7), sw, sw * 0.38, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    const sy = this.y + bob - (this.data.flying ? 6 : 0);
+    const sy = this.y + bob - (this.data.flying ? 6 : 0) - this.lift;
     const st = this.status?.id;
     const pulse = 0.5 + 0.5 * Math.sin(this.game.time * 6);
     const tint = frozen ? '#a8e0ff' : this.protectT > 0 ? '#88f8f8' : st === 'brn' ? '#f86030' : st === 'par' ? '#f8e048' : st === 'psn' || st === 'tox' ? '#b048f8' : null;
@@ -386,8 +404,27 @@ export class Fighter {
       if (spr.name !== spr.resolve(this.sprite.name)) spr.play(this.sprite.name, { loop: this.sprite.loop, restart: true });
       spr.update(1 / 60);
     }
+    // Afterimages (speed moves): earlier frames, fading out.
+    for (const g of this.ghosts) {
+      const keep = [spr.anim, spr.frame];
+      if (spr === this.sprite) [spr.anim, spr.frame] = [g.anim, g.frame];
+      spr.draw(ctx, g.x, g.y + (sy - this.y + this.lift), g.dir, { alpha: 0.45 * (1 - g.t / 0.3), tint: g.tint || '#ffffff', tintAmt: 0.5 });
+      [spr.anim, spr.frame] = keep;
+    }
     spr.draw(ctx, this.x, sy, this.dir, { flash: this.flash, alpha, tint, tintAmt });
     if (!this.ko) this.drawTag(ctx, sy);
+  }
+
+  /** Travelling as a shadow (Shadow Sneak): only a dark stretched shadow on the ground. */
+  drawSneak(ctx) {
+    ctx.save();
+    ctx.globalAlpha = 0.75;
+    ctx.fillStyle = '#201030';
+    ctx.beginPath();
+    const w = this.radius * 1.3;
+    ctx.ellipse(Math.round(this.x), Math.round(this.y + 6), w, w * 0.32, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 
   /** "P1".."P4" tag above the head so every player can find their Pokémon. */

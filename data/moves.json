@@ -2239,5 +2239,636 @@
     "flags": [
       "contact"
     ]
+  },
+  "aerialace": {
+    "id": "aerialace",
+    "name": "Aerial Ace",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 2.25,
+    "shortDesc": "This move does not check accuracy.",
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "drillpeck": {
+    "id": "drillpeck",
+    "name": "Drill Peck",
+    "type": "Flying",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 2.25,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "steelwing": {
+    "id": "steelwing",
+    "name": "Steel Wing",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 25,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.8,
+    "shortDesc": "10% chance to raise the user's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 10,
+        "selfBoosts": {
+          "def": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "headsmash": {
+    "id": "headsmash",
+    "name": "Head Smash",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 150,
+    "accuracy": 80,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Has 1/2 recoil.",
+    "recoil": 0.5,
+    "flags": [
+      "contact"
+    ]
+  },
+  "wildcharge": {
+    "id": "wildcharge",
+    "name": "Wild Charge",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Has 1/4 recoil.",
+    "recoil": 0.25,
+    "flags": [
+      "contact"
+    ]
+  },
+  "boltstrike": {
+    "id": "boltstrike",
+    "name": "Bolt Strike",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 130,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "20% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 20,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "highjumpkick": {
+    "id": "highjumpkick",
+    "name": "High Jump Kick",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 130,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User is hurt by 50% of its max HP if it misses.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "darkestlariat": {
+    "id": "darkestlariat",
+    "name": "Darkest Lariat",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Ignores the target's stat stage changes.",
+    "ignoreStages": true,
+    "flags": [
+      "contact"
+    ]
+  },
+  "accelerock": {
+    "id": "accelerock",
+    "name": "Accelerock",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 1,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "woodhammer": {
+    "id": "woodhammer",
+    "name": "Wood Hammer",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Has 33% recoil.",
+    "recoil": 0.33,
+    "flags": [
+      "contact"
+    ]
+  },
+  "crosspoison": {
+    "id": "crosspoison",
+    "name": "Cross Poison",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "High critical hit ratio. 10% chance to poison.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "psn"
+      }
+    ],
+    "critRatio": 2,
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "hammerarm": {
+    "id": "hammerarm",
+    "name": "Hammer Arm",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Lowers the user's Speed by 1.",
+    "selfBoosts": {
+      "spe": -1
+    },
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "bitterblade": {
+    "id": "bitterblade",
+    "name": "Bitter Blade",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 50% of the damage dealt.",
+    "drain": 0.5,
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "heatwave": {
+    "id": "heatwave",
+    "name": "Heat Wave",
+    "type": "Fire",
+    "category": "Special",
+    "power": 95,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "10% chance to burn the foe(s).",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ]
+  },
+  "freezedry": {
+    "id": "freezedry",
+    "name": "Freeze-Dry",
+    "type": "Ice",
+    "category": "Special",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "10% chance to freeze. Super effective on Water.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ]
+  },
+  "bulletseed": {
+    "id": "bulletseed",
+    "name": "Bullet Seed",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 25,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 30,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.5,
+    "shortDesc": "Hits 2-5 times in one turn.",
+    "multihit": [
+      2,
+      5
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "spore": {
+    "id": "spore",
+    "name": "Spore",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Causes the target to fall asleep.",
+    "status": "slp",
+    "flags": [
+      "powder"
+    ]
+  },
+  "lusterpurge": {
+    "id": "lusterpurge",
+    "name": "Luster Purge",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 95,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "50% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 50,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ]
+  },
+  "iceshard": {
+    "id": "iceshard",
+    "name": "Ice Shard",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 30,
+    "priority": 1,
+    "target": "normal",
+    "cooldown": 1.5,
+    "shortDesc": "Usually goes first."
+  },
+  "spiritshackle": {
+    "id": "spiritshackle",
+    "name": "Spirit Shackle",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Prevents the target from switching out.",
+    "secondary": [
+      {
+        "chance": 100
+      }
+    ]
+  },
+  "pyroball": {
+    "id": "pyroball",
+    "name": "Pyro Ball",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "10% chance to burn the target. Thaws user.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "brn"
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "snipeshot": {
+    "id": "snipeshot",
+    "name": "Snipe Shot",
+    "type": "Water",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "High critical hit ratio. Cannot be redirected.",
+    "critRatio": 2
+  },
+  "hurricane": {
+    "id": "hurricane",
+    "name": "Hurricane",
+    "type": "Flying",
+    "category": "Special",
+    "power": 110,
+    "accuracy": 70,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 4.5,
+    "shortDesc": "30% chance to confuse target. Can't miss in rain.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "confusion"
+      }
+    ]
+  },
+  "blizzard": {
+    "id": "blizzard",
+    "name": "Blizzard",
+    "type": "Ice",
+    "category": "Special",
+    "power": 110,
+    "accuracy": 70,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "10% chance to freeze foe(s). Can't miss in Snow.",
+    "secondary": [
+      {
+        "chance": 10,
+        "status": "frz"
+      }
+    ]
+  },
+  "iciclecrash": {
+    "id": "iciclecrash",
+    "name": "Icicle Crash",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 85,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "30% chance to make the target flinch.",
+    "secondary": [
+      {
+        "chance": 30,
+        "volatile": "flinch"
+      }
+    ]
+  },
+  "magmastorm": {
+    "id": "magmastorm",
+    "name": "Magma Storm",
+    "type": "Fire",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 75,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Traps and damages the target for 4-5 turns.",
+    "volatile": "partiallytrapped"
+  },
+  "blueflare": {
+    "id": "blueflare",
+    "name": "Blue Flare",
+    "type": "Fire",
+    "category": "Special",
+    "power": 130,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "20% chance to burn the target.",
+    "secondary": [
+      {
+        "chance": 20,
+        "status": "brn"
+      }
+    ]
+  },
+  "drumbeating": {
+    "id": "drumbeating",
+    "name": "Drum Beating",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to lower the target's Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "flowertrick": {
+    "id": "flowertrick",
+    "name": "Flower Trick",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Always results in a critical hit; no accuracy check.",
+    "willCrit": true
+  },
+  "discharge": {
+    "id": "discharge",
+    "name": "Discharge",
+    "type": "Electric",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 3,
+    "shortDesc": "30% chance to paralyze adjacent Pokemon.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "par"
+      }
+    ]
+  },
+  "sparklingaria": {
+    "id": "sparklingaria",
+    "name": "Sparkling Aria",
+    "type": "Water",
+    "category": "Special",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 4.5,
+    "shortDesc": "The target is cured of its burn.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "sparklingaria"
+      }
+    ],
+    "flags": [
+      "sound"
+    ]
+  },
+  "snowscape": {
+    "id": "snowscape",
+    "name": "Snowscape",
+    "type": "Ice",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "all",
+    "cooldown": 15,
+    "shortDesc": "For 5 turns, snow falls. Ice: 1.5× Def.",
+    "weather": "snowscape"
+  },
+  "slackoff": {
+    "id": "slackoff",
+    "name": "Slack Off",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by 50% of its max HP.",
+    "heal": 0.5
   }
 }

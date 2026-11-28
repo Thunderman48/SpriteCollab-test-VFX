@@ -22,7 +22,7 @@ export function moveEffectText(m) {
     if (m.volatile === 'focusenergy') parts.push(t('e_buff', { stats: stats({ crit: 2 }) }));
     if (m.heal && m.id !== 'moonlight' && m.id !== 'synthesis') parts.push(t('e_heal', { n: Math.round(m.heal * 100) }));
     if (m.weather) {
-      const d = m.weather === 'raindance' ? 'rain_d' : m.weather === 'sunnyday' ? 'sun_d' : 'sand_d';
+      const d = { raindance: 'rain_d', sunnyday: 'sun_d', sandstorm: 'sand_d', snowscape: 'snow_d' }[m.weather];
       parts.push(`${t('e_weather', { w: t('wn_' + m.weather) })} (${t(d)})`);
     }
     if (m.target !== 'self' && m.status) parts.push(t('e_inflict', { what: t('e_' + m.status) }));

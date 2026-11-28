@@ -35,7 +35,7 @@ const STR = {
     used: '{who} used {move}!', superEff: "It's super effective!", notVery: "It's not very effective...",
     noEffect: "It doesn't affect {who}...", crit: 'A critical hit!', fainted: '{who} fainted!',
     recoil: '{who} is hurt by recoil!', comeBack: 'Come back, {a}! Go, {b}!', sentOut: 'Go, {who}!',
-    sudden: 'Sudden death! All damage is doubled.',
+    sudden: 'Sudden death! Damage is doubled and keeps rising; healing is halved.',
     sitrus: "{who}'s {item} restored {n} HP!", reviveLog: '{who} was revived by its {item}!',
     // customization
     nature: 'Nature', ability: 'Ability', statPoints: 'Stat Points', reset: 'Reset', resetBuild: 'Reset to default',
@@ -50,8 +50,8 @@ const STR = {
     stn_brn: 'BRN', stn_psn: 'PSN', stn_tox: 'PSN', stn_par: 'PAR', stn_slp: 'SLP', stn_frz: 'FRZ', stn_confusion: 'Confused', stn_flinch: 'Flinch',
     wokeUp: '{who} woke up!', thawed: '{who} thawed out!', fullPara: "{who} is paralyzed! It can't move!", hitSelf: 'It hurt itself in its confusion!',
     protectLog: '{who} protected itself!', protected: 'Protected!', healLog: '{who} restored HP!', mustRecharge: '{who} must recharge!',
-    knockedOff: "{who} lost its {item}!", missed: 'Miss', avoided: '{who} avoided the attack!', failed: 'Failed', traced: '{who} traced {ability}!', disguiseBusted: "{who}'s disguise was busted!", illusionBroke: "{who}'s illusion wore off!",
-    w_raindance: 'It started to rain!', w_sunnyday: 'The sunlight turned harsh!', w_sandstorm: 'A sandstorm kicked up!',
+    knockedOff: "{who} lost its {item}!", missed: 'Miss', avoided: '{who} avoided the attack!', failed: 'Failed', traced: '{who} traced {ability}!', disguiseBusted: "{who}'s disguise was busted!", crashed: '{who} kept going and crashed!', illusionBroke: "{who}'s illusion wore off!",
+    w_raindance: 'It started to rain!', w_snowscape: 'It started to snow!', w_end_snowscape: 'The snow stopped.', wn_snowscape: 'Snow', terrainGrassy: 'Grass grew to cover the battlefield!', terrainEnd: 'The grass disappeared.', wn_grassy: 'Grassy', enduredHit: '{who} endured the hit!', snow_d: 'Ice types Def ×1.5; Blizzard strikes instantly', w_sunnyday: 'The sunlight turned harsh!', w_sandstorm: 'A sandstorm kicked up!',
     w_end_raindance: 'The rain stopped.', w_end_sunnyday: 'The sunlight faded.', w_end_sandstorm: 'The sandstorm subsided.',
     wn_raindance: 'Rain', wn_sunnyday: 'Sun', wn_sandstorm: 'Sandstorm',
     // move effect descriptions (generated from the move data)
@@ -99,7 +99,7 @@ const STR = {
     used: '{who}의 {move}!', superEff: '효과가 굉장했다!', notVery: '효과가 별로인 듯하다...',
     noEffect: '{who}에게는 효과가 없는 것 같다...', crit: '급소에 맞았다!', fainted: '{who}{eun} 쓰러졌다!',
     recoil: '{who}{eun} 반동으로 데미지를 입었다!', comeBack: '돌아와, {a}! 가랏, {b}!', sentOut: '가랏, {who}!',
-    sudden: '서든데스! 모든 데미지가 2배가 된다.',
+    sudden: '서든데스! 데미지 2배, 계속 올라간다. 회복은 절반.',
     sitrus: '{who}의 {item}! HP를 {n} 회복했다!', reviveLog: '{who}의 {item}! 쓰러지지 않고 부활했다!',
     // customization
     nature: '성격', ability: '특성', statPoints: '능력 포인트', reset: '초기화', resetBuild: '기본값으로',
@@ -113,8 +113,8 @@ const STR = {
     stn_brn: '화상', stn_psn: '독', stn_tox: '맹독', stn_par: '마비', stn_slp: '잠듦', stn_frz: '얼음', stn_confusion: '혼란', stn_flinch: '풀죽음',
     wokeUp: '{who}{eun} 눈을 떴다!', thawed: '{who}의 얼음이 녹았다!', fullPara: '{who}{eun} 몸이 저려서 움직일 수 없다!', hitSelf: '영문도 모른 채 자신을 공격했다!',
     protectLog: '{who}{eun} 방어 태세에 들어갔다!', protected: '방어!', healLog: '{who}의 HP가 회복되었다!', mustRecharge: '{who}{eun} 반동으로 움직일 수 없다!',
-    knockedOff: '{who}의 {item}을(를) 떨어뜨렸다!', missed: '빗나감', avoided: '{who}에게는 맞지 않았다!', failed: '실패', traced: '{who}{eun} {ability}을(를) 트레이스했다!', disguiseBusted: '{who}의 탈이 벗겨졌다!', illusionBroke: '{who}의 일루전이 풀렸다!',
-    w_raindance: '비가 내리기 시작했다!', w_sunnyday: '햇살이 강해졌다!', w_sandstorm: '모래바람이 불기 시작했다!',
+    knockedOff: '{who}의 {item}을(를) 떨어뜨렸다!', missed: '빗나감', avoided: '{who}에게는 맞지 않았다!', failed: '실패', traced: '{who}{eun} {ability}을(를) 트레이스했다!', disguiseBusted: '{who}의 탈이 벗겨졌다!', crashed: '{who}{eun} 의욕이 넘쳐서 땅에 부딪쳤다!', illusionBroke: '{who}의 일루전이 풀렸다!',
+    w_raindance: '비가 내리기 시작했다!', w_snowscape: '눈이 내리기 시작했다!', w_end_snowscape: '눈이 그쳤다.', wn_snowscape: '설경', terrainGrassy: '발밑에 풀이 무성해졌다!', terrainEnd: '풀이 사라졌다.', wn_grassy: '그래스필드', enduredHit: '{who}{eun} 공격을 버텼다!', snow_d: '얼음 타입 방어 ×1.5, 눈보라가 바로 떨어진다', w_sunnyday: '햇살이 강해졌다!', w_sandstorm: '모래바람이 불기 시작했다!',
     w_end_raindance: '비가 그쳤다.', w_end_sunnyday: '햇살이 약해졌다.', w_end_sandstorm: '모래바람이 가라앉았다.',
     wn_raindance: '비', wn_sunnyday: '쾌청', wn_sandstorm: '모래바람',
     e_chance: '{n}% 확률로 {what}', e_brn: '화상', e_psn: '독', e_tox: '맹독', e_par: '마비', e_slp: '잠듦', e_frz: '얼음',
@@ -144,6 +144,13 @@ const MON_KO = {
   sylveon: '님피아', gallade: '엘레이드', zoroark: '조로아크', mimikyu: '따라큐', hydreigon: '삼삼드래', volcarona: '불카모스',
   heracross: '헤라크로스', milotic: '밀로틱', lugia: '루기아', hooh: '칠색조', kyogre: '가이오가', groudon: '그란돈',
   celebi: '세레비', chandelure: '샹델라', excadrill: '몰드류', weavile: '포푸니라', dragapult: '드래펄트', goodra: '미끄래곤',
+  scyther: '스라크', starmie: '아쿠스타', aerodactyl: '프테라', clefable: '픽시', slowbro: '야도란', zapdos: '썬더',
+  moltres: '파이어', articuno: '프리져', feraligatr: '장크로다일', houndoom: '헬가', kingdra: '킹드라', skarmory: '무장조',
+  suicune: '스이쿤', crobat: '크로뱃', breloom: '버섯모', aggron: '보스로라', flygon: '플라이곤', latios: '라티오스',
+  empoleon: '엠페르트', luxray: '렌트라', roserade: '로즈레이드', mamoswine: '맘모꾸리', heatran: '히드런', serperior: '샤로다',
+  haxorus: '액스라이즈', krookodile: '악비아르', conkeldurr: '노보청', reshiram: '레시라무', zekrom: '제크로무', talonflame: '파이어로',
+  hawlucha: '루차불', decidueye: '모크나이퍼', incineroar: '어흥염', primarina: '누리레느', lycanroc: '루가루암', cinderace: '에이스번',
+  rillaboom: '고릴타', inteleon: '인텔리레온', meowscarada: '마스카나', ceruledge: '창푸리',
 };
 
 const MOVE_KO = {
@@ -172,6 +179,12 @@ const MOVE_KO = {
   firepunch: '불꽃펀치', icepunch: '냉동펀치', thunderpunch: '번개펀치', hypervoice: '하이퍼보이스', playrough: '치근거리기',
   bugbuzz: '벌레의야단법석', quiverdance: '나비춤', aeroblast: '에어로블라스트', sacredfire: '성스러운불꽃', bravebird: '브레이브버드',
   waterspout: '해수스파우팅', dragondarts: '드래곤애로', shadowclaw: '섀도크루',
+  aerialace: '제비반환', drillpeck: '회전부리', steelwing: '강철날개', heatwave: '열풍', hurricane: '폭풍', discharge: '방전',
+  freezedry: '프리즈드라이', blizzard: '눈보라', snowscape: '설경', slackoff: '태만함', crosspoison: '크로스포이즌', bulletseed: '기관총',
+  spore: '버섯포자', headsmash: '양날박치기', lusterpurge: '러스터퍼지', wildcharge: '와일드볼트', iceshard: '얼음뭉치', iciclecrash: '고드름떨구기',
+  magmastorm: '마그마스톰', hammerarm: '암해머', blueflare: '블루플레어', boltstrike: '뇌격', highjumpkick: '무릎차기', spiritshackle: '그림자꿰매기',
+  darkestlariat: 'DD래리어트', sparklingaria: '물거품아리아', accelerock: '액셀록', pyroball: '화염볼', woodhammer: '우드해머', drumbeating: '드럼어택',
+  snipeshot: '스나이프샷', flowertrick: '트릭플라워', bitterblade: '비터블레이드',
 };
 
 const NATURE_KO = {

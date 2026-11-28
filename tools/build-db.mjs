@@ -50,10 +50,12 @@ function effectsOf(m) {
   if (m.recoil) e.recoil = m.recoil[0] / m.recoil[1];
   if (m.heal) e.heal = m.heal[0] / m.heal[1];
   if (m.critRatio > 1) e.critRatio = m.critRatio;
+  if (m.willCrit) e.willCrit = true;
+  if (m.ignoreDefensive) e.ignoreStages = true;
   if (m.weather) e.weather = toId(m.weather);
   if (m.selfSwitch) e.selfSwitch = true;
   if (m.multihit) e.multihit = m.multihit;
-  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet'].filter((f) => m.flags?.[f]);
+  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet', 'powder'].filter((f) => m.flags?.[f]);
   if (flags.length) e.flags = flags;
   return e;
 }

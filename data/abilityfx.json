@@ -327,8 +327,8 @@
   },
   "regenerator": {
     "ko": "재생력",
-    "desc": "Heals 1/3 HP when it switches out; outside Trio, heals 1% HP per second while standing still.",
-    "descKo": "교체되면 HP를 1/3 회복. 트리오 외에는 가만히 있을 때 매초 HP 1% 회복."
+    "desc": "Heals 1/3 HP when it switches out; outside Trio, heals 0.5% HP per second while standing still.",
+    "descKo": "교체되면 HP를 1/3 회복. 트리오 외에는 가만히 있을 때 매초 HP 0.5% 회복."
   },
   "naturalcure": {
     "ko": "자연회복",
@@ -374,5 +374,145 @@
     "ko": "터보블레이즈",
     "desc": "Its attacks ignore the target's ability.",
     "descKo": "공격이 상대의 특성을 무시한다."
+  },
+  "analytic": {
+    "ko": "애널라이즈",
+    "desc": "×1.3 damage to a target that's attacking or just finished attacking.",
+    "descKo": "공격 중이거나 막 공격한 상대에게 데미지 1.3배."
+  },
+  "angerpoint": {
+    "ko": "분노의경혈",
+    "desc": "Hit by a critical hit: Attack maxes out (+6).",
+    "descKo": "급소에 맞으면 공격이 최대(+6)로 오른다."
+  },
+  "contrary": {
+    "ko": "심술꾸러기",
+    "desc": "Stat changes are reversed (Leaf Storm raises Sp. Atk!).",
+    "descKo": "능력 변화가 반대가 된다 (리프스톰으로 특수공격이 오른다!)."
+  },
+  "earlybird": {
+    "ko": "일찍기상",
+    "desc": "Wakes up twice as fast.",
+    "descKo": "잠에서 두 배 빨리 깬다."
+  },
+  "effectspore": {
+    "ko": "포자",
+    "desc": "Foes that hit it with contact moves: 30% poison, paralysis or sleep.",
+    "descKo": "접촉 기술로 공격한 상대가 30% 확률로 독·마비·잠듦."
+  },
+  "galewings": {
+    "ko": "질풍날개",
+    "desc": "At full HP, Flying moves have priority (faster wind-up).",
+    "descKo": "HP가 꽉 찼을 때 비행 기술이 선제공격이 된다."
+  },
+  "grassysurge": {
+    "ko": "그래스메이커",
+    "desc": "When it enters, Grassy Terrain for 20 s: Grass moves ×1.3, grounded Pokémon heal 1% HP per second, Earthquake halved.",
+    "descKo": "등장하면 20초 동안 그래스필드: 풀 기술 1.3배, 땅에 있는 포켓몬 매초 HP 1% 회복, 지진 위력 절반."
+  },
+  "heavymetal": {
+    "ko": "헤비메탈",
+    "desc": "Very heavy: barely knocked back, but walks 10% slower.",
+    "descKo": "아주 무거워서 거의 밀려나지 않지만 이동이 10% 느리다."
+  },
+  "illuminate": {
+    "ko": "발광",
+    "desc": "Its attacks ignore evasion (Sand Veil, Snow Cloak, Telepathy...).",
+    "descKo": "공격이 상대의 회피(모래숨기·눈숨기·텔레파시 등)를 무시한다."
+  },
+  "keeneye": {
+    "ko": "날카로운눈",
+    "desc": "Its attacks ignore evasion (Sand Veil, Snow Cloak, Telepathy...).",
+    "descKo": "공격이 상대의 회피(모래숨기·눈숨기·텔레파시 등)를 무시한다."
+  },
+  "libero": {
+    "ko": "리베로",
+    "desc": "Becomes the type of the move it uses: every move gets STAB.",
+    "descKo": "사용하는 기술의 타입이 되어 모든 기술이 자속 보정을 받는다."
+  },
+  "limber": {
+    "ko": "유연",
+    "desc": "Can't be paralyzed.",
+    "descKo": "마비되지 않는다."
+  },
+  "liquidvoice": {
+    "ko": "촉촉보이스",
+    "desc": "Sound moves become Water type.",
+    "descKo": "소리 기술이 물 타입이 된다."
+  },
+  "longreach": {
+    "ko": "원격",
+    "desc": "Its moves never make contact (no Rough Skin, Static...).",
+    "descKo": "기술이 접촉하지 않는다 (까칠한피부·정전기 등이 발동하지 않는다)."
+  },
+  "oblivious": {
+    "ko": "둔감",
+    "desc": "Immune to Intimidate and Cute Charm.",
+    "descKo": "위협과 헤롱헤롱바디가 통하지 않는다."
+  },
+  "owntempo": {
+    "ko": "마이페이스",
+    "desc": "Can't be confused. Immune to Intimidate.",
+    "descKo": "혼란에 빠지지 않는다. 위협이 통하지 않는다."
+  },
+  "poisonheal": {
+    "ko": "포이즌힐",
+    "desc": "When poisoned, heals 2.5% HP per second instead of losing it.",
+    "descKo": "독 상태일 때 HP를 잃는 대신 매초 2.5% 회복한다."
+  },
+  "poisonpoint": {
+    "ko": "독가시",
+    "desc": "Foes that hit it with contact moves: 30% poison.",
+    "descKo": "접촉 기술로 공격한 상대를 30% 확률로 독 상태로 만든다."
+  },
+  "rivalry": {
+    "ko": "투쟁심",
+    "desc": "×1.25 damage to foes that share a type with it.",
+    "descKo": "같은 타입을 가진 상대에게 데미지 1.25배."
+  },
+  "rockhead": {
+    "ko": "돌머리",
+    "desc": "No recoil damage (Brave Bird, Head Smash, Flare Blitz...).",
+    "descKo": "반동 데미지를 받지 않는다 (브레이브버드·양날박치기 등)."
+  },
+  "sheerforce": {
+    "ko": "우격다짐",
+    "desc": "Moves with extra effects deal ×1.3, but the extra effects don't happen.",
+    "descKo": "추가 효과가 있는 기술의 위력 1.3배, 대신 추가 효과가 없어진다."
+  },
+  "sniper": {
+    "ko": "스나이퍼",
+    "desc": "Critical hits deal ×2.25 instead of ×1.5.",
+    "descKo": "급소에 맞히면 1.5배 대신 2.25배."
+  },
+  "snowcloak": {
+    "ko": "눈숨기",
+    "desc": "In snow, 20% of hits against it miss.",
+    "descKo": "설경일 때 20%의 공격을 피한다."
+  },
+  "sturdy": {
+    "ko": "옹골참",
+    "desc": "At full HP, a hit that would knock it out leaves it with 1 HP.",
+    "descKo": "HP가 꽉 찼을 때 쓰러질 공격을 받아도 HP 1로 버틴다."
+  },
+  "swiftswim": {
+    "ko": "쓱쓱",
+    "desc": "In rain, Speed ×1.5.",
+    "descKo": "비가 오면 스피드가 1.5배."
+  },
+  "teravolt": {
+    "ko": "테라볼티지",
+    "desc": "Its attacks ignore the target's ability.",
+    "descKo": "공격이 상대의 특성을 무시한다."
+  },
+  "unaware": {
+    "ko": "천진",
+    "desc": "Ignores the opponent's stat changes when attacking and defending.",
+    "descKo": "공격할 때와 받을 때 상대의 능력 변화를 무시한다."
+  },
+  "weakarmor": {
+    "ko": "깨어진갑옷",
+    "desc": "Hit by a physical move: Defense −1, Speed +2.",
+    "descKo": "물리 기술에 맞으면 방어 −1, 스피드 +2."
   }
 }
