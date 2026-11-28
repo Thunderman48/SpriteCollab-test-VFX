@@ -6,7 +6,7 @@ import { startCast, cancelCast, MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { equip, unequip } from './items.js';
 import { t, itemName, abilityName } from './i18n.js';
-import { ab, stageOf, stageMul, tickFighter, beforeCast, wantsMove, weatherNow } from './effects.js';
+import { ab, stageOf, stageMul, tickFighter, beforeCast, wantsMove, weatherNow, loseFocus, trapped } from './effects.js';
 
 export const PLAYER_COLORS = ['#88c8f8', '#f8a0c8', '#88f888', '#f8e860'];
 const DODGE_TIME = 0.2;
@@ -53,6 +53,12 @@ export class Fighter {
     this.protectKind = null;
     this.timesHit = 0; // Rage Fist
     this.bladeT = 0; // Stance Change
+    this.glaiveT = 0; // Glaive Rush: takes double damage meanwhile
+    this.seed = null; // Leech Seed
+    this.salt = null; // Salt Cure
+    this.zen = false; // Zen Mode (Darmanitan)
+    this.hero = false; // Zero to Hero (Palafin)
+    this.burrowing = false; // Dig
     this.rechargeT = 0;
     this.pendingRecharge = 0;
     this.lock = null; // Outrage
@@ -87,6 +93,7 @@ export class Fighter {
 
   /** Types right now (Roost removes Flying for a moment). */
   get types() {
+    if (this.zen) return ['Fire', 'Psychic'];
     if (this.roostT > 0) {
       const t2 = this.data.types.filter((x) => x !== 'Flying');
       return t2.length ? t2 : ['Normal'];
@@ -141,8 +148,17 @@ export class Fighter {
     if ((critSide === 'atk' && n < 0) || (critSide === 'def' && n > 0)) n = 0;
     // Stance Change: Blade Forme swaps attack and defense stats.
     const key = this.bladeT > 0 && ab(this, 'stancechange') ? { atk: 'def', def: 'atk', spa: 'spd', spd: 'spa' }[k] || k : k;
-    let v = this.stats[key] * stageMul(n);
+    // Zen Mode: Attack and Sp. Atk trade places; Hero Palafin is far stronger.
+    const k2 = this.zen && (key === 'atk' || key === 'spa') ? (key === 'atk' ? 'spa' : 'atk') : key;
+    let v = this.stats[k2] * stageMul(n);
+    if (this.zen && (k2 === 'def' || k2 === 'spd')) v *= 1.6;
+    if (this.hero) v *= { atk: 2, def: 1.27, spa: 1.72, spd: 1.3 }[k] || 1;
     const w = weatherNow(this.game);
+    // Protosynthesis: in sun its best stat goes up (Speed ×1.5, others ×1.3).
+    if (w === 'sunnyday' && ab(this, 'protosynthesis')) {
+      const best = ['atk', 'def', 'spa', 'spd', 'spe'].reduce((b, s) => (this.stats[s] > this.stats[b] ? s : b), 'atk');
+      if (k === best) v *= k === 'spe' ? 1.5 : 1.3;
+    }
     if (k === 'atk' && (ab(this, 'hugepower') || ab(this, 'purepower'))) v *= 2;
     if (k === 'atk' && ab(this, 'orichalcumpulse') && w === 'sunnyday') v *= 4 / 3;
     if (k === 'spa' && ab(this, 'plus') && this.game.fighters?.some((o) => o !== this && o.alive && o.team === this.team)) v *= 1.5;
@@ -191,7 +207,8 @@ export class Fighter {
   }
 
   heal(amount) {
-    if (this.game.damageMul > 1) amount /= 2; // sudden death: healing is halved
+    // Sudden death: healing shrinks as damage grows (×2 damage = half healing, ×3 = a third...).
+    if (this.game.damageMul > 1) amount /= this.game.damageMul;
     const before = this.hp;
     this.hp = Math.min(this.maxHp, this.hp + amount);
     return this.hp - before;
@@ -219,6 +236,7 @@ export class Fighter {
   takeHit(dmg, angle, kbMul = 1) {
     this.hp = Math.max(0, this.hp - dmg);
     if (dmg > 0) this.timesHit++;
+    if (dmg > 0 && this.cast?.focusing) loseFocus(this.game, this); // Focus Punch
     if (dmg > 0 && this.illusion) this.breakIllusion();
     this.flash = 0.75;
     this.metroStacks = 0; // Metronome streak breaks when you're hit
@@ -281,7 +299,7 @@ export class Fighter {
     }
     this.dodgeT = DODGE_TIME;
     this.invuln = DODGE_INVULN;
-    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1);
+    this.dodgeCd = DODGE_COOLDOWN * (ab(this, 'runaway') ? 0.7 : 1) * (trapped(this.game, this) ? 1.5 : 1);
     this.dir = angleToDir(this.dodgeAngle);
     this.sprite.play('Hop', { loop: false, restart: true, speed: 1.6 });
     this.game.addEffect(new Effect(MOVEFX.common.dodge, this.x, this.y + 6, { layer: 'under' }));
@@ -390,6 +408,7 @@ export class Fighter {
 
   draw(ctx) {
     if (this.sneaking) return this.drawSneak(ctx);
+    if (this.burrowing) return this.drawBurrow(ctx);
     if (this.hidden) return; // vanished (Shadow Force)
     const frozen = this.status?.id === 'frz';
     let alpha = 1;
@@ -436,6 +455,28 @@ export class Fighter {
     ctx.beginPath();
     const w = this.radius * 1.3;
     ctx.ellipse(Math.round(this.x), Math.round(this.y + 6), w, w * 0.32, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  /** Tunnelling (Dig): a mound of dirt moving along the ground. */
+  drawBurrow(ctx) {
+    const x = Math.round(this.x);
+    const y = Math.round(this.y + 4);
+    const w = this.radius * 0.9;
+    const wob = Math.sin(this.game.time * 30) * 1.5;
+    ctx.save();
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.beginPath();
+    ctx.ellipse(x, y + 3, w + 2, (w + 2) * 0.35, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#8a6a3a';
+    ctx.beginPath();
+    ctx.ellipse(x, y, w, w * 0.45 + wob, 0, Math.PI, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#b08850';
+    ctx.beginPath();
+    ctx.ellipse(x - 2, y - 2, w * 0.55, w * 0.2, 0, Math.PI, Math.PI * 2);
     ctx.fill();
     ctx.restore();
   }

@@ -2,7 +2,7 @@
 // weather, move side effects (secondary chances, drain, recoil...) and abilities.
 // Data: data/moves.json (original effects from @pkmn/dex), data/movefx.json `extra`
 // (this game's extra properties) and data/abilityfx.json (ability texts).
-import { DB, effectiveness } from './combat.js';
+import { DB, effectiveness, LEVEL } from './combat.js';
 import { MOVEFX } from './moves.js';
 import { Effect, FloatText } from './vfx.js';
 import { t } from './i18n.js';
@@ -14,7 +14,11 @@ const CONFUSE_TIME = 4;
 const WEATHER_TIME = 20;
 export const STAT_KEYS = ['atk', 'def', 'spa', 'spd', 'spe', 'crit'];
 
-export const ab = (f, id) => !!f && f.ability === id;
+// Abilities that Neutralizing Gas can't switch off.
+const UNSUPPRESSED = ['neutralizinggas', 'multitype', 'stancechange', 'zerotohero', 'zenmode', 'disguise'];
+/** Neutralizing Gas: while one is out, every other Pokémon's ability stops working. */
+const gassed = (f) => !UNSUPPRESSED.includes(f.ability) && !!f.game?.fighters?.some((o) => o !== f && !o.ko && o.ability === 'neutralizinggas');
+export const ab = (f, id) => !!f && f.ability === id && !gassed(f);
 /** Mold Breaker / Turboblaze: the attacker ignores the target's ability. */
 // The move landing the current hit (Sunsteel Strike / Moongeist Beam ignore the target's ability).
 let hitMove = null;
@@ -37,6 +41,11 @@ export const hasPriority = (f, m) =>
   m.priority > 0 || (ab(f, 'galewings') && m.type === 'Flying' && f.hp >= f.maxHp) || (ab(f, 'prankster') && m.category === 'Status');
 /** Grounded (not flying / Levitate): affected by terrain. */
 const grounded = (f) => !f.data.flying && !ab(f, 'levitate');
+export const isGrounded = grounded;
+/** Arena Trap (grounded foes) / Magnet Pull (Steel foes): their dodge recharges slower. */
+export const trapped = (game, f) =>
+  game.enemiesOf?.(f).some((e) => (ab(e, 'arenatrap') && grounded(f)) || (ab(e, 'magnetpull') && f.types.includes('Steel')));
+const allies = (game, f) => game.fighters.filter((o) => o !== f && o.alive && o.team === f.team);
 /** Terrain (Grassy Surge): 'grassy' or null. */
 export const terrainNow = (game) => game.terrain?.id || null;
 function setTerrain(game, id) {
@@ -146,6 +155,9 @@ export function statusBlock(game, f, id, source) {
   if (id === 'frz' && (types.includes('Ice') || weatherNow(game) === 'sunnyday')) return 'type';
   if (f.protectT > 0 && source && source !== f) return 'protect';
   if (id === 'slp' && (ab(f, 'vitalspirit') || (terrainNow(game) === 'electric' && grounded(f)))) return 'type';
+  if (id === 'slp' && [f, ...allies(game, f)].some((o) => ab(o, 'sweetveil'))) return 'type';
+  if (id === 'brn' && ab(f, 'thermalexchange')) return 'type';
+  if (ab(f, 'purifyingsalt') || (ab(f, 'leafguard') && weatherNow(game) === 'sunnyday')) return 'type';
   return null;
 }
 
@@ -252,6 +264,14 @@ export function tickFighter(game, f, dt) {
   f.stunT = Math.max(0, (f.stunT || 0) - dt);
   f.anticipateT = Math.max(0, (f.anticipateT || 0) - dt);
   if (f.bladeT > 0 && (f.bladeT -= dt) <= 0) formChange(game, f, false); // Stance Change: back to Shield Forme
+  f.glaiveT = Math.max(0, (f.glaiveT || 0) - dt);
+  // Zen Mode: below half HP Darmanitan turns Fire/Psychic and its Attack and Sp. Atk swap.
+  if (ab(f, 'zenmode') && !f.zen && f.alive && f.hp < f.maxHp / 2) {
+    f.zen = true;
+    ability(game, f);
+    say(game, 'zenMode', { who: game.who(f) });
+    fxAt(game, MOVEFX.status.statUpRing, f, { dy: 6, layer: 'under' });
+  }
   if (f.confusedT > 0) f.confusedT = Math.max(0, f.confusedT - dt);
   f.fxT = (f.fxT || 0) - dt;
   const w = weatherNow(game);
@@ -286,7 +306,47 @@ export function tickFighter(game, f, dt) {
     fxAt(game, MOVEFX.status.chill, f, { dy: -4 });
   }
 
+  // Leech Seed / Salt Cure: lose HP every second for a while.
+  if (f.seed && perSecond && f.alive) {
+    const by = f.seed.by;
+    const before = f.hp;
+    hurt(game, f, 0.02, '#78c850');
+    if (by?.alive && f.hp < before) {
+      const h = by.heal(before - f.hp);
+      if (h > 0) game.addEffect(new FloatText(`+${Math.round(h)}`, by.x, by.y - 24, '#78f878'));
+    }
+    fxAt(game, MOVEFX.status.seed, f, { dy: -10 });
+    if ((f.seed.t -= 1) <= 0) f.seed = null;
+  }
+  if (f.salt && perSecond && f.alive) {
+    hurt(game, f, f.types.some((x) => x === 'Water' || x === 'Steel') ? 0.03 : 0.015, '#e8e8f8');
+    fxAt(game, MOVEFX.status.salt, f, { dy: -8 });
+    if ((f.salt.t -= 1) <= 0) f.salt = null;
+  }
   if (perSecond && f.alive) {
+    if (ab(f, 'shedskin') && f.status && chance(10)) {
+      ability(game, f);
+      cureStatus(game, f);
+    }
+    if (ab(f, 'icebody') && w === 'snowscape') f.heal(f.maxHp * 0.01);
+    // Healer: now and then cures its partner's status.
+    if (ab(f, 'healer') && (f.healerT = (f.healerT ?? 6) - 1) <= 0) {
+      f.healerT = 6;
+      const sick = allies(game, f).find((o) => o.status);
+      if (sick) {
+        ability(game, f);
+        cureStatus(game, sick);
+      }
+    }
+    // Harvest: a used berry may grow back (always in sun).
+    if (ab(f, 'harvest') && f.item && f.itemSpent && /berry/.test(f.item.id) && (f.harvestT = (f.harvestT ?? 5) - 1) <= 0) {
+      f.harvestT = 5;
+      if (w === 'sunnyday' || chance(50)) {
+        f.itemSpent = false;
+        ability(game, f);
+        say(game, 'harvested', { who: game.who(f), item: f.itemLabel() });
+      }
+    }
     const sandProof = ['sandveil', 'sandrush', 'sandforce', 'overcoat'].some((a) => ab(f, a));
     if (ab(f, 'dryskin') && w === 'raindance') f.heal(f.maxHp * 0.01);
     if (ab(f, 'dryskin') && w === 'sunnyday') hurt(game, f, 0.01, '#f8d858');
@@ -320,7 +380,7 @@ export function onEntry(game, f) {
   f.enteredAt = game.fightTime || 0; // Fake Out works only right after entering
   if (ab(f, 'trace')) {
     const near = game.nearestEnemy(f);
-    const copy = near && near.ability !== 'trace' ? near.ability : null;
+    const copy = near && !['trace', 'illusion', ...UNSUPPRESSED].includes(near.ability) ? near.ability : null;
     if (copy) {
       ability(game, f);
       f.ability = copy;
@@ -338,6 +398,28 @@ export function onEntry(game, f) {
   if (ab(f, 'drought')) setWeather(game, 'sunnyday', f);
   if (ab(f, 'drizzle')) setWeather(game, 'raindance', f);
   if (ab(f, 'grassysurge')) setTerrain(game, 'grassy');
+  if (ab(f, 'snowwarning')) setWeather(game, 'snowscape', f);
+  if (ab(f, 'neutralizinggas')) {
+    ability(game, f);
+    say(game, 'gasOut');
+  }
+  if (ab(f, 'dauntlessshield') && !f.dauntlessDone) {
+    f.dauntlessDone = true;
+    ability(game, f);
+    boost(game, f, { def: 1 }, f);
+  }
+  // Download: raises Attack or Sp. Atk, whichever the foes defend worse against.
+  if (ab(f, 'download') && foes.length) {
+    const def = foes.reduce((s2, e) => s2 + e.statVal('def'), 0);
+    const spd = foes.reduce((s2, e) => s2 + e.statVal('spd'), 0);
+    ability(game, f);
+    boost(game, f, def < spd ? { atk: 1 } : { spa: 1 }, f);
+  }
+  if (f.hero && !f.heroShown) {
+    f.heroShown = true;
+    ability(game, f);
+    say(game, 'heroForm', { who: game.who(f) });
+  }
   if (ab(f, 'electricsurge')) setTerrain(game, 'electric');
   if (ab(f, 'orichalcumpulse')) {
     ability(game, f);
@@ -365,6 +447,9 @@ export function onSwitchOut(game, f) {
     f.status = null;
     f.statusImmune = 0;
   }
+  if (ab(f, 'zerotohero') && f.alive) f.hero = true; // comes back in as Hero Palafin
+  f.seed = null; // switching out shakes off Leech Seed
+  f.glaiveT = 0;
 }
 
 /** Final damage tweaks: Disguise blocks the first hit. */
@@ -427,6 +512,7 @@ export function wantsMove(game, f, id, foe) {
   const fx = MOVEFX.moves[id];
   if (!m || !fx) return false;
   const w = weatherNow(game);
+  if (fx.behavior === 'hazard') return !!foe?.alive && (game.hazardCount?.(f, id) ?? 0) < (fx.max || 6) - 1;
   if (fx.behavior === 'self') {
     if (m.weather) return game.weather?.id !== m.weather;
     if (PROTECTS.includes(id)) return threatened(game, f);
@@ -444,14 +530,19 @@ export function wantsMove(game, f, id, foe) {
     if (m.flags?.includes('powder') && foe.types.includes('Grass')) return false;
     if (m.status) return !statusBlock(game, foe, m.status, f) && !(m.status === 'par' && effectiveness('Electric', foe.types) === 0);
     if (m.volatile === 'confusion') return foe.confusedT <= 0;
+    if (m.volatile === 'leechseed') return !foe.seed && !foe.types.includes('Grass');
     return true;
   }
   // Damaging: never waste a move the target is immune to (or absorbs).
   const type = moveType(f, m);
-  if (effectiveness(type, foe.types) === 0) return false;
+  const scrappy = ab(f, 'scrappy') && (type === 'Normal' || type === 'Fighting');
+  if (effectiveness(type, scrappy ? foe.types.filter((x) => x !== 'Ghost') : foe.types) === 0) return false;
   if (!breaks(f) && immuneAbility(foe, type)) return false;
   if (id === 'solarbeam' && w === 'raindance') return Math.random() < 0.02;
-  if (id === 'fakeout') return (game.fightTime || 0) - (f.enteredAt || 0) < 4;
+  if (id === 'fakeout' || id === 'firstimpression') return (game.fightTime || 0) - (f.enteredAt || 0) < 4;
+  if (id === 'focuspunch') return !threatened(game, f); // don't tighten focus with an attack coming
+  if (id === 'mindblown') return f.hp > f.maxHp * 0.55 || foe.hp < foe.maxHp * 0.3;
+  if (id === 'saltcure' && foe.salt) return Math.random() < 0.3;
   return true;
 }
 
@@ -495,7 +586,8 @@ const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
 export function preHit(game, att, def, cast) {
   const m = cast.move;
   const x = MOVEFX.moves[m.id]?.extra || {};
-  if (def.protectT > 0 && !ab(att, 'infiltrator')) {
+  const throughProtect = ab(att, 'infiltrator') || m.noProtect || (ab(att, 'unseenfist') && m.flags?.includes('contact'));
+  if (def.protectT > 0 && !throughProtect) {
     if (x.breakProtect) {
       // Raging Bull smashes through.
       def.protectT = 0;
@@ -521,6 +613,8 @@ export function preHit(game, att, def, cast) {
     if (defAb(att, def, 'soundproof') && m.flags?.includes('sound')) return nope();
     if (defAb(att, def, 'overcoat') && m.flags?.includes('powder')) return nope();
     if (defAb(att, def, 'goodasgold') && m.category === 'Status') return nope();
+    // Queenly Majesty: foes' priority moves can't touch it (or its partner).
+    if (hasPriority(att, m) && [def, ...allies(game, def)].some((o) => defAb(att, o, 'queenlymajesty'))) return nope();
     if (m.category === 'Status' && ab(att, 'prankster') && def.types.includes('Dark')) {
       game.ui?.log(t('noEffect', { who: game.who(def) }));
       return true;
@@ -538,14 +632,26 @@ export function preHit(game, att, def, cast) {
     return true;
   }
   if (m.category === 'Physical' && ab(att, 'hustle') && Math.random() < 0.2) return miss(game, att, def);
-  const sharpEyed = ab(att, 'keeneye') || ab(att, 'illuminate') || ab(att, 'compoundeyes');
+  const sharpEyed = ab(att, 'keeneye') || ab(att, 'illuminate') || ab(att, 'compoundeyes') || victoryStar(game, att);
   if (m.category !== 'Status' && !noGuard(att, def) && !sharpEyed) {
     if (defAb(att, def, 'snowcloak') && weatherNow(game) === 'snowscape' && Math.random() < 0.2) return miss(game, att, def);
     if (defAb(att, def, 'telepathy') && Math.random() < 0.1) return miss(game, att, def);
     if (defAb(att, def, 'sandveil') && weatherNow(game) === 'sandstorm' && Math.random() < 0.2) return miss(game, att, def);
   }
+  // Spectral Thief: steals the target's stat boosts before it strikes.
+  if (m.id === 'spectralthief') {
+    const up = Object.fromEntries(Object.entries(def.boosts).filter(([, b]) => b.n > 0).map(([k, b]) => [k, b.n]));
+    if (Object.keys(up).length) {
+      for (const k of Object.keys(up)) delete def.boosts[k];
+      say(game, 'stoleBoosts', { who: game.who(att), foe: game.who(def) });
+      boost(game, att, up, att);
+    }
+  }
   return false;
 }
+
+/** Victory Star: it and its partner's attacks ignore evasion, effect chances ×1.2. */
+const victoryStar = (game, f) => [f, ...allies(game, f)].some((o) => ab(o, 'victorystar'));
 
 function miss(game, att, def) {
   float(game, def, t('missed'), '#c8c8c8');
@@ -604,14 +710,39 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'acrobatics' && (!att.item || att.itemSpent)) power *= 2;
   if (m.id === 'hex' && def.status) power *= 2;
   if (m.id === 'ragefist') power = Math.min(350, 50 + 50 * (att.timesHit || 0));
+  // Gyro Ball: stronger the slower the user is. Electro Ball: stronger the faster it is.
+  if (m.id === 'gyroball') power = Math.max(1, Math.min(150, Math.floor((25 * def.statVal('spe')) / att.statVal('spe')) + 1));
+  if (m.id === 'electroball') {
+    const r = att.statVal('spe') / Math.max(1, def.statVal('spe'));
+    power = r >= 4 ? 150 : r >= 3 ? 120 : r >= 2 ? 80 : r >= 1 ? 60 : 40;
+  }
+  // Type match after Scrappy (Normal / Fighting moves hit Ghosts).
+  const scrappy = ab(att, 'scrappy') && (type === 'Normal' || type === 'Fighting') && def.types.includes('Ghost');
+  const eff = effectiveness(type, scrappy ? def.types.filter((x) => x !== 'Ghost') : def.types);
+  if (eff > 0 && eff < 1 && ab(att, 'tintedlens')) mul *= 2;
+  if (eff > 1 && (defAb(att, def, 'solidrock') || defAb(att, def, 'filter') || ab(def, 'prismarmor'))) mul *= 0.75;
+  if (type === 'Electric' && ab(att, 'transistor')) mul *= 1.3;
+  if (m.flags?.includes('pulse') && ab(att, 'megalauncher')) mul *= 1.5;
+  if (type === 'Ghost' && defAb(att, def, 'purifyingsalt')) mul *= 0.5;
+  if (def.glaiveT > 0) mul *= 2; // Glaive Rush leaves the user wide open
+  // Protosynthesis: in sun its best stat is ×1.3 (handled in statVal); Photon Geyser hits with its better attack.
+  let offStat = m.offStat;
+  let defStat = m.defStat;
+  if (m.id === 'photongeyser' && att.statVal('atk') > att.statVal('spa')) {
+    offStat = 'atk';
+    defStat = 'def';
+  }
   if (x.punish && def.cast) mul *= x.punish; // Sucker Punch
   const stab = ab(att, 'protean') || ab(att, 'libero') || att.types.includes(type) ? (ab(att, 'adaptability') ? 2 : 1.5) : 1;
   const critStage = m.willCrit ? 3 : (m.critRatio ? m.critRatio - 1 : 0) + stageOf(att, 'crit') + (ab(att, 'superluck') ? 1 : 0);
   return {
     mul, power, stab, critStage, type,
-    offStat: m.offStat, // Body Press attacks with Defense
-    defStat: m.defStat, // Psyshock hits Defense
-    noCrit: defAb(att, def, 'shellarmor'),
+    offStat, // Body Press attacks with Defense
+    defStat, // Psyshock hits Defense
+    eff: scrappy ? eff : undefined,
+    // Seismic Toss: damage equal to the user's level.
+    fixed: m.id === 'seismictoss' ? LEVEL : 0,
+    noCrit: defAb(att, def, 'shellarmor') || defAb(att, def, 'battlearmor'),
     critMul: ab(att, 'sniper') ? 2.25 : 1.5,
     ignoreAtkStages: defAb(att, def, 'unaware'), // the defender ignores the attacker's boosts
     ignoreDefStages: ab(att, 'unaware') || !!m.ignoreStages || !!x.ignoreStages,
@@ -625,7 +756,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
   const once = (cast.effected ||= new Set());
   const first = !once.has(def);
   once.add(def);
-  const sg = (ab(att, 'serenegrace') ? 2 : 1) * (ab(att, 'compoundeyes') ? 1.3 : 1);
+  const sg = (ab(att, 'serenegrace') ? 2 : 1) * (ab(att, 'compoundeyes') ? 1.3 : 1) * (victoryStar(game, att) ? 1.2 : 1);
 
   if (dmg > 0) {
     if (m.drain && att.alive) {
@@ -643,6 +774,29 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       if (s.volatile === 'confusion') confuse(game, def);
       if (s.boosts) boost(game, def, s.boosts, att);
       if (s.selfBoosts) boost(game, att, s.selfBoosts, att);
+      if (s.volatile === 'saltcure') salt(game, def, att);
+    }
+    // Stench: its attacks may make the target flinch.
+    if (ab(att, 'stench') && dmg > 0 && !(m.secondary || []).some((s) => s.volatile === 'flinch') && chance(10)) flinch(game, def, att);
+    // Stone Axe: leaves sharp rocks (Stealth Rock) around the target.
+    if (x.rocks && dmg > 0) {
+      for (let i = 0; i < x.rocks; i++) {
+        const a = Math.random() * Math.PI * 2;
+        game.placeHazard?.(att, 'stealthrock', def.x + Math.cos(a) * 34, def.y + Math.sin(a) * 24);
+      }
+    }
+    if (m.id === 'clearsmog' && Object.keys(def.boosts).length) {
+      def.boosts = {};
+      say(game, 'boostsCleared', { who: game.who(def) });
+    }
+    if (m.type === 'Fire' && dmg > 0 && ab(def, 'thermalexchange') && def.alive) {
+      ability(game, def);
+      boost(game, def, { atk: 1 }, def);
+    }
+    // Emergency Exit: dropping below half HP, it flees (Trio switches it out).
+    if (ab(def, 'emergencyexit') && def.alive && def.hp < def.maxHp / 2 && def.hp + dmg >= def.maxHp / 2) {
+      ability(game, def);
+      game.after(0.2, () => game.uturn?.(def), null);
     }
     if (x.chill) {
       def.chillT = x.chill;
@@ -683,7 +837,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
         ability(game, def);
         inflict(game, att, 'par', def);
       }
-      if (ab(def, 'roughskin')) {
+      if (ab(def, 'roughskin') || ab(def, 'ironbarbs')) {
         ability(game, def);
         hurt(game, att, 0.06, '#f8a858');
       }
@@ -729,6 +883,7 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       else if (m.flags?.includes('powder') && def.types.includes('Grass')) ok = false; // Spore: Grass types are immune
       else ok = inflict(game, def, m.status, att);
     } else if (m.volatile === 'confusion') ok = confuse(game, def);
+    else if (m.volatile === 'leechseed') ok = seed(game, def, att);
     if (!ok) float(game, def, t('failed'), '#c8c8c8');
   }
 }
@@ -736,7 +891,19 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
 /** Once per cast, when the move is used: self stat changes (Close Combat, Draco Meteor...), Outrage lock. */
 export function onMoveUsed(game, c, id) {
   const m = DB.moves[id];
-  if (m.selfBoosts) game.after(0.3, () => c.alive && boost(game, c, m.selfBoosts, c), null);
+  // Diamond Storm: its self boost only happens half the time.
+  if (m.selfBoosts && (!m.selfChance || chance(m.selfChance * (ab(c, 'serenegrace') ? 2 : 1)))) game.after(0.3, () => c.alive && boost(game, c, m.selfBoosts, c), null);
+  if (id === 'glaiverush') c.glaiveT = 2;
+  if (id === 'mindblown' && !ab(c, 'magicguard')) {
+    // Mind Blown: costs half its max HP.
+    say(game, 'mindBlown', { who: game.who(c) });
+    game.recoil(c, Math.ceil(c.maxHp / 2), 'mindblown', false);
+  }
+  if (id === 'rapidspin') game.clearHazards?.(c);
+  if (id === 'icespinner' && game.terrain) {
+    say(game, game.terrain.id === 'electric' ? 'terrainEndElectric' : 'terrainEnd');
+    game.terrain = null;
+  }
   if (m.recharge) c.pendingRecharge = 1.2;
   if (m.locked) {
     // Outrage: keeps raging for 2 more uses, then becomes confused.
@@ -811,8 +978,19 @@ function formChange(game, f, blade) {
 }
 
 /** A Pokémon was knocked out by an attack from `killer`. */
-export function onKnockOut(game, killer) {
+export function onKnockOut(game, killer, move = null) {
   if (!killer?.alive) return;
+  if (move?.id === 'fellstinger') boost(game, killer, { atk: 3 }, killer);
+  if (ab(killer, 'grimneigh')) {
+    ability(game, killer);
+    boost(game, killer, { spa: 1 }, killer);
+  }
+  if (ab(killer, 'beastboost')) {
+    // Beast Boost: raises its highest stat.
+    const best = ['atk', 'def', 'spa', 'spd', 'spe'].reduce((b, k) => (killer.stats[k] > killer.stats[b] ? k : b), 'atk');
+    ability(game, killer);
+    boost(game, killer, { [best]: 1 }, killer);
+  }
   if (ab(killer, 'moxie')) {
     ability(game, killer);
     boost(game, killer, { atk: 1 }, killer);
@@ -843,4 +1021,32 @@ export function burnGround(game, att, x, y, r, time) {
     }
     return life >= time;
   });
+}
+
+/** Leech Seed: the target loses a little HP every second for 8 s and the user drinks it. */
+function seed(game, f, by) {
+  if (!f.alive || f.seed || f.types.includes('Grass')) return false;
+  f.seed = { by, t: 8 };
+  say(game, 'seeded', { who: game.who(f) });
+  fxAt(game, MOVEFX.status.seed, f, { dy: -10 });
+  return true;
+}
+
+/** Salt Cure: salt eats away at the target for 8 s (twice as fast on Water / Steel types). */
+function salt(game, f, by) {
+  if (!f.alive || f.salt) return;
+  f.salt = { by, t: 8 };
+  say(game, 'salted', { who: game.who(f) });
+}
+
+/** Focus Punch: getting hit while tightening focus loses it (the punch goes on cooldown). */
+export function loseFocus(game, f) {
+  const cast = f.cast;
+  if (!cast?.focusing) return;
+  cast.focusing = false;
+  cast.release();
+  game.cancelCast(f);
+  f.castGap = 0.6;
+  say(game, 'lostFocus', { who: game.who(f) });
+  float(game, f, t('stn_flinch'), '#f8f8f8');
 }

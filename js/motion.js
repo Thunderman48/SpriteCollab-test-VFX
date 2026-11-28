@@ -5,10 +5,15 @@
 //   dive (Brave Bird, High Jump Kick) · shadow (Shadow Sneak) · bounce (U-turn) · blink (Sucker Punch)
 //   charge (Flare Blitz, Wild Charge, Head Smash) · ram (Dragon Rush, Bolt Strike)
 //   spin (Drill Peck, Darkest Lariat) · rise (Waterfall) · leap (Wood Hammer, Giga Impact)
-//   orbit (Aqua Step) · arc (Acrobatics) · hops (Heavy Slam); straight + accel (Aqua Jet)
+//   orbit (Aqua Step) · arc (Acrobatics) · hops (Heavy Slam); straight + accel (Aqua Jet, Jet Punch)
+//   burrow (Dig: tunnels over, bursts up under the target) · roll (Rollout: rolls again and again, harder each time)
+//   vee (V-create: a V of fire) · pounce (First Impression: crouch, then pin the target) · surf (Wave Crash: a wide wave)
 // Melee styles: basic · sweep (slashes and tails hit everything in an arc) · uppercut (launches)
 //   slam (hop onto the target, small shockwave) · combo (rapid flurry) · clamp (bites hold the target)
 //   whirl (Sacred Sword: spins, hits all around) · trip (Low Sweep: knocks down) · rage (Rage Fist: more punches the more it was hit)
+//   triple (Triple Kick: 3 kicks, each stronger, a miss ends it) · throw (Seismic Toss: lifts the target over and slams it)
+//   flurry (Plasma Fists: blinks around the target, hitting from every side) · axe (Ivy Cudgel: leaps up, smashes down)
+//   + `focus` on any melee skill: tightens focus first (Focus Punch fails if hit meanwhile)
 import { MOVEFX, spawnFx, frontOf, aimOf } from './moves.js';
 import { Telegraph } from './vfx.js';
 import { angleToDir } from './sprite.js';
@@ -672,6 +677,230 @@ export const DASH = {
     };
     game.sfx?.('charge');
   },
+
+  /** Dig: tunnels underground (can't be hit), then bursts up under the target. */
+  burrow(game, c, t, cast) {
+    const d = cast.def;
+    begin(game, c, t, cast, d, { speed: 1 });
+    spawnFx(game, d.under, c.x, c.y, { layer: 'under' });
+    spawnFx(game, MOVEFX.common.dodge, c.x, c.y, { scale: 1.2 });
+    c.burrowing = true;
+    c.invuln = Math.max(c.invuln, d.dashTime + 0.15);
+    let time = 0;
+    let dustT = 0;
+    let mark = null;
+    const surface = () => {
+      c.burrowing = false;
+      c.invuln = Math.min(c.invuln, 0.05);
+      if (mark) mark.dead = true;
+      spawnFx(game, d.under, c.x, c.y, { layer: 'under' });
+      spawnFx(game, d.impact, c.x, c.y - 6);
+      c.sprite.play(d.anim, { loop: false, restart: true });
+      for (const e of game.enemiesOf(c)) {
+        if (Math.hypot(e.x - c.x, (e.y - c.y) / 0.7) > (d.radius || 30) + e.radius) continue;
+        if (contact(game, c, e, cast, { angle: c.angleTo(e), kbMul: 0.4 })) launch(game, e, 34, 0.45);
+      }
+      game.shake(d.shake || 5, 0.25);
+      game.sfx?.('boom');
+      end(game, c, cast, 0.25);
+    };
+    cast.drive = (dt) => {
+      time += dt;
+      const goal = t.alive ? t : null;
+      if (!goal || time >= d.dashTime) return surface();
+      const a = c.angleTo(goal);
+      cast.faceAngle = a;
+      const step = Math.min(d.dashSpeed * dt, Math.max(0, c.distTo(goal) - 2));
+      c.x += Math.cos(a) * step;
+      c.y += Math.sin(a) * step;
+      c.clamp();
+      if ((dustT -= dt) <= 0) {
+        dustT = 0.06;
+        spawnFx(game, d.trail, c.x + (Math.random() - 0.5) * 10, c.y + 4, { layer: 'under' });
+      }
+      // The ground cracks under the target just before it bursts out.
+      if (!mark && c.distTo(goal) < 40) mark = game.addEffect(new Telegraph(goal.x, goal.y + 4, d.radius || 30, 0.2));
+      if (c.distTo(goal) <= 6 || (mark && mark.t >= 0.18)) surface();
+    };
+    game.sfx?.('dash');
+  },
+
+  /** Rollout: rolls into the target, bounces off and rolls again (up to 4 times), harder every time. A miss ends it. */
+  roll(game, c, t, cast) {
+    const d = cast.def;
+    let a = begin(game, c, t, cast, d, { speed: 2 });
+    cast.lockDir = true;
+    const rolls = d.rolls || 4;
+    let n = 0;
+    let time = 0;
+    let back = 0;
+    let spinT = 0;
+    let speed = d.dashSpeed;
+    cast.drive = (dt) => {
+      time += dt;
+      if ((spinT += dt) >= 0.04) {
+        spinT = 0;
+        c.dir = (c.dir + 1) % 8;
+      }
+      if (back > 0) {
+        // Bouncing back off the target before the next roll.
+        back -= dt;
+        c.x -= Math.cos(a) * 220 * dt;
+        c.y -= Math.sin(a) * 220 * dt;
+        c.lift = Math.sin((1 - back / 0.18) * Math.PI) * 12;
+        c.clamp();
+        if (back <= 0) {
+          c.lift = 0;
+          if (!t.alive || n >= rolls) return end(game, c, cast);
+          a = c.angleTo(t);
+          time = 0;
+          speed *= 1.15;
+        }
+        return;
+      }
+      if (time >= d.dashTime) return end(game, c, cast); // rolled past: it's over
+      c.x += Math.cos(a) * speed * dt;
+      c.y += Math.sin(a) * speed * dt;
+      c.clamp();
+      trail(game, c, d, cast, dt);
+      const e = game.enemiesOf(c).find((o) => c.distTo(o) <= c.radius + o.radius + 6);
+      if (!e) return;
+      if (!contact(game, c, e, cast, { angle: a, factor: 2 ** n, kbMul: 0.5 })) return end(game, c, cast);
+      n++;
+      spawnFx(game, d.impact, e.x, e.y - 4);
+      game.shake(2 + n * 2, 0.2);
+      back = 0.18;
+    };
+    game.sfx?.('dash');
+  },
+
+  /** V-create: dashes out to one side, then cuts back through the target, drawing a V of fire. */
+  vee(game, c, t, cast) {
+    const d = cast.def;
+    let a = begin(game, c, t, cast, d, { speed: 2 });
+    followFx(game, c, d, d.dashTime * 2);
+    const side = Math.random() < 0.5 ? 1 : -1;
+    const dist = t.alive ? c.distTo(t) : 120;
+    const apex = { x: c.x + Math.cos(a + 0.75 * side) * dist * 0.55, y: c.y + Math.sin(a + 0.75 * side) * dist * 0.55 * 0.8 };
+    let leg = 0;
+    let time = 0;
+    let left = 0;
+    const hit = new Set();
+    a = Math.atan2(apex.y - c.y, apex.x - c.x);
+    cast.drive = (dt) => {
+      time += dt;
+      if (time > d.dashTime * 3) return end(game, c, cast);
+      const step = d.dashSpeed * dt;
+      if (leg === 0) {
+        if (Math.hypot(apex.x - c.x, apex.y - c.y) <= step) {
+          c.x = apex.x;
+          c.y = apex.y;
+          leg = 1;
+          a = t.alive ? c.angleTo(t) : a + Math.PI / 2;
+          cast.faceAngle = a;
+          left = (t.alive ? c.distTo(t) : 80) + (d.overshoot || 50);
+          spawnFx(game, d.impact, c.x, c.y - 4, { scale: 0.7 });
+          return;
+        }
+        a = Math.atan2(apex.y - c.y, apex.x - c.x);
+      } else if ((left -= step) <= 0) return end(game, c, cast, 0.15);
+      cast.faceAngle = a;
+      c.x += Math.cos(a) * step;
+      c.y += Math.sin(a) * step;
+      c.clamp();
+      trail(game, c, d, cast, dt);
+      for (const e of game.enemiesOf(c)) {
+        if (hit.has(e) || c.distTo(e) > c.radius + e.radius + 8) continue;
+        hit.add(e);
+        if (contact(game, c, e, cast, { angle: a })) {
+          spawnFx(game, d.slash, e.x, e.y - 6, { angle: a });
+          game.shake(d.shake || 6, 0.25);
+        }
+      }
+    };
+    game.sfx?.('dash');
+  },
+
+  /** First Impression: crouches, then springs onto the target and pins it for a moment. */
+  pounce(game, c, t, cast) {
+    const d = cast.def;
+    const crouch = (d.windup || 0.15) / cast.speed;
+    c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
+    spawnFx(game, d.charge, c.x, c.y, { follow: c, life: crouch + 0.1, loop: true, layer: 'under' });
+    game.after(crouch, () => {
+      begin(game, c, t, cast, d, { anim: d.riseAnim || 'Hop', speed: 1.6 });
+      const from = { x: c.x, y: c.y };
+      const to = t.alive ? { x: t.x - Math.cos(c.angleTo(t)) * (t.radius * 0.5), y: t.y } : from;
+      let tt = 0;
+      cast.drive = (dt) => {
+        tt += dt;
+        const k = Math.min(1, tt / d.dashTime);
+        c.x = from.x + (to.x - from.x) * k;
+        c.y = from.y + (to.y - from.y) * k;
+        c.lift = Math.sin(k * Math.PI) * (d.height || 30);
+        if (tt % 0.03 < dt) c.ghost(d.ghostTint);
+        if (k < 1) return;
+        c.lift = 0;
+        c.sprite.play(d.anim, { loop: false, restart: true });
+        for (const e of game.enemiesOf(c)) {
+          if (c.distTo(e) > c.radius + e.radius + 14) continue;
+          if (contact(game, c, e, cast, { angle: c.angleTo(e), kbMul: 0.2 })) e.stunT = Math.max(e.stunT, d.pin || 0.35);
+        }
+        spawnFx(game, d.land, c.x, c.y, { layer: 'under' });
+        game.shake(d.shake || 4, 0.2);
+        end(game, c, cast, 0.25);
+      };
+      game.sfx?.('dash');
+    }, cast);
+  },
+
+  /** Wave Crash: rides a wide wave forward, sweeping up every foe in its path. */
+  surf(game, c, t, cast) {
+    const d = cast.def;
+    const a = begin(game, c, t, cast, d, { speed: 2 });
+    followFx(game, c, d, d.dashTime);
+    const width = d.width || 26;
+    const carried = new Map();
+    let time = 0;
+    let fxT = 0;
+    cast.drive = (dt) => {
+      time += dt;
+      if (time >= d.dashTime) {
+        for (const e of carried.keys()) if (e.alive) game.applyHit(c, e, cast, { angle: a, kbMul: 1.6, factor: 0.5 });
+        spawnFx(game, d.impact, c.x + Math.cos(a) * 20, c.y + Math.sin(a) * 14 - 4);
+        game.shake(d.shake || 6, 0.3);
+        return end(game, c, cast, 0.2);
+      }
+      c.x += Math.cos(a) * d.dashSpeed * dt;
+      c.y += Math.sin(a) * d.dashSpeed * dt;
+      c.clamp();
+      trail(game, c, d, cast, dt);
+      if ((fxT -= dt) <= 0) {
+        fxT = 0.05;
+        const s = (Math.random() - 0.5) * 2 * width;
+        spawnFx(game, d.spray, c.x + Math.cos(a) * 16 - Math.sin(a) * s, c.y + Math.sin(a) * 12 + Math.cos(a) * s * 0.7, { layer: 'over' });
+      }
+      for (const e of game.enemiesOf(c)) {
+        if (carried.has(e)) {
+          // Swept along in front of the wave.
+          const off = carried.get(e);
+          e.x = c.x + Math.cos(a) * (c.radius + e.radius) - Math.sin(a) * off;
+          e.y = c.y + Math.sin(a) * (c.radius + e.radius) * 0.8 + Math.cos(a) * off * 0.7;
+          e.clamp();
+          e.stunT = Math.max(e.stunT, 0.1);
+          continue;
+        }
+        const fwd = (e.x - c.x) * Math.cos(a) + (e.y - c.y) * Math.sin(a);
+        const lat = -(e.x - c.x) * Math.sin(a) + (e.y - c.y) * Math.cos(a);
+        if (fwd < -4 || fwd > c.radius + e.radius + 8 || Math.abs(lat) > width + e.radius) continue;
+        if (contact(game, c, e, cast, { angle: a, factor: 0.5, kbMul: 0 })) {
+          carried.set(e, Math.max(-width, Math.min(width, lat)));
+          if (e.cast && !e.cast.released) game.cancelCast(e);
+        }
+      }
+    };
+    game.sfx?.('dash');
+  },
 };
 
 // ---------------------------------------------------------------- melee strikes
@@ -772,6 +1001,93 @@ export const MELEE = {
     const hits = Math.max(2, Math.min(6, 2 + Math.floor((c.timesHit || 0) / 2)));
     MELEE.combo(game, c, t, cast, { ...d, hits });
     if ((c.timesHit || 0) >= 4) spawnFx(game, d.hit2, c.x, c.y - 10, { follow: c });
+  },
+
+  /** Triple Kick: three spinning kicks, each one stronger; the first one that misses ends it. */
+  triple(game, c, t, cast, d) {
+    const gap = d.hitGap || 0.16;
+    let on = true;
+    for (let k = 0; k < 3; k++) {
+      game.after(k * gap, () => {
+        if (!on || !t.alive || c.ko) return;
+        c.dir = (c.dir + 3) % 8;
+        c.ghost(d.ghostTint);
+        const a = c.angleTo(t);
+        if (c.distTo(t) > c.radius + t.radius + 36 || !contact(game, c, t, cast, { angle: a, factor: k + 1, kbMul: k === 2 ? 1.3 : 0.2 })) {
+          on = false;
+          spawnFx(game, MOVEFX.common.dodge, c.x + Math.cos(a) * 26, c.y + Math.sin(a) * 26, { scale: 0.7 });
+          return;
+        }
+        game.shake(2 + k, 0.12);
+      }, null);
+    }
+  },
+
+  /** Seismic Toss: grabs the target, swings it up over its head and slams it down behind. */
+  throw(game, c, t, cast, d) {
+    if (!t.alive || c.distTo(t) > c.radius + t.radius + 34) return MELEE.basic(game, c, t, cast, { hits: 1 });
+    if (game.dodges(c, t)) return void game.dodgedText(t);
+    if (t.cast && !t.cast.released) game.cancelCast(t);
+    const from = { x: t.x, y: t.y };
+    const back = c.angleTo(t) + Math.PI;
+    const to = { x: c.x + Math.cos(back) * (c.radius + t.radius + 10), y: c.y + Math.sin(back) * (c.radius + t.radius + 10) * 0.7 };
+    const time = d.throwTime || 0.45;
+    t.stunT = Math.max(t.stunT, time + 0.2);
+    spawnFx(game, d.grab, t.x, t.y - 8);
+    let tt = 0;
+    game.addUpdater((dt) => {
+      tt += dt;
+      if (!t.alive) return true;
+      const k = Math.min(1, tt / time);
+      t.x = from.x + (to.x - from.x) * k;
+      t.y = from.y + (to.y - from.y) * k;
+      t.lift = Math.sin(k * Math.PI) * (d.height || 70);
+      if (k < 1) return false;
+      t.lift = 0;
+      t.clamp();
+      game.applyHit(c, t, cast, { angle: back, kbMul: 0.4 });
+      spawnFx(game, d.land, t.x, t.y, { layer: 'under' });
+      game.shake(d.shake || 8, 0.3);
+      game.sfx?.('boom');
+      return true;
+    });
+  },
+
+  /** Plasma Fists: blinks around the target, punching from every side. */
+  flurry(game, c, t, cast, d) {
+    const hits = d.hits || 4;
+    const start = t.angleTo(c);
+    const turn = Math.random() < 0.5 ? 1 : -1;
+    for (let k = 0; k < hits; k++) {
+      game.after(k * (d.hitGap || 0.11), () => {
+        if (!t.alive || c.ko) return;
+        c.ghost(d.ghostTint);
+        const ang = start + turn * (k + 1) * ((Math.PI * 2) / hits) * 0.75;
+        c.x = t.x + Math.cos(ang) * (t.radius + c.radius + 2);
+        c.y = t.y + Math.sin(ang) * (t.radius + c.radius + 2) * 0.7;
+        c.clamp();
+        const a = c.angleTo(t);
+        cast.faceAngle = a;
+        c.dir = angleToDir(a);
+        spawnFx(game, d.blink, c.x, c.y, { layer: 'under', scale: 0.7 });
+        contact(game, c, t, cast, { angle: a, factor: 1 / hits, kbMul: k === hits - 1 ? 1.4 : 0.1 });
+      }, null);
+    }
+  },
+
+  /** Ivy Cudgel: leaps up with the club raised and smashes it down; the target is dazed. */
+  axe(game, c, t, cast, d) {
+    let any = false;
+    const a = t.alive ? c.angleTo(t) : cast.faceAngle;
+    for (const e of game.enemiesOf(c)) {
+      if (c.distTo(e) > c.radius + e.radius + (d.splash || 26)) continue;
+      if (contact(game, c, e, cast, { angle: c.angleTo(e), kbMul: 0.3 })) {
+        any = true;
+        e.stunT = Math.max(e.stunT, d.daze || 0.3);
+      }
+    }
+    spawnFx(game, d.land, c.x + Math.cos(a) * 18, c.y + Math.sin(a) * 12, { layer: 'under' });
+    game.shake(any ? d.shake || 7 : 3, 0.25);
   },
 
   /** Crunch / Fangs: bites and holds the target in place, then bites again. */

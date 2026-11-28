@@ -4,6 +4,8 @@ import { DB } from './combat.js';
 import { Effect, Beam, Telegraph } from './vfx.js';
 import { selfMove, burnGround, weatherNow, hasPriority } from './effects.js';
 import { DASH, MELEE } from './motion.js';
+import { PROJ, BEAMS, BURSTS, zone, pull, hazardMove } from './patterns.js';
+import { inflict } from './effects.js';
 
 export const MOVEFX = { common: {}, moves: {} };
 /** Pause after every attack before the next one can start. */
@@ -77,7 +79,7 @@ export function cancelCast(game, c) {
 }
 
 /** Optional charge phase (charge anim + charge VFX at the caster's front), then `then()`. */
-function withCharge(game, c, t, cast, then) {
+export function withCharge(game, c, t, cast, then) {
   const d = cast.def;
   let time = (d.charge?.time || 0) / cast.speed;
   if (d.extra?.noChargeSun && weatherNow(game) === 'sunnyday') time = 0.12;
@@ -95,10 +97,16 @@ function withCharge(game, c, t, cast, then) {
   game.after(time, then, cast);
 }
 
-class Projectile {
-  constructor(game, owner, target, cast, angle, x, y) {
-    const pd = cast.def.projectile;
+/**
+ * A flying shot. Styles in js/patterns.js can take over its motion (`mover`), keep it from hitting
+ * for a while (`idle`), let it hit several foes / the same foe again (`multi` + `hitSet`).
+ */
+export class Projectile {
+  constructor(game, owner, target, cast, angle, x, y, pd = cast.def.projectile) {
     Object.assign(this, { game, owner, target, cast, angle, x, y, pd, t: 0, trailT: 0, dead: false, layer: 'over' });
+    this.bx = x;
+    this.by = y;
+    this.bounces = 0;
     this.def = cast.def;
     this.move = cast.move;
     this.speed = pd.speed;
@@ -109,14 +117,21 @@ class Projectile {
   update(dt) {
     const pd = this.pd;
     this.t += dt;
-    if (pd.homing && this.target.alive) {
-      const want = Math.atan2(this.target.y - this.y, this.target.x - this.x);
-      let diff = want - this.angle;
-      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-      this.angle += Math.max(-pd.homing * dt, Math.min(pd.homing * dt, diff));
+    if (this.mover) this.mover(this, dt);
+    else {
+      if (pd.homing && this.target.alive) {
+        const want = Math.atan2(this.target.y - this.y, this.target.x - this.x);
+        let diff = want - this.angle;
+        diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+        this.angle += Math.max(-pd.homing * dt, Math.min(pd.homing * dt, diff));
+      }
+      this.bx += Math.cos(this.angle) * this.speed * dt;
+      this.by += Math.sin(this.angle) * this.speed * dt;
+      // Wobble: drifts side to side along its path (Sleep Powder, Clear Smog).
+      const w = pd.wobble ? Math.sin(this.t * (pd.wobbleFreq || 7)) * pd.wobble : 0;
+      this.x = this.bx - Math.sin(this.angle) * w;
+      this.y = this.by + Math.cos(this.angle) * w;
     }
-    this.x += Math.cos(this.angle) * this.speed * dt;
-    this.y += Math.sin(this.angle) * this.speed * dt;
     this.effect.x = this.x;
     this.effect.y = this.y;
     this.effect.angle = this.angle;
@@ -136,9 +151,9 @@ class Projectile {
 
     // Hits the first enemy it touches (not only the one it was aimed at).
     // Piercing shots (Flamethrower, Psycho Cut) keep going and hit each enemy once.
-    const pierce = this.def.extra?.pierce;
-    for (const tg of this.game.enemiesOf(this.owner)) {
-      if (pierce && this.pierced?.has(tg)) continue;
+    const pierce = this.def.extra?.pierce || this.multi;
+    for (const tg of this.idle ? [] : this.game.enemiesOf(this.owner)) {
+      if (pierce && (this.pierced?.has(tg) || this.hitSet?.has(tg))) continue;
       if (Math.hypot(tg.x - this.x, tg.y - this.y) >= pd.radius * (this.owner.mods?.hitbox ?? 1) + tg.radius) continue;
       if (this.game.dodges(this.owner, tg)) {
         if (!this.dodged) {
@@ -147,6 +162,7 @@ class Projectile {
         }
       } else if (pierce) {
         (this.pierced ||= new Set()).add(tg);
+        if (this.multi) (this.hitSet ||= new Set()).add(tg);
         this.game.applyHit(this.owner, tg, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
       } else {
         this.explode(tg);
@@ -154,8 +170,28 @@ class Projectile {
       }
     }
     const b = this.game.bounds;
-    const out = this.x < b.x0 - 20 || this.x > b.x1 + 20 || this.y < b.y0 - 40 || this.y > b.y1 + 20;
-    if (out || this.t > (pd.life || 2)) {
+    // Electro Ball: bounces off the walls.
+    if (pd.bounces && this.bounces < pd.bounces && !this.mover) {
+      let bounced = false;
+      if (this.x < b.x0 || this.x > b.x1) {
+        this.angle = Math.PI - this.angle;
+        bounced = true;
+      }
+      if (this.y < b.y0 - 10 || this.y > b.y1) {
+        this.angle = -this.angle;
+        bounced = true;
+      }
+      if (bounced) {
+        this.bounces++;
+        this.bx = this.x = Math.max(b.x0, Math.min(b.x1, this.x));
+        this.by = this.y = Math.max(b.y0 - 10, Math.min(b.y1, this.y));
+        this.t = Math.min(this.t, (pd.life || 2) * 0.5);
+        spawnFx(this.game, this.def.hit2 || MOVEFX.common.dodge, this.x, this.y, { scale: 0.7 });
+        this.game.sfx?.('tick');
+      }
+    }
+    const out = !this.noWall && (this.x < b.x0 - 20 || this.x > b.x1 + 20 || this.y < b.y0 - 40 || this.y > b.y1 + 20);
+    if (out || this.t > (pd.life || 2) * (this.mover ? 3 : 1)) {
       if (this.pierced?.size) this.dead = true;
       else this.explode(false);
     }
@@ -166,7 +202,10 @@ class Projectile {
     this.dead = true;
     const g = this.game;
     if (victim) {
-      g.applyHit(this.owner, victim, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
+      const dmg = g.applyHit(this.owner, victim, this.cast, { angle: this.angle, at: { x: this.x, y: this.y }, factor: this.factor ?? 1 });
+      this.onLand?.(dmg);
+      // Tri Attack: each orb can burn / freeze / paralyse.
+      if (this.status && dmg > 0 && Math.random() < 0.067 * (this.owner.ability === 'serenegrace' ? 2 : 1)) inflict(g, victim, this.status, this.owner);
       // Seed Bomb: the blast also catches foes standing nearby.
       if (this.pd.blast) {
         for (const tg of g.enemiesOf(this.owner)) {
@@ -199,6 +238,15 @@ export function distToSegment(px, py, x0, y0, angle, len) {
   return Math.hypot(px - (x0 + dx * t), py - (y0 + dy * t));
 }
 
+/** How long a melee skill keeps the user busy after its anim ends (holds, flurries, throws). */
+function meleeTail(d) {
+  if (d.style === 'clamp') return d.hold || 0.45;
+  if (d.style === 'rage') return 6 * (d.hitGap || 0.09);
+  if (d.style === 'throw') return 0.55;
+  if (d.style === 'triple') return 3 * (d.hitGap || 0.16);
+  return (d.hits || 1) * (d.hitGap || 0);
+}
+
 const BEHAVIORS = {
   projectile(game, c, t, cast) {
     const d = cast.def;
@@ -211,7 +259,8 @@ const BEHAVIORS = {
         const p = frontOf(c, a);
         spawnFx(game, d.muzzle, p.x, p.y, { angle: a });
         const pd = d.projectile;
-        if (pd.stream) {
+        if (d.style && PROJ[d.style]) PROJ[d.style](game, c, t, cast, a, p);
+        else if (pd.stream) {
           // A rapid stream of small shots (Flamethrower); each carries a share of the damage.
           for (let k = 0; k < pd.stream; k++) {
             game.after(k * (pd.streamGap || 0.07), () => {
@@ -248,6 +297,7 @@ const BEHAVIORS = {
         cast.faceAngle = a;
         const p = frontOf(c, a, 6);
         spawnFx(game, d.muzzle, p.x, p.y, { angle: a });
+        if (d.style && BEAMS[d.style]) return BEAMS[d.style](game, c, t, cast, a);
         const beam = new Beam(d.beam, p.x, p.y, a);
         game.addEffect(beam);
         game.shake(d.shake || 0, d.beam.time);
@@ -277,6 +327,21 @@ const BEHAVIORS = {
 
   melee(game, c, t, cast) {
     const d = cast.def;
+    // Focus Punch / Wicked Blow: tightens its focus first (Focus Punch is lost if it's hit meanwhile).
+    if (d.focus && !cast.focused) {
+      const time = d.focus / cast.speed;
+      cast.focusing = !!d.extra?.loseFocus;
+      c.sprite.play(d.chargeAnim || 'Charge', { loop: true, restart: true });
+      const fx = spawnFx(game, d.charge, c.x, c.y - 4, { follow: c, oy: -4, loop: true, life: time, layer: 'over' });
+      if (fx) fx.owner = cast;
+      game.sfx?.('charge');
+      game.after(time, () => {
+        cast.focused = true;
+        cast.focusing = false;
+        BEHAVIORS.melee(game, c, t, cast);
+      }, cast);
+      return;
+    }
     const anim = c.sprite.art.animData.anims[c.sprite.resolve(d.anim)];
     const hitFrame = anim.hit ?? anim.durations.length - 1;
     // Some sprites mark the hit on frame 0; give the lunge a moment to close in first.
@@ -286,7 +351,7 @@ const BEHAVIORS = {
     const lungeSpeed = (d.lunge || 0) / hitTime;
     cast.drive = (dt) => {
       elapsed += dt;
-      if (d.style === 'slam') c.lift = Math.sin(Math.min(1, elapsed / hitTime) * Math.PI) * (d.hop || 22); // hop onto the target
+      if (d.style === 'slam' || d.style === 'axe') c.lift = Math.sin(Math.min(1, elapsed / hitTime) * Math.PI) * (d.hop || 22); // hop onto the target
       if (travelled >= (d.lunge || 0) || !t.alive) return;
       if (c.distTo(t) <= c.radius + t.radius + 4) return;
       const a = c.angleTo(t);
@@ -312,7 +377,7 @@ const BEHAVIORS = {
       (MELEE[d.style] || MELEE.basic)(game, c, t, cast, d);
       game.sfx?.('melee');
     };
-    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after(d.style === 'clamp' ? d.hold || 0.45 : d.style === 'rage' ? 6 * (d.hitGap || 0.09) : (d.hits || 1) * (d.hitGap || 0), cast.finish, null) });
+    c.sprite.play(d.anim, { loop: false, restart: true, speed: cast.speed, onHit: strike, onEnd: () => game.after(meleeTail(d), cast.finish, null) });
   },
 
   /** Dashes: each skill picks a style of movement (js/motion.js). */
@@ -377,6 +442,13 @@ const BEHAVIORS = {
             });
           }, null);
         }
+        if (d.pull) pull(game, c, p, radius, warn, d.pull);
+        if (d.pillar) {
+          // A column rising from the ground (Photon Geyser, Judgment).
+          game.after(Math.max(0, warn - 0.05), () => {
+            game.addEffect(new Beam({ ...d.pillar, length: d.pillar.length || 220 }, p.x, p.y + 6, -Math.PI / 2));
+          }, null);
+        }
         if (d.bolt) {
           // A bolt from the top of the screen down onto the point.
           game.after(Math.max(0, warn - 0.05), () => {
@@ -394,6 +466,7 @@ const BEHAVIORS = {
             else game.applyHit(c, e, cast, { angle: Math.atan2(e.y - p.y, e.x - p.x), factor: d.damageFactor ?? 1, noFx: true });
           }
           if (d.extra?.burnGround) burnGround(game, c, p.x, p.y, radius, d.extra.burnGround);
+          if (d.zone) zone(game, c, cast, p, radius);
         }, null);
       });
     };
@@ -419,6 +492,11 @@ const BEHAVIORS = {
           spawnFx(game, d.ring, c.x + Math.cos(ang) * d.ring.r, c.y + Math.sin(ang) * d.ring.r * 0.6);
         }, null);
       }
+    }
+    if (d.style && BURSTS[d.style]) {
+      BURSTS[d.style](game, c, t, cast);
+      game.after(Math.max(d.delay + (d.waveTime || 0.3) + 0.2, c.sprite.duration(d.anim)), cast.finish, null);
+      return;
     }
     game.after(d.delay, () => {
       if (c.ko) return;
@@ -450,6 +528,11 @@ const BEHAVIORS = {
       selfMove(game, c, cast);
       game.after(0.15, cast.finish, null);
     }, cast);
+  },
+
+  /** Spikes / Toxic Spikes / Stealth Rock (js/patterns.js). */
+  hazard(game, c, t, cast) {
+    hazardMove(game, c, t, cast);
   },
 
   /** Shadow Force: vanish (invulnerable), then strike from behind the target. Dodge the warning! */

@@ -664,5 +664,175 @@
     "ko": "진홍빛고동",
     "desc": "When it enters, the sun comes out. In sun, Attack ×1.33.",
     "descKo": "등장하면 쾌청이 된다. 쾌청일 때 공격 1.33배."
+  },
+  "battlearmor": {
+    "ko": "전투무장",
+    "desc": "Critical hits can't land on it.",
+    "descKo": "급소에 맞지 않는다."
+  },
+  "skilllink": {
+    "ko": "스킬링크",
+    "desc": "Multi-hit skills (Icicle Spear, Pin Missile) always hit 5 times.",
+    "descKo": "연속 기술(고드름침·바늘미사일)이 항상 5번 맞는다."
+  },
+  "tintedlens": {
+    "ko": "색안경",
+    "desc": "Its not-very-effective hits deal double damage.",
+    "descKo": "효과가 별로인 기술의 데미지가 2배."
+  },
+  "neutralizinggas": {
+    "ko": "화학변화가스",
+    "desc": "While it's out, every other Pokémon's ability stops working.",
+    "descKo": "나와 있는 동안 다른 모든 포켓몬의 특성이 사라진다."
+  },
+  "stench": {
+    "ko": "악취",
+    "desc": "Its attacks: 10% chance to make the target flinch.",
+    "descKo": "공격하면 10% 확률로 상대가 풀죽는다."
+  },
+  "arenatrap": {
+    "ko": "개미지옥",
+    "desc": "Grounded foes' dodge recharges 50% slower.",
+    "descKo": "땅에 있는 상대의 회피 충전이 50% 느려진다."
+  },
+  "download": {
+    "ko": "다운로드",
+    "desc": "When it enters: Attack +1 or Sp. Atk +1, whichever the foes defend worse against.",
+    "descKo": "등장하면 상대의 방어와 특수방어 중 낮은 쪽에 맞춰 공격 또는 특수공격 +1."
+  },
+  "scrappy": {
+    "ko": "배짱",
+    "desc": "Its Normal and Fighting moves hit Ghost types. Immune to Intimidate.",
+    "descKo": "노말·격투 기술이 고스트 타입에게 맞는다. 위협이 통하지 않는다."
+  },
+  "healer": {
+    "ko": "치유의마음",
+    "desc": "In 2vs2, every 6 s it cures its partner's status condition.",
+    "descKo": "2vs2에서 6초마다 동료의 상태 이상을 고친다."
+  },
+  "solidrock": {
+    "ko": "하드록",
+    "desc": "Super-effective hits deal ×0.75.",
+    "descKo": "효과가 굉장한 기술의 데미지 0.75배."
+  },
+  "magnetpull": {
+    "ko": "자력",
+    "desc": "Steel-type foes' dodge recharges 50% slower.",
+    "descKo": "강철 타입 상대의 회피 충전이 50% 느려진다."
+  },
+  "snowwarning": {
+    "ko": "눈퍼뜨리기",
+    "desc": "When it enters, snow for 20 s.",
+    "descKo": "등장하면 20초 동안 눈이 내린다."
+  },
+  "multitype": {
+    "ko": "멀티타입",
+    "desc": "Its ability can't be copied or switched off. (There are no plates in this game.)",
+    "descKo": "특성을 복사하거나 없앨 수 없다. (이 게임에는 플레이트가 없다.)"
+  },
+  "zenmode": {
+    "ko": "달마모드",
+    "desc": "Below half HP it enters Zen Mode: Fire/Psychic type, Attack and Sp. Atk swap, defenses ×1.6.",
+    "descKo": "HP가 절반 이하가 되면 달마모드: 불꽃·에스퍼 타입이 되고 공격과 특수공격이 바뀌며 방어력 1.6배."
+  },
+  "shedskin": {
+    "ko": "탈피",
+    "desc": "While it has a status condition: 10% chance every second to shed it.",
+    "descKo": "상태 이상일 때 매초 10% 확률로 낫는다."
+  },
+  "ironbarbs": {
+    "ko": "철가시",
+    "desc": "Contact attackers lose 6% HP.",
+    "descKo": "접촉한 상대는 HP 6%를 잃는다."
+  },
+  "victorystar": {
+    "ko": "승리의별",
+    "desc": "Its and its partner's attacks ignore evasion abilities; effect chances ×1.2.",
+    "descKo": "자신과 동료의 공격이 회피 특성을 무시하고, 추가 효과 확률 1.2배."
+  },
+  "megalauncher": {
+    "ko": "메가런처",
+    "desc": "Pulse and aura skills (Water Pulse, Aura Sphere, Dark Pulse, Dragon Pulse) ×1.5.",
+    "descKo": "파동 기술(물의파동·파동탄·악의파동·용의파동) 1.5배."
+  },
+  "harvest": {
+    "ko": "수확",
+    "desc": "A used berry may grow back: 50% every 5 s (always in sun).",
+    "descKo": "사용한 나무열매가 5초마다 50% 확률로 다시 생긴다 (쾌청이면 반드시)."
+  },
+  "emergencyexit": {
+    "ko": "위기회피",
+    "desc": "When a hit drops it below half HP, it switches out (Trio).",
+    "descKo": "공격으로 HP가 절반 아래가 되면 교체된다 (트리오)."
+  },
+  "leafguard": {
+    "ko": "리프가드",
+    "desc": "In sun it can't get a status condition.",
+    "descKo": "쾌청일 때 상태 이상이 되지 않는다."
+  },
+  "queenlymajesty": {
+    "ko": "여왕의위엄",
+    "desc": "Foes' priority skills can't hit it or its partner.",
+    "descKo": "상대의 선제 기술이 자신과 동료에게 통하지 않는다."
+  },
+  "sweetveil": {
+    "ko": "스위트베일",
+    "desc": "It and its partner can't fall asleep.",
+    "descKo": "자신과 동료가 잠들지 않는다."
+  },
+  "prismarmor": {
+    "ko": "프리즘아머",
+    "desc": "Super-effective hits deal ×0.75 (even against Mold Breaker).",
+    "descKo": "효과가 굉장한 기술의 데미지 0.75배 (틀깨기도 무시)."
+  },
+  "beastboost": {
+    "ko": "비스트부스트",
+    "desc": "When it knocks a foe out: its highest stat +1.",
+    "descKo": "상대를 쓰러뜨리면 가장 높은 능력 +1."
+  },
+  "dauntlessshield": {
+    "ko": "불굴의방패",
+    "desc": "When it first enters the battle: Defense +1.",
+    "descKo": "처음 등장할 때 방어 +1."
+  },
+  "unseenfist": {
+    "ko": "보이지않는주먹",
+    "desc": "Its contact moves go straight through Protect.",
+    "descKo": "접촉 기술이 방어를 무시한다."
+  },
+  "grimneigh": {
+    "ko": "흑마의울음",
+    "desc": "When it knocks a foe out: Sp. Atk +1.",
+    "descKo": "상대를 쓰러뜨리면 특수공격 +1."
+  },
+  "transistor": {
+    "ko": "트랜지스터",
+    "desc": "Electric moves ×1.3.",
+    "descKo": "전기 기술 1.3배."
+  },
+  "purifyingsalt": {
+    "ko": "정화의소금",
+    "desc": "Can't get a status condition; Ghost moves against it ×0.5.",
+    "descKo": "상태 이상이 되지 않고, 받는 고스트 기술 0.5배."
+  },
+  "zerotohero": {
+    "ko": "마이티체인지",
+    "desc": "After it switches out once (Trio), it comes back as Hero Palafin: far stronger.",
+    "descKo": "한 번 교체되면 (트리오) 마이티폼으로 돌아온다: 훨씬 강해진다."
+  },
+  "thermalexchange": {
+    "ko": "열교환",
+    "desc": "Hit by a Fire move: Attack +1. Can't be burned.",
+    "descKo": "불꽃 기술을 받으면 공격 +1. 화상에 걸리지 않는다."
+  },
+  "icebody": {
+    "ko": "아이스바디",
+    "desc": "In snow it heals 1% HP per second.",
+    "descKo": "눈이 오면 매초 HP 1% 회복."
+  },
+  "protosynthesis": {
+    "ko": "고대활성",
+    "desc": "In sun its highest stat goes up (×1.3; Speed ×1.5).",
+    "descKo": "쾌청일 때 가장 높은 능력이 오른다 (1.3배, 스피드는 1.5배)."
   }
 }

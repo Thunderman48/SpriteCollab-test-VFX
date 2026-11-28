@@ -8,6 +8,7 @@ import { SpriteAnimator } from './sprite.js';
 import { MODES, defaultSetup, makeMember, partyFor, teamOf, battleSetup } from './modes.js';
 import { ITEMS } from './items.js';
 import { MOVEFX, cancelCast } from './moves.js';
+import { clearHazards, hazardCount, placeHazard } from './patterns.js';
 import { FX, Effect, FloatText, BannerFont } from './vfx.js';
 import { Input } from './input.js';
 import { UI } from './ui.js';
@@ -211,7 +212,7 @@ class Game {
     this.shake(Math.min(5, 1 + dmg / 40), 0.15);
     this.sfx(eff > 1 ? 'hitBig' : 'hit');
     if (eff > 0) FXE.afterHit(this, att, def, cast, dmg, { angle, crit });
-    if (def.ko) FXE.onKnockOut(this, att);
+    if (def.ko) FXE.onKnockOut(this, att, move);
     return dmg;
   }
 
@@ -240,6 +241,17 @@ class Game {
     this.addEffect(new FloatText(String(dmg), e.x + 6, e.y - 18, '#f89858'));
     if (h.status && Math.random() * 100 < (h.chance || 10)) FXE.inflict(this, e, h.status, owner);
     if (e.hp <= 0) e.faint();
+  }
+
+  /** Rapid Spin: clears the foes' Spikes / Stealth Rock. */
+  clearHazards(c) {
+    clearHazards(this, c);
+  }
+  hazardCount(c, kind) {
+    return hazardCount(this, c, kind);
+  }
+  placeHazard(c, kind, x, y) {
+    placeHazard(this, c, kind, x, y);
   }
 
   /** High Jump Kick missed: the user crashes and loses part of its HP. */

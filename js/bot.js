@@ -39,6 +39,18 @@ export class Bot {
     if (me.y < b.y0 + 30) y += 1;
     if (me.y > b.y1 - 20) y -= 1;
 
+    // Walk around the foes' Spikes / Stealth Rock.
+    for (const o of g.objects) {
+      if (!o.hazard || o.owner.team === me.team) continue;
+      const dx = me.x - o.x;
+      const dy = me.y - o.y;
+      const dd = Math.hypot(dx, dy);
+      if (dd < 34 && dd > 0.1) {
+        x += (dx / dd) * 1.2;
+        y += (dy / dd) * 1.2;
+      }
+    }
+
     // Moves only fire while standing still: stop when one is ready (or while attacking).
     const ready = (me.lock ? [me.lock.id] : me.moves).find((id) => me.cd[id] <= 0 && wantsMove(g, me, id, foe));
     if (me.cast || ready || me.stunned) {

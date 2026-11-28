@@ -34,7 +34,10 @@
     "priority": 0,
     "target": "any",
     "cooldown": 4.5,
-    "shortDesc": "No additional effect."
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "pulse"
+    ]
   },
   "hyperbeam": {
     "id": "hyperbeam",
@@ -100,7 +103,8 @@
     "cooldown": 2.25,
     "shortDesc": "This move does not check accuracy.",
     "flags": [
-      "bullet"
+      "bullet",
+      "pulse"
     ]
   },
   "flashcannon": {
@@ -298,6 +302,9 @@
         "chance": 20,
         "volatile": "flinch"
       }
+    ],
+    "flags": [
+      "pulse"
     ]
   },
   "sludgebomb": {
@@ -455,6 +462,9 @@
         "chance": 20,
         "volatile": "confusion"
       }
+    ],
+    "flags": [
+      "pulse"
     ]
   },
   "aquatail": {
@@ -688,6 +698,7 @@
     "target": "normal",
     "cooldown": 9,
     "shortDesc": "Disappears turn 1. Hits turn 2. Breaks protection.",
+    "noProtect": true,
     "flags": [
       "contact"
     ]
@@ -3831,5 +3842,1003 @@
     "cooldown": 15,
     "shortDesc": "Protects from damaging attacks. Contact: -1 Atk.",
     "volatile": "kingsshield"
+  },
+  "bonemerang": {
+    "id": "bonemerang",
+    "name": "Bonemerang",
+    "type": "Ground",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 2 times in one turn.",
+    "multihit": 2
+  },
+  "iciclespear": {
+    "id": "iciclespear",
+    "name": "Icicle Spear",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 25,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 30,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.5,
+    "shortDesc": "Hits 2-5 times in one turn.",
+    "multihit": [
+      2,
+      5
+    ]
+  },
+  "pinmissile": {
+    "id": "pinmissile",
+    "name": "Pin Missile",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 25,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Hits 2-5 times in one turn.",
+    "multihit": [
+      2,
+      5
+    ]
+  },
+  "triattack": {
+    "id": "triattack",
+    "name": "Tri Attack",
+    "type": "Normal",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "20% chance to paralyze or burn or freeze target.",
+    "secondary": [
+      {
+        "chance": 20
+      }
+    ]
+  },
+  "saltcure": {
+    "id": "saltcure",
+    "name": "Salt Cure",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 40,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Deals 1/8 max HP each turn; 1/4 on Steel, Water.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "saltcure"
+      }
+    ]
+  },
+  "armorcannon": {
+    "id": "armorcannon",
+    "name": "Armor Cannon",
+    "type": "Fire",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Defense and Sp. Def by 1.",
+    "selfBoosts": {
+      "def": -1,
+      "spd": -1
+    }
+  },
+  "electroball": {
+    "id": "electroball",
+    "name": "Electro Ball",
+    "type": "Electric",
+    "category": "Special",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "More power the faster the user is than the target.",
+    "flags": [
+      "bullet"
+    ]
+  },
+  "astralbarrage": {
+    "id": "astralbarrage",
+    "name": "Astral Barrage",
+    "type": "Ghost",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "No additional effect. Hits adjacent foes."
+  },
+  "sleeppowder": {
+    "id": "sleeppowder",
+    "name": "Sleep Powder",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 75,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Causes the target to fall asleep.",
+    "status": "slp",
+    "flags": [
+      "powder"
+    ]
+  },
+  "clearsmog": {
+    "id": "clearsmog",
+    "name": "Clear Smog",
+    "type": "Poison",
+    "category": "Special",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Resets all of the target's stat stages to 0."
+  },
+  "leechseed": {
+    "id": "leechseed",
+    "name": "Leech Seed",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 15,
+    "shortDesc": "1/8 of target's HP is restored to user every turn.",
+    "volatile": "leechseed"
+  },
+  "zapcannon": {
+    "id": "zapcannon",
+    "name": "Zap Cannon",
+    "type": "Electric",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 50,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "100% chance to paralyze the target.",
+    "secondary": [
+      {
+        "chance": 100,
+        "status": "par"
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "rockwrecker": {
+    "id": "rockwrecker",
+    "name": "Rock Wrecker",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 150,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "User cannot move next turn.",
+    "recharge": true,
+    "flags": [
+      "bullet"
+    ]
+  },
+  "dynamaxcannon": {
+    "id": "dynamaxcannon",
+    "name": "Dynamax Cannon",
+    "type": "Dragon",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "No additional effect."
+  },
+  "steameruption": {
+    "id": "steameruption",
+    "name": "Steam Eruption",
+    "type": "Water",
+    "category": "Special",
+    "power": 110,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "30% chance to burn the target. Thaws target.",
+    "secondary": [
+      {
+        "chance": 30,
+        "status": "brn"
+      }
+    ]
+  },
+  "technoblast": {
+    "id": "technoblast",
+    "name": "Techno Blast",
+    "type": "Normal",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Type varies based on the held Drive."
+  },
+  "seedflare": {
+    "id": "seedflare",
+    "name": "Seed Flare",
+    "type": "Grass",
+    "category": "Special",
+    "power": 120,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "40% chance to lower the target's Sp. Def by 2.",
+    "secondary": [
+      {
+        "chance": 40,
+        "boosts": {
+          "spd": -2
+        }
+      }
+    ]
+  },
+  "diamondstorm": {
+    "id": "diamondstorm",
+    "name": "Diamond Storm",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 9,
+    "shortDesc": "50% chance to raise user's Defense by 2.",
+    "secondary": [
+      {
+        "chance": 100
+      }
+    ],
+    "selfBoosts": {
+      "def": 2
+    },
+    "selfChance": 50
+  },
+  "glaciate": {
+    "id": "glaciate",
+    "name": "Glaciate",
+    "type": "Ice",
+    "category": "Special",
+    "power": 65,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to lower the foe(s) Speed by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spe": -1
+        }
+      }
+    ]
+  },
+  "mindblown": {
+    "id": "mindblown",
+    "name": "Mind Blown",
+    "type": "Fire",
+    "category": "Special",
+    "power": 150,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 9,
+    "shortDesc": "User loses 50% max HP. Hits adjacent Pokemon."
+  },
+  "judgment": {
+    "id": "judgment",
+    "name": "Judgment",
+    "type": "Normal",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Type varies based on the held Plate."
+  },
+  "photongeyser": {
+    "id": "photongeyser",
+    "name": "Photon Geyser",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Physical if user's Atk > Sp. Atk. Ignores Abilities.",
+    "ignoreAbility": true
+  },
+  "hyperspacehole": {
+    "id": "hyperspacehole",
+    "name": "Hyperspace Hole",
+    "type": "Psychic",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Breaks the target's protection for this turn.",
+    "noProtect": true
+  },
+  "thundercage": {
+    "id": "thundercage",
+    "name": "Thunder Cage",
+    "type": "Electric",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Traps and damages the target for 4-5 turns.",
+    "volatile": "partiallytrapped"
+  },
+  "firespin": {
+    "id": "firespin",
+    "name": "Fire Spin",
+    "type": "Fire",
+    "category": "Special",
+    "power": 35,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Traps and damages the target for 4-5 turns.",
+    "volatile": "partiallytrapped"
+  },
+  "wildboltstorm": {
+    "id": "wildboltstorm",
+    "name": "Wildbolt Storm",
+    "type": "Electric",
+    "category": "Special",
+    "power": 100,
+    "accuracy": 80,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "20% chance to paralyze foe(s). Rain: can't miss.",
+    "secondary": [
+      {
+        "chance": 20,
+        "status": "par"
+      }
+    ]
+  },
+  "spikes": {
+    "id": "spikes",
+    "name": "Spikes",
+    "type": "Ground",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "foeSide",
+    "cooldown": 7.5,
+    "shortDesc": "Hurts grounded foes on switch-in. Max 3 layers."
+  },
+  "toxicspikes": {
+    "id": "toxicspikes",
+    "name": "Toxic Spikes",
+    "type": "Poison",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "foeSide",
+    "cooldown": 7.5,
+    "shortDesc": "Poisons grounded foes on switch-in. Max 2 layers."
+  },
+  "stealthrock": {
+    "id": "stealthrock",
+    "name": "Stealth Rock",
+    "type": "Rock",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "foeSide",
+    "cooldown": 7.5,
+    "shortDesc": "Hurts foes on switch-in. Factors Rock weakness."
+  },
+  "triplekick": {
+    "id": "triplekick",
+    "name": "Triple Kick",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 10,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 3 times. Each hit can miss, but power rises.",
+    "multihit": 3,
+    "flags": [
+      "contact"
+    ]
+  },
+  "seismictoss": {
+    "id": "seismictoss",
+    "name": "Seismic Toss",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Does damage equal to the user's level.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "plasmafists": {
+    "id": "plasmafists",
+    "name": "Plasma Fists",
+    "type": "Electric",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Normal moves become Electric type this turn.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "ivycudgel": {
+    "id": "ivycudgel",
+    "name": "Ivy Cudgel",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "High critical hit ratio. Type depends on user's form.",
+    "critRatio": 2
+  },
+  "focuspunch": {
+    "id": "focuspunch",
+    "name": "Focus Punch",
+    "type": "Fighting",
+    "category": "Physical",
+    "power": 150,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": -3,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Fails if the user takes damage before it hits.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "wickedblow": {
+    "id": "wickedblow",
+    "name": "Wicked Blow",
+    "type": "Dark",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Always results in a critical hit.",
+    "willCrit": true,
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "crabhammer": {
+    "id": "crabhammer",
+    "name": "Crabhammer",
+    "type": "Water",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact"
+    ]
+  },
+  "hornleech": {
+    "id": "hornleech",
+    "name": "Horn Leech",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 75,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "User recovers 50% of the damage dealt.",
+    "drain": 0.5,
+    "flags": [
+      "contact"
+    ]
+  },
+  "fellstinger": {
+    "id": "fellstinger",
+    "name": "Fell Stinger",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 50,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 25,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 1.8,
+    "shortDesc": "Raises user's Attack by 3 if this KOes the target.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "tropkick": {
+    "id": "tropkick",
+    "name": "Trop Kick",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "100% chance to lower the target's Attack by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "atk": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "secretsword": {
+    "id": "secretsword",
+    "name": "Secret Sword",
+    "type": "Fighting",
+    "category": "Special",
+    "power": 85,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Damages target based on Defense, not Sp. Def.",
+    "defStat": "def",
+    "flags": [
+      "slicing"
+    ]
+  },
+  "powerwhip": {
+    "id": "powerwhip",
+    "name": "Power Whip",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "stoneaxe": {
+    "id": "stoneaxe",
+    "name": "Stone Axe",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 65,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Sets Stealth Rock on the target's side.",
+    "secondary": [
+      {
+        "chance": 100
+      }
+    ],
+    "flags": [
+      "contact",
+      "slicing"
+    ]
+  },
+  "dig": {
+    "id": "dig",
+    "name": "Dig",
+    "type": "Ground",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Digs underground turn 1, strikes turn 2.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "rollout": {
+    "id": "rollout",
+    "name": "Rollout",
+    "type": "Rock",
+    "category": "Physical",
+    "power": 30,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "Power doubles with each hit. Repeats for 5 turns.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "vcreate": {
+    "id": "vcreate",
+    "name": "V-create",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 180,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Defense, Sp. Def, Speed by 1.",
+    "selfBoosts": {
+      "spe": -1,
+      "def": -1,
+      "spd": -1
+    },
+    "flags": [
+      "contact"
+    ]
+  },
+  "firstimpression": {
+    "id": "firstimpression",
+    "name": "First Impression",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 2,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Nearly always goes first. First turn out only.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "wavecrash": {
+    "id": "wavecrash",
+    "name": "Wave Crash",
+    "type": "Water",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Has 33% recoil.",
+    "recoil": 0.33,
+    "flags": [
+      "contact"
+    ]
+  },
+  "jetpunch": {
+    "id": "jetpunch",
+    "name": "Jet Punch",
+    "type": "Water",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 1,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Usually goes first.",
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "glaiverush": {
+    "id": "glaiverush",
+    "name": "Glaive Rush",
+    "type": "Dragon",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "User takes sure-hit 2× damage until its next turn.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "headlongrush": {
+    "id": "headlongrush",
+    "name": "Headlong Rush",
+    "type": "Ground",
+    "category": "Physical",
+    "power": 120,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "Lowers the user's Defense and Sp. Def by 1.",
+    "selfBoosts": {
+      "def": -1,
+      "spd": -1
+    },
+    "flags": [
+      "contact",
+      "punch"
+    ]
+  },
+  "icespinner": {
+    "id": "icespinner",
+    "name": "Ice Spinner",
+    "type": "Ice",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "Ends the effects of terrain.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "gyroball": {
+    "id": "gyroball",
+    "name": "Gyro Ball",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "More power the slower the user than the target.",
+    "flags": [
+      "contact",
+      "bullet"
+    ]
+  },
+  "drillrun": {
+    "id": "drillrun",
+    "name": "Drill Run",
+    "type": "Ground",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "contact"
+    ]
+  },
+  "behemothbash": {
+    "id": "behemothbash",
+    "name": "Behemoth Bash",
+    "type": "Steel",
+    "category": "Physical",
+    "power": 100,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 5,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 9,
+    "shortDesc": "No additional effect.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "spectralthief": {
+    "id": "spectralthief",
+    "name": "Spectral Thief",
+    "type": "Ghost",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Steals target's boosts before dealing damage.",
+    "flags": [
+      "contact"
+    ]
+  },
+  "softboiled": {
+    "id": "softboiled",
+    "name": "Soft-Boiled",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by 50% of its max HP.",
+    "heal": 0.5
+  },
+  "milkdrink": {
+    "id": "milkdrink",
+    "name": "Milk Drink",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 5,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 30,
+    "shortDesc": "Heals the user by 50% of its max HP.",
+    "heal": 0.5
   }
 }

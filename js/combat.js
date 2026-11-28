@@ -52,7 +52,7 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
   const type = x.type || move.type; // Pixilate can change it
   const atkTypes = attacker.types || attacker.data.types;
   const stab = x.stab ?? (atkTypes.includes(type) ? 1.5 : 1);
-  const eff = effectiveness(type, defender.types || defender.data.types);
+  const eff = x.eff ?? effectiveness(type, defender.types || defender.data.types); // Scrappy hits Ghosts
   const rand = 0.85 + Math.random() * 0.15;
   // Held items: type booster, Life Orb, Expert Belt, Metronome streak, Iron Ball.
   const items =
@@ -61,6 +61,8 @@ export function computeDamage(attacker, defender, move, factor = 1, x = {}) {
     (eff > 1 ? am.superMul ?? 1 : 1) *
     (1 + Math.min(0.5, (attacker.metroStacks || 0) * (am.metronome || 0))) *
     (dm.takenMul ?? 1);
+  // Seismic Toss: a fixed amount (only type immunity matters).
+  if (x.fixed) return { dmg: eff === 0 ? 0 : Math.round(x.fixed * factor * (dm.takenMul ?? 1)), eff: eff === 0 ? 0 : 1, crit: false };
   const dmg = eff === 0 ? 0 : Math.max(1, Math.floor(base * stab * eff * (crit ? x.critMul || 1.5 : 1) * rand * factor * items * (x.mul ?? 1)));
   return { dmg, eff, crit };
 }

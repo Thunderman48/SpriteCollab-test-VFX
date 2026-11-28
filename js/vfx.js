@@ -35,8 +35,9 @@ export class Effect {
     if (!this.sheet) console.warn('Missing particle', def.fx);
   }
 
+  /** Frames to play: `frames` in the def keeps only the first ones (Light Ball sheets grow into a flash). */
   get frameCount() {
-    return this.sheet.frames;
+    return this.def.frames ? Math.min(this.def.frames, this.sheet.frames) : this.sheet.frames;
   }
 
   update(dt) {
@@ -50,13 +51,14 @@ export class Effect {
     }
     if (this.def.spin) this.rot += this.def.spin * dt;
     if (this.t >= this.life) this.dead = true;
-    if (!this.loop && this.t * this.fps >= this.sheet.frames) this.dead = true;
+    if (!this.loop && this.t * this.fps >= this.frameCount) this.dead = true;
   }
 
   draw(ctx) {
     const s = this.sheet;
     let frame = Math.floor(this.t * this.fps);
-    frame = this.loop ? frame % s.frames : Math.min(frame, s.frames - 1);
+    const n = this.frameCount;
+    frame = this.loop ? frame % n : Math.min(frame, n - 1);
     let row = 0;
     let mirror = this.flipX;
     if (s.rows > 1 && this.def.dirRows !== false) {

@@ -41,6 +41,8 @@ function effectsOf(m) {
     });
   }
   if (m.self?.boosts) e.selfBoosts = m.self.boosts;
+  if (m.self?.boosts && m.self.chance) e.selfChance = m.self.chance; // Diamond Storm: 50%
+  if (m.category !== 'Status' && !m.flags?.protect) e.noProtect = true; // Hyperspace Hole goes through Protect
   if (m.self?.volatileStatus === 'mustrecharge') e.recharge = true;
   if (m.self?.volatileStatus === 'lockedmove') e.locked = true;
   if (m.boosts) e.boosts = m.boosts; // status moves: target === 'self' -> own buffs
@@ -58,7 +60,7 @@ function effectsOf(m) {
   if (m.weather) e.weather = toId(m.weather);
   if (m.selfSwitch) e.selfSwitch = true;
   if (m.multihit) e.multihit = m.multihit;
-  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet', 'powder', 'cantusetwice'].filter((f) => m.flags?.[f]);
+  const flags = ['contact', 'punch', 'bite', 'sound', 'slicing', 'bullet', 'powder', 'cantusetwice', 'pulse'].filter((f) => m.flags?.[f]);
   if (flags.length) e.flags = flags;
   return e;
 }

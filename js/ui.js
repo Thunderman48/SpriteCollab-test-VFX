@@ -20,7 +20,7 @@ const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const TYPE_ORDER = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'];
 const TABS = ['Stats', 'Skills', 'Equipment', 'Personality'];
 const OVERLAYS = ['settings', 'credits', 'info', 'editor', 'pause', 'result'];
-export const VERSION = 'v1.1';
+export const VERSION = 'v1.2';
 
 const KEYS = {
   up: ['ArrowUp', 'KeyW'],
