@@ -80,6 +80,26 @@
       "Strike",
       "Walk"
     ],
+    "1011": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "1013": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
     "1015": [
       "Attack",
       "Charge",
@@ -4374,6 +4394,524 @@
       "Shoot",
       "Sleep",
       "Walk"
+    ],
+    "0327": [
+      "Attack",
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0441": [
+      "Attack",
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0324": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0323": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0338": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0337": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0967": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0421": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0902": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0930": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0918": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0927": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0961": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Sleep",
+      "Walk"
+    ],
+    "0982": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shake",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0976": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0962": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0975": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0952": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Sleep",
+      "Walk"
+    ],
+    "0904": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0903": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Strike",
+      "Walk"
+    ],
+    "0901": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Strike",
+      "Walk"
+    ],
+    "0899": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0841": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Sleep",
+      "Walk"
+    ],
+    "0842": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0820": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0826": [
+      "Attack",
+      "Charge",
+      "Emit",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0836": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shock",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0847": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "SpAttack",
+      "Strike",
+      "Walk"
+    ],
+    "0851": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0863": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0869": [
+      "Attack",
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0844": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0939": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shock",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0988": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0317": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0284": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0416": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "SpAttack",
+      "Walk"
+    ],
+    "0423": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "RearUp",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0369": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0368": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Twirl",
+      "Walk"
+    ],
+    "0357": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0455": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0463": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0435": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0419": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Shoot",
+      "Sleep",
+      "SpAttack",
+      "Walk"
+    ],
+    "0417": [
+      "Attack",
+      "Charge",
+      "Faint",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Pose",
+      "Shoot",
+      "Sleep",
+      "Walk"
+    ],
+    "0332": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "SpAttack",
+      "Walk"
+    ],
+    "0340": [
+      "Attack",
+      "Charge",
+      "Hop",
+      "Hurt",
+      "Idle",
+      "Rotate",
+      "Shoot",
+      "Sleep",
+      "Walk"
     ]
   },
   "portraits": {
@@ -4421,6 +4959,13 @@
       "Joyous",
       "Normal",
       "Pain"
+    ],
+    "1011": [
+      "Normal",
+      "Pain"
+    ],
+    "1013": [
+      "Normal"
     ],
     "1015": [
       "Happy",
@@ -6804,6 +7349,274 @@
       "Pain"
     ],
     "0545": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0327": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0441": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0324": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0323": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0338": [
+      "Normal"
+    ],
+    "0337": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0967": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0421": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0902": [
+      "Normal"
+    ],
+    "0930": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0918": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0927": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0961": [
+      "Normal"
+    ],
+    "0982": [
+      "Normal"
+    ],
+    "0976": [
+      "Normal"
+    ],
+    "0962": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0975": [
+      "Normal"
+    ],
+    "0952": [
+      "Normal"
+    ],
+    "0904": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0903": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0901": [
+      "Normal"
+    ],
+    "0899": [
+      "Normal"
+    ],
+    "0841": [
+      "Normal"
+    ],
+    "0842": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0820": [
+      "Normal"
+    ],
+    "0826": [
+      "Normal"
+    ],
+    "0836": [
+      "Happy",
+      "Joyous",
+      "Normal"
+    ],
+    "0847": [
+      "Normal"
+    ],
+    "0851": [
+      "Normal"
+    ],
+    "0863": [
+      "Normal"
+    ],
+    "0869": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0844": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0939": [
+      "Happy",
+      "Joyous",
+      "Normal"
+    ],
+    "0988": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0317": [
+      "Normal"
+    ],
+    "0284": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0416": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0423": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0369": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0368": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0357": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0455": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0463": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0435": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0419": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0417": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0332": [
+      "Determined",
+      "Happy",
+      "Joyous",
+      "Normal",
+      "Pain"
+    ],
+    "0340": [
       "Determined",
       "Happy",
       "Joyous",

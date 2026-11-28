@@ -11953,6 +11953,608 @@
         "desc": "Flatters the target: Sp. Atk +1, but it becomes confused.",
         "descKo": "상대를 부추긴다: 특수공격 +1, 대신 혼란에 빠진다."
       }
+    },
+    "cosmicpower": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Lucky_Chant_Star_Violet.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Wave_Circle_Purple.Dir5",
+        "fps": 16,
+        "scale": 1.8
+      }
+    },
+    "defendorder": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Defend_Order.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Defend_Order_Dust.Flip",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Its subjects form a shield: Defense and Sp. Def +1.",
+        "descKo": "부하들이 몸을 지킨다: 방어·특수방어 +1."
+      }
+    },
+    "healorder": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Heal_Order.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "under": {
+        "fx": "Heal_Order_Dust.Flip",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Its subjects heal it: 50% HP.",
+        "descKo": "부하들이 치료한다: HP 50% 회복."
+      }
+    },
+    "filletaway": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Rage.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "Sheds its own body: loses half its HP for Attack, Sp. Atk and Speed +2.",
+        "descKo": "자신의 몸을 깎아 HP 절반을 쓰고 공격·특수공격·스피드 +2."
+      }
+    },
+    "stuffcheeks": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Swallow_Balls.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Eats its held berry right away (heals), then Defense +2.",
+        "descKo": "가진 나무열매를 바로 먹고 (회복) 방어 +2."
+      }
+    },
+    "decorate": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.4,
+      "over": {
+        "fx": "Flatter_Confetti.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "In 2vs2: decorates its partner — Attack and Sp. Atk +2.",
+        "descKo": "2vs2: 동료를 장식해 공격·특수공격 +2."
+      }
+    },
+    "shedtail": {
+      "behavior": "self",
+      "anim": "Charge",
+      "range": 9999,
+      "time": 0.3,
+      "over": {
+        "fx": "Materialize.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "In Trio: pays half its HP to leave a substitute, then switches out — the teammate coming in hides behind it.",
+        "descKo": "트리오: HP 절반을 써서 분신을 남기고 교체된다. 다음 포켓몬이 그 분신 뒤에 숨는다."
+      }
+    },
+    "spicyextract": {
+      "behavior": "projectile",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Ember.None",
+        "fps": 24,
+        "scale": 1.6,
+        "loop": true,
+        "speed": 280,
+        "radius": 14,
+        "life": 1.3,
+        "trail": {
+          "fx": "Puff_Red.None",
+          "fps": 24,
+          "scale": 0.6,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Rage.None",
+        "fps": 30,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "A fiery spice: the target's Attack +2 but its Defense −2.",
+        "descKo": "매운 추출물: 상대의 공격 +2, 대신 방어 −2."
+      }
+    },
+    "teeterdance": {
+      "behavior": "burst",
+      "anim": "Attack",
+      "range": 110,
+      "radius": 115,
+      "delay": 0.35,
+      "under": {
+        "fx": "Circle_Pink_Out.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "ring": {
+        "fx": "Emote_Question.None",
+        "fps": 20,
+        "scale": 1.2,
+        "n": 8,
+        "r": 75
+      },
+      "hit": {
+        "fx": "Swagger.Flip",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "A wobbly dance that confuses every foe around it.",
+        "descKo": "비틀비틀 춤을 춰서 주위의 모든 상대를 혼란시킨다."
+      }
+    },
+    "chatter": {
+      "behavior": "burst",
+      "anim": "SpAttack",
+      "range": 110,
+      "radius": 115,
+      "delay": 0.3,
+      "under": {
+        "fx": "Circle_Uproar_Yellow_Out.None",
+        "fps": 20,
+        "scale": 2.4
+      },
+      "ring": {
+        "fx": "Chatter_Notes.None",
+        "fps": 16,
+        "scale": 1.4,
+        "n": 8,
+        "r": 75
+      },
+      "over": {
+        "fx": "Chatter.None",
+        "fps": 16,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Chatter_Waves.None",
+        "fps": 20,
+        "scale": 1.3
+      },
+      "extra": {
+        "desc": "Sound: noisy chatter all around. Sure confusion.",
+        "descKo": "소리 기술: 시끄러운 수다로 주위를 공격한다. 반드시 혼란."
+      }
+    },
+    "muddywater": {
+      "behavior": "burst",
+      "style": "line",
+      "anim": "SpAttack",
+      "range": 240,
+      "radius": 240,
+      "delay": 0.25,
+      "points": 6,
+      "gap": 0.07,
+      "width": 34,
+      "spike": {
+        "fx": "Mud_Bomb_Hit.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "crack": {
+        "fx": "Mud.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "hit": {
+        "fx": "Mud_Bomb_Hit.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "A wave of muddy water rolls along the ground to the target.",
+        "descKo": "흙탕물 파도가 땅을 따라 상대에게 밀려간다."
+      }
+    },
+    "tripledive": {
+      "behavior": "dash",
+      "style": "burrow",
+      "anim": "Attack",
+      "range": 240,
+      "dashSpeed": 300,
+      "dashTime": 0.7,
+      "radius": 30,
+      "surfaces": 3,
+      "surfaceGap": 0.28,
+      "under": {
+        "fx": "Dive.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "trail": {
+        "fx": "Bubbles_Blue.None",
+        "fps": 24,
+        "scale": 0.9
+      },
+      "impact": {
+        "fx": "Water_Spout_Splash.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Dives underground and bursts up under the target three times in a row.",
+        "descKo": "땅속으로 들어가 상대 밑에서 연속으로 3번 튀어나온다."
+      }
+    },
+    "psyshieldbash": {
+      "behavior": "dash",
+      "style": "charge",
+      "anim": "Walk",
+      "range": 240,
+      "windup": 0.3,
+      "dashSpeed": 620,
+      "dashTime": 0.4,
+      "charge": {
+        "fx": "Psycho_Shift_Charge.None",
+        "fps": 24,
+        "scale": 1.2
+      },
+      "over": {
+        "fx": "Protect_Pink.None",
+        "fps": 24,
+        "scale": 1.0,
+        "follow": true,
+        "alpha": 0.6
+      },
+      "trail": {
+        "fx": "Psycho_Cut_Hole.None",
+        "fps": 24,
+        "scale": 0.7
+      },
+      "impact": {
+        "fx": "Psycho_Shift_Hit.None",
+        "fps": 30,
+        "scale": 1.6
+      },
+      "ghostTint": "#f0a0f8",
+      "shake": 5,
+      "hit": {
+        "fx": "Hit_Super_Effective.None",
+        "fps": 20,
+        "scale": 1.2
+      },
+      "extra": {
+        "desc": "Charges behind a psychic shield. Defense +1.",
+        "descKo": "염력의 방패를 두르고 돌진한다. 방어 +1."
+      }
+    },
+    "firelash": {
+      "behavior": "melee",
+      "style": "sweep",
+      "anim": "Attack",
+      "range": 90,
+      "lunge": 34,
+      "reach": 68,
+      "arc": 1.3,
+      "arcFx": {
+        "fx": "Power_Whip_Whip.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit": {
+        "fx": "Fire_Fang_Hit.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Ember.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "A long burning whip that hits everything in an arc. Defense −1.",
+        "descKo": "불타는 채찍으로 넓게 후려친다. 방어 −1."
+      }
+    },
+    "direclaw": {
+      "behavior": "melee",
+      "style": "sweep",
+      "anim": "Attack",
+      "range": 78,
+      "lunge": 50,
+      "reach": 48,
+      "arc": 1.3,
+      "arcFx": {
+        "fx": "Cut_Dark.Dir8",
+        "fps": 20,
+        "scale": 1.6,
+        "dirRows": true
+      },
+      "hit": {
+        "fx": "Poison_Jab.None",
+        "fps": 24,
+        "scale": 1.3
+      },
+      "hit2": {
+        "fx": "Cross_Poison_Bubbles.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "Vicious claws: 50% chance of poison, paralysis or sleep.",
+        "descKo": "흉악한 발톱: 50% 확률로 독·마비·잠듦 중 하나."
+      }
+    },
+    "aquacutter": {
+      "behavior": "projectile",
+      "anim": "Attack",
+      "range": 280,
+      "projectile": {
+        "fx": "Psycho_Cut_Shot.Dir8",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 420,
+        "radius": 13,
+        "life": 0.9,
+        "dirRows": true,
+        "trail": {
+          "fx": "Bubbles_Blue.None",
+          "fps": 24,
+          "scale": 0.7,
+          "every": 0.04
+        }
+      },
+      "hit": {
+        "fx": "Aqua_Tail_Splash.None",
+        "fps": 24,
+        "scale": 1.4
+      },
+      "extra": {
+        "pierce": true,
+        "desc": "A blade of pressurized water that slices through everything in line. High critical-hit ratio.",
+        "descKo": "고압의 물 칼날이 직선상의 모두를 벤다. 급소에 맞기 쉽다."
+      }
+    },
+    "barbbarrage": {
+      "behavior": "projectile",
+      "style": "volley",
+      "anim": "Shoot",
+      "range": 260,
+      "projectile": {
+        "fx": "Twin_Needle.Dir8",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 400,
+        "radius": 11,
+        "life": 0.9,
+        "dirRows": true,
+        "gap": 0.08,
+        "spread": 0.25,
+        "max": 3,
+        "chain": 1.0,
+        "factor": 0.34
+      },
+      "hit": {
+        "fx": "Poison_Jab.None",
+        "fps": 24,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "A spray of barbs. 50% poison; ×2 power against a poisoned target.",
+        "descKo": "가시를 마구 쏜다. 50% 독. 독 상태인 상대에게 위력 2배."
+      }
+    },
+    "syrupbomb": {
+      "behavior": "projectile",
+      "style": "lob",
+      "anim": "Shoot",
+      "range": 280,
+      "projectile": {
+        "fx": "Bubble_Clump_Green.None",
+        "fps": 20,
+        "scale": 1.5,
+        "loop": true,
+        "speed": 300,
+        "radius": 13,
+        "life": 1.6,
+        "blast": 34,
+        "height": 80
+      },
+      "hit": {
+        "fx": "Sticky_Green_Front.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Sticky_Green_Back.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "shake": 3,
+      "extra": {
+        "desc": "Lobs a bomb of sticky syrup: the target's Speed drops every second for 3 s.",
+        "descKo": "끈적한 시럽 폭탄을 던진다: 3초 동안 매초 상대의 스피드가 떨어진다."
+      }
+    },
+    "appleacid": {
+      "behavior": "projectile",
+      "anim": "SpAttack",
+      "range": 280,
+      "projectile": {
+        "fx": "Apple.None",
+        "fps": 20,
+        "scale": 1.4,
+        "loop": true,
+        "speed": 300,
+        "radius": 13,
+        "life": 1.3,
+        "spin": 8,
+        "trail": {
+          "fx": "Acid_Green.None",
+          "fps": 20,
+          "scale": 0.7,
+          "every": 0.05
+        }
+      },
+      "hit": {
+        "fx": "Acid_Green.None",
+        "fps": 20,
+        "scale": 1.6
+      },
+      "extra": {
+        "desc": "A tart apple of acid. Sp. Def −1.",
+        "descKo": "신맛 나는 사과 산. 특수방어 −1."
+      }
+    },
+    "gravapple": {
+      "behavior": "targetArea",
+      "anim": "Attack",
+      "range": 300,
+      "warn": 0.6,
+      "count": 1,
+      "radius": 36,
+      "meteor": {
+        "fx": "Apple.None",
+        "fps": 20,
+        "scale": 2.6,
+        "fall": 0.3,
+        "fromX": 0,
+        "fromY": -230,
+        "trail": {
+          "fx": "Leaf_Storm_Particle.None",
+          "fps": 24,
+          "scale": 0.8,
+          "every": 0.04,
+          "jitter": 8
+        }
+      },
+      "hit": {
+        "fx": "Seed_Bomb_Blast.None",
+        "fps": 24,
+        "scale": 1.8
+      },
+      "shake": 6,
+      "extra": {
+        "desc": "Drops a giant apple from above. Defense −1; ×1.5 under Gravity.",
+        "descKo": "위에서 거대한 사과를 떨어뜨린다. 방어 −1. 중력 상태에서 1.5배."
+      }
+    },
+    "matchagotcha": {
+      "behavior": "targetArea",
+      "anim": "SpAttack",
+      "range": 300,
+      "warn": 0.5,
+      "count": 4,
+      "scatter": 55,
+      "radius": 26,
+      "damageFactor": 0.45,
+      "meteor": {
+        "fx": "Bubble_Clump_Green.None",
+        "fps": 20,
+        "scale": 1.2,
+        "fall": 0.25,
+        "fromX": -60,
+        "fromY": -150,
+        "trail": {
+          "fx": "Smoke_Green.None",
+          "fps": 20,
+          "scale": 0.6,
+          "every": 0.05,
+          "jitter": 6
+        }
+      },
+      "hit": {
+        "fx": "Bubble_Pop_Blue.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "hit2": {
+        "fx": "Smoke_Green.None",
+        "fps": 20,
+        "scale": 1.4
+      },
+      "extra": {
+        "desc": "Splashes hot matcha all around the target: heals half the damage. 20% burn.",
+        "descKo": "뜨거운 말차를 뿌린다: 데미지의 절반 회복. 20% 화상."
+      }
+    },
+    "attackorder": {
+      "behavior": "projectile",
+      "style": "orbitals",
+      "anim": "Shoot",
+      "range": 300,
+      "projectile": {
+        "fx": "Attack_Order_Bee.Dir5",
+        "fps": 20,
+        "scale": 1.3,
+        "loop": true,
+        "speed": 320,
+        "radius": 11,
+        "life": 1.4,
+        "homing": 4,
+        "count": 5,
+        "orbitTime": 0.45,
+        "launchGap": 0.06,
+        "dirRows": true,
+        "trail": {
+          "fx": "Attack_Order_Dust.Flip",
+          "fps": 20,
+          "scale": 0.6,
+          "every": 0.06
+        }
+      },
+      "hit": {
+        "fx": "Attack_Order.None",
+        "fps": 20,
+        "scale": 1.0
+      },
+      "extra": {
+        "desc": "Its subjects swarm the user, then fly at the foes. High critical-hit ratio.",
+        "descKo": "부하들이 모여들었다가 상대에게 달려든다. 급소에 맞기 쉽다."
+      }
     }
   },
   "status": {

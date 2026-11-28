@@ -70,6 +70,7 @@ export const PROJ = {
         const q = frontOf(c, aim);
         const proj = new Projectile(game, c, t, cast, aim + (Math.random() - 0.5) * (pd.spread || 0.12), q.x, q.y);
         proj.onLand = () => hits.n++;
+        if (pd.factor) proj.factor = pd.factor; // Barb Barrage: one move split into barbs
         game.addObject(proj);
         game.sfx?.('shoot');
       }, null);

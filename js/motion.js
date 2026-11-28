@@ -716,7 +716,17 @@ export const DASH = {
       }
       game.shake(d.shake || 5, 0.25);
       game.sfx?.('boom');
-      end(game, c, cast, 0.25);
+      // Triple Dive: dives back in and bursts up twice more.
+      for (let k = 1; k < (d.surfaces || 1); k++) {
+        game.after(k * (d.surfaceGap || 0.28), () => {
+          if (!t.alive || c.ko) return;
+          spawnFx(game, d.under, t.x, t.y, { layer: 'under' });
+          spawnFx(game, d.impact, t.x, t.y - 6);
+          contact(game, c, t, cast, { angle: c.angleTo(t), kbMul: 0.2 });
+          game.shake(3, 0.15);
+        }, null);
+      }
+      end(game, c, cast, 0.25 + ((d.surfaces || 1) - 1) * (d.surfaceGap || 0.28));
     };
     cast.drive = (dt) => {
       time += dt;

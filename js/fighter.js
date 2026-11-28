@@ -182,6 +182,9 @@ export class Fighter {
     if (this.hero) v *= { atk: 2, def: 1.27, spa: 1.72, spd: 1.3 }[k] || 1;
     const w = weatherNow(this.game);
     if (k === 'spe' && sideOn(this.game, this.team, 'tailwind')) v *= 2;
+    if (k === 'spe' && ab(this, 'slushrush') && w === 'snowscape') v *= 2;
+    // Flower Gift: in sun it and its partner get Attack and Sp. Def ×1.5.
+    if ((k === 'atk' || k === 'spd') && w === 'sunnyday' && this.game.fighters?.some((o) => !o.ko && o.team === this.team && ab(o, 'flowergift'))) v *= 1.5;
     if ((k === 'atk' || k === 'spe') && this.slowT > 0) v *= 0.5; // Slow Start
     // Protosynthesis (sun) / Quark Drive (Electric Terrain): its best stat goes up (Speed ×1.5, others ×1.3).
     if ((w === 'sunnyday' && ab(this, 'protosynthesis')) || (terrainNow(this.game) === 'electric' && ab(this, 'quarkdrive'))) {
@@ -285,7 +288,7 @@ export class Fighter {
     const berryAt = ab(this, 'gluttony') ? 0.75 : 0.5;
     const unnerved = this.game.enemiesOf?.(this).some((e) => ab(e, 'unnerve'));
     if (this.mods.sitrus && !this.itemSpent && !unnerved && this.hp < this.maxHp * berryAt) {
-      const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus));
+      const healed = this.heal(Math.round(this.maxHp * this.mods.sitrus * (ab(this, 'ripen') ? 2 : 1))); // Ripen doubles it
       this.useItem(t('sitrus', { who: this.game.who(this), item: `<span class="yellow">${itemName(this.item)}</span>`, n: healed }));
       if (ab(this, 'cheekpouch')) this.heal(this.maxHp / 3); // Cheek Pouch
       // Cud Chew: chews the berry again a moment later.

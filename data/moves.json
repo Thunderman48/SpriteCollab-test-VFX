@@ -8012,5 +8012,432 @@
       "spa": 1
     },
     "volatile": "confusion"
+  },
+  "cosmicpower": {
+    "id": "cosmicpower",
+    "name": "Cosmic Power",
+    "type": "Psychic",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 20,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 7.5,
+    "shortDesc": "Raises the user's Defense and Sp. Def by 1.",
+    "boosts": {
+      "def": 1,
+      "spd": 1
+    }
+  },
+  "defendorder": {
+    "id": "defendorder",
+    "name": "Defend Order",
+    "type": "Bug",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Raises the user's Defense and Sp. Def by 1.",
+    "boosts": {
+      "def": 1,
+      "spd": 1
+    }
+  },
+  "healorder": {
+    "id": "healorder",
+    "name": "Heal Order",
+    "type": "Bug",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Heals the user by 50% of its max HP.",
+    "heal": 0.5
+  },
+  "filletaway": {
+    "id": "filletaway",
+    "name": "Fillet Away",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "+2 Attack, Sp. Atk, Speed for 1/2 user's max HP.",
+    "boosts": {
+      "atk": 2,
+      "spa": 2,
+      "spe": 2
+    }
+  },
+  "stuffcheeks": {
+    "id": "stuffcheeks",
+    "name": "Stuff Cheeks",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "Must hold Berry to use. User eats Berry, Def +2."
+  },
+  "decorate": {
+    "id": "decorate",
+    "name": "Decorate",
+    "type": "Fairy",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Raises the target's Attack and Sp. Atk by 2.",
+    "boosts": {
+      "atk": 2,
+      "spa": 2
+    }
+  },
+  "shedtail": {
+    "id": "shedtail",
+    "name": "Shed Tail",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 10,
+    "priority": 0,
+    "target": "self",
+    "cooldown": 15,
+    "shortDesc": "User takes 1/2 its max HP to pass a substitute.",
+    "volatile": "substitute",
+    "selfSwitch": true
+  },
+  "spicyextract": {
+    "id": "spicyextract",
+    "name": "Spicy Extract",
+    "type": "Grass",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": true,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 10,
+    "shortDesc": "Raises target's Atk by 2 and lowers its Def by 2.",
+    "boosts": {
+      "atk": 2,
+      "def": -2
+    }
+  },
+  "teeterdance": {
+    "id": "teeterdance",
+    "name": "Teeter Dance",
+    "type": "Normal",
+    "category": "Status",
+    "power": 0,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "allAdjacent",
+    "cooldown": 7.5,
+    "shortDesc": "Confuses adjacent Pokemon.",
+    "volatile": "confusion"
+  },
+  "chatter": {
+    "id": "chatter",
+    "name": "Chatter",
+    "type": "Flying",
+    "category": "Special",
+    "power": 65,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "any",
+    "cooldown": 2.25,
+    "shortDesc": "100% chance to confuse the target.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "confusion"
+      }
+    ],
+    "flags": [
+      "sound"
+    ]
+  },
+  "muddywater": {
+    "id": "muddywater",
+    "name": "Muddy Water",
+    "type": "Water",
+    "category": "Special",
+    "power": 90,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 4.5,
+    "shortDesc": "30% chance to lower the foe(s) accuracy by 1.",
+    "secondary": [
+      {
+        "chance": 30,
+        "boosts": {
+          "accuracy": -1
+        }
+      }
+    ]
+  },
+  "tripledive": {
+    "id": "tripledive",
+    "name": "Triple Dive",
+    "type": "Water",
+    "category": "Physical",
+    "power": 30,
+    "accuracy": 95,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Hits 3 times.",
+    "multihit": 3,
+    "flags": [
+      "contact"
+    ]
+  },
+  "psyshieldbash": {
+    "id": "psyshieldbash",
+    "name": "Psyshield Bash",
+    "type": "Psychic",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to raise the user's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "selfBoosts": {
+          "def": 1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "firelash": {
+    "id": "firelash",
+    "name": "Fire Lash",
+    "type": "Fire",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "100% chance to lower the target's Defense by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "direclaw": {
+    "id": "direclaw",
+    "name": "Dire Claw",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "50% chance to sleep, poison, or paralyze target.",
+    "secondary": [
+      {
+        "chance": 50
+      }
+    ],
+    "flags": [
+      "contact"
+    ]
+  },
+  "aquacutter": {
+    "id": "aquacutter",
+    "name": "Aqua Cutter",
+    "type": "Water",
+    "category": "Physical",
+    "power": 70,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 20,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 2.25,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2,
+    "flags": [
+      "slicing"
+    ]
+  },
+  "barbbarrage": {
+    "id": "barbbarrage",
+    "name": "Barb Barrage",
+    "type": "Poison",
+    "category": "Physical",
+    "power": 60,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "50% psn. 2× power if target already poisoned.",
+    "secondary": [
+      {
+        "chance": 50,
+        "status": "psn"
+      }
+    ]
+  },
+  "syrupbomb": {
+    "id": "syrupbomb",
+    "name": "Syrup Bomb",
+    "type": "Grass",
+    "category": "Special",
+    "power": 60,
+    "accuracy": 85,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Target's Speed is lowered by 1 stage for 3 turns.",
+    "secondary": [
+      {
+        "chance": 100,
+        "volatile": "syrupbomb"
+      }
+    ],
+    "flags": [
+      "bullet"
+    ]
+  },
+  "appleacid": {
+    "id": "appleacid",
+    "name": "Apple Acid",
+    "type": "Grass",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "100% chance to lower the target's Sp. Def by 1.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "spd": -1
+        }
+      }
+    ]
+  },
+  "gravapple": {
+    "id": "gravapple",
+    "name": "Grav Apple",
+    "type": "Grass",
+    "category": "Physical",
+    "power": 80,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 10,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 4.5,
+    "shortDesc": "Target: 100% -1 Def. During Gravity: 1.5× power.",
+    "secondary": [
+      {
+        "chance": 100,
+        "boosts": {
+          "def": -1
+        }
+      }
+    ]
+  },
+  "matchagotcha": {
+    "id": "matchagotcha",
+    "name": "Matcha Gotcha",
+    "type": "Grass",
+    "category": "Special",
+    "power": 80,
+    "accuracy": 90,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "allAdjacentFoes",
+    "cooldown": 3,
+    "shortDesc": "20% burn. Recovers 50% dmg dealt. Thaws foe(s).",
+    "secondary": [
+      {
+        "chance": 20,
+        "status": "brn"
+      }
+    ],
+    "drain": 0.5
+  },
+  "attackorder": {
+    "id": "attackorder",
+    "name": "Attack Order",
+    "type": "Bug",
+    "category": "Physical",
+    "power": 90,
+    "accuracy": 100,
+    "alwaysHits": false,
+    "pp": 15,
+    "priority": 0,
+    "target": "normal",
+    "cooldown": 3,
+    "shortDesc": "High critical hit ratio.",
+    "critRatio": 2
   }
 }

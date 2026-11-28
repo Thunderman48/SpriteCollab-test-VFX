@@ -110,7 +110,7 @@ class Game {
   nearestEnemy(f) {
     // Follow Me: a foe calling attention gets targeted first.
     const caller = this.enemiesOf(f).find((o) => o.followT > 0);
-    if (caller) return caller;
+    if (caller && !FXE.ab(f, 'propellertail') && !FXE.ab(f, 'stalwart')) return caller; // Propeller Tail ignores Follow Me
     let best = null;
     for (const o of this.enemiesOf(f)) if (!best || f.distTo(o) < f.distTo(best)) best = o;
     return best;
@@ -130,6 +130,11 @@ class Game {
   sendOut(slot, next, at) {
     const p = this.parties[slot];
     const prev = p.members[p.active];
+    // Shed Tail: the one coming in hides behind a substitute.
+    if (prev?.passSub && prev !== next) {
+      next.sub = { hp: Math.floor(next.maxHp / 4) };
+      prev.passSub = false;
+    }
     // Baton Pass: the stat changes go to the one coming in.
     if (prev?.passBoosts && prev !== next) {
       next.boosts = prev.passBoosts;

@@ -110,7 +110,7 @@ export function boost(game, f, boosts, source = null, bounced = false) {
     if (ab(f, 'contrary')) raw = -raw; // Contrary: reversed
     // Flower Veil: Grass-type Pokémon on its team keep their stats.
     const veiled = f.types.includes('Grass') && f.game?.fighters?.some((o) => o.alive && o.team === f.team && ab(o, 'flowerveil'));
-    const guarded = ab(f, 'clearbody') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter')) || (k === 'def' && ab(f, 'bigpecks')) || veiled;
+    const guarded = ab(f, 'clearbody') || ab(f, 'whitesmoke') || ab(f, 'fullmetalbody') || (k === 'atk' && ab(f, 'hypercutter')) || (k === 'def' && ab(f, 'bigpecks')) || veiled;
     if (raw < 0 && enemy && guarded) {
       ability(game, f);
       continue;
@@ -415,6 +415,11 @@ export function tickFighter(game, f, dt) {
     fxAt(game, MOVEFX.status.seed, f, { dy: -10 });
     if ((f.seed.t -= 1) <= 0) f.seed = null;
   }
+  // Syrup Bomb: sticky syrup slows it down a little more every second.
+  if (f.syrupBomb > 0 && perSecond && f.alive) {
+    f.syrupBomb -= 1;
+    boost(game, f, { spe: -1 }, f.syrupBy);
+  }
   if (f.cursed && perSecond && f.alive) {
     hurt(game, f, 0.025, '#a058f8');
     fxAt(game, MOVEFX.status.curse, f, { dy: -20 });
@@ -539,6 +544,11 @@ export function onEntry(game, f) {
   if (ab(f, 'grassysurge')) setTerrain(game, 'grassy');
   if (ab(f, 'snowwarning')) setWeather(game, 'snowscape', f);
   if (ab(f, 'psychicsurge')) setTerrain(game, 'psychic');
+  // Hospitality: pours its partner a cup of tea.
+  if (ab(f, 'hospitality')) for (const mate of allies(game, f)) if (mate.hp < mate.maxHp) {
+    ability(game, f);
+    healText(game, mate, mate.heal(mate.maxHp * 0.25));
+  }
   // Pickup: empty-handed, it may find a Sitrus Berry.
   if (ab(f, 'pickup') && !f.item && !f.pickedUp && Math.random() < 0.5) {
     f.pickedUp = true;
@@ -696,6 +706,10 @@ export function wantsMove(game, f, id, foe) {
   if (fx.behavior === 'self') {
     if (id === 'auroraveil') return w === 'snowscape' && !sideOn(game, f.team, id);
     if (SIDE_TIME[id]) return !sideOn(game, f.team, id);
+    if (id === 'filletaway') return f.hp > f.maxHp * 0.6 && stageOf(f, 'atk') < 2;
+    if (id === 'stuffcheeks') return !!f.item && !f.itemSpent && !!f.mods.sitrus && f.hp < f.maxHp * 0.7;
+    if (id === 'decorate') return allies(game, f).some((o) => stageOf(o, 'atk') < 3);
+    if (id === 'shedtail') return f.hp > f.maxHp * 0.55 && (game.benchOf?.(f.slot) || []).length > 0;
     if (id === 'stockpile') return (f.stock || 0) < 3;
     if (id === 'swallow') return (f.stock || 0) > 0 && f.hp < f.maxHp * 0.6;
     if (id === 'batonpass') return Object.values(f.boosts).reduce((n, b) => n + b.n, 0) >= 2 && (game.benchOf?.(f.slot) || []).length > 0;
@@ -750,6 +764,8 @@ export function wantsMove(game, f, id, foe) {
     if (id === 'psychup') return Object.values(foe.boosts).reduce((n, b) => n + b.n, 0) >= 2;
     if (id === 'skillswap') return !UNSUPPRESSED.includes(foe.ability) && Math.random() < 0.3;
     if (id === 'partingshot') return true;
+    if (id === 'spicyextract') return stageOf(foe, 'def') > -4 && foe.moves.every((x) => DB.moves[x]?.category !== 'Physical');
+    if (id === 'teeterdance') return foe.confusedT <= 0 && f.distTo(foe) < 120;
     if (id === 'spite') return !!foe.lastMove && (foe.cd[foe.lastMove] || 0) < 1;
     if (id === 'swagger' || id === 'flatter') return foe.confusedT <= 0;
     if (id === 'sketch') return !!foe.lastMove && !f.moves.includes(foe.lastMove) && !!MOVEFX.moves[foe.lastMove];
@@ -855,7 +871,7 @@ export function stanceAnswer(game, def, att, m, dmg) {
 // Abilities that make a Pokémon immune to a type (and what they do when hit by it).
 const IMMUNE = {
   waterabsorb: 'Water', flashfire: 'Fire', lightningrod: 'Electric', voltabsorb: 'Electric', sapsipper: 'Grass', levitate: 'Ground',
-  motordrive: 'Electric', dryskin: 'Water', stormdrain: 'Water',
+  motordrive: 'Electric', dryskin: 'Water', stormdrain: 'Water', wellbakedbody: 'Fire',
 };
 const immuneAbility = (f, type) => IMMUNE[f?.ability] === type;
 
@@ -937,6 +953,7 @@ export function preHit(game, att, def, cast) {
     if (ab(def, 'lightningrod') || ab(def, 'stormdrain')) boost(game, def, { spa: 1 }, def);
     if (ab(def, 'sapsipper')) boost(game, def, { atk: 1 }, def);
     if (ab(def, 'motordrive')) boost(game, def, { spe: 1 }, def);
+    if (ab(def, 'wellbakedbody')) boost(game, def, { def: 2 }, def);
     if (ab(def, 'dryskin')) def.heal(def.maxHp * 0.25);
     game.ui?.log(t('noEffect', { who: game.who(def) }));
     return true;
@@ -1036,6 +1053,10 @@ export function damageMods(game, att, def, cast) {
   if (m.id === 'crushgrip') power = Math.max(1, Math.floor((120 * def.hp) / def.maxHp));
   if (m.id === 'weatherball' && weatherNow(game)) power *= 2;
   if (m.id === 'facade' && att.status) power *= 2;
+  if (m.id === 'barbbarrage' && (def.status?.id === 'psn' || def.status?.id === 'tox')) power *= 2;
+  if (m.id === 'gravapple' && game.gravity?.t > 0) power *= 1.5;
+  if (type === 'Rock' && ab(att, 'rockypayload')) mul *= 1.5;
+  if (type === 'Steel' && [att, ...allies(game, att)].some((o) => ab(o, 'steelyspirit'))) mul *= 1.5;
   if (m.id === 'furycutter') power = Math.min(160, 40 * 2 ** ((att.streak?.id === 'furycutter' ? att.streak.n : 1) - 1));
   if (m.id === 'echoedvoice') power = Math.min(200, 40 * (att.streak?.id === 'echoedvoice' ? att.streak.n : 1));
   if (m.id === 'spitup') power = 100 * (att.spitStock || 1);
@@ -1201,6 +1222,24 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
       ability(game, def);
       boost(game, def, { spe: 1 }, def);
     }
+    if (m.id === 'syrupbomb' && def.alive && !(def.syrupBomb > 0)) {
+      def.syrupBomb = 3;
+      def.syrupBy = att;
+      say(game, 'syruped', { who: game.who(def) });
+    }
+    if (m.id === 'direclaw' && def.alive && chance(50 * sg)) inflict(game, def, ['psn', 'par', 'slp'][Math.floor(Math.random() * 3)], att);
+    if (dmg > 0 && def.alive && ab(def, 'seedsower') && terrainNow(game) !== 'grassy') {
+      ability(game, def);
+      setTerrain(game, 'grassy');
+    }
+    if (dmg > 0 && def.alive && ab(def, 'sandspit') && weatherNow(game) !== 'sandstorm') {
+      ability(game, def);
+      setWeather(game, 'sandstorm', def);
+    }
+    if (dmg > 0 && def.alive && ab(def, 'electromorphosis') && !def.charged) {
+      ability(game, def);
+      def.charged = true;
+    }
     if (m.id === 'octazooka' && def.alive) {
       def.inkT = 4;
       say(game, 'inked', { who: game.who(def) });
@@ -1323,13 +1362,13 @@ export function afterHit(game, att, def, cast, dmg, { angle = 0, crit = false } 
     } else if (m.volatile === 'confusion' && m.id !== 'swagger' && m.id !== 'flatter') ok = confuse(game, def);
     else if (m.volatile === 'leechseed') ok = seed(game, def, att);
     else if (m.volatile === 'taunt') {
-      ok = !(def.tauntT > 0) && !ab(def, 'oblivious');
+      ok = !(def.tauntT > 0) && !ab(def, 'oblivious') && ![def, ...allies(game, def)].some((o) => ab(o, 'aromaveil'));
       if (ok) {
         def.tauntT = 6;
         say(game, 'taunted', { who: game.who(def) });
       }
     } else if (m.volatile === 'encore') {
-      ok = !!def.lastMove && !def.encore && def.moves.includes(def.lastMove);
+      ok = !!def.lastMove && !def.encore && def.moves.includes(def.lastMove) && ![def, ...allies(game, def)].some((o) => ab(o, 'aromaveil'));
       if (ok) {
         def.encore = { id: def.lastMove, t: 5 };
         say(game, 'encored', { who: game.who(def) });
@@ -1569,6 +1608,34 @@ export function selfMove(game, c, cast) {
       return say(game, 'cursedLog', { who: game.who(c), foe: game.who(foe) });
     }
     return boost(game, c, { spe: -1, atk: 1, def: 1 }, c);
+  }
+  if (m.id === 'filletaway') {
+    if (c.hp <= c.maxHp / 2) return float(game, c, t('failed'), '#c8c8c8');
+    const cost = Math.floor(c.maxHp / 2);
+    c.hp -= cost;
+    game.addEffect(new FloatText(String(cost), c.x + 6, c.y - 18, '#f8a858'));
+    return boost(game, c, { atk: 2, spa: 2, spe: 2 }, c);
+  }
+  if (m.id === 'stuffcheeks') {
+    // Eats its berry on the spot, then Defense +2.
+    if (!c.item || c.itemSpent || !c.mods.sitrus) return float(game, c, t('failed'), '#c8c8c8');
+    const h = c.heal(Math.round(c.maxHp * c.mods.sitrus * (ab(c, 'ripen') ? 2 : 1)));
+    c.useItem(t('sitrus', { who: game.who(c), item: c.itemLabel(), n: Math.round(h) }));
+    return boost(game, c, { def: 2 }, c);
+  }
+  if (m.id === 'decorate') {
+    const mates = allies(game, c);
+    if (!mates.length) return float(game, c, t('failed'), '#c8c8c8');
+    for (const f of mates) boost(game, f, { atk: 2, spa: 2 }, c);
+    return;
+  }
+  if (m.id === 'shedtail') {
+    // Pays half its HP to leave a substitute for the teammate coming in (Trio).
+    const cost = Math.floor(c.maxHp / 2);
+    if (c.hp <= cost) return float(game, c, t('failed'), '#c8c8c8');
+    c.hp -= cost;
+    c.passSub = true;
+    return say(game, 'shedTail', { who: game.who(c) });
   }
   if (m.id === 'stockpile') {
     if ((c.stock || 0) >= 3) return float(game, c, t('failed'), '#c8c8c8');

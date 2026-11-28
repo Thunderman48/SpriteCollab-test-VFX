@@ -1189,5 +1189,70 @@
     "ko": "마중물",
     "desc": "Water moves don't hurt it: Sp. Atk +1 instead.",
     "descKo": "물 기술을 받으면 데미지 대신 특수공격 +1."
+  },
+  "whitesmoke": {
+    "ko": "하얀연기",
+    "desc": "Its stats can't be lowered by foes.",
+    "descKo": "상대가 능력을 떨어뜨릴 수 없다."
+  },
+  "flowergift": {
+    "ko": "플라워기프트",
+    "desc": "In sun, it and its partner get Attack and Sp. Def ×1.5.",
+    "descKo": "쾌청일 때 자신과 동료의 공격·특수방어 1.5배."
+  },
+  "seedsower": {
+    "ko": "넘치는씨",
+    "desc": "When it's hit, Grassy Terrain spreads.",
+    "descKo": "공격받으면 그래스필드가 된다."
+  },
+  "wellbakedbody": {
+    "ko": "노릇노릇바디",
+    "desc": "Fire moves don't hurt it: Defense +2 instead.",
+    "descKo": "불꽃 기술을 받으면 데미지 대신 방어 +2."
+  },
+  "aromaveil": {
+    "ko": "아로마베일",
+    "desc": "It and its partner can't be taunted or encored.",
+    "descKo": "자신과 동료가 도발·앙코르를 받지 않는다."
+  },
+  "rockypayload": {
+    "ko": "바위나르기",
+    "desc": "Rock moves ×1.5.",
+    "descKo": "바위 기술 1.5배."
+  },
+  "slushrush": {
+    "ko": "눈치우기",
+    "desc": "In snow, Speed ×2.",
+    "descKo": "눈이 올 때 스피드 2배."
+  },
+  "hospitality": {
+    "ko": "대접",
+    "desc": "When it enters, it heals its partner 25% HP.",
+    "descKo": "등장하면 동료의 HP를 25% 회복시킨다."
+  },
+  "ripen": {
+    "ko": "숙성",
+    "desc": "Berries work twice as well.",
+    "descKo": "나무열매의 효과가 2배."
+  },
+  "propellertail": {
+    "ko": "스크루지느러미",
+    "desc": "Ignores Follow Me: it always goes for its own target.",
+    "descKo": "날따름을 무시하고 노린 상대를 공격한다."
+  },
+  "steelyspirit": {
+    "ko": "강철정신",
+    "desc": "It and its partner's Steel moves ×1.5.",
+    "descKo": "자신과 동료의 강철 기술 1.5배."
+  },
+  "sandspit": {
+    "ko": "모래뿜기",
+    "desc": "When it's hit, a sandstorm starts.",
+    "descKo": "공격받으면 모래바람이 분다."
+  },
+  "electromorphosis": {
+    "ko": "전기로바꾸기",
+    "desc": "When it's hit, it charges up: its next Electric move is doubled.",
+    "descKo": "공격받으면 충전되어 다음 전기 기술의 위력 2배."
   }
 }
